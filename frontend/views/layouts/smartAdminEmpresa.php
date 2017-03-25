@@ -1,0 +1,286 @@
+<?php
+/* @var $this \yii\web\View */
+/* @var $content string */
+
+use frontend\assets\SmartAdminAsset;
+use yii\helpers\Html;
+use yii\widgets\Breadcrumbs;
+use common\widgets\Alert;
+
+SmartAdminAsset::register($this);
+
+//var_dump($this->params);
+?>
+<?php $this->beginPage() ?>
+<!DOCTYPE html>
+<html lang="en-us">	
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <!-- #CSS Links -->
+        <!-- Basic Styles -->
+        <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+
+        <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+        <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production-plugins.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
+
+        <!-- DEV links : turn this on when you like to develop directly -->
+        <!--<link rel="stylesheet" type="text/css" media="screen" href="../Source_UNMINIFIED_CSS/smartadmin-production.css">-->
+        <!--<link rel="stylesheet" type="text/css" media="screen" href="../Source_UNMINIFIED_CSS/smartadmin-skins.css">-->
+
+        <!-- SmartAdmin RTL Support -->
+        <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.min.css"> 
+
+        <!-- We recommend you use "your_style.css" to override SmartAdmin
+             specific styles this will also ensure you retrain your customization with each SmartAdmin update.
+        <link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css"> -->
+
+        <!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
+
+        <!--<link rel="stylesheet" type="text/css" media="screen" href="css/demo.min.css">-->
+
+        <!-- #FAVICONS -->
+        <link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+
+        <!-- #GOOGLE FONT -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+        <!-- #APP SCREEN / ICONS -->
+        <!-- Specifying a Webpage Icon for Web Clip 
+                 Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+        <link rel="apple-touch-icon" href="img/splash/sptouch-icon-iphone.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="img/splash/touch-icon-ipad.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="img/splash/touch-icon-iphone-retina.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="img/splash/touch-icon-ipad-retina.png">
+
+        <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <!-- Startup image for web apps -->
+        <link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+        <link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+        <link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css">
+
+        <?= Html::csrfMetaTags() ?>
+        <title><?= Html::encode($this->title) ?></title>
+        <?php $this->head() ?>
+
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function (event) {
+
+            });
+        </script>
+
+    </head>
+
+    <body class="smart-style-0 fixed-header">
+
+        <!-- #HEADER -->
+        <header id="header" class="height-top">
+            <div class="meu-saldo">
+                <span>MEU SALDO:</span>
+                R$ <?= $this->params['saldo'] ?>
+            </div>
+            <a href="#" id="meu-saldo-btn">
+                <span class="fa fa-lg fa-chevron-circle-right"></span>
+            </a>
+            <!-- #PROJECTS: projects dropdown -->
+            <div class="project-context hidden-xs"></div>
+            <!-- end projects dropdown -->
+
+            <div class="widget-body">
+                <ul id="menu-tab" class="nav nav-tabs bordered">
+                    <li class="active">
+                        <a href="#s1" data-toggle="tab"><i class="glyphicon fa-lg glyphicon-tags"></i></a>
+                    </li> 
+                    <li>
+                        <a href="#s2" data-toggle="tab"><i class="glyphicon fa-lg glyphicon-heart"></i></a>
+                    </li> 
+                    <li>
+                        <a href="#s3" data-toggle="tab"><i class="glyphicon fa-lg glyphicon-fire"></i></a>
+                    </li>
+                </ul>
+            </div>
+            <!-- end widget content -->
+
+        </header>
+
+
+        <div id="menu-filtro">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="input-group">
+
+                        <div class="icon-addon addon-md">
+                            <select class="form-control">
+                                <?= $this->params['categorias'] ?>
+                            </select>
+                            <span for="Categoria" class="fa fa-book" rel="tooltip" title="" data-original-title="Categorias"></span>
+                        </div>
+
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default" tabindex="0" id="controller-teste">
+                                <span class="fa fa-filter"></span>
+                            </button>
+                        </div>
+
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default" tabindex="-1">
+                                <span class="fa fa-search"></span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="itens-categoria" style="display: none">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 no-padding-bottom">
+                    <div id="itens-categoria-selected">
+                        <span class="fa fa-lg fa-trash-o float-right padding-2 btn btn-default" title="limpar filtros"></span>
+                        <strong>Filtro:</strong> <i>Item 1, Item 2, Item 3</i>
+                    </div>
+
+                    <div id="itens-categoria-all" style="display: block;">
+                        <span class="fa fa-close float-right padding-2 btn btn-default" title="fechar filtro"></span>
+                        <div class="row">
+                            
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Item 1</label>
+                                <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>Item 2</label>
+                                <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>Item 9</label>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Item 3</label>
+                                <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Item 4</label>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-3">
+                                <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>Item 5</label>
+                                <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Item 6</label>
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                            
+                            <div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="margin-left: -10px!important">
+                                <div class="note float-left no-padding">Selecione as opções para filtrar.</div>
+                                <span class="float-right fa fa-check btn btn-default" style="margin-right: -10px" title="fechar filtro"> Aplicar filtro</span>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- END HEADER -->
+
+        <!-- #MAIN PANEL -->
+        <div id="main" role="main">
+
+            <!-- #MAIN CONTENT -->
+            <div class="container no-padding">
+                <?= $content ?>
+            </div>
+            <!-- END #MAIN CONTENT -->
+
+        </div>
+        <!-- END #MAIN PANEL -->
+
+        <!-- #PAGE FOOTER -->
+        <div class="page-footer">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <span class="txt-color-white">
+
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- END FOOTER -->
+
+        <!--================================================== -->
+
+        <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)
+        <script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>-->
+
+
+        <!-- #PLUGINS -->
+
+        <script src="js/libs/jquery-2.1.1.min.js"></script>
+
+        <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
+
+
+        <script src="js/jquery.priceformat.min.js"></script>
+
+        <!-- IMPORTANT: APP CONFIG -->
+        <script src="js/app.config.js"></script>
+
+        <!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
+        <script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> 
+
+        <!-- BOOTSTRAP JS -->
+        <script src="js/bootstrap/bootstrap.min.js"></script>
+
+        <!-- CUSTOM NOTIFICATION -->
+        <script src="js/notification/SmartNotification.min.js"></script>
+
+        <!-- JARVIS WIDGETS -->
+        <script src="js/smartwidgets/jarvis.widget.min.js"></script>
+
+        <!-- EASY PIE CHARTS -->
+        <script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+        <!-- SPARKLINES -->
+        <script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+        <!-- JQUERY VALIDATE -->
+        <script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+        <!-- JQUERY MASKED INPUT -->
+        <script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+        <!-- JQUERY SELECT2 INPUT -->
+        <script src="js/plugin/select2/select2.min.js"></script>
+
+        <!-- JQUERY UI + Bootstrap Slider -->
+        <script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+        <!-- browser msie issue fix -->
+        <script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+        <!-- FastClick: For mobile devices: you can disable this in app.js -->
+        <script src="js/plugin/fastclick/fastclick.min.js"></script>
+
+        <!--[if IE 8]>
+                <h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+        <![endif]-->
+
+        <!-- Demo purpose only -->
+        <!--<script src="js/demo.min.js"></script>-->
+
+        <!-- MAIN APP JS FILE -->
+        <script src="js/app.min.js"></script>
+
+        <!-- ENHANCEMENT PLUGINS : NOT A REQUIREMENT -->
+        <!-- Voice command : plugin -->
+        <script src="js/speech/voicecommand.min.js"></script>
+
+        <!-- SmartChat UI : plugin -->
+        <script src="js/smart-chat-ui/smart.chat.ui.min.js"></script>
+        <script src="js/smart-chat-ui/smart.chat.manager.min.js"></script>
+
+    </body>
+
+</html>
