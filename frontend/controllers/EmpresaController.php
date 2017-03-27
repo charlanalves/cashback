@@ -6,6 +6,7 @@ use common\controllers\GlobalBaseController;
 use common\models\VIEWEXTRATOCLIENTE;
 use common\models\CB10CATEGORIA;
 use common\models\CB04EMPRESA;
+use common\models\CB11ITEMCATEGORIA;
 
 /**
  * Empresa controller
@@ -30,16 +31,21 @@ class EmpresaController extends GlobalBaseController {
         
         $empresas = CB04EMPRESA::getEmpresas();
         
-        return $this->render('index', ['empresas' => $empresas]);
+        return $this->render('lista', ['empresas' => $empresas]);
     }
 
     public function actionFiltraEmpresas() {
         $post = \Yii::$app->request->post();
         $empresas = CB04EMPRESA::getEmpresas($post);
-        return $this->renderPartial('index', ['empresas' => $empresas]);
+        return $this->renderPartial('lista', ['empresas' => $empresas]);
     }
     
-
+    public function actionItensCategoria() {
+        $categoria = \Yii::$app->request->post('categoria');
+        $itens = CB11ITEMCATEGORIA::find()->where('CB11_CATEGORIA_ID = ' . (int) $categoria)->orderBy('CB11_DESCRICAO')->all();
+        return $this->renderPartial('itens', ['itens' => $itens]);
+    }
+    
     private static function optionsSelect($a, $primeiro = []) {
         $r = ($primeiro) ? "<option value='" . array_keys($primeiro)[0] . "'>" . array_values($primeiro)[0] . "</option>\n" : '';
         foreach ($a as $v) {

@@ -76,7 +76,106 @@ SmartAdminAsset::register($this);
         <?php $this->head() ?>
 
         <script type="text/javascript">
+            
+            SYSTEM = {};
+            var categoriaSelected = '';
+            var itensCatSelected = [];
+            
             document.addEventListener("DOMContentLoaded", function (event) {
+
+                // exibe ou esconde os itens da categoria
+                SYSTEM.itensCategoria = function () {
+                    $('div#itens-categoria-all').toggle('fast');
+                }
+
+                // filtra empresas por categoria e seus itens
+                SYSTEM.filtrarEmpresa = function () {
+
+                    var categoria = $('select#filtro-categoria').val();
+                    var item = $('#itens-categoria-all input:checked').map(function (_, el) {
+                        itensCatSelected.push($(el).attr('title'));
+                        return $(el).val();
+                    }).get();
+
+                    var busca = $.ajax({
+                        url: 'index.php?r=empresa/filtra-empresas',
+                        type: 'POST',
+                        data: {'categoria': categoria, 'item': item},
+                        dataType: "jsonp"
+                    });
+
+                    busca.always(function (data) {
+                        retorno = data.responseText;
+                        if (retorno) {
+
+                            // esconde os itens da categoria
+                            $('div#itens-categoria-all').hide('fast');
+
+                            // exibe ou esconde itens filtrados
+                            if (itensCatSelected.length && categoria) {
+                                $('div#itens-categoria-selected i').text(itensCatSelected.join(', '));
+                                $('div#itens-categoria-selected').show('fast');
+                            } else {
+                                $('div#itens-categoria-selected i').text('');
+                                $('div#itens-categoria-selected').hide('fast');
+                            }
+                            itensCatSelected = [];
+
+                            // exibe resultado do filtro
+                            $('div.container').html(retorno);
+
+                        } else {
+                            $.smallBox({
+                                title: "Opss",
+                                content: "<i class='fa fa-clock-o'></i> <i>ocorreu um erro tente novamente...</i>",
+                                color: "#C46A69",
+                                iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                                timeout: 4000
+                            });
+                        }
+                    });
+                }
+                
+                SYSTEM.limparItensSelecionados = function () {
+                    // desmarca itens selecionados do filtro
+                    $('#itens-categoria-all input:checked').map(function (_, el) {
+                        $(el).attr('checked', false);
+                    });
+                    SYSTEM.filtrarEmpresa();
+                }
+                
+                SYSTEM.loadItensCategoria = function () {
+                
+                    $('div#ckeckbox-itens').html('');
+                    if (!categoriaSelected) {
+                        $('button#btn-itens-categoria').attr('disabled', true);
+
+                    } else {
+                        var itens = $.ajax({
+                            url: 'index.php?r=empresa/itens-categoria',
+                            type: 'POST',
+                            data: {'categoria': categoriaSelected},
+                            dataType: "jsonp"
+                        });
+
+                        itens.always(function (data) {
+                            retorno = data.responseText;
+                            if (retorno) {
+                                // exibe itens da categoria no filtro
+                                $('div#ckeckbox-itens').html(retorno);
+                                $('button#btn-itens-categoria').attr('disabled', false);
+                            }
+                        });
+                    }
+                }
+
+                $('#filtro-categoria').change(function (a) {
+                    categoriaSelected = a.target.value;
+                    if(!$("div#itens-categoria-all:hidden").length){
+                        $('div#itens-categoria-all').toggle('fast');
+                    }
+                    SYSTEM.loadItensCategoria();
+                });
 
             });
         </script>
@@ -122,20 +221,20 @@ SmartAdminAsset::register($this);
                     <div class="input-group">
 
                         <div class="icon-addon addon-md">
-                            <select class="form-control">
+                            <select class="form-control" id="filtro-categoria">
                                 <?= $this->params['categorias'] ?>
                             </select>
                             <span for="Categoria" class="fa fa-book" rel="tooltip" title="" data-original-title="Categorias"></span>
                         </div>
 
                         <div class="input-group-btn">
-                            <button type="button" class="btn btn-default" tabindex="0" id="controller-teste">
+                            <button id="btn-itens-categoria" title="itens da categoria" type="button" class="btn btn-default" tabindex="0" onclick="SYSTEM.itensCategoria()" disabled="">
                                 <span class="fa fa-filter"></span>
                             </button>
                         </div>
 
                         <div class="input-group-btn">
-                            <button type="button" class="btn btn-default" tabindex="-1">
+                            <button id="btn-filtrar" title="buscar empresas" type="button" class="btn btn-default" tabindex="-1" onclick="SYSTEM.filtrarEmpresa()">
                                 <span class="fa fa-search"></span>
                             </button>
                         </div>
@@ -145,43 +244,33 @@ SmartAdminAsset::register($this);
             </div>
         </div>
 
-        <div id="itens-categoria" style="display: none">
+        <div id="itens-categoria" style="display: block">
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12 no-padding-bottom">
                     <div id="itens-categoria-selected">
-                        <span class="fa fa-lg fa-trash-o float-right padding-2 btn btn-default" title="limpar filtros"></span>
+                        <span class="fa fa-lg fa-trash-o float-right padding-2 btn btn-default" title="limpar filtros" onclick="SYSTEM.limparItensSelecionados()"></span>
                         <strong>Filtro:</strong> <i>Item 1, Item 2, Item 3</i>
                     </div>
 
-                    <div id="itens-categoria-all" style="display: block;">
-                        <span class="fa fa-close float-right padding-2 btn btn-default" title="fechar filtro"></span>
+                    <div id="itens-categoria-all">
+                        <span class="fa fa-close float-right padding-2 btn btn-default" title="fechar filtro" onclick="SYSTEM.itensCategoria()"></span>
                         <div class="row">
-                            
-                            <div class="col-md-4 col-sm-4 col-xs-4">
-                                <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Item 1</label>
-                                <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>Item 2</label>
-                                <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>Item 9</label>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-4">
-                                <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Item 3</label>
-                                <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Item 4</label>
-                            </div>
-                            <div class="col-md-3 col-sm-3 col-xs-3">
-                                <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>Item 5</label>
-                                <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Item 6</label>
-                            </div>
+
+                            <div id="ckeckbox-itens"></div>
+
                             <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                            
+
                             <div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="margin-left: -10px!important">
                                 <div class="note float-left no-padding">Selecione as opções para filtrar.</div>
-                                <span class="float-right fa fa-check btn btn-default" style="margin-right: -10px" title="fechar filtro"> Aplicar filtro</span>
+                                <span class="float-right fa fa-check btn btn-default" style="margin-right: -10px" title="fechar filtro" onclick="SYSTEM.filtrarEmpresa()"> Aplicar filtro</span>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!-- END HEADER -->
 

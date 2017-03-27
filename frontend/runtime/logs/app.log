@@ -1565,3 +1565,1234 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1490413217.445
     'REQUEST_TIME' => 1490413217
 ]
+2017-03-27 00:46:20 [::1][-][-][error][yii\base\ErrorException:2] exception 'yii\base\ErrorException' with message 'json_decode() expects parameter 1 to be string, array given' in /opt/lampp/htdocs/cashback/common/models/CB04EMPRESA.php:166
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(38): common\models\CB04EMPRESA::getEmpresas()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): frontend\controllers\EmpresaController->actionFiltraEmpresas()
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): ::call_user_func_array:{/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php:57}()
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams()
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction()
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction()
+#6 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest()
+#7 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#8 {main}
+2017-03-27 00:46:20 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/filtra-empresas'
+    'callback' => 'jQuery21104579599873457183_1490568373932'
+]
+
+$_POST = [
+    'categoria' => '1'
+    'item' => [
+        0 => '2'
+        1 => '9'
+        2 => '5'
+    ]
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhEvH8AAQEAAC-QqrIAAAAE'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '50'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '55710'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/filtra-empresas&callback=jQuery21104579599873457183_1490568373932'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/filtra-empresas&callback=jQuery21104579599873457183_1490568373932'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490568380.483
+    'REQUEST_TIME' => 1490568380
+]
+2017-03-27 00:48:10 [::1][-][-][error][yii\db\Exception] exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '2,9,5
+            GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPA' at line 19' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php:902
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(902): PDOStatement->execute()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(362): yii\db\Command->queryInternal('fetchAll', NULL)
+#2 /opt/lampp/htdocs/cashback/common/models/CB04EMPRESA.php(194): yii\db\Command->queryAll()
+#3 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(38): common\models\CB04EMPRESA::getEmpresas(Array)
+#4 [internal function]: frontend\controllers\EmpresaController->actionFiltraEmpresas()
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#6 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('filtra-empresas', Array)
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/filtra-...', Array)
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#10 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#11 {main}
+
+Next exception 'yii\db\Exception' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '2,9,5
+            GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPA' at line 19
+The SQL being executed was: 
+        SELECT 
+            CB04_ID,
+            CB04_NOME,
+            CB04_QTD_FAVORITO,
+            CB04_QTD_COMPARTILHADO,
+            CB04_END_LOGRADOURO,
+            CB04_END_BAIRRO,
+            CB04_END_CIDADE,
+            CB04_END_UF,
+            CB04_END_NUMERO,
+            CB04_NOME,
+            FORMAT(MAX(CB07_PERCENTUAL), 0, 'de_DE') AS CASHBACK
+        FROM CB04_EMPRESA
+            LEFT JOIN CB05_PRODUTO ON(CB05_EMPRESA_ID = CB04_ID)
+            LEFT JOIN CB06_VARIACAO ON(CB06_PRODUTO_ID = CB05_ID)
+            LEFT JOIN CB10_CATEGORIA ON(CB10_ID = CB04_CATEGORIA_ID)
+            LEFT JOIN CB12_ITEM_CATEG_EMPRESA ON(CB12_EMPRESA_ID = CB04_ID OR CB05_ID = CB12_PRODUTO_ID)
+            LEFT JOIN CB07_CASH_BACK ON(CB07_PRODUTO_ID = CB05_ID  OR CB07_VARIACAO_ID = CB06_ID)
+        WHERE CB04_EMPRESA.CB04_STATUS = 1  AND CB04_CATEGORIA_ID = 1  AND CB12_ITEM_ID IN 2,9,5
+            GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPARTILHADO, CB04_END_LOGRADOURO, 
+            CB04_END_BAIRRO, CB04_END_CIDADE, CB04_END_UF, CB04_END_NUMERO, CB04_NOME' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Schema.php:636
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(917): yii\db\Schema->convertException(Object(PDOException), '\n        SELECT...')
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(362): yii\db\Command->queryInternal('fetchAll', NULL)
+#2 /opt/lampp/htdocs/cashback/common/models/CB04EMPRESA.php(194): yii\db\Command->queryAll()
+#3 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(38): common\models\CB04EMPRESA::getEmpresas(Array)
+#4 [internal function]: frontend\controllers\EmpresaController->actionFiltraEmpresas()
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#6 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('filtra-empresas', Array)
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/filtra-...', Array)
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#10 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#11 {main}
+Additional Information:
+Array
+(
+    [0] => 42000
+    [1] => 1064
+    [2] => You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '2,9,5
+            GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPA' at line 19
+)
+
+2017-03-27 00:48:09 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/filtra-empresas'
+    'callback' => 'jQuery21107260125305855867_1490568458347'
+]
+
+$_POST = [
+    'categoria' => '1'
+    'item' => [
+        0 => '2'
+        1 => '9'
+        2 => '5'
+    ]
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhFKX8AAQEAACWUSMcAAAAG'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '50'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '55828'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/filtra-empresas&callback=jQuery21107260125305855867_1490568458347'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/filtra-empresas&callback=jQuery21107260125305855867_1490568458347'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490568489.965
+    'REQUEST_TIME' => 1490568489
+]
+2017-03-27 02:08:32 [::1][-][-][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Undefined variable: empresas' in /opt/lampp/htdocs/cashback/frontend/views/empresa/itens.php:24
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile()
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(411): yii\base\View->render()
+#3 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(46): yii\base\Controller->renderPartial()
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): frontend\controllers\EmpresaController->actionItensCategoria()
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): ::call_user_func_array:{/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php:57}()
+#6 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams()
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction()
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction()
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest()
+#10 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#11 {main}
+2017-03-27 02:08:32 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery21107648841551891152_1490573303531'
+]
+
+$_POST = [
+    'categoria' => '1'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhYAH8AAQEAADNE-FMAAAAB'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '57956'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery21107648841551891152_1490573303531'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery21107648841551891152_1490573303531'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490573312.058
+    'REQUEST_TIME' => 1490573312
+]
+2017-03-27 02:42:02 [::1][-][-][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Trying to get property of non-object' in /opt/lampp/htdocs/cashback/frontend/views/empresa/itens.php:23
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile()
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(411): yii\base\View->render()
+#3 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(46): yii\base\Controller->renderPartial()
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): frontend\controllers\EmpresaController->actionItensCategoria()
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): ::call_user_func_array:{/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php:57}()
+#6 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams()
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction()
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction()
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest()
+#10 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#11 {main}
+2017-03-27 02:42:02 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211044981793002095594_1490575189808'
+]
+
+$_POST = [
+    'categoria' => '2'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhf2n8AAQEAAEu4bo8AAAAD'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '58884'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211044981793002095594_1490575189808'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211044981793002095594_1490575189808'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575322.875
+    'REQUEST_TIME' => 1490575322
+]
+2017-03-27 02:42:27 [::1][-][-][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Undefined index: CB11_DESCRICAO' in /opt/lampp/htdocs/cashback/frontend/views/empresa/itens.php:23
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile()
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(411): yii\base\View->render()
+#3 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(46): yii\base\Controller->renderPartial()
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): frontend\controllers\EmpresaController->actionItensCategoria()
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): ::call_user_func_array:{/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php:57}()
+#6 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams()
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction()
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction()
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest()
+#10 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#11 {main}
+2017-03-27 02:42:27 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211044981793002095594_1490575189808'
+]
+
+$_POST = [
+    'categoria' => '1'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhf838AAQEAAFKTWLoAAAAC'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '58890'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211044981793002095594_1490575189808'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211044981793002095594_1490575189808'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575347.523
+    'REQUEST_TIME' => 1490575347
+]
+2017-03-27 02:42:32 [::1][-][-][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Undefined index: CB11_DESCRICAO' in /opt/lampp/htdocs/cashback/frontend/views/empresa/itens.php:23
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile()
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(411): yii\base\View->render()
+#3 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(46): yii\base\Controller->renderPartial()
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): frontend\controllers\EmpresaController->actionItensCategoria()
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): ::call_user_func_array:{/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php:57}()
+#6 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams()
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction()
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction()
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest()
+#10 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#11 {main}
+2017-03-27 02:42:32 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211044981793002095594_1490575189808'
+]
+
+$_POST = [
+    'categoria' => '2'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhf@H8AAQEAAEidKOAAAAAG'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '58892'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211044981793002095594_1490575189808'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211044981793002095594_1490575189808'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575352.399
+    'REQUEST_TIME' => 1490575352
+]
+2017-03-27 02:43:01 [::1][-][-][error][yii\db\Exception] exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'CB11_ITEM_CATEGORIA' in 'where clause'' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php:902
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(902): PDOStatement->execute()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(362): yii\db\Command->queryInternal('fetchAll', NULL)
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Query.php(213): yii\db\Command->queryAll()
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(133): yii\db\Query->all(NULL)
+#4 /opt/lampp/htdocs/cashback/common/models/CB11ITEMCATEGORIAQuery.php(23): yii\db\ActiveQuery->all(NULL)
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/BaseActiveRecord.php(116): common\models\CB11ITEMCATEGORIAQuery->all()
+#6 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(45): yii\db\BaseActiveRecord::findAll(Array)
+#7 [internal function]: frontend\controllers\EmpresaController->actionItensCategoria()
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#10 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('itens-categoria', Array)
+#11 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/itens-c...', Array)
+#12 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#13 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#14 {main}
+
+Next exception 'yii\db\Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'CB11_ITEM_CATEGORIA' in 'where clause'
+The SQL being executed was: SELECT * FROM `CB11_ITEM_CATEGORIA` WHERE `CB11_ITEM_CATEGORIA`='1'' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Schema.php:636
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(917): yii\db\Schema->convertException(Object(PDOException), 'SELECT * FROM `...')
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(362): yii\db\Command->queryInternal('fetchAll', NULL)
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Query.php(213): yii\db\Command->queryAll()
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(133): yii\db\Query->all(NULL)
+#4 /opt/lampp/htdocs/cashback/common/models/CB11ITEMCATEGORIAQuery.php(23): yii\db\ActiveQuery->all(NULL)
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/BaseActiveRecord.php(116): common\models\CB11ITEMCATEGORIAQuery->all()
+#6 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(45): yii\db\BaseActiveRecord::findAll(Array)
+#7 [internal function]: frontend\controllers\EmpresaController->actionItensCategoria()
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#10 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('itens-categoria', Array)
+#11 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/itens-c...', Array)
+#12 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#13 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#14 {main}
+Additional Information:
+Array
+(
+    [0] => 42S22
+    [1] => 1054
+    [2] => Unknown column 'CB11_ITEM_CATEGORIA' in 'where clause'
+)
+
+2017-03-27 02:43:01 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211044981793002095594_1490575189808'
+]
+
+$_POST = [
+    'categoria' => '1'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhgFX8AAQEAAFF6yrQAAAAI'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '58894'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211044981793002095594_1490575189808'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211044981793002095594_1490575189808'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575381.614
+    'REQUEST_TIME' => 1490575381
+]
+2017-03-27 02:47:09 [::1][-][-][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Undefined index: CB11_DESCRICAO' in /opt/lampp/htdocs/cashback/frontend/views/empresa/itens.php:23
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile()
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(411): yii\base\View->render()
+#3 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(47): yii\base\Controller->renderPartial()
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): frontend\controllers\EmpresaController->actionItensCategoria()
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): ::call_user_func_array:{/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php:57}()
+#6 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams()
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction()
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction()
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest()
+#10 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#11 {main}
+2017-03-27 02:47:09 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211027745284148387706_1490575523557'
+]
+
+$_POST = [
+    'categoria' => '1'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhhDX8AAQEAAFIyr7MAAAAJ'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '58982'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575629.167
+    'REQUEST_TIME' => 1490575629
+]
+2017-03-27 02:48:08 [::1][-][-][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Undefined index: CB11_DESCRICAO' in /opt/lampp/htdocs/cashback/frontend/views/empresa/itens.php:23
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile()
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(411): yii\base\View->render()
+#3 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(47): yii\base\Controller->renderPartial()
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): frontend\controllers\EmpresaController->actionItensCategoria()
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): ::call_user_func_array:{/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php:57}()
+#6 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams()
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction()
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction()
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest()
+#10 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#11 {main}
+2017-03-27 02:48:08 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211027745284148387706_1490575523557'
+]
+
+$_POST = [
+    'categoria' => '2'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhhSH8AAQEAAFUBWooAAAAH'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '59176'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575688.776
+    'REQUEST_TIME' => 1490575688
+]
+2017-03-27 02:48:20 [::1][-][-][error][yii\db\Exception] exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'CB11_ITEM_CATEGORIA' in 'where clause'' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php:902
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(902): PDOStatement->execute()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(362): yii\db\Command->queryInternal('fetchAll', NULL)
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Query.php(213): yii\db\Command->queryAll()
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(133): yii\db\Query->all(NULL)
+#4 /opt/lampp/htdocs/cashback/common/models/CB11ITEMCATEGORIAQuery.php(23): yii\db\ActiveQuery->all(NULL)
+#5 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(45): common\models\CB11ITEMCATEGORIAQuery->all()
+#6 [internal function]: frontend\controllers\EmpresaController->actionItensCategoria()
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('itens-categoria', Array)
+#10 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/itens-c...', Array)
+#11 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#12 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#13 {main}
+
+Next exception 'yii\db\Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'CB11_ITEM_CATEGORIA' in 'where clause'
+The SQL being executed was: SELECT * FROM `CB11_ITEM_CATEGORIA` WHERE `CB11_ITEM_CATEGORIA`='1' ORDER BY `CB11_DESCRICAO`' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Schema.php:636
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(917): yii\db\Schema->convertException(Object(PDOException), 'SELECT * FROM `...')
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(362): yii\db\Command->queryInternal('fetchAll', NULL)
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Query.php(213): yii\db\Command->queryAll()
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(133): yii\db\Query->all(NULL)
+#4 /opt/lampp/htdocs/cashback/common/models/CB11ITEMCATEGORIAQuery.php(23): yii\db\ActiveQuery->all(NULL)
+#5 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(45): common\models\CB11ITEMCATEGORIAQuery->all()
+#6 [internal function]: frontend\controllers\EmpresaController->actionItensCategoria()
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('itens-categoria', Array)
+#10 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/itens-c...', Array)
+#11 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#12 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#13 {main}
+Additional Information:
+Array
+(
+    [0] => 42S22
+    [1] => 1054
+    [2] => Unknown column 'CB11_ITEM_CATEGORIA' in 'where clause'
+)
+
+2017-03-27 02:48:20 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211027745284148387706_1490575523557'
+]
+
+$_POST = [
+    'categoria' => '1'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhhVH8AAQEAAFKhWlIAAAAK'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '59178'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575700.579
+    'REQUEST_TIME' => 1490575700
+]
+2017-03-27 02:49:47 [::1][-][-][error][yii\base\InvalidParamException] exception 'yii\base\InvalidParamException' with message 'Operator 'CB11_ITEM_CATEGORIA = 2' requires two operands.' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php:1430
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php(1057): yii\db\QueryBuilder->buildSimpleCondition('CB11_ITEM_CATEG...', Array, Array)
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php(861): yii\db\QueryBuilder->buildCondition(Array, Array)
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php(100): yii\db\QueryBuilder->buildWhere(Array, Array)
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(319): yii\db\QueryBuilder->build(Object(common\models\CB11ITEMCATEGORIAQuery))
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Query.php(213): yii\db\ActiveQuery->createCommand(NULL)
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(133): yii\db\Query->all(NULL)
+#6 /opt/lampp/htdocs/cashback/common/models/CB11ITEMCATEGORIAQuery.php(23): yii\db\ActiveQuery->all(NULL)
+#7 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(45): common\models\CB11ITEMCATEGORIAQuery->all()
+#8 [internal function]: frontend\controllers\EmpresaController->actionItensCategoria()
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#10 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#11 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('itens-categoria', Array)
+#12 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/itens-c...', Array)
+#13 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#14 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#15 {main}
+2017-03-27 02:49:47 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211027745284148387706_1490575523557'
+]
+
+$_POST = [
+    'categoria' => '2'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhhq38AAQEAAE7Zl40AAAAF'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '59194'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575787.662
+    'REQUEST_TIME' => 1490575787
+]
+2017-03-27 02:50:11 [::1][-][-][error][yii\base\InvalidParamException] exception 'yii\base\InvalidParamException' with message 'Operator 'CB11_ITEM_CATEGORIA = 1' requires two operands.' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php:1430
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php(1057): yii\db\QueryBuilder->buildSimpleCondition('CB11_ITEM_CATEG...', Array, Array)
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php(861): yii\db\QueryBuilder->buildCondition(Array, Array)
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php(100): yii\db\QueryBuilder->buildWhere(Array, Array)
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(319): yii\db\QueryBuilder->build(Object(common\models\CB11ITEMCATEGORIAQuery))
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Query.php(213): yii\db\ActiveQuery->createCommand(NULL)
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(133): yii\db\Query->all(NULL)
+#6 /opt/lampp/htdocs/cashback/common/models/CB11ITEMCATEGORIAQuery.php(23): yii\db\ActiveQuery->all(NULL)
+#7 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(45): common\models\CB11ITEMCATEGORIAQuery->all()
+#8 [internal function]: frontend\controllers\EmpresaController->actionItensCategoria()
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#10 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#11 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('itens-categoria', Array)
+#12 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/itens-c...', Array)
+#13 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#14 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#15 {main}
+2017-03-27 02:50:11 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211027745284148387706_1490575523557'
+]
+
+$_POST = [
+    'categoria' => '1'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhhw38AAQEAAFJCPjoAAAAA'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '59196'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575811.517
+    'REQUEST_TIME' => 1490575811
+]
+2017-03-27 02:50:20 [::1][-][-][error][yii\base\InvalidParamException] exception 'yii\base\InvalidParamException' with message 'Operator 'CB11_ITEM_CATEGORIA = 2' requires two operands.' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php:1430
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php(1057): yii\db\QueryBuilder->buildSimpleCondition('CB11_ITEM_CATEG...', Array, Array)
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php(861): yii\db\QueryBuilder->buildCondition(Array, Array)
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/QueryBuilder.php(100): yii\db\QueryBuilder->buildWhere(Array, Array)
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(319): yii\db\QueryBuilder->build(Object(common\models\CB11ITEMCATEGORIAQuery))
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Query.php(213): yii\db\ActiveQuery->createCommand(NULL)
+#5 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(133): yii\db\Query->all(NULL)
+#6 /opt/lampp/htdocs/cashback/common/models/CB11ITEMCATEGORIAQuery.php(23): yii\db\ActiveQuery->all(NULL)
+#7 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(45): common\models\CB11ITEMCATEGORIAQuery->all()
+#8 [internal function]: frontend\controllers\EmpresaController->actionItensCategoria()
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#10 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#11 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('itens-categoria', Array)
+#12 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/itens-c...', Array)
+#13 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#14 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#15 {main}
+2017-03-27 02:50:20 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211027745284148387706_1490575523557'
+]
+
+$_POST = [
+    'categoria' => '2'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhhzH8AAQEAAC-Qq1UAAAAE'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '59198'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575820.001
+    'REQUEST_TIME' => 1490575820
+]
+2017-03-27 02:50:45 [::1][-][-][error][yii\db\Exception] exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'CB11_ITEM_CATEGORIA' in 'where clause'' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php:902
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(902): PDOStatement->execute()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(362): yii\db\Command->queryInternal('fetchAll', NULL)
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Query.php(213): yii\db\Command->queryAll()
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(133): yii\db\Query->all(NULL)
+#4 /opt/lampp/htdocs/cashback/common/models/CB11ITEMCATEGORIAQuery.php(23): yii\db\ActiveQuery->all(NULL)
+#5 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(45): common\models\CB11ITEMCATEGORIAQuery->all()
+#6 [internal function]: frontend\controllers\EmpresaController->actionItensCategoria()
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('itens-categoria', Array)
+#10 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/itens-c...', Array)
+#11 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#12 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#13 {main}
+
+Next exception 'yii\db\Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'CB11_ITEM_CATEGORIA' in 'where clause'
+The SQL being executed was: SELECT * FROM `CB11_ITEM_CATEGORIA` WHERE CB11_ITEM_CATEGORIA = 2 ORDER BY `CB11_DESCRICAO`' in /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Schema.php:636
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(917): yii\db\Schema->convertException(Object(PDOException), 'SELECT * FROM `...')
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Command.php(362): yii\db\Command->queryInternal('fetchAll', NULL)
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/Query.php(213): yii\db\Command->queryAll()
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/db/ActiveQuery.php(133): yii\db\Query->all(NULL)
+#4 /opt/lampp/htdocs/cashback/common/models/CB11ITEMCATEGORIAQuery.php(23): yii\db\ActiveQuery->all(NULL)
+#5 /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php(45): common\models\CB11ITEMCATEGORIAQuery->all()
+#6 [internal function]: frontend\controllers\EmpresaController->actionItensCategoria()
+#7 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#8 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#9 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('itens-categoria', Array)
+#10 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('empresa/itens-c...', Array)
+#11 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#12 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#13 {main}
+Additional Information:
+Array
+(
+    [0] => 42S22
+    [1] => 1054
+    [2] => Unknown column 'CB11_ITEM_CATEGORIA' in 'where clause'
+)
+
+2017-03-27 02:50:45 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211027745284148387706_1490575523557'
+]
+
+$_POST = [
+    'categoria' => '2'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhh5X8AAQEAAEvpM@AAAAAB'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '59200'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575845.25
+    'REQUEST_TIME' => 1490575845
+]
+2017-03-27 02:52:15 [::1][-][-][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Trying to get property of non-object' in /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php:46
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): ::call_user_func_array:{/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php:57}()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams()
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction()
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction()
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest()
+#5 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#6 {main}
+2017-03-27 02:52:15 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211027745284148387706_1490575523557'
+]
+
+$_POST = [
+    'categoria' => '1'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhiP38AAQEAAFKhWlMAAAAK'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '59228'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575935.142
+    'REQUEST_TIME' => 1490575935
+]
+2017-03-27 02:52:19 [::1][-][-][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Trying to get property of non-object' in /opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php:46
+Stack trace:
+#0 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php(57): ::call_user_func_array:{/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/InlineAction.php:57}()
+#1 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams()
+#2 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction()
+#3 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction()
+#4 /opt/lampp/htdocs/cashback/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest()
+#5 /opt/lampp/htdocs/cashback/frontend/web/index.php(17): yii\base\Application->run()
+#6 {main}
+2017-03-27 02:52:19 [::1][-][-][info][application] $_GET = [
+    'r' => 'empresa/itens-categoria'
+    'callback' => 'jQuery211027745284148387706_1490575523557'
+]
+
+$_POST = [
+    'categoria' => '2'
+]
+
+$_COOKIE = [
+    '__utma' => '111872281.348099296.1485728603.1485822909.1485922939.3'
+    '__utmz' => '111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)'
+    '_csrf-frontend' => '43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH\";}'
+]
+
+$_SERVER = [
+    'UNIQUE_ID' => 'WNhiQ38AAQEAAE7Zl44AAAAF'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '11'
+    'HTTP_ACCEPT' => 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://localhost/cashback/frontend/web/index.php?r=empresa'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4'
+    'HTTP_COOKIE' => '__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=43cde71ecf0adc43569a95bc020c53cddf334f14d78589015b8e0e93c0182738a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22iviGq9yIMPzO5dYDboMl6yjHvhYOwHGH%22%3B%7D'
+    'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'
+    'LD_LIBRARY_PATH' => '/opt/lampp/lib:/opt/lampp/lib'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => '/opt/lampp/htdocs'
+    'SERVER_ADMIN' => 'you@example.com'
+    'SCRIPT_FILENAME' => '/opt/lampp/htdocs/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '59234'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'REQUEST_URI' => '/cashback/frontend/web/index.php?r=empresa/itens-categoria&callback=jQuery211027745284148387706_1490575523557'
+    'SCRIPT_NAME' => '/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1490575939.861
+    'REQUEST_TIME' => 1490575939
+]

@@ -160,7 +160,7 @@ class CB04EMPRESA extends \common\models\GlobalModel
             $categoria = " AND CB04_CATEGORIA_ID = " . (int)$a['categoria'];
 
             if (!empty($a['item'])) {
-                $item = " AND CB12_ITEM_ID IN " . implode(',', json_decode($a['item'], true));
+                $item = " AND CB12_ITEM_ID IN (" . implode(',', $a['item']) . ")";
             }
         }
         
