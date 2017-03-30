@@ -54,7 +54,7 @@ class CB08FORMAPAGAMENTO extends \common\models\GlobalModel
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCB09FORMAPAGEMPRESAs()
+    public function getcB09_FORMA_PAG_EMPRESA()
     {
         return $this->hasMany(CB09FORMAPAGEMPRESA::className(), ['CB09_FORMA_PAG_ID' => 'CB08_ID']);
     }

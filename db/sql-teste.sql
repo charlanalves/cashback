@@ -7,6 +7,10 @@ ALTER TABLE `CB07_CASH_BACK` CHANGE `CB07_ID` `CB07_ID` INT(11) NOT NULL AUTO_IN
 ALTER TABLE `CB07_CASH_BACK` CHANGE `CB07_PERCENTUAL` `CB07_PERCENTUAL` DECIMAL(10,2) NOT NULL;
 ALTER TABLE `CB00_TRANSFERENCIA` ADD `CB00_COD_BANCO` INT NOT NULL AFTER `CB00_DT_CONCLUSAO`, ADD `CB00_TP_CONTA` INT NOT NULL AFTER `CB00_COD_BANCO`, ADD `CB00_NUM_CONTA` INT NOT NULL AFTER `CB00_TP_CONTA`, ADD `CB00_AGENCIA` VARCHAR(5) NOT NULL AFTER `CB00_NUM_CONTA`;
 ALTER TABLE `CB00_TRANSFERENCIA` CHANGE `CB00_ID` `CB00_ID` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `CB04_EMPRESA` ADD `CB04_URL_LOGOMARCA` VARCHAR(100) NULL DEFAULT NULL AFTER `CB04_OBSERVACAO`;
+ALTER TABLE `CB05_PRODUTO` ADD `CB05_NOME_CURTO` VARCHAR(15) NOT NULL AFTER `CB05_EMPRESA_ID`;
+ALTER TABLE `CB05_PRODUTO` ADD `CB05_IMPORTANTE` TEXT NULL DEFAULT NULL AFTER `CB05_DESCRICAO`;
+
 
 -- VIEW
 CREATE
@@ -48,8 +52,6 @@ ORDER BY DT1 DESC
 
 
 
-    
-
 ---------------------	DADOS PARA TESTE ----------------------
 -- add usuario
 INSERT INTO `CB02_CLIENTE` (`CB02_ID`, `CB02_NOME`, `CB02_CPF`, `CB02_EMAIL`, `CB02_STATUS`, `CB02_DT_CADASTRO`) VALUES (NULL, 'Eduardo Matias', '535.334.688-28', 'emailteste@test.com', '1', CURRENT_TIMESTAMP);
@@ -80,6 +82,36 @@ INSERT INTO `CB12_ITEM_CATEG_EMPRESA` (`CB12_ID`, `CB12_ITEM_ID`, `CB12_EMPRESA_
 
 -- add transferencia
 INSERT INTO `CB00_TRANSFERENCIA` (`CB00_ID`, `CB00_CLIENTE_ID`, `CB00_DT_SOLICITACAO`, `CB00_DT_CONCLUSAO`, `CB00_COD_BANCO`, `CB00_TP_CONTA`, `CB00_NUM_CONTA`, `CB00_AGENCIA`, `CB00_STATUS`, `CB00_VALOR_TRANSFERIDO`) VALUES ('', '1', '2017-03-18 12:25:36', NULL, '123', '4', '12344323', '532', '2', '100');
+
+-- add logo marca no estabelecimento 1
+UPDATE `CB04_EMPRESA` SET `CB04_URL_LOGOMARCA` = 'https://www.guiademoteis.com.br/imagens/logotipos/116-forest-hills.gif' WHERE `CB04_EMPRESA`.`CB04_ID` = 1;
+
+-- add imagem do estabelecimento
+INSERT INTO `CB13_FOTO_EMPRESA` (`CB13_ID`, `CB13_EMPRESA_ID`, `CB13_CAMPA`, `CB13_URL`) VALUES (NULL, '1', '1', 'img/motel-teste/Motel-Baton2109-fachada.jpg');
+INSERT INTO `CB13_FOTO_EMPRESA` (`CB13_ID`, `CB13_EMPRESA_ID`, `CB13_CAMPA`, `CB13_URL`) VALUES (NULL, '1', '0', 'img/demo/m3.jpg');
+
+-- produto
+UPDATE `CB05_PRODUTO` SET `CB05_NOME_CURTO` = 'Master', `CB05_TITULO` = 'Suíte Master', `CB05_DESCRICAO` = 'As características incluem uma tranquila área de estar, colchões de penas de luxo, roupa de cama egípcia de qualidade superior, controle individual do clima, Televisões Interativas IP e sistema à prova de som de última geração.' WHERE `CB05_PRODUTO`.`CB05_ID` = 1;
+
+-- add produto
+INSERT INTO `CB05_PRODUTO` (`CB05_ID`, `CB05_EMPRESA_ID`, `CB05_NOME_CURTO`, `CB05_TITULO`, `CB05_DESCRICAO`) VALUES (NULL, '1', 'Luxo', 'Suíte Luxo', 'Dispõem de muita luz natural graças às janelas que vão do piso ao teto. Também oferecem uma área cômoda de salão. Os banheiros de estilo contemporâneo dispõem de uma generosa ducha balinesa e comodidades de categoria superior. ');
+
+-- imagens do produto 1 e 2
+INSERT INTO `CB14_FOTO_PRODUTO` (`CB14_ID`, `CB14_PRODUTO_ID`, `CB14_CAPA`, `CB14_URL`) VALUES (NULL, '1', '1', 'img/motel-teste/116_big_4091_4.jpg'), (NULL, '1', '0', '116_big_553_1.jpg');
+INSERT INTO `CB14_FOTO_PRODUTO` (`CB14_ID`, `CB14_PRODUTO_ID`, `CB14_CAPA`, `CB14_URL`) VALUES (NULL, '2', '1', 'img/motel-teste/116_big_2022_2.jpg'), (NULL, '2', '0', 'img/motel-teste/116_big_2022_3.jpg'), (NULL, '2', '0', 'img/motel-teste/116_big_2022_4.jpg');
+UPDATE `CB14_FOTO_PRODUTO` SET `CB14_URL` = 'img/motel-teste/116_big_553_1.jpg' WHERE `CB14_FOTO_PRODUTO`.`CB14_ID` = 2;
+
+-- add valor ao campo importante no produto 1
+UPDATE `CB05_PRODUTO` SET `CB05_IMPORTANTE` = 'Pernoite Antecipado! Aproveite o pernoite com entrada as 18h e saída as 14h. Válido às sextas, sábados, feriados e vésperas. * Preços válidos para 2 pessoas. » Hora adicional - R$ 11,00. » Em feriados, vésperas, Dia dos Namorados e Reveillon será cobrado o valor do fim de semana. Os itens de decoração apresentados nas fotos, estão disponíveis no cardápio do motel.' WHERE `CB05_PRODUTO`.`CB05_ID` = 1;
+
+-- add variações do produto 1
+INSERT INTO `CB06_VARIACAO` (`CB06_ID`, `CB06_PRODUTO_ID`, `CB06_DESCRICAO`, `CB06_PRECO`) VALUES (NULL, '1', '2ª a 6ª - 1h', '60'), (NULL, '1', '2ª a 6ª - 2h', '70'), (NULL, '1', '2ª a 6ª - 3h', '80'), (NULL, '1', 'Pernoite: de 21h até as 14h', '130');
+
+-- add produtos
+INSERT INTO `CB05_PRODUTO` (`CB05_ID`, `CB05_EMPRESA_ID`, `CB05_NOME_CURTO`, `CB05_TITULO`, `CB05_DESCRICAO`, `CB05_IMPORTANTE`) VALUES (NULL, '1', 'Super Luxo', 'Apto Super Luxo', NULL, NULL), (NULL, '1', 'Com Piscina', 'Suíte com Piscina', NULL, NULL);
+
+UPDATE `CB11_ITEM_CATEGORIA` SET `CB11_DESCRICAO` = 'hidro' WHERE `CB11_ITEM_CATEGORIA`.`CB11_ID` = 2; UPDATE `CB11_ITEM_CATEGORIA` SET `CB11_DESCRICAO` = 'frigobar' WHERE `CB11_ITEM_CATEGORIA`.`CB11_ID` = 1;
+INSERT INTO `CB11_ITEM_CATEGORIA` (`CB11_ID`, `CB11_CATEGORIA_ID`, `CB11_DESCRICAO`, `CB11_STATUS`) VALUES (NULL, '1', 'ar-condicionado', '1'), (NULL, '1', 'ducha', '1'), (NULL, '1', 'canal erótico', '1'), (NULL, '1', 'piscina', '1');
 
 -----------------------------------------------------------------
 

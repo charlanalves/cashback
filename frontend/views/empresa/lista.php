@@ -20,16 +20,20 @@ ini_set('display_errors', 1);
                 </thead>-->
                 <tbody>
 
-                    <?php 
-                    foreach ($empresas as $v) {
-                        for ($i = 0; $i < 3; $i++) {
-                        ?>
+                    <?php foreach ($empresas as $v) { ?>
                     
                     <tr>
-                        <td class="text-center" style="width: 30px;"><i class="fa fa-globe fa-2x text-muted"></i></td>
+                        <td class="text-center" style="
+                            width: 80px; 
+                            background: #FFF url(<?= ($v['CB04_URL_LOGOMARCA'])?:'img/empresa_default.png'?>) no-repeat padding-box center center; 
+                            background-size: 100%;
+                            ">
+                            <!--<i class="fa fa-globe fa-2x text-muted"></i>-->
+                            <!--<image class="img-circle" src="" />-->
+                        </td>
                         <td>
                             <h4>
-                                <a href="#"><?= $v['CB04_NOME']?></a>
+                                <a href="index.php?r=empresa/detalhe&empresa=<?= $v['CB04_ID']?>"><?= $v['CB04_NOME']?></a>
                                 <small class="endereco-empresa ">
                                     <span class="hidden-mobile">
                                         <?= $v['CB04_END_LOGRADOURO'] . ", " . $v['CB04_END_NUMERO'] . " - " ?>    
@@ -47,7 +51,7 @@ ini_set('display_errors', 1);
                         </td>
                     </tr>
                     
-                    <?php }} ?>
+                    <?php } ?>
                     
                 </tbody>
             </table>

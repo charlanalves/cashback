@@ -10,7 +10,7 @@ foreach ($itens as $v) {
         $i = 0;
     }
     
-    echo '<label class="checkbox"><input type="checkbox" name="checkbox-item[]" value="' . $v['CB11_ID'] . '" title="Item 1"><i></i>' . $v['CB11_DESCRICAO'] . '</label></div>';
+    echo '<label class="checkbox"><input type="checkbox" name="checkbox-item[]" value="' . $v['CB11_ID'] . '" title="' . $v['CB11_DESCRICAO'] . '"><i></i>' . $v['CB11_DESCRICAO'] . '</label></div>';
     
 }
 ?>

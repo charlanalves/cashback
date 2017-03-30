@@ -9,8 +9,10 @@ use Yii;
  *
  * @property integer $CB05_ID
  * @property integer $CB05_EMPRESA_ID
+ * @property string $CB05_NOME_CURTO
  * @property string $CB05_TITULO
  * @property string $CB05_DESCRICAO
+ * @property string $CB05_IMPORTANTE
  *
  * @property CB04EMPRESA $cB05EMPRESA
  * @property CB07CASHBACK[] $cB07CASHBACKs
@@ -33,9 +35,10 @@ class CB05PRODUTO extends \common\models\GlobalModel
     public function rules()
     {
         return [
-            [['CB05_EMPRESA_ID', 'CB05_TITULO'], 'required'],
+            [['CB05_EMPRESA_ID', 'CB05_NOME_CURTO', 'CB05_TITULO'], 'required'],
             [['CB05_EMPRESA_ID'], 'integer'],
-            [['CB05_DESCRICAO'], 'string'],
+            [['CB05_DESCRICAO', 'CB05_IMPORTANTE'], 'string'],
+            [['CB05_NOME_CURTO'], 'string', 'max' => 15],
             [['CB05_TITULO'], 'string', 'max' => 30],
             [['CB05_EMPRESA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => CB04EMPRESA::className(), 'targetAttribute' => ['CB05_EMPRESA_ID' => 'CB04_ID']],
         ];
@@ -50,7 +53,9 @@ class CB05PRODUTO extends \common\models\GlobalModel
             'CB05_ID' => Yii::t('app', 'Cb05  ID'),
             'CB05_EMPRESA_ID' => Yii::t('app', 'Cb05  Empresa  ID'),
             'CB05_TITULO' => Yii::t('app', 'Cb05  Titulo'),
+            'CB05_NOME_CURTO' => Yii::t('app', 'Cb05  Nome Curto'),
             'CB05_DESCRICAO' => Yii::t('app', 'Cb05  Descricao'),
+            'CB05_IMPORTANTE' => Yii::t('app', 'Cb05  Importante'),
         ];
     }
 

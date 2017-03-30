@@ -18,7 +18,6 @@ class EmpresaController extends GlobalBaseController {
         $this->layout = 'smartAdminEmpresa';
         $cliente = 1;
 
-
         $layout = $data = [];
 
         // saldo do cliente
@@ -52,6 +51,15 @@ class EmpresaController extends GlobalBaseController {
             $r .= "<option value='" . $v['CB10_ID'] . "'>" . $v['CB10_NOME'] . "</option>\n";
         }
         return $r;
+    }
+    
+    /*
+     * Detalhe da empresa
+     */
+    public function actionDetalhe($empresa) {
+        $this->layout = 'smartAdminEmpresaDetalhe';
+        $dados = CB04EMPRESA::getEmpresa($empresa);
+        return $this->render(($dados) ? 'detalhe' : 'error', ['empresa' => $dados]);
     }
 
 }
