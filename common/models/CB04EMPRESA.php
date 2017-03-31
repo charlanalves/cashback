@@ -237,7 +237,6 @@ class CB04EMPRESA extends \common\models\GlobalModel {
                         ->orderBy('CB07_DIA_SEMANA')
                         ->all();
 
-
                 // variações
                 $retornoProduto['VARIACAO'] = CB06VARIACAO::find()
                         ->where(['CB06_PRODUTO_ID' => $p['CB05_ID']])

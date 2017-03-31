@@ -10,6 +10,20 @@ ini_set('display_errors', 1);
     .table-bordered, .table-bordered>tbody>tr{
         border: 1px solid #ddd;
     }
+    
+    /* tabela chashback do produto */
+    .table-cashback-produto{}
+    .table-cashback-produto>thead>tr>th {
+        text-align: center!important;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 1px;
+        padding-bottom: 5px;
+    }
+    .table-cashback-produto>thead>tr>th span {
+        padding: 1px 5px;
+        border-radius: 5px;
+    }
 </style>
 
 <div class="row">
@@ -76,7 +90,6 @@ ini_set('display_errors', 1);
                         </div>
                     </div>
 
-
                     <div class="row">
                         <div class="col-sm-12 padding-10">
 
@@ -84,12 +97,59 @@ ini_set('display_errors', 1);
 
                                 <!-- widget content -->
                                 <div class="widget-body">
-
-
+                                    
                                     <?php
                                     $i = 1;
                                     $tabs = $tabs_content = '';
                                     foreach ($empresa['produto'] as $produto) {
+
+
+                                        // cashback do produto ---------------------------------
+                                        $cashback_produto = $cashback_unico = '';
+                                        $cashback_dia = [];
+                                        if (!empty($produto['CASHBACK'])) {
+                                            foreach ($produto['CASHBACK'] as $cashback) {
+                                                if (!$cashback['CB07_DIA_SEMANA']) {
+                                                    $cashback_dia = [];
+                                                    $cashback_unico = (int) $cashback['CB07_PERCENTUAL'];
+                                                    break;
+                                                } else {
+                                                    $cashback_dia[$cashback['CB07_DIA_SEMANA']] = (int) $cashback['CB07_PERCENTUAL'];
+                                                }
+                                            }
+
+                                            $diaSemana = [
+                                                1 => 'SEG',
+                                                2 => 'TER',
+                                                3 => 'QUA',
+                                                4 => 'QUI',
+                                                5 => 'SEXT',
+                                                6 => 'SÁB',
+                                                0 => 'DOM'
+                                            ];
+                                            
+                                            // se o cashback for por dia
+                                            if ($cashback_dia) {
+                                                $cashback_dia_tr = '';
+                                                foreach ($diaSemana as $d => $cbDia) {
+                                                    $cashback_dia_tr .= '<th>' . $cbDia . '<br><span class="btn-' . ((array_key_exists($d, $cashback_dia) ? 'success">' . $cashback_dia[$d] : 'danger">0')) . '%</span></th>';
+                                                }
+                                                $cashback_produto = '
+                                                    <table class="table table-bordered table-striped table-cashback-produto">
+                                                        <thead>
+                                                            <tr>' . $cashback_dia_tr . '</tr>
+                                                        </thead>
+                                                    </table>';
+
+                                                // se cashback por produto
+                                            } else if ($cashback_unico) {
+                                                $cashback_produto = (string) $cashback_unico . '%';
+                                            }
+                                        }
+
+
+
+
 
                                         // create tabs --------------------------------------
                                         $tabs .= '<li class="' . (($i == 1) ? 'active' : '') . '">' . "\n";
@@ -132,16 +192,15 @@ ini_set('display_errors', 1);
                                         // descrição do produto --------------------------------
                                         $tabs_content .= '<p class="font-sm text-justify">' . $produto['CB05_DESCRICAO'] . '</p>' . "\n";
 
+                                        // credito por produto ---------------------------------
+                                        $tabs_content .= (!$cashback_produto) ? '' : '<p class="font-md no-margin"><span class="fa fa-money"></span> &nbsp;Crédito</p>' . $cashback_produto;
+
                                         // variação do produto ---------------------------------
                                         if (!empty($produto['VARIACAO'])) {
 
                                             $tabela_variacao = '
+                                                <p class="font-md no-margin"><span class="fa fa-tags"></span> &nbsp;Promoções</p>
                                                 <table class="table table-bordered table-striped table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="2"><span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp; Promoções</th>
-                                                        </tr>
-                                                    </thead>
                                                     <tbody>';
 
                                             foreach ($produto['VARIACAO'] as $variacao) {
@@ -189,39 +248,32 @@ ini_set('display_errors', 1);
                                 </div>
                                 <!-- end widget content -->
 
+                                <p class="font-md no-margin">
+                                    <span class="fa fa-clock-o"></span> &nbsp;Funcionamento
+                                </p>
+                                <p class="font-light text-justify">
+                                    <?= $empresa['empresa']['CB04_FUNCIONAMENTO'] ?>
+                                </p>
+                                <p class="font-light text-justify">
+                                    <?= $empresa['empresa']['CB04_OBSERVACAO'] ?>
+                                </p>
+                                <br />
+                                <p class="font-md no-margin">
+                                    <span class="fa fa-credit-card"></span> &nbsp;Pagamentos
+                                </p>
+                                <p class="font-light text-justify">
+                                    <?php
+                                    $fp = [];
+                                    foreach ($empresa['forma_pagamento'] as $value) {
+                                        $fp[] = $value['CB08_URL_IMG'] . ' ' . $value['CB08_NOME'];
+                                    }
+                                    echo implode(' | ', $fp);
+                                    ?>
+                                </p>
                             </div>
                         </div>
+
                     </div>
-
-
-
-                    <div class="row">
-                        <div class="col-sm-12 padding-10">
-                            <p class="font-md no-margin">
-                                <span class="fa fa-clock-o"></span> &nbsp;Funcionamento
-                            </p>
-                            <p class="font-light text-justify">
-                                <?= $empresa['empresa']['CB04_FUNCIONAMENTO'] ?>
-                            </p>
-                            <p class="font-light text-justify">
-                                <?= $empresa['empresa']['CB04_OBSERVACAO'] ?>
-                            </p>
-                            <br />
-                            <p class="font-md no-margin">
-                                <span class="fa fa-credit-card"></span> &nbsp;Pagamentos
-                            </p>
-                            <p class="font-light text-justify">
-                                <?php
-                                $fp = [];
-                                foreach ($empresa['forma_pagamento'] as $value) {
-                                    $fp[] = $value['CB08_URL_IMG'] . ' ' . $value['CB08_NOME'];
-                                }
-                                echo implode(' | ', $fp);
-                                ?>
-                            </p>
-                        </div>
-                    </div>
-
 
                 </div>
 
