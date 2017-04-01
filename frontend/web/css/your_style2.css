@@ -1,0 +1,263 @@
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the 
+ * later versions of this theme. 
+ * 
+ * We advise that you use use this CSS to override 
+ * SmartAdmin styles. 
+ * 
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+/*
+ * INDEX
+ * 
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */
+
+.btn-header.pull-right {    
+    margin-right: 5px;
+}
+
+@media only screen and (max-width: 479px) and (min-width: 320px){
+    #header {
+        padding-right: 0px !important;
+    }
+}
+
+.nav-tabs>li.active>a {
+    -webkit-box-shadow: 0 0 0 #57889c;
+    -moz-box-shadow: 0 0 0 #57889c;
+    /* box-shadow: 0px 3px 0px #57889c; */
+    border-top-width: 0 !important;
+    margin-top: 1px!important;
+    font-weight: 700;
+    border-bottom: 3px solid #57889c !important;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    border: 0px solid #ddd;
+}
+
+.nav-tabs>li>a {
+    text-transform: uppercase;
+    /*min-width: 116px;*/
+}
+
+.nav-tabs>li>a {
+    border-radius: 0;
+    color: #bfbfbf;
+}
+
+.widget-body {
+    width: 100% !important;
+    margin: 0 auto!important;
+    padding:0 !important;
+}
+
+.fixed-header #header {
+    position: relative;
+    width: 100%;
+    z-index: 905;
+    top: 0;
+    border-bottom: 2px solid #999;
+    border-bottom: 0px solid rgba(0, 0, 0, .3);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, .1);
+    padding: 0 !important;
+}
+.btn-success {
+    color: #fff;
+    background-color: #35b135;
+    border-color: #659265;
+}
+
+@media (max-width:50px) {
+    .col-xs-custom-50{
+        width: 50%;
+    }
+
+    .col-no-padding{
+        padding: 0 !important;
+    }
+
+    .product-content .product-deatil {
+        padding-left: 15px;
+        padding-top: 0px;
+    }
+    .product-deatil {
+        padding: 0;
+    }
+
+    .smart-form .row {
+        margin: 0px 32px !important;
+    }
+    .product-content .product-info {
+        float:right;
+    }
+
+    .product-content .description {    
+        padding: 4px 10px 10px 16px;
+    }
+
+    .carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {    
+        max-width: 86%;    
+    }
+    .product-content .product-image {
+        min-height: 172px;
+        padding-left: 29px;
+    }
+    .product-content .product-deatil {
+        padding-bottom: 4px;
+    }
+    .product-content {        
+        margin-bottom: 0px;
+        margin-top: 5px;
+    }
+    .padding-10 {
+        padding: 0px!important;
+    }
+
+    #content, #ribbon {   
+        padding-top: 0px;
+    }
+    .bg-white{
+        background: white;
+    }
+    .width-100{
+        width: 100%;
+        padding: 8px !important;
+    }
+    .row.bg-white {
+        margin-top: 51px;
+    }
+}
+
+@media (max-width:380px) {
+    .nav-tabs>li>a {
+        font-size: 12px;
+    }
+    .product-content .product-deatil {
+        padding-left: 0px;
+        padding-top: 0px;
+    }
+    .product-content .description {
+        padding: 3px 9px 7px 2px;
+    }
+}
+
+#finalizarVenda {
+    border-radius: 12px;
+    background: #0091d9 !important;
+}
+.h3etapa{
+    margin-top: 43px;
+}
+
+span.campo-obrigatorio {
+    color: #b94a48;
+}
+
+#wizard-1 .form-group {
+    text-align: left;
+}
+div#form-bootstrapWizard {
+    text-align: center;
+    position: relative;
+    left: 25%;
+    top: 7px;    
+}
+
+.modal-dialog.modal-venda-rapida {    
+    margin: 0 auto; 
+}
+
+.modal-content.modal-content-venda-rapida {
+    border: 0;
+}
+
+#container-finalizar-venda{    
+    width: 100%;
+    margin: 0;
+    padding-top: 7px;
+    padding-bottom: 100%;
+}
+
+.height-800{
+    height: 800px;
+}
+
+#container-finalizar-venda-web{
+    display: none !important;
+}
+
+.fixed-header #main {
+    /*margin-top: 99px !important; */
+}
+#main {
+    min-height: 420px !important;
+    margin: 0!important;
+}
+
+
+@media (min-width: 768px) {
+
+    .height-800{
+        height: auto;
+    }
+    .modal-dialog.modal-venda-rapida {    
+        margin: 50px auto; 
+    }
+
+    #container-finalizar-venda{    
+        display: none !important;
+    }
+    #container-finalizar-venda-web{
+        display: block !important;
+    }
+
+
+
+
+}
+
+.fixed-page{
+    position: fixed;
+    z-index: 9999999;
+}
+
+.finalizar-venda{
+    text-align: center;
+}
+
+.simple-hide{
+    display: none;
+}
+
+@media screen and (max-width: 600px){
+    .smart-form .col {
+        float: left;
+        width: 100%;
+    }
+    .smart-form .col-4 {
+        width: 33.33%;
+    }
+    .smart-form .col-3 {
+        width: 25%;
+    }
+    .smart-form .col-5 {
+        width: 41.66%;
+    }
+    .smart-form .col-8 {
+        width: 66.67%;
+    }
+
+}
+
+.height-top {
+    height:70px!important;
+}
+
+

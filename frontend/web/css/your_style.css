@@ -1,0 +1,482 @@
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the 
+ * later versions of this theme. 
+ * 
+ * We advise that you use use this CSS to override 
+ * SmartAdmin styles. 
+ * 
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+/*
+ * INDEX
+ * 
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */
+
+.btn-header.pull-right {    
+    margin-right: 5px;
+}
+
+@media only screen and (max-width: 479px) and (min-width: 320px){
+    #header {
+        padding-right: 0px !important;
+    }
+}
+
+.nav-tabs>li.active>a {
+    -webkit-box-shadow: 0 0 0 #57889c;
+    -moz-box-shadow: 0 0 0 #57889c;
+    /* box-shadow: 0px 3px 0px #57889c; */
+    border-top-width: 0 !important;
+    margin-top: 1px!important;
+    font-weight: 700;
+    border-bottom: 3px solid #57889c !important;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    border: 0px solid #ddd;
+}
+
+.nav-tabs>li>a {
+    text-transform: uppercase;
+    /*min-width: 116px;*/
+}
+
+.nav-tabs>li>a {
+    border-radius: 0;
+    color: #bfbfbf;
+}
+
+.widget-body {
+    width: 100% !important;
+    margin: 0 auto!important;
+    padding:0 !important;
+}
+
+.fixed-header #header {
+    position: relative;
+    width: 100%;
+    z-index: 905;
+    top: 0;
+    border-bottom: 2px solid #999;
+    border-bottom: 0px solid rgba(0, 0, 0, .3);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, .1);
+    padding: 0 !important;
+}
+
+
+@media (max-width:50px) {
+    .col-xs-custom-50{
+        width: 50%;
+    }
+
+    .col-no-padding{
+        padding: 0 !important;
+    }
+
+    .product-content .product-deatil {
+        padding-left: 15px;
+        padding-top: 0px;
+    }
+    .product-deatil {
+        padding: 0;
+    }
+
+    .smart-form .row {
+        margin: 0px 32px !important;
+    }
+    .product-content .product-info {
+        float:right;
+    }
+
+    .product-content .description {    
+        padding: 4px 10px 10px 16px;
+    }
+
+    .carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {    
+        max-width: 86%;    
+    }
+    .product-content .product-image {
+        min-height: 172px;
+        padding-left: 29px;
+    }
+    .product-content .product-deatil {
+        padding-bottom: 4px;
+    }
+    .product-content {        
+        margin-bottom: 0px;
+        margin-top: 5px;
+    }
+    .padding-10 {
+        padding: 0px!important;
+    }
+
+    #content, #ribbon {   
+        padding-top: 0px;
+    }
+    .bg-white{
+        background: white;
+    }
+    .width-100{
+        width: 100%;
+        padding: 8px !important;
+    }
+    .row.bg-white {
+        margin-top: 51px;
+    }
+}
+
+@media (max-width:380px) {
+    .nav-tabs>li>a {
+        font-size: 12px;
+    }
+    .product-content .product-deatil {
+        padding-left: 0px;
+        padding-top: 0px;
+    }
+    .product-content .description {
+        padding: 3px 9px 7px 2px;
+    }
+}
+
+#finalizarVenda {
+    border-radius: 12px;
+    background: #0091d9 !important;
+}
+.h3etapa{
+    margin-top: 43px;
+}
+
+span.campo-obrigatorio {
+    color: #b94a48;
+}
+
+#wizard-1 .form-group {
+    text-align: left;
+}
+div#form-bootstrapWizard {
+    text-align: center;
+    position: relative;
+    left: 25%;
+    top: 7px;    
+}
+
+.modal-dialog.modal-venda-rapida {    
+    margin: 0 auto; 
+}
+
+.modal-content.modal-content-venda-rapida {
+    border: 0;
+}
+
+#container-finalizar-venda{    
+    width: 100%;
+    margin: 0;
+    padding-top: 7px;
+    padding-bottom: 100%;
+}
+
+.height-800{
+    height: 800px;
+}
+
+#container-finalizar-venda-web{
+    display: none !important;
+}
+
+.fixed-header #main {
+    /*margin-top: 99px !important; */
+}
+#main {
+    min-height: 420px !important;
+    margin: 0!important;
+}
+
+
+@media (min-width: 768px) {
+
+    .height-800{
+        height: auto;
+    }
+    .modal-dialog.modal-venda-rapida {    
+        margin: 50px auto; 
+    }
+
+    #container-finalizar-venda{    
+        display: none !important;
+    }
+    #container-finalizar-venda-web{
+        display: block !important;
+    }
+
+
+
+
+}
+
+.fixed-page{
+    position: fixed;
+    z-index: 9999999;
+}
+
+.finalizar-venda{
+    text-align: center;
+}
+
+.simple-hide{
+    display: none;
+}
+
+@media screen and (max-width: 700px){
+    .smart-form .col {
+        float: left;
+        width: 100%;
+    }
+    .smart-form .col-4 {
+        width: 33.33%;
+    }
+    .smart-form .col-3 {
+        width: 25%;
+    }
+    .smart-form .col-5 {
+        width: 41.66%;
+    }
+    .smart-form .col-8 {
+        width: 66.67%;
+    }
+
+}
+
+.height-top {
+    height:70px!important;
+}
+
+
+
+
+
+.price-container span{
+    font-size: 26px!important;
+}
+
+.price-container span span{
+    padding-left: 12px!important;
+    font-size: 11px!important;
+    color: #888!important;
+}
+
+.price-container {
+    margin-top: -25px!important;
+    position: relative;
+    float: right!important; 
+    text-align: right;
+}
+
+.price-container span{
+    display:block;
+    clear:both;
+}
+
+div#main div.container{
+    padding-top: 0px!important
+}
+
+
+
+
+
+
+
+
+.float-right{float: right}
+.float-left{float: left}
+
+.padding-2{padding: 2px!important}
+
+.checkbox, .radio{
+    margin-top: 0px;
+    margin-left: 10px;
+}
+
+.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {    
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.row {
+    margin-left: 0px;
+    margin-right: 0px; 
+}
+
+
+
+/* CASHBACK */
+
+body{
+    max-width: 700px!important; 
+    margin: 0 auto;
+}
+
+div#main{
+    padding-bottom: 0px!important;
+    margin-top: 0px !important;
+}
+
+div#main div.container{
+    width: 100%;
+    max-width: 700px!important; 
+}
+
+div.page-footer{
+    position: relative;
+}
+
+div.meu-saldo{
+    font-size: 28px!important;
+    padding: 0 10px;
+    /*border: 1px silver solid;*/
+    height: 100%;
+    width: auto;
+    margin: 0 auto;
+    line-height: 20px
+}
+
+div.meu-saldo span{
+    font-size: 8px!important;
+    color: #777;
+    display:block;
+    clear:both;
+}
+
+a#meu-saldo-btn{
+    float: right;
+    padding: 15px 10px;
+}
+
+ul#menu-tab{
+    border: 0px!important;
+    border-top: 1px #DDD solid!important;
+}
+
+ul#menu-tab li{
+    width: 33.33%;
+    margin: 0 auto !important;
+    padding: 0px!important;
+    text-align: center;
+    display:inline-block!important;
+}
+
+ul#menu-tab li a{
+    margin: 0 auto !important;
+}
+
+div#menu-filtro {
+    width: 100%;
+    max-width: 700px!important; 
+    position: absolute;
+    position: relative;
+    top: -8px;
+}
+
+div#itens-categoria{
+    width: 100%;
+    max-width: 700px!important;
+    position: relative;
+    padding: 0px;
+    margin: 0px;
+    top: -8px;
+}
+
+div#itens-categoria div#itens-categoria-selected{
+    background-color: #FFF;
+    padding: 5px;
+    font-size: 10px;
+    border: 1px solid #DDD;
+    border-top: 0px;
+    display: none;
+}
+
+div#itens-categoria div#itens-categoria-all{
+    background-color: #FFF;
+    padding: 6px;
+    border-top: 3px solid #0091d9;
+    border-bottom: 1px solid #DDD;
+    display: none;
+}
+
+div#itens-categoria div#itens-categoria-all .row{
+    margin: 0px;
+    margin-left: 10px;
+    padding: 0px;
+}
+
+div#itens-categoria div#itens-categoria-all label{
+    font-size: 10px;
+}
+
+
+/* LISTA DE ESTABELECIMENTOS */
+.lista-estabelecimentos{
+    margin-bottom: 0px;
+}
+
+.lista-estabelecimentos tr td{
+    padding: 25px 5px!important;
+    padding-top: 20px;
+    height: auto;
+}
+
+.lista-estabelecimentos tr td i{
+    padding: 0px;
+}
+
+.lista-estabelecimentos .endereco-empresa{
+    font-size: 10px;
+}
+
+
+.lista-estabelecimentos .vlr-cashback-1{
+    background-color: #35b135;
+}
+
+.lista-estabelecimentos .vlr-cashback-2{
+    background-color: #c7901c;
+}
+
+.lista-estabelecimentos .vlr-cashback-3{
+    background-color: #77021d;
+}
+
+.lista-estabelecimentos .vlr-cashback-1,
+.lista-estabelecimentos .vlr-cashback-2,
+.lista-estabelecimentos .vlr-cashback-3{
+    font-size: 9px;
+    position: absolute;
+    right: 10px;
+    padding: 0px 7px;
+    color: #FFF;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .05);
+    -moz-box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .05);
+    -webkit-box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .05);
+}
+
+.lista-estabelecimentos .vlr-cashback-1 span,
+.lista-estabelecimentos .vlr-cashback-2 span,
+.lista-estabelecimentos .vlr-cashback-3 span{
+    font-size: 20px;
+    font-weight: bold;
+    padding: 2px;
+}
+@media (max-width: 979px){
+    .profile-pic+div, .profile-pic+div+div {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
