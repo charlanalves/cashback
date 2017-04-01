@@ -1,0 +1,181 @@
+a:11:{s:6:"config";a:5:{s:10:"phpVersion";s:6:"5.5.38";s:10:"yiiVersion";s:8:"2.0.11.2";s:11:"application";a:8:{s:3:"yii";s:8:"2.0.11.2";s:4:"name";s:14:"My Application";s:7:"version";s:3:"1.0";s:8:"language";s:5:"en-US";s:14:"sourceLanguage";s:5:"en-US";s:7:"charset";s:5:"UTF-8";s:3:"env";s:3:"dev";s:5:"debug";b:1;}s:3:"php";a:5:{s:7:"version";s:6:"5.5.38";s:6:"xdebug";b:1;s:3:"apc";b:0;s:8:"memcache";b:0;s:9:"memcached";b:0;}s:10:"extensions";a:5:{s:24:"yiisoft/yii2-swiftmailer";a:3:{s:4:"name";s:24:"yiisoft/yii2-swiftmailer";s:7:"version";s:7:"2.0.6.0";s:5:"alias";a:1:{s:16:"@yii/swiftmailer";s:58:"/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2-swiftmailer";}}s:22:"yiisoft/yii2-bootstrap";a:3:{s:4:"name";s:22:"yiisoft/yii2-bootstrap";s:7:"version";s:7:"2.0.6.0";s:5:"alias";a:1:{s:14:"@yii/bootstrap";s:56:"/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2-bootstrap";}}s:18:"yiisoft/yii2-debug";a:3:{s:4:"name";s:18:"yiisoft/yii2-debug";s:7:"version";s:7:"2.0.9.0";s:5:"alias";a:1:{s:10:"@yii/debug";s:52:"/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2-debug";}}s:16:"yiisoft/yii2-gii";a:3:{s:4:"name";s:16:"yiisoft/yii2-gii";s:7:"version";s:7:"2.0.5.0";s:5:"alias";a:1:{s:8:"@yii/gii";s:50:"/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2-gii";}}s:18:"yiisoft/yii2-faker";a:3:{s:4:"name";s:18:"yiisoft/yii2-faker";s:7:"version";s:7:"2.0.3.0";s:5:"alias";a:1:{s:10:"@yii/faker";s:52:"/opt/lampp/htdocs/cashback/vendor/yiisoft/yii2-faker";}}}}s:7:"request";a:14:{s:7:"flashes";a:0:{}s:10:"statusCode";i:200;s:14:"requestHeaders";a:9:{s:4:"host";s:9:"localhost";s:10:"connection";s:10:"keep-alive";s:13:"cache-control";s:9:"max-age=0";s:25:"upgrade-insecure-requests";s:1:"1";s:10:"user-agent";s:105:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";s:6:"accept";s:74:"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";s:15:"accept-encoding";s:19:"gzip, deflate, sdch";s:15:"accept-language";s:35:"pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4";s:6:"cookie";s:365:"__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=e6e87a0f2bd31e0f5b680bcf979b502aaab18e81941e6f0e45cdd2c178940079a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22nLXN5cyeUNMtXUPEo3B8OseHfT_k1TH0%22%3B%7D; XDEBUG_SESSION=netbeans-xdebug";}s:15:"responseHeaders";a:2:{s:12:"X-Powered-By";s:10:"PHP/5.5.38";s:12:"Content-Type";s:24:"text/html; charset=UTF-8";}s:5:"route";s:13:"empresa/index";s:6:"action";s:53:"frontend\controllers\EmpresaController::actionIndex()";s:12:"actionParams";a:0:{}s:11:"requestBody";a:0:{}s:6:"SERVER";a:34:{s:9:"UNIQUE_ID";s:24:"WN8V338AAQEAAFQMFGMAAAAB";s:9:"HTTP_HOST";s:9:"localhost";s:15:"HTTP_CONNECTION";s:10:"keep-alive";s:18:"HTTP_CACHE_CONTROL";s:9:"max-age=0";s:30:"HTTP_UPGRADE_INSECURE_REQUESTS";s:1:"1";s:15:"HTTP_USER_AGENT";s:105:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";s:11:"HTTP_ACCEPT";s:74:"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";s:20:"HTTP_ACCEPT_ENCODING";s:19:"gzip, deflate, sdch";s:20:"HTTP_ACCEPT_LANGUAGE";s:35:"pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4";s:11:"HTTP_COOKIE";s:365:"__utma=111872281.348099296.1485728603.1485822909.1485922939.3; __utmz=111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _csrf-frontend=e6e87a0f2bd31e0f5b680bcf979b502aaab18e81941e6f0e45cdd2c178940079a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22nLXN5cyeUNMtXUPEo3B8OseHfT_k1TH0%22%3B%7D; XDEBUG_SESSION=netbeans-xdebug";s:4:"PATH";s:70:"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin";s:15:"LD_LIBRARY_PATH";s:29:"/opt/lampp/lib:/opt/lampp/lib";s:16:"SERVER_SIGNATURE";s:0:"";s:15:"SERVER_SOFTWARE";s:78:"Apache/2.4.23 (Unix) OpenSSL/1.0.2h PHP/5.5.38 mod_perl/2.0.8-dev Perl/v5.16.3";s:11:"SERVER_NAME";s:9:"localhost";s:11:"SERVER_ADDR";s:3:"::1";s:11:"SERVER_PORT";s:2:"80";s:11:"REMOTE_ADDR";s:3:"::1";s:13:"DOCUMENT_ROOT";s:17:"/opt/lampp/htdocs";s:14:"REQUEST_SCHEME";s:4:"http";s:14:"CONTEXT_PREFIX";s:0:"";s:21:"CONTEXT_DOCUMENT_ROOT";s:17:"/opt/lampp/htdocs";s:12:"SERVER_ADMIN";s:15:"you@example.com";s:15:"SCRIPT_FILENAME";s:49:"/opt/lampp/htdocs/cashback/frontend/web/index.php";s:11:"REMOTE_PORT";s:5:"36622";s:17:"GATEWAY_INTERFACE";s:7:"CGI/1.1";s:15:"SERVER_PROTOCOL";s:8:"HTTP/1.1";s:14:"REQUEST_METHOD";s:3:"GET";s:12:"QUERY_STRING";s:9:"r=empresa";s:11:"REQUEST_URI";s:42:"/cashback/frontend/web/index.php?r=empresa";s:11:"SCRIPT_NAME";s:32:"/cashback/frontend/web/index.php";s:8:"PHP_SELF";s:32:"/cashback/frontend/web/index.php";s:18:"REQUEST_TIME_FLOAT";d:1491015135.63899993896484375;s:12:"REQUEST_TIME";i:1491015135;}s:3:"GET";a:1:{s:1:"r";s:7:"empresa";}s:4:"POST";a:0:{}s:6:"COOKIE";a:4:{s:6:"__utma";s:54:"111872281.348099296.1485728603.1485822909.1485922939.3";s:6:"__utmz";s:70:"111872281.1485728603.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)";s:14:"_csrf-frontend";s:140:"e6e87a0f2bd31e0f5b680bcf979b502aaab18e81941e6f0e45cdd2c178940079a:2:{i:0;s:14:"_csrf-frontend";i:1;s:32:"nLXN5cyeUNMtXUPEo3B8OseHfT_k1TH0";}";s:14:"XDEBUG_SESSION";s:15:"netbeans-xdebug";}s:5:"FILES";a:0:{}s:7:"SESSION";a:0:{}}s:3:"log";a:1:{s:8:"messages";a:16:{i:0;a:6:{i:0;s:33:"Bootstrap with yii\log\Dispatcher";i:1;i:8;i:2;s:31:"yii\base\Application::bootstrap";i:3;d:1491015135.7798459529876708984375;i:4;a:0:{}i:5;i:2635304;}i:1;a:6:{i:0;s:21:"Loading module: debug";i:1;i:8;i:2;s:26:"yii\base\Module::getModule";i:3;d:1491015135.78011798858642578125;i:4;a:0:{}i:5;i:2638480;}i:2;a:6:{i:0;s:44:"Bootstrap with yii\debug\Module::bootstrap()";i:1;i:8;i:2;s:31:"yii\base\Application::bootstrap";i:3;d:1491015135.792057037353515625;i:4;a:0:{}i:5;i:3319296;}i:3;a:6:{i:0;s:19:"Loading module: gii";i:1;i:8;i:2;s:26:"yii\base\Module::getModule";i:3;d:1491015135.7944009304046630859375;i:4;a:0:{}i:5;i:3498128;}i:4;a:6:{i:0;s:42:"Bootstrap with yii\gii\Module::bootstrap()";i:1;i:8;i:2;s:31:"yii\base\Application::bootstrap";i:3;d:1491015135.7960579395294189453125;i:4;a:0:{}i:5;i:3554320;}i:6;a:6:{i:0;s:26:"Route requested: 'empresa'";i:1;i:8;i:2;s:34:"yii\web\Application::handleRequest";i:3;d:1491015135.801250934600830078125;i:4;a:0:{}i:5;i:3977296;}i:7;a:6:{i:0;s:27:"Route to run: empresa/index";i:1;i:8;i:2;s:30:"yii\base\Controller::runAction";i:3;d:1491015135.805387973785400390625;i:4;a:0:{}i:5;i:4298944;}i:8;a:6:{i:0;s:69:"Running action: frontend\controllers\EmpresaController::actionIndex()";i:1;i:8;i:2;s:36:"yii\base\InlineAction::runWithParams";i:3;d:1491015135.8059809207916259765625;i:4;a:0:{}i:5;i:4315024;}i:9;a:6:{i:0;s:69:"SELECT SUM(VLR2) AS SALDO FROM VIEW_EXTRATO_CLIENTE WHERE CLIENTE = 1";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8177430629730224609375;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/VIEWEXTRATOCLIENTE.php";s:4:"line";i:84;s:8:"function";s:8:"queryOne";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:24;s:8:"function";s:19:"saldoAtualByCliente";s:5:"class";s:32:"common\models\VIEWEXTRATOCLIENTE";s:4:"type";s:2:"::";}}i:5;i:5724760;}i:10;a:6:{i:0;s:59:"Opening DB connection: mysql:host=localhost;dbname=cashback";i:1;i:4;i:2;s:23:"yii\db\Connection::open";i:3;d:1491015135.8181231021881103515625;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/VIEWEXTRATOCLIENTE.php";s:4:"line";i:84;s:8:"function";s:8:"queryOne";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:24;s:8:"function";s:19:"saldoAtualByCliente";s:5:"class";s:32:"common\models\VIEWEXTRATOCLIENTE";s:4:"type";s:2:"::";}}i:5;i:5735448;}i:15;a:6:{i:0;s:52:"SELECT * FROM `CB10_CATEGORIA` WHERE `CB10_STATUS`=1";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.83156108856201171875;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6871352;}i:18;a:6:{i:0;s:39:"SHOW FULL COLUMNS FROM `CB10_CATEGORIA`";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8336389064788818359375;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6912816;}i:21;a:6:{i:0;s:615:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'CB10_CATEGORIA' AND kcu.table_name = 'CB10_CATEGORIA'";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8374760150909423828125;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6957168;}i:24;a:6:{i:0;s:1058:"
+        SELECT 
+            CB04_ID,
+            CB04_NOME,
+            CB04_QTD_FAVORITO,
+            CB04_QTD_COMPARTILHADO,
+            CB04_END_LOGRADOURO,
+            CB04_END_BAIRRO,
+            CB04_END_CIDADE,
+            CB04_END_UF,
+            CB04_END_NUMERO,
+            CB04_NOME,
+            CB04_URL_LOGOMARCA,
+            FORMAT(MAX(CB07_PERCENTUAL), 0, 'de_DE') AS CASHBACK
+        FROM CB04_EMPRESA
+            LEFT JOIN CB05_PRODUTO ON(CB05_EMPRESA_ID = CB04_ID)
+            LEFT JOIN CB06_VARIACAO ON(CB06_PRODUTO_ID = CB05_ID)
+            LEFT JOIN CB10_CATEGORIA ON(CB10_ID = CB04_CATEGORIA_ID)
+            LEFT JOIN CB12_ITEM_CATEG_EMPRESA ON(CB12_EMPRESA_ID = CB04_ID OR CB05_ID = CB12_PRODUTO_ID)
+            LEFT JOIN CB07_CASH_BACK ON(CB07_PRODUTO_ID = CB05_ID  OR CB07_VARIACAO_ID = CB06_ID)
+        WHERE CB04_EMPRESA.CB04_STATUS = 1  
+            GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPARTILHADO, CB04_END_LOGRADOURO, 
+            CB04_END_BAIRRO, CB04_END_CIDADE, CB04_END_UF, CB04_END_NUMERO, CB04_NOME";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.84160709381103515625;i:4;a:2:{i:0;a:5:{s:4:"file";s:56:"/opt/lampp/htdocs/cashback/common/models/CB04EMPRESA.php";s:4:"line";i:190;s:8:"function";s:8:"queryAll";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:31;s:8:"function";s:11:"getEmpresas";s:5:"class";s:25:"common\models\CB04EMPRESA";s:4:"type";s:2:"::";}}i:5;i:7068192;}i:27;a:6:{i:0;s:80:"Rendering view file: /opt/lampp/htdocs/cashback/frontend/views/empresa/lista.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1491015135.845223903656005859375;i:4;a:1:{i:0;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:33;s:8:"function";s:6:"render";s:5:"class";s:19:"yii\base\Controller";s:4:"type";s:2:"->";}}i:5;i:7260328;}i:28;a:6:{i:0;s:92:"Rendering view file: /opt/lampp/htdocs/cashback/frontend/views/layouts/smartAdminEmpresa.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1491015135.8460509777069091796875;i:4;a:1:{i:0;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:33;s:8:"function";s:6:"render";s:5:"class";s:19:"yii\base\Controller";s:4:"type";s:2:"->";}}i:5;i:7269000;}}}s:9:"profiling";a:3:{s:6:"memory";i:8401880;s:4:"time";d:0.1104028224945068359375;s:8:"messages";a:12:{i:11;a:6:{i:0;s:59:"Opening DB connection: mysql:host=localhost;dbname=cashback";i:1;i:80;i:2;s:23:"yii\db\Connection::open";i:3;d:1491015135.8183739185333251953125;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/VIEWEXTRATOCLIENTE.php";s:4:"line";i:84;s:8:"function";s:8:"queryOne";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:24;s:8:"function";s:19:"saldoAtualByCliente";s:5:"class";s:32:"common\models\VIEWEXTRATOCLIENTE";s:4:"type";s:2:"::";}}i:5;i:5739208;}i:12;a:6:{i:0;s:59:"Opening DB connection: mysql:host=localhost;dbname=cashback";i:1;i:96;i:2;s:23:"yii\db\Connection::open";i:3;d:1491015135.81919097900390625;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/VIEWEXTRATOCLIENTE.php";s:4:"line";i:84;s:8:"function";s:8:"queryOne";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:24;s:8:"function";s:19:"saldoAtualByCliente";s:5:"class";s:32:"common\models\VIEWEXTRATOCLIENTE";s:4:"type";s:2:"::";}}i:5;i:5751840;}i:13;a:6:{i:0;s:69:"SELECT SUM(VLR2) AS SALDO FROM VIEW_EXTRATO_CLIENTE WHERE CLIENTE = 1";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.819550037384033203125;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/VIEWEXTRATOCLIENTE.php";s:4:"line";i:84;s:8:"function";s:8:"queryOne";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:24;s:8:"function";s:19:"saldoAtualByCliente";s:5:"class";s:32:"common\models\VIEWEXTRATOCLIENTE";s:4:"type";s:2:"::";}}i:5;i:5751368;}i:14;a:6:{i:0;s:69:"SELECT SUM(VLR2) AS SALDO FROM VIEW_EXTRATO_CLIENTE WHERE CLIENTE = 1";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8205449581146240234375;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/VIEWEXTRATOCLIENTE.php";s:4:"line";i:84;s:8:"function";s:8:"queryOne";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:24;s:8:"function";s:19:"saldoAtualByCliente";s:5:"class";s:32:"common\models\VIEWEXTRATOCLIENTE";s:4:"type";s:2:"::";}}i:5;i:5755552;}i:16;a:6:{i:0;s:52:"SELECT * FROM `CB10_CATEGORIA` WHERE `CB10_STATUS`=1";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.83195400238037109375;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6875752;}i:17;a:6:{i:0;s:52:"SELECT * FROM `CB10_CATEGORIA` WHERE `CB10_STATUS`=1";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.832498073577880859375;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6881728;}i:19;a:6:{i:0;s:39:"SHOW FULL COLUMNS FROM `CB10_CATEGORIA`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.83407306671142578125;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6917232;}i:20;a:6:{i:0;s:39:"SHOW FULL COLUMNS FROM `CB10_CATEGORIA`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8349230289459228515625;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6927704;}i:22;a:6:{i:0;s:615:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'CB10_CATEGORIA' AND kcu.table_name = 'CB10_CATEGORIA'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8379580974578857421875;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6962440;}i:23;a:6:{i:0;s:615:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'CB10_CATEGORIA' AND kcu.table_name = 'CB10_CATEGORIA'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8387050628662109375;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6966728;}i:25;a:6:{i:0;s:1058:"
+        SELECT 
+            CB04_ID,
+            CB04_NOME,
+            CB04_QTD_FAVORITO,
+            CB04_QTD_COMPARTILHADO,
+            CB04_END_LOGRADOURO,
+            CB04_END_BAIRRO,
+            CB04_END_CIDADE,
+            CB04_END_UF,
+            CB04_END_NUMERO,
+            CB04_NOME,
+            CB04_URL_LOGOMARCA,
+            FORMAT(MAX(CB07_PERCENTUAL), 0, 'de_DE') AS CASHBACK
+        FROM CB04_EMPRESA
+            LEFT JOIN CB05_PRODUTO ON(CB05_EMPRESA_ID = CB04_ID)
+            LEFT JOIN CB06_VARIACAO ON(CB06_PRODUTO_ID = CB05_ID)
+            LEFT JOIN CB10_CATEGORIA ON(CB10_ID = CB04_CATEGORIA_ID)
+            LEFT JOIN CB12_ITEM_CATEG_EMPRESA ON(CB12_EMPRESA_ID = CB04_ID OR CB05_ID = CB12_PRODUTO_ID)
+            LEFT JOIN CB07_CASH_BACK ON(CB07_PRODUTO_ID = CB05_ID  OR CB07_VARIACAO_ID = CB06_ID)
+        WHERE CB04_EMPRESA.CB04_STATUS = 1  
+            GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPARTILHADO, CB04_END_LOGRADOURO, 
+            CB04_END_BAIRRO, CB04_END_CIDADE, CB04_END_UF, CB04_END_NUMERO, CB04_NOME";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8420670032501220703125;i:4;a:2:{i:0;a:5:{s:4:"file";s:56:"/opt/lampp/htdocs/cashback/common/models/CB04EMPRESA.php";s:4:"line";i:190;s:8:"function";s:8:"queryAll";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:31;s:8:"function";s:11:"getEmpresas";s:5:"class";s:25:"common\models\CB04EMPRESA";s:4:"type";s:2:"::";}}i:5;i:7074672;}i:26;a:6:{i:0;s:1058:"
+        SELECT 
+            CB04_ID,
+            CB04_NOME,
+            CB04_QTD_FAVORITO,
+            CB04_QTD_COMPARTILHADO,
+            CB04_END_LOGRADOURO,
+            CB04_END_BAIRRO,
+            CB04_END_CIDADE,
+            CB04_END_UF,
+            CB04_END_NUMERO,
+            CB04_NOME,
+            CB04_URL_LOGOMARCA,
+            FORMAT(MAX(CB07_PERCENTUAL), 0, 'de_DE') AS CASHBACK
+        FROM CB04_EMPRESA
+            LEFT JOIN CB05_PRODUTO ON(CB05_EMPRESA_ID = CB04_ID)
+            LEFT JOIN CB06_VARIACAO ON(CB06_PRODUTO_ID = CB05_ID)
+            LEFT JOIN CB10_CATEGORIA ON(CB10_ID = CB04_CATEGORIA_ID)
+            LEFT JOIN CB12_ITEM_CATEG_EMPRESA ON(CB12_EMPRESA_ID = CB04_ID OR CB05_ID = CB12_PRODUTO_ID)
+            LEFT JOIN CB07_CASH_BACK ON(CB07_PRODUTO_ID = CB05_ID  OR CB07_VARIACAO_ID = CB06_ID)
+        WHERE CB04_EMPRESA.CB04_STATUS = 1  
+            GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPARTILHADO, CB04_END_LOGRADOURO, 
+            CB04_END_BAIRRO, CB04_END_CIDADE, CB04_END_UF, CB04_END_NUMERO, CB04_NOME";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8430778980255126953125;i:4;a:2:{i:0;a:5:{s:4:"file";s:56:"/opt/lampp/htdocs/cashback/common/models/CB04EMPRESA.php";s:4:"line";i:190;s:8:"function";s:8:"queryAll";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:31;s:8:"function";s:11:"getEmpresas";s:5:"class";s:25:"common\models\CB04EMPRESA";s:4:"type";s:2:"::";}}i:5;i:7084664;}}}s:2:"db";a:1:{s:8:"messages";a:10:{i:13;a:6:{i:0;s:69:"SELECT SUM(VLR2) AS SALDO FROM VIEW_EXTRATO_CLIENTE WHERE CLIENTE = 1";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.819550037384033203125;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/VIEWEXTRATOCLIENTE.php";s:4:"line";i:84;s:8:"function";s:8:"queryOne";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:24;s:8:"function";s:19:"saldoAtualByCliente";s:5:"class";s:32:"common\models\VIEWEXTRATOCLIENTE";s:4:"type";s:2:"::";}}i:5;i:5751368;}i:14;a:6:{i:0;s:69:"SELECT SUM(VLR2) AS SALDO FROM VIEW_EXTRATO_CLIENTE WHERE CLIENTE = 1";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8205449581146240234375;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/VIEWEXTRATOCLIENTE.php";s:4:"line";i:84;s:8:"function";s:8:"queryOne";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:24;s:8:"function";s:19:"saldoAtualByCliente";s:5:"class";s:32:"common\models\VIEWEXTRATOCLIENTE";s:4:"type";s:2:"::";}}i:5;i:5755552;}i:16;a:6:{i:0;s:52:"SELECT * FROM `CB10_CATEGORIA` WHERE `CB10_STATUS`=1";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.83195400238037109375;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6875752;}i:17;a:6:{i:0;s:52:"SELECT * FROM `CB10_CATEGORIA` WHERE `CB10_STATUS`=1";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.832498073577880859375;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6881728;}i:19;a:6:{i:0;s:39:"SHOW FULL COLUMNS FROM `CB10_CATEGORIA`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.83407306671142578125;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6917232;}i:20;a:6:{i:0;s:39:"SHOW FULL COLUMNS FROM `CB10_CATEGORIA`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8349230289459228515625;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6927704;}i:22;a:6:{i:0;s:615:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'CB10_CATEGORIA' AND kcu.table_name = 'CB10_CATEGORIA'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8379580974578857421875;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6962440;}i:23;a:6:{i:0;s:615:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'CB10_CATEGORIA' AND kcu.table_name = 'CB10_CATEGORIA'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8387050628662109375;i:4;a:2:{i:0;a:5:{s:4:"file";s:63:"/opt/lampp/htdocs/cashback/common/models/CB10CATEGORIAQuery.php";s:4:"line";i:23;s:8:"function";s:3:"all";s:5:"class";s:18:"yii\db\ActiveQuery";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:27;s:8:"function";s:7:"findAll";s:5:"class";s:23:"yii\db\BaseActiveRecord";s:4:"type";s:2:"::";}}i:5;i:6966728;}i:25;a:6:{i:0;s:1058:"
+        SELECT 
+            CB04_ID,
+            CB04_NOME,
+            CB04_QTD_FAVORITO,
+            CB04_QTD_COMPARTILHADO,
+            CB04_END_LOGRADOURO,
+            CB04_END_BAIRRO,
+            CB04_END_CIDADE,
+            CB04_END_UF,
+            CB04_END_NUMERO,
+            CB04_NOME,
+            CB04_URL_LOGOMARCA,
+            FORMAT(MAX(CB07_PERCENTUAL), 0, 'de_DE') AS CASHBACK
+        FROM CB04_EMPRESA
+            LEFT JOIN CB05_PRODUTO ON(CB05_EMPRESA_ID = CB04_ID)
+            LEFT JOIN CB06_VARIACAO ON(CB06_PRODUTO_ID = CB05_ID)
+            LEFT JOIN CB10_CATEGORIA ON(CB10_ID = CB04_CATEGORIA_ID)
+            LEFT JOIN CB12_ITEM_CATEG_EMPRESA ON(CB12_EMPRESA_ID = CB04_ID OR CB05_ID = CB12_PRODUTO_ID)
+            LEFT JOIN CB07_CASH_BACK ON(CB07_PRODUTO_ID = CB05_ID  OR CB07_VARIACAO_ID = CB06_ID)
+        WHERE CB04_EMPRESA.CB04_STATUS = 1  
+            GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPARTILHADO, CB04_END_LOGRADOURO, 
+            CB04_END_BAIRRO, CB04_END_CIDADE, CB04_END_UF, CB04_END_NUMERO, CB04_NOME";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8420670032501220703125;i:4;a:2:{i:0;a:5:{s:4:"file";s:56:"/opt/lampp/htdocs/cashback/common/models/CB04EMPRESA.php";s:4:"line";i:190;s:8:"function";s:8:"queryAll";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:31;s:8:"function";s:11:"getEmpresas";s:5:"class";s:25:"common\models\CB04EMPRESA";s:4:"type";s:2:"::";}}i:5;i:7074672;}i:26;a:6:{i:0;s:1058:"
+        SELECT 
+            CB04_ID,
+            CB04_NOME,
+            CB04_QTD_FAVORITO,
+            CB04_QTD_COMPARTILHADO,
+            CB04_END_LOGRADOURO,
+            CB04_END_BAIRRO,
+            CB04_END_CIDADE,
+            CB04_END_UF,
+            CB04_END_NUMERO,
+            CB04_NOME,
+            CB04_URL_LOGOMARCA,
+            FORMAT(MAX(CB07_PERCENTUAL), 0, 'de_DE') AS CASHBACK
+        FROM CB04_EMPRESA
+            LEFT JOIN CB05_PRODUTO ON(CB05_EMPRESA_ID = CB04_ID)
+            LEFT JOIN CB06_VARIACAO ON(CB06_PRODUTO_ID = CB05_ID)
+            LEFT JOIN CB10_CATEGORIA ON(CB10_ID = CB04_CATEGORIA_ID)
+            LEFT JOIN CB12_ITEM_CATEG_EMPRESA ON(CB12_EMPRESA_ID = CB04_ID OR CB05_ID = CB12_PRODUTO_ID)
+            LEFT JOIN CB07_CASH_BACK ON(CB07_PRODUTO_ID = CB05_ID  OR CB07_VARIACAO_ID = CB06_ID)
+        WHERE CB04_EMPRESA.CB04_STATUS = 1  
+            GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPARTILHADO, CB04_END_LOGRADOURO, 
+            CB04_END_BAIRRO, CB04_END_CIDADE, CB04_END_UF, CB04_END_NUMERO, CB04_NOME";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1491015135.8430778980255126953125;i:4;a:2:{i:0;a:5:{s:4:"file";s:56:"/opt/lampp/htdocs/cashback/common/models/CB04EMPRESA.php";s:4:"line";i:190;s:8:"function";s:8:"queryAll";s:5:"class";s:14:"yii\db\Command";s:4:"type";s:2:"->";}i:1;a:5:{s:4:"file";s:69:"/opt/lampp/htdocs/cashback/frontend/controllers/EmpresaController.php";s:4:"line";i:31;s:8:"function";s:11:"getEmpresas";s:5:"class";s:25:"common\models\CB04EMPRESA";s:4:"type";s:2:"::";}}i:5;i:7084664;}}}s:6:"assets";a:1:{s:31:"frontend\assets\SmartAdminAsset";a:9:{s:8:"basePath";s:39:"/opt/lampp/htdocs/cashback/frontend/web";s:7:"baseUrl";s:22:"/cashback/frontend/web";s:3:"css";a:14:{i:0;s:21:"css/bootstrap.min.css";i:1;s:24:"css/font-awesome.min.css";i:2;s:41:"css/smartadmin-production-plugins.min.css";i:3;s:33:"css/smartadmin-production.min.css";i:4;s:28:"css/smartadmin-skins.min.css";i:5;s:75:"//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700";i:6;s:12:"css/site.css";i:7;s:21:"css/bootstrap.min.css";i:8;s:24:"css/font-awesome.min.css";i:9;s:41:"css/smartadmin-production-plugins.min.css";i:10;s:33:"css/smartadmin-production.min.css";i:11;s:28:"css/smartadmin-skins.min.css";i:12;s:26:"css/smartadmin-rtl.min.css";i:13;s:18:"css/your_style.css";}s:2:"js";a:23:{i:0;s:27:"js/libs/jquery-2.1.1.min.js";i:1;s:31:"js/libs/jquery-ui-1.10.3.min.js";i:2;s:93:"https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js";i:3;s:26:"js/plugin/pace/pace.min.js";i:4;s:16:"js/app.config.js";i:5;s:13:"js/app.min.js";i:6;s:51:"js/plugin/jquery-touch/jquery.ui.touch-punch.min.js";i:7;s:29:"js/bootstrap/bootstrap.min.js";i:8;s:40:"js/notification/SmartNotification.min.js";i:9;s:36:"js/smartwidgets/jarvis.widget.min.js";i:10;s:53:"js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js";i:11;s:43:"js/plugin/sparkline/jquery.sparkline.min.js";i:12;s:48:"js/plugin/masked-input/jquery.maskedinput.min.js";i:13;s:46:"js/plugin/masked-input/jquery.maskMoney.min.js";i:14;s:32:"js/plugin/select2/select2.min.js";i:15;s:50:"js/plugin/bootstrap-slider/bootstrap-slider.min.js";i:16;s:43:"js/plugin/msie-fix/jquery.mb.browser.min.js";i:17;s:36:"js/plugin/fastclick/fastclick.min.js";i:18;s:29:"js/speech/voicecommand.min.js";i:19;s:37:"js/smart-chat-ui/smart.chat.ui.min.js";i:20;s:42:"js/smart-chat-ui/smart.chat.manager.min.js";i:21;s:48:"js/plugin/jquery-validate/jquery.validate.min.js";i:22;s:12:"js/global.js";}s:9:"jsOptions";a:1:{s:8:"position";i:3;}s:10:"sourcePath";N;s:7:"depends";a:0:{}s:10:"cssOptions";a:0:{}s:14:"publishOptions";a:0:{}}}s:4:"mail";a:0:{}s:8:"timeline";a:3:{s:5:"start";d:1491015135.75522708892822265625;s:3:"end";d:1491015135.8658969402313232421875;s:6:"memory";i:8401880;}s:4:"user";N;s:6:"router";a:1:{s:8:"messages";a:1:{i:5;a:6:{i:0;s:56:"Pretty URL not enabled. Using default URL parsing logic.";i:1;i:8;i:2;s:32:"yii\web\UrlManager::parseRequest";i:3;d:1491015135.8009989261627197265625;i:4;a:0:{}i:5;i:3977992;}}}s:7:"summary";a:9:{s:3:"tag";s:13:"58df15dfc1970";s:3:"url";s:58:"http://localhost/cashback/frontend/web/index.php?r=empresa";s:4:"ajax";i:0;s:6:"method";s:3:"GET";s:2:"ip";s:3:"::1";s:4:"time";d:1491015135.63899993896484375;s:10:"statusCode";i:200;s:8:"sqlCount";i:5;s:9:"mailCount";i:0;}}

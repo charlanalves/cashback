@@ -20,14 +20,16 @@ ini_set('display_errors', 1);
                 </thead>-->
                 <tbody>
 
-                    <?php foreach ($empresas as $v) { ?>
+                    <?php 
+                    foreach ($empresas as $v) {
+                    foreach ($empresas as $v) {
+                        ?>
                     
                     <tr>
                         <td class="text-center" style="
-                            width: 80px; 
+                            width: 80px!important; 
                             background: #FFF url(<?= ($v['CB04_URL_LOGOMARCA'])?:'img/empresa_default.png'?>) no-repeat padding-box center center; 
-                            background-size: 100%;
-                            ">
+                            background-size: 100%;">
                             <!--<i class="fa fa-globe fa-2x text-muted"></i>-->
                             <!--<image class="img-circle" src="" />-->
                         </td>
@@ -52,7 +54,9 @@ ini_set('display_errors', 1);
                     </tr>
                     
                     <?php } ?>
+                    <?php } ?>
                     
+                    <tr><td colspan="3" style="height: 10px!important"></td></tr>
                 </tbody>
             </table>
 

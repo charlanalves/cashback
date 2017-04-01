@@ -62,7 +62,7 @@ class CB11ITEMCATEGORIA extends \common\models\GlobalModel
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCB12ITEMCATEGEMPRESAs()
+    public function getcB12_ITEM_CATEG_EMPRESA()
     {
         return $this->hasMany(CB12ITEMCATEGEMPRESA::className(), ['CB12_ITEM_ID' => 'CB11_ID']);
     }

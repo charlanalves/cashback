@@ -96,10 +96,12 @@ UPDATE `CB05_PRODUTO` SET `CB05_NOME_CURTO` = 'Master', `CB05_TITULO` = 'Suíte 
 -- add produto
 INSERT INTO `CB05_PRODUTO` (`CB05_ID`, `CB05_EMPRESA_ID`, `CB05_NOME_CURTO`, `CB05_TITULO`, `CB05_DESCRICAO`) VALUES (NULL, '1', 'Luxo', 'Suíte Luxo', 'Dispõem de muita luz natural graças às janelas que vão do piso ao teto. Também oferecem uma área cômoda de salão. Os banheiros de estilo contemporâneo dispõem de uma generosa ducha balinesa e comodidades de categoria superior. ');
 
--- imagens do produto 1 e 2
+-- imagens do produto 1, 2 e 3
 INSERT INTO `CB14_FOTO_PRODUTO` (`CB14_ID`, `CB14_PRODUTO_ID`, `CB14_CAPA`, `CB14_URL`) VALUES (NULL, '1', '1', 'img/motel-teste/116_big_4091_4.jpg'), (NULL, '1', '0', '116_big_553_1.jpg');
 INSERT INTO `CB14_FOTO_PRODUTO` (`CB14_ID`, `CB14_PRODUTO_ID`, `CB14_CAPA`, `CB14_URL`) VALUES (NULL, '2', '1', 'img/motel-teste/116_big_2022_2.jpg'), (NULL, '2', '0', 'img/motel-teste/116_big_2022_3.jpg'), (NULL, '2', '0', 'img/motel-teste/116_big_2022_4.jpg');
 UPDATE `CB14_FOTO_PRODUTO` SET `CB14_URL` = 'img/motel-teste/116_big_553_1.jpg' WHERE `CB14_FOTO_PRODUTO`.`CB14_ID` = 2;
+INSERT INTO `CB14_FOTO_PRODUTO` (`CB14_ID`, `CB14_PRODUTO_ID`, `CB14_CAPA`, `CB14_URL`) VALUES (NULL, '3', '1', 'img/motel-teste/116_big_552_2.jpg'), (NULL, '3', '0', 'img/motel-teste/116_big_552_1.jpg');
+INSERT INTO `CB14_FOTO_PRODUTO` (`CB14_ID`, `CB14_PRODUTO_ID`, `CB14_CAPA`, `CB14_URL`) VALUES (NULL, '3', '0', 'img/motel-teste/116_big_552_3.jpg');
 
 -- add valor ao campo importante no produto 1
 UPDATE `CB05_PRODUTO` SET `CB05_IMPORTANTE` = 'Pernoite Antecipado! Aproveite o pernoite com entrada as 18h e saída as 14h. Válido às sextas, sábados, feriados e vésperas. * Preços válidos para 2 pessoas. » Hora adicional - R$ 11,00. » Em feriados, vésperas, Dia dos Namorados e Reveillon será cobrado o valor do fim de semana. Os itens de decoração apresentados nas fotos, estão disponíveis no cardápio do motel.' WHERE `CB05_PRODUTO`.`CB05_ID` = 1;
@@ -113,7 +115,26 @@ INSERT INTO `CB05_PRODUTO` (`CB05_ID`, `CB05_EMPRESA_ID`, `CB05_NOME_CURTO`, `CB
 UPDATE `CB11_ITEM_CATEGORIA` SET `CB11_DESCRICAO` = 'hidro' WHERE `CB11_ITEM_CATEGORIA`.`CB11_ID` = 2; UPDATE `CB11_ITEM_CATEGORIA` SET `CB11_DESCRICAO` = 'frigobar' WHERE `CB11_ITEM_CATEGORIA`.`CB11_ID` = 1;
 INSERT INTO `CB11_ITEM_CATEGORIA` (`CB11_ID`, `CB11_CATEGORIA_ID`, `CB11_DESCRICAO`, `CB11_STATUS`) VALUES (NULL, '1', 'ar-condicionado', '1'), (NULL, '1', 'ducha', '1'), (NULL, '1', 'canal erótico', '1'), (NULL, '1', 'piscina', '1');
 
+-- add variacao
+INSERT INTO `CB06_VARIACAO` (`CB06_ID`, `CB06_PRODUTO_ID`, `CB06_DESCRICAO`, `CB06_PRECO`) VALUES (NULL, '3', 'Variação 1', '45'), (NULL, '3', 'Variação 2', '50');
+
+-- add cashback na variacao
+INSERT INTO `CB07_CASH_BACK` (`CB07_ID`, `CB07_PRODUTO_ID`, `CB07_VARIACAO_ID`, `CB07_DIA_SEMANA`, `CB07_PERCENTUAL`) VALUES (NULL, NULL, '6', '2', '10'), (NULL, NULL, '6', '3', '15'), (NULL, NULL, '6', '4', '20'), (NULL, NULL, '7', '0', '5'), (NULL, NULL, '7', '1', '45');
+
+-- add item da categoria no produto
+INSERT INTO `CB12_ITEM_CATEG_EMPRESA` (`CB12_ID`, `CB12_ITEM_ID`, `CB12_EMPRESA_ID`, `CB12_PRODUTO_ID`) VALUES (NULL, '3', NULL, '2'), (NULL, '5', NULL, '2');
+
+-- add novo motel
+INSERT INTO `CB04_EMPRESA` (`CB04_ID`, `CB04_NOME`, `CB04_CATEGORIA_ID`, `CB04_FUNCIONAMENTO`, `CB04_OBSERVACAO`, `CB04_URL_LOGOMARCA`, `CB04_STATUS`, `CB04_QTD_FAVORITO`, `CB04_QTD_COMPARTILHADO`, `CB04_END_LOGRADOURO`, `CB04_END_BAIRRO`, `CB04_END_CIDADE`, `CB04_END_UF`, `CB04_END_NUMERO`, `CB04_END_COMPLEMENTO`, `CB04_END_CEP`) VALUES (NULL, 'Motel Fantasy III', '1', 'O Motel oferece quatro categorias de suíte a seus hóspedes, ambas equipadas com ar-condicionado, TV com canal erótico, garagem privativa, som e ducha. A categoria Super Luxo conta com hidro anatômica, TV LCD 40'''' e internet Wi-Fi. Já a categoria Temática conta ainda com uma decoração personalizada. Aproveite o café da manhã, oferecido como cortesia aos pernoites, e programe sua visita!', '', 'img/motel-teste/Motel-Fantasy-III-logo-grande.jpg', '1', '56', '23', 'Rodovia Anel Rodoviário Celso Mello Azevedo', 'Caiçaras', 'Belo Horizonte', 'MG', ' 1630', 'BR-262', '81736132');
+INSERT INTO `CB13_FOTO_EMPRESA` (`CB13_ID`, `CB13_EMPRESA_ID`, `CB13_CAMPA`, `CB13_URL`) VALUES (NULL, '2', '1', 'img/motel-teste/foto1-fachada.gif');
+INSERT INTO `CB05_PRODUTO` (`CB05_ID`, `CB05_EMPRESA_ID`, `CB05_NOME_CURTO`, `CB05_TITULO`, `CB05_DESCRICAO`, `CB05_IMPORTANTE`) VALUES (NULL, '2', 'Super Luxo', 'Suíte Super Luxo', NULL, 'Promoção - Super Pernoite! Vá ao motel, hospeda-se para o pernoite e ganhe: Refeição* + Café da Manhã! Válido todos os dias, em todas as suítes. *Refeição: Almoço ou Jantar. » Não acumulativo com demais promoções e cortesias oferecidas pelo Motel. » Opção de suíte com pole dance.');
+INSERT INTO `CB07_CASH_BACK` (`CB07_ID`, `CB07_PRODUTO_ID`, `CB07_VARIACAO_ID`, `CB07_DIA_SEMANA`, `CB07_PERCENTUAL`) VALUES (NULL, '4', NULL, NULL, '15');
+INSERT INTO `CB12_ITEM_CATEG_EMPRESA` (`CB12_ID`, `CB12_ITEM_ID`, `CB12_EMPRESA_ID`, `CB12_PRODUTO_ID`) VALUES (NULL, '3', NULL, '4');
+
+
 -----------------------------------------------------------------
+
+
 
 
 

@@ -11,6 +11,7 @@ use common\models\CB05PRODUTO;
 use common\models\CB14FOTOPRODUTO;
 use common\models\CB07CASHBACK;
 use common\models\CB06VARIACAO;
+use common\models\CB11ITEMCATEGORIA;
 
 /**
  * This is the model class for table "CB04_EMPRESA".
@@ -196,7 +197,7 @@ class CB04EMPRESA extends \common\models\GlobalModel {
         $retorno = [];
 
         // dados da empresa
-        if (($retorno['empresa'] = self::find($id)->where('CB04_STATUS = 1')->one())) {
+        if (($retorno['empresa'] = self::find()->where('CB04_ID=' . $id . ' AND CB04_STATUS = 1')->one())) {
 
             // imagens da empresa
             $retorno['img_empresa'] = CB13FOTOEMPRESA::find()
@@ -206,6 +207,13 @@ class CB04EMPRESA extends \common\models\GlobalModel {
 
             // categoria
             $retorno['categoria'] = CB10CATEGORIA::findOne($retorno['empresa']['CB04_CATEGORIA_ID']);
+
+            // itens da categoria
+            $retorno['itens_categoria'] = CB11ITEMCATEGORIA::find()
+                    ->joinWith('cB12_ITEM_CATEG_EMPRESA')
+                    ->where(['CB12_EMPRESA_ID' => $retorno['empresa']['CB04_ID']])
+                    ->orderBy('CB11_DESCRICAO')
+                    ->all();
 
             // formas de pagamento
             $retorno['forma_pagamento'] = CB08FORMAPAGAMENTO::find()
@@ -224,7 +232,14 @@ class CB04EMPRESA extends \common\models\GlobalModel {
 
                 // dados do produto
                 $retornoProduto = $p->attributes;
-                
+
+                // itens do produto
+                $retornoProduto['ITEM'] = CB11ITEMCATEGORIA::find()
+                        ->joinWith('cB12_ITEM_CATEG_EMPRESA')
+                        ->where(['CB12_PRODUTO_ID' => $p['CB05_ID']])
+                        ->orderBy('CB11_DESCRICAO')
+                        ->all();
+
                 // imagens
                 $retornoProduto['IMG'] = CB14FOTOPRODUTO::find()
                         ->where(['CB14_PRODUTO_ID' => $p['CB05_ID']])
@@ -242,12 +257,14 @@ class CB04EMPRESA extends \common\models\GlobalModel {
                         ->where(['CB06_PRODUTO_ID' => $p['CB05_ID']])
                         ->orderBy('CB06_DESCRICAO')
                         ->all();
-
-                // cashback da variação
-                $retornoProduto['CASHBACK_VARIACAO'] = CB07CASHBACK::find()
-                        ->where(['CB07_VARIACAO_ID' => $p['CB05_ID']])
-                        ->orderBy('CB07_DIA_SEMANA')
-                        ->all();
+                
+                // cashback por da variação
+                foreach ($retornoProduto['VARIACAO'] as $v) {
+                    $retornoProduto['CASHBACK_VARIACAO'][$v['CB06_ID']] = CB07CASHBACK::find()
+                            ->where(['CB07_VARIACAO_ID' => $v['CB06_ID']])
+                            ->orderBy('CB07_DIA_SEMANA')
+                            ->all();
+                }
                 
                 $retorno['produto'][] = $retornoProduto;
             }

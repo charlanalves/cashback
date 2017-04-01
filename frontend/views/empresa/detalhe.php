@@ -12,17 +12,22 @@ ini_set('display_errors', 1);
     }
     
     /* tabela chashback do produto */
-    .table-cashback-produto{}
+    .table-cashback-produto{
+        margin-bottom: 5px;
+    }
     .table-cashback-produto>thead>tr>th {
         text-align: center!important;
-        padding-left: 5px;
-        padding-right: 5px;
+        padding-left: 1px;
+        padding-right: 1px;
         padding-top: 1px;
         padding-bottom: 5px;
     }
-    .table-cashback-produto>thead>tr>th span {
+    .div-cashback-produto span {
         padding: 1px 5px;
         border-radius: 5px;
+    }
+    .border-top{
+        border-top: dashed 2px #EEE;
     }
 </style>
 
@@ -37,13 +42,12 @@ ini_set('display_errors', 1);
                 <div class="col-sm-12">
                     <div id="myCarousel" class="carousel slide profile-carousel">
                         <div class="air air-bottom-right padding-5">
-                            <a href="whatsapp://send?text=" class="btn txt-color-white bg-color-teal btn-circle">
+                            <a href="whatsapp://send?text=<?= $empresa['categoria']['CB10_NOME'] ?>" class="btn txt-color-white bg-color-teal btn-circle">
                                 <i class="fa fa-share-alt"></i>
                             </a>
                         </div>
                         <div class="air air-top-left padding-5">
                             <span class="fa fa-lg fa-mail-reply btn btn-default btn-circle" title="voltar" onclick="history.back()"></span>
-                            <!--<h4 class="txt-color-white font-md">Jan 1, 2014</h4>-->
                         </div>
                         <ol class="carousel-indicators">
                             <?php
@@ -99,17 +103,15 @@ ini_set('display_errors', 1);
                                 <div class="widget-body">
                                     
                                     <?php
-                                    $i = 1;
-                                    $tabs = $tabs_content = '';
-                                    foreach ($empresa['produto'] as $produto) {
-
-
-                                        // cashback do produto ---------------------------------
-                                        $cashback_produto = $cashback_unico = '';
+                                    
+                                    function cashBackTable($cashBack) {
+                                    
+                                        $cashback_table = $cashback_unico = '';
                                         $cashback_dia = [];
-                                        if (!empty($produto['CASHBACK'])) {
-                                            foreach ($produto['CASHBACK'] as $cashback) {
-                                                if (!$cashback['CB07_DIA_SEMANA']) {
+                                        
+                                        if (!empty($cashBack)) {
+                                            foreach ($cashBack as $cashback) {
+                                                if (!is_numeric($cashback['CB07_DIA_SEMANA'])) {
                                                     $cashback_dia = [];
                                                     $cashback_unico = (int) $cashback['CB07_PERCENTUAL'];
                                                     break;
@@ -129,27 +131,42 @@ ini_set('display_errors', 1);
                                             ];
                                             
                                             // se o cashback for por dia
-                                            if ($cashback_dia) {
+//                                            if ($cashback_dia) {
                                                 $cashback_dia_tr = '';
                                                 foreach ($diaSemana as $d => $cbDia) {
-                                                    $cashback_dia_tr .= '<th>' . $cbDia . '<br><span class="btn-' . ((array_key_exists($d, $cashback_dia) ? 'success">' . $cashback_dia[$d] : 'danger">0')) . '%</span></th>';
+                                                    $vlDia = ($cashback_unico)? : (array_key_exists($d, $cashback_dia) ? $cashback_dia[$d] : 0);
+                                                    $cashback_dia_tr .= '<th><div class="div-cashback-produto">' . $cbDia . '<br><span class="btn-' . (($vlDia ? 'success">' . $vlDia : 'danger">0')) . '%</span></div></th>';
                                                 }
-                                                $cashback_produto = '
+                                                $cashback_table = '
                                                     <table class="table table-bordered table-striped table-cashback-produto">
                                                         <thead>
                                                             <tr>' . $cashback_dia_tr . '</tr>
                                                         </thead>
                                                     </table>';
 
-                                                // se cashback por produto
-                                            } else if ($cashback_unico) {
-                                                $cashback_produto = (string) $cashback_unico . '%';
-                                            }
+                                            // se cashback por produto
+//                                            } else if ($cashback_unico) {
+//                                                $cashback_table = '<div class="div-cashback-produto margin-bottom-10"><span class="btn-success">' . $cashback_unico . '%</span></div>';
+//                                            }
                                         }
-
-
-
-
+                                        return $cashback_table;
+                                    }
+                                    
+                                    function itensTable($item) {
+                                        $html = '';
+                                        if (!empty($item)) {
+                                            $html .= '<p class="margin-bottom-10 font-sm text-justify">';
+                                            foreach ($item as $i) {
+                                                $html .= ' &nbsp; <span class="fa fa-check"></span> ' . $i['CB11_DESCRICAO'] . " &nbsp; ";
+                                            }
+                                            $html .= '</p>';
+                                        }
+                                        return $html;
+                                    }
+                                    
+                                    $i = 1;
+                                    $tabs = $tabs_content = '';
+                                    foreach ($empresa['produto'] as $produto) {
 
                                         // create tabs --------------------------------------
                                         $tabs .= '<li class="' . (($i == 1) ? 'active' : '') . '">' . "\n";
@@ -171,7 +188,7 @@ ini_set('display_errors', 1);
                                             $carousel_atalho = $carousel_img = '';
 
                                             foreach ($produto['IMG'] as $img) {
-                                                $carousel_atalho .= '<li data-target="#carouselProduto' . $i . '" data-slide-to="' . $ii . '" class="' . (($ii == 1) ? 'active' : '') . '"></li>' . "\n";
+                                                //$carousel_atalho .= '<li data-target="#carouselProduto' . $i . '" data-slide-to="' . $ii . '" class="' . (($ii == 1) ? 'active' : '') . '"></li>' . "\n";
                                                 $carousel_img .= '<div class="item ' . (($ii == 1) ? 'active' : '') . '"><img src="' . $img['CB14_URL'] . '" alt=""></div>' . "\n";
                                                 $ii++;
                                             }
@@ -191,28 +208,41 @@ ini_set('display_errors', 1);
 
                                         // descrição do produto --------------------------------
                                         $tabs_content .= '<p class="font-sm text-justify">' . $produto['CB05_DESCRICAO'] . '</p>' . "\n";
-
-                                        // credito por produto ---------------------------------
-                                        $tabs_content .= (!$cashback_produto) ? '' : '<p class="font-md no-margin"><span class="fa fa-money"></span> &nbsp;Crédito</p>' . $cashback_produto;
+                                        
+                                        // itens do produto -------------------------------
+                                        $itens_produto = itensTable($produto['ITEM']);
+                                        $tabs_content .= (!$itens_produto) ? '' : '<p class="font-md no-margin border-top"><span class="fa fa-check-square-o"></span> &nbsp;Itens</p>' . $itens_produto;
+                                        
+                                        // cashback do produto ---------------------------------
+                                        $cashback_produto = cashBackTable($produto['CASHBACK']);
+                                        $tabs_content .= (!$cashback_produto) ? '' : '<p class="font-md no-margin border-top"><span class="fa fa-money"></span> &nbsp;Crédito</p>' . $cashback_produto;
 
                                         // variação do produto ---------------------------------
                                         if (!empty($produto['VARIACAO'])) {
 
                                             $tabela_variacao = '
-                                                <p class="font-md no-margin"><span class="fa fa-tags"></span> &nbsp;Promoções</p>
+                                                <p class="font-md no-margin border-top"><span class="fa fa-tags"></span> &nbsp;Promoções</p>
                                                 <table class="table table-bordered table-striped table-hover">
                                                     <tbody>';
 
                                             foreach ($produto['VARIACAO'] as $variacao) {
-                                                $tabela_variacao .= '
-                                                    <tr>
-                                                        <td>' . $variacao['CB06_DESCRICAO'] . '</td>
-                                                        <td class="text-align-right">R$ ' . $variacao['CB06_PRECO'] . '</td>
-                                                    </tr>';
+                                                
+                                                // linha do cashback se o mesmo existir
+                                                $cashback_variacao = '';
+                                                if (!empty($produto['CASHBACK_VARIACAO'][$variacao['CB06_ID']])) {
+                                                    
+                                                    $cashback_variacao = cashBackTable($produto['CASHBACK_VARIACAO'][$variacao['CB06_ID']]);
+//                                                    if (($cashback_variacao = cashBackTable($produto['CASHBACK_VARIACAO'][$variacao['CB06_ID']]))) {
+//                                                        $tabela_variacao .= '<tr><td colspan="2">' . $cashback_variacao . '</td></tr>' . "\n";
+//                                                    }
+                                                }
+                                                
+                                                // linha com descricao + valor ---------------------------
+                                                $tabela_variacao .= '<tr><td>' . $cashback_variacao . '<span class="float-left">'.$variacao['CB06_DESCRICAO'].'</span><span class="float-right"><b>R$ ' . $variacao['CB06_PRECO'] . '</b></span></td></tr>' . "\n";
                                             }
 
-                                            // Campo importante do produto
-                                            $tabela_variacao .= (!$produto['CB05_IMPORTANTE']) ? : '
+                                            // Campo importante do produto -------------------------------
+                                            $tabela_variacao .= (!$produto['CB05_IMPORTANTE']) ? '' : '
                                                         <tr>
                                                             <td colspan="2">	
                                                                 <p class="alert alert-warning no-margin">
@@ -228,8 +258,7 @@ ini_set('display_errors', 1);
 
                                             $tabs_content .= $tabela_variacao;
                                         }
-
-
+                                        
                                         $tabs_content .= '</div>' . "\n";
 
                                         $i++;
@@ -248,17 +277,16 @@ ini_set('display_errors', 1);
                                 </div>
                                 <!-- end widget content -->
 
-                                <p class="font-md no-margin">
+                                <p class="font-md no-margin border-top margin-top-10">
                                     <span class="fa fa-clock-o"></span> &nbsp;Funcionamento
                                 </p>
                                 <p class="font-light text-justify">
-                                    <?= $empresa['empresa']['CB04_FUNCIONAMENTO'] ?>
+                                    <?= nl2br($empresa['empresa']['CB04_FUNCIONAMENTO']) ?>
                                 </p>
                                 <p class="font-light text-justify">
-                                    <?= $empresa['empresa']['CB04_OBSERVACAO'] ?>
+                                    <?= nl2br($empresa['empresa']['CB04_OBSERVACAO']) ?>
                                 </p>
-                                <br />
-                                <p class="font-md no-margin">
+                                <p class="font-md no-margin border-top">
                                     <span class="fa fa-credit-card"></span> &nbsp;Pagamentos
                                 </p>
                                 <p class="font-light text-justify">
@@ -292,4 +320,6 @@ ini_set('display_errors', 1);
         });
     });
 </script>
-<?php var_dump($empresa); ?>
+<?php 
+//var_dump($empresa); 
+?>
