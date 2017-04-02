@@ -3,7 +3,7 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=cashback2',
+            'dsn' => 'mysql:host=localhost;dbname=cashback',
             'username' => 'root',
             'password' => '',
             'charset' => 'utf8',
@@ -16,5 +16,13 @@ return [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+        'authManager' =>[
+            'class' => 'yii\rbac\DbManager',
+        ],
+        'modules' => [
+            'admin' => [
+                'class' => 'mdm\admin\Module'
+            ]
+        ]
     ],
 ];
