@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 'on');
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
