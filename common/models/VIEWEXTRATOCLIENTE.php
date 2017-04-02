@@ -78,7 +78,7 @@ class VIEWEXTRATOCLIENTE extends \common\models\GlobalModel
     
     public static function saldoAtualByCliente($cliente)
     {
-        $sql = "SELECT SUM(VLR2) AS SALDO FROM VIEW_EXTRATO_CLIENTE WHERE CLIENTE = :cliente";
+        $sql = "SELECT SUM(VLR2) AS SALDO FROM view_extrato_cliente WHERE CLIENTE = :cliente";
         $command = \Yii::$app->db->createCommand($sql);
         $command->bindValue(':cliente', $cliente);
         return number_format($command->queryOne()['SALDO'], 2, ",", ".");
