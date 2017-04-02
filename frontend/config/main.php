@@ -39,7 +39,7 @@ return [
      
         
     ],
-    'homeUrl' => 'index.php?empresa',
+    'homeUrl' => 'empresa',
     'defaultRoute' => 'empresa',
     'params' => $params,
 ];
