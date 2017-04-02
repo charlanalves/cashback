@@ -24,7 +24,7 @@ $urlResetPass = Url::to(['site/request']);
 
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>ADM </b>CashBack</a>
+        <a href="#"><b>Login </b>CashBack</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
