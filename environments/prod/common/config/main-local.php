@@ -12,6 +12,9 @@ return [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
         ],
+       'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ]
     ],
     
      'modules' => [
