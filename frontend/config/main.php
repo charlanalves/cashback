@@ -9,7 +9,7 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log','debug'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
@@ -39,7 +39,7 @@ return [
      
         
     ],
-    'homeUrl' => 'empresa',
+    'homeUrl' => 'index.php?empresa',
     'defaultRoute' => 'empresa',
     'params' => $params,
 ];
