@@ -1,5 +1,5 @@
 /nbproject/private/
-/backend/
+/backend/*
 *.data
 *.bin
 *.log
