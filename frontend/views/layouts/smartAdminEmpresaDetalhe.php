@@ -69,7 +69,7 @@ SmartAdminAsset::register($this);
         <link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
         <link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
         <link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/style_detalhe_empresa.css">
 
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
@@ -183,12 +183,6 @@ SmartAdminAsset::register($this);
     </head>
 
     <body class="smart-style-0 fixed-header">
-
-
-
-
-
-        <!-- END HEADER -->
 
         <!-- #MAIN PANEL -->
         <div id="main" role="main">
