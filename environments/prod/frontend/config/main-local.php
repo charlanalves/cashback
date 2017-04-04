@@ -6,4 +6,8 @@ return [
             'cookieValidationKey' => '',
         ],
     ],
+    'homeUrl' => 'empresa',
+    'defaultRoute' => 'empresa',
 ];
+
+

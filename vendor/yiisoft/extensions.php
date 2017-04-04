@@ -48,4 +48,67 @@ return array (
       '@yii/faker' => $vendorDir . '/yiisoft/yii2-faker',
     ),
   ),
+  'rmrevin/yii2-fontawesome' => 
+  array (
+    'name' => 'rmrevin/yii2-fontawesome',
+    'version' => '2.17.1.0',
+    'alias' => 
+    array (
+      '@rmrevin/yii/fontawesome' => $vendorDir . '/rmrevin/yii2-fontawesome',
+    ),
+  ),
+  'cebe/yii2-gravatar' => 
+  array (
+    'name' => 'cebe/yii2-gravatar',
+    'version' => '1.1.0.0',
+    'alias' => 
+    array (
+      '@cebe/gravatar' => $vendorDir . '/cebe/yii2-gravatar/cebe/gravatar',
+    ),
+  ),
+  'dmstr/yii2-adminlte-asset' => 
+  array (
+    'name' => 'dmstr/yii2-adminlte-asset',
+    'version' => '2.4.2.0',
+    'alias' => 
+    array (
+      '@dmstr' => $vendorDir . '/dmstr/yii2-adminlte-asset',
+    ),
+  ),
+  'mdmsoft/yii2-admin' => 
+  array (
+    'name' => 'mdmsoft/yii2-admin',
+    'version' => '2.7.0.0',
+    'alias' => 
+    array (
+      '@mdm/admin' => $vendorDir . '/mdmsoft/yii2-admin',
+    ),
+  ),
+  'yiisoft/yii2-jui' => 
+  array (
+    'name' => 'yiisoft/yii2-jui',
+    'version' => '2.0.6.0',
+    'alias' => 
+    array (
+      '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
+    ),
+  ),
+  '2amigos/yii2-arrayquery-component' => 
+  array (
+    'name' => '2amigos/yii2-arrayquery-component',
+    'version' => '1.0.2.0',
+    'alias' => 
+    array (
+      '@dosamigos/arrayquery' => $vendorDir . '/2amigos/yii2-arrayquery-component/src',
+    ),
+  ),
+  'yii2mod/yii2-rbac' => 
+  array (
+    'name' => 'yii2mod/yii2-rbac',
+    'version' => '1.9.3.0',
+    'alias' => 
+    array (
+      '@yii2mod/rbac' => $vendorDir . '/yii2mod/yii2-rbac',
+    ),
+  ),
 );
