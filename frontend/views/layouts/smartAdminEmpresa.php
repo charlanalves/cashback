@@ -213,6 +213,13 @@ SmartAdminAsset::register($this);
 
                     });
 
+                    // Dialog click
+                    $('#menu_sair').click(function () {        
+                        window.open('index.php?r=site/login','_self');
+                        return false;
+
+                    });
+
                     $('#convidar_amigo_dialog').dialog({
                         autoOpen: false,
                         width: 300,
@@ -276,7 +283,7 @@ SmartAdminAsset::register($this);
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="javascript:void(0);"><i class="fa fa-power-off"></i> Sair</a>
+                        <a href="javascript:void(0);" id="menu_sair"><i class="fa fa-power-off"></i> Sair</a>
                     </li>
                 </ul>
             </div>

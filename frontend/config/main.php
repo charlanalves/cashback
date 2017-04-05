@@ -40,7 +40,7 @@ return [
      
         
     ],
-    'homeUrl' => 'empresa',
+    'homeUrl' => 'site/login',
     'defaultRoute' => 'empresa',
     'params' => $params,
 ];

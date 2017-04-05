@@ -26,10 +26,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'cadastro'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['cadastro'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -89,7 +89,7 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if ($model->load(Yii::$app->request->post()) && $model->loginCpfCnpj()) {
             return $this->goBack();
         } else {
             
@@ -145,12 +145,21 @@ class SiteController extends Controller
     }
 
     /**
-     * Signs user up.
+     * Cadastro user up.
      *
      * @return mixed
      */
-    public function actionSignup()
+    public function actionCadastro()
     {
+        // campos cpf_cnpj
+        // CPF/CNPJ, nome, email, senha
+        // add campo id_indicacao
+        // criar tabela parametros globais (id, nome, cod, valor)
+        // logar ao cadastrar
+        // 
+        
+        $this->layout = 'main-login';
+        
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
@@ -160,7 +169,7 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('signup', [
+        return $this->render('cadastro', [
             'model' => $model,
         ]);
     }

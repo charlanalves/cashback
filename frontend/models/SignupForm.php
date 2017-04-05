@@ -10,6 +10,8 @@ use common\models\User;
 class SignupForm extends Model
 {
     public $username;
+    public $name;
+    public $cpf_cnpj;
     public $email;
     public $password;
 
@@ -20,19 +22,24 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
+//            ['username', 'trim'],
+//            ['username', 'required'],
+//            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este Username já foi usado.'],
+//            ['username', 'string', 'min' => 2, 'max' => 255],
+            
+            ['cpf_cnpj', 'trim'],
+            ['cpf_cnpj', 'required'],
+            ['cpf_cnpj', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este CPF/CNPJ já foi usado.'],
+            ['cpf_cnpj', 'string', 'min' => 11, 'max' => 14],
 
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este Email já foi usado.'],
 
             ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            ['password', 'string', 'min' => 6, 'message' => 'Insira uma senha com no mínimo 6 dígitos.'],
         ];
     }
 
@@ -48,8 +55,10 @@ class SignupForm extends Model
         }
         
         $user = new User();
-        $user->username = $this->username;
+        $user->cpf_cnpj = $this->cpf_cnpj;
+        $user->name = $this->name;
         $user->email = $this->email;
+        $user->username = $this->cpf_cnpj;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         

@@ -10,10 +10,12 @@ use yii\base\Model;
 class LoginForm extends Model
 {
     public $username;
+    public $cpf_cnpj;
     public $password;
     public $rememberMe = true;
 
     private $_user;
+    private $_cpf_cnpj;
 
 
     /**
@@ -22,8 +24,8 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
-            [['username', 'password'], 'required'],
+            // cpf_cnpj and password are both required
+            [['cpf_cnpj', 'password'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
@@ -47,7 +49,7 @@ class LoginForm extends Model
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $user = $this->getUser();
+            $user = $this->getCpfCnpj();
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Usuário ou senha incorretos.');
             }
@@ -69,6 +71,20 @@ class LoginForm extends Model
     }
 
     /**
+     * Logs in a user using the provided cpf and password.
+     *
+     * @return bool whether the user is logged in successfully
+     */
+    public function loginCpfCnpj()
+    {
+        if ($this->validate()) {
+            return Yii::$app->user->login($this->getCpfCnpj(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Finds user by [[username]]
      *
      * @return User|null
@@ -80,5 +96,19 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+
+    /**
+     * Finds user by [[cpf_cnpj]]
+     *
+     * @return Cpf|null
+     */
+    protected function getCpfCnpj()
+    {
+        if ($this->_cpf_cnpj === null) {
+            $this->_cpf_cnpj = User::findByCpfCnpj($this->cpf_cnpj);
+        }
+
+        return $this->_cpf_cnpj;
     }
 }
