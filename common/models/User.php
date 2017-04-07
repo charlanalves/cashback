@@ -203,4 +203,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(Company::className(), ['id_company' => 'id_company']);
     }
+    
+    public static function getIdByAuthKey($authKey)
+    {
+        return (($user = self::findOne(['auth_key' => $authKey]))) ? $user->id : false;
+    }
+
 }

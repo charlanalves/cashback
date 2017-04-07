@@ -29,6 +29,11 @@ $fieldOptions4 = [
     'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
 ];
 
+$fieldOptions5 = [
+    'options' => ['class' => 'form-group has-feedback'],
+    'inputTemplate' => "{input}<span class='glyphicon glyphicon-tags form-control-feedback'></span>"
+];
+
 $urlResetPass = Url::to(['site/request']);
 
         // cpf_cnpj, name, email, password
@@ -76,9 +81,26 @@ $urlResetPass = Url::to(['site/request']);
             ->label(false)
             ->passwordInput(['placeholder' => 'Senha', 'title' => 'Senha']) ?>
 
-        <div class="row">
-            <div class="col-xs-8">
+        <?php 
+            
+            if ($convidado['codIndicacao'] && $convidado['idIndicacao']) { 
                 
+                echo $form
+                     ->field($model, 'cod_indicacao')
+                     ->label(false)
+                     ->textInput(['value' => $convidado['codIndicacao'], 'readonly' => true, 'title' => 'Código da indicação']);
+                
+                echo $form
+                     ->field($model, 'id_indicacao')
+                     ->label(false)
+                     ->hiddenInput(['value' => $convidado['idIndicacao']]);
+                
+            }
+        ?>
+
+        <div class="row">
+            <div class="col-xs-8 text-align-left text-sm">
+                já tem uma conta? <a href="index.php?r=site/login">Fazer login</a>
             </div>
             <!-- /.col -->
             <div class="col-xs-4 ">

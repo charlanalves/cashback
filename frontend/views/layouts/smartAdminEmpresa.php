@@ -9,7 +9,8 @@ use common\widgets\Alert;
 
 SmartAdminAsset::register($this);
 
-//var_dump($this->params);
+$user = Yii::$app->user->identity;
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -78,10 +79,34 @@ SmartAdminAsset::register($this);
         <script type="text/javascript">
             
             SYSTEM = {};
-            var categoriaSelected = '';
-            var itensCatSelected = [];
+            var Util,
+                categoriaSelected = '',
+                itensCatSelected = [];
             
             document.addEventListener("DOMContentLoaded", function (event) {
+
+                Util = {
+                    copyElement: function ($element)
+                    {
+                        $element.select();
+                        this.copyText($element.text());  
+                    },
+                    copyText:function(text)
+                    {
+                        var $tempInput =  $("<textarea>");
+                        $("body").append($tempInput);
+                        $tempInput.val(text).select();
+                        document.execCommand("copy");
+                        $tempInput.remove();
+
+                        $.smallBox({
+                            title : "Copiado...",
+                            color : "#739E73",
+                            iconSmall : "fa fa-copy",
+                            timeout : 1000
+                        });
+                    }
+                };
 
                 pageSetUp();
 
@@ -202,24 +227,13 @@ SmartAdminAsset::register($this);
                         }
                     }));
 
-                    /*
-                     * DIALOG SIMPLE
-                     */
 
-                    // Dialog click
+                    // CONVIDAR AMIGO ------------------------------------------
                     $('#convidar_amigo_link').click(function () {
                         $('#convidar_amigo_dialog').dialog('open');
                         return false;
-
                     });
-
-                    // Dialog click
-                    $('#menu_sair').click(function () {        
-                        window.open('index.php?r=site/login','_self');
-                        return false;
-
-                    });
-
+                    
                     $('#convidar_amigo_dialog').dialog({
                         autoOpen: false,
                         width: 300,
@@ -241,18 +255,32 @@ SmartAdminAsset::register($this);
 //                                }
 //                            }]
                     });
-
-//                    $('#convidar_amigo_dialog').dialog('open');
+                    
+                    // SAIR ----------------------------------------------------
+                    $("#menu_sair").click(function(e) {
+                        $.sound_on = false;
+                        $.sound_on = true;
+                        $.SmartMessageBox({
+                            title : "Deseja sair?",
+                            //content : "",
+                            buttons : '[Não][Sim]'
+                        }, function(ButtonPressed) {
+                            if (ButtonPressed === "Sim") {
+                                $('form[name=form-sair]').submit();
+                            }
+                        });
+                    });
+                    
 
                 };
+                
                 // run pagefunction on load
-
                 pagefunction();
-
-
-
+                
+                
             });
 
+            
         </script>
 
     </head>
@@ -276,15 +304,23 @@ SmartAdminAsset::register($this);
                 </span>
                 <ul class="dropdown-menu float-right no-padding">
                     <li>
+                        <a href="javascript:void(0);" id=""><i class="fa fa-lg fa-user"></i> <?= $user->name ?></a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
                         <a href="javascript:void(0);"><i class="fa fa-gear fa-spin"></i> Configurações</a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" id="convidar_amigo_link"><i class="fa fa-user-plus"></i> Indicar amigo</a>
                     </li>
                     <li class="divider"></li>
-                    <li>
-                        <a href="javascript:void(0);" id="menu_sair"><i class="fa fa-power-off"></i> Sair</a>
-                    </li>
+                    <?=
+                      Html::beginForm(['/site/logout'], 'post', ['name'=>'form-sair'])
+                    . Html::endForm()
+                    . '<li>'
+                    . Html::a('<i class="fa fa-power-off"></i> Sair', 'javascript:void(0);', ['id' => 'menu_sair'])
+                    . '</li>';
+                    ?>
                 </ul>
             </div>
 
@@ -400,10 +436,10 @@ SmartAdminAsset::register($this);
                 Assim que seu amigo começar a utilizar o CashBack, você e ele <strong>ganham R$ 10,00</strong> cada!
             </p>
             <div class="alert alert-info no-margin text-align-right">
-                <textarea rows="3" class="width-100" style="width: 100%;"></textarea>
+                <textarea rows="3" class="width-100 font-xs text-justify" id="texto-convite-amigo" style="width: 100%; overflow: hidden" onclick="Util.copyElement($(this))" readonly="true"><?= \common\models\SYS01PARAMETROSGLOBAIS::getValor('1') . $user->getAuthKey() ?></textarea>
                 <small class="font-xs"><i>Sua mensagem personalizada</i></small>
             </div>
-            <button class="btn btn-default btn-info margin-top-10"><i class="fa fa-copy"></i> copiar </button>
+            <button class="btn btn-default btn-info margin-top-10" onclick="Util.copyElement($('textarea#texto-convite-amigo'))"><i class="fa fa-copy"></i> copiar </button>
             &nbsp; &nbsp;
             <button class="btn btn-default btn-success margin-top-10"><i class="fa fa-share-alt"></i> compartilhar </button>
         </div>

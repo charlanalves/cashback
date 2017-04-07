@@ -150,15 +150,11 @@ class SiteController extends Controller
      * @return mixed
      */
     public function actionCadastro()
-    {
-        // campos cpf_cnpj
-        // CPF/CNPJ, nome, email, senha
-        // add campo id_indicacao
-        // criar tabela parametros globais (id, nome, cod, valor)
-        // logar ao cadastrar
-        // 
-        
+    {   
         $this->layout = 'main-login';
+        
+        $convidado['codIndicacao'] = Yii::$app->request->get('cod');
+        $convidado['idIndicacao'] = \common\models\User::getIdByAuthKey($convidado['codIndicacao']);
         
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
@@ -171,6 +167,7 @@ class SiteController extends Controller
 
         return $this->render('cadastro', [
             'model' => $model,
+            'convidado' => $convidado,
         ]);
     }
 

@@ -7,18 +7,21 @@ use common\models\VIEWEXTRATOCLIENTE;
 use common\models\CB10CATEGORIA;
 use common\models\CB04EMPRESA;
 use common\models\CB11ITEMCATEGORIA;
+use common\models\SYS01PARAMETROSGLOBAIS;
 
 /**
  * Empresa controller
  */
 class EmpresaController extends GlobalBaseController {
-
+    
     public function actionIndex() {
-
+        
         $this->layout = 'smartAdminEmpresa';
+        
         $cliente = 1;
 
         $layout = $data = [];
+        
 
         // saldo do cliente
         $layout['saldo'] = VIEWEXTRATOCLIENTE::saldoAtualByCliente($cliente);
