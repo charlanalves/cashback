@@ -11,6 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log','debug'],
     'controllerNamespace' => 'frontend\controllers',
+    'defaultRoute' => 'empresa',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -39,7 +40,7 @@ return [
      
         
     ],
-    'homeUrl' => 'empresa',
-    'defaultRoute' => 'empresa',
+    'homeUrl' => 'index.php?r=empresa',
+    'defaultRoute' => 'index.php?r=empresa',
     'params' => $params,
 ];

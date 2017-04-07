@@ -9,7 +9,8 @@ use common\widgets\Alert;
 
 SmartAdminAsset::register($this);
 
-//var_dump($this->params);
+$user = Yii::$app->user->identity;
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -69,7 +70,7 @@ SmartAdminAsset::register($this);
         <link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
         <link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
         <link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/style_lista_estabelecimentos.css">
 
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
@@ -78,106 +79,208 @@ SmartAdminAsset::register($this);
         <script type="text/javascript">
             
             SYSTEM = {};
-            var categoriaSelected = '';
-            var itensCatSelected = [];
+            var Util,
+                categoriaSelected = '',
+                itensCatSelected = [];
             
             document.addEventListener("DOMContentLoaded", function (event) {
 
-                // exibe ou esconde os itens da categoria
-                SYSTEM.itensCategoria = function () {
-                    $('div#itens-categoria-all').toggle('fast');
-                }
+                Util = {
+                    copyElement: function ($element)
+                    {
+                        $element.select();
+                        this.copyText($element.text());  
+                    },
+                    copyText:function(text)
+                    {
+                        var $tempInput =  $("<textarea>");
+                        $("body").append($tempInput);
+                        $tempInput.val(text).select();
+                        document.execCommand("copy");
+                        $tempInput.remove();
 
-                // filtra empresas por categoria e seus itens
-                SYSTEM.filtrarEmpresa = function () {
+                        $.smallBox({
+                            title : "Copiado...",
+                            color : "#739E73",
+                            iconSmall : "fa fa-copy",
+                            timeout : 1000
+                        });
+                    }
+                };
 
-                    var categoria = $('select#filtro-categoria').val();
-                    var item = $('#itens-categoria-all input:checked').map(function (_, el) {
-                        itensCatSelected.push($(el).attr('title'));
-                        return $(el).val();
-                    }).get();
+                pageSetUp();
 
-                    var busca = $.ajax({
-                        url: 'index.php?r=empresa/filtra-empresas',
-                        type: 'POST',
-                        data: {'categoria': categoria, 'item': item},
-                        dataType: "jsonp"
-                    });
+                // pagefunction
 
-                    busca.always(function (data) {
-                        retorno = data.responseText;
-                        if (retorno) {
+                var pagefunction = function () {
 
-                            // esconde os itens da categoria
-                            $('div#itens-categoria-all').hide('fast');
+                    // exibe ou esconde os itens da categoria
+                    SYSTEM.itensCategoria = function () {
+                        $('div#itens-categoria-all').toggle('fast');
+                    }
 
-                            // exibe ou esconde itens filtrados
-                            if (itensCatSelected.length && categoria) {
-                                $('div#itens-categoria-selected i').text(itensCatSelected.join(', '));
-                                $('div#itens-categoria-selected').show('fast');
-                            } else {
-                                $('div#itens-categoria-selected i').text('');
-                                $('div#itens-categoria-selected').hide('fast');
-                            }
-                            itensCatSelected = [];
+                    // filtra empresas por categoria e seus itens
+                    SYSTEM.filtrarEmpresa = function () {
 
-                            // exibe resultado do filtro
-                            $('div.container').html(retorno);
+                        var categoria = $('select#filtro-categoria').val();
+                        var item = $('#itens-categoria-all input:checked').map(function (_, el) {
+                            itensCatSelected.push($(el).attr('title'));
+                            return $(el).val();
+                        }).get();
 
-                        } else {
-                            $.smallBox({
-                                title: "Opss",
-                                content: "<i class='fa fa-clock-o'></i> <i>ocorreu um erro tente novamente...</i>",
-                                color: "#C46A69",
-                                iconSmall: "fa fa-times fa-2x fadeInRight animated",
-                                timeout: 4000
-                            });
-                        }
-                    });
-                }
-                
-                SYSTEM.limparItensSelecionados = function () {
-                    // desmarca itens selecionados do filtro
-                    $('#itens-categoria-all input:checked').map(function (_, el) {
-                        $(el).attr('checked', false);
-                    });
-                    SYSTEM.filtrarEmpresa();
-                }
-                
-                SYSTEM.loadItensCategoria = function () {
-                
-                    $('div#ckeckbox-itens').html('');
-                    if (!categoriaSelected) {
-                        $('button#btn-itens-categoria').attr('disabled', true);
-
-                    } else {
-                        var itens = $.ajax({
-                            url: 'index.php?r=empresa/itens-categoria',
+                        var busca = $.ajax({
+                            url: 'index.php?r=empresa/filtra-empresas',
                             type: 'POST',
-                            data: {'categoria': categoriaSelected},
+                            data: {'categoria': categoria, 'item': item},
                             dataType: "jsonp"
                         });
 
-                        itens.always(function (data) {
+                        busca.always(function (data) {
                             retorno = data.responseText;
                             if (retorno) {
-                                // exibe itens da categoria no filtro
-                                $('div#ckeckbox-itens').html(retorno);
-                                $('button#btn-itens-categoria').attr('disabled', false);
+
+                                // esconde os itens da categoria
+                                $('div#itens-categoria-all').hide('fast');
+
+                                // exibe ou esconde itens filtrados
+                                if (itensCatSelected.length && categoria) {
+                                    $('div#itens-categoria-selected i').text(itensCatSelected.join(', '));
+                                    $('div#itens-categoria-selected').show('fast', function (){
+                                        document.getElementById('main').style.top = '25px'; 
+                                    });
+                                } else {
+                                    $('div#itens-categoria-selected i').text('');
+                                    $('div#itens-categoria-selected').hide('fast', function (){
+                                        document.getElementById('main').style.top = '0px'; 
+                                    });
+                                }
+                                itensCatSelected = [];
+
+                                // exibe resultado do filtro
+                                $('div.container').html(retorno);
+
+                            } else {
+                                $.smallBox({
+                                    title: "Opss",
+                                    content: "<i class='fa fa-clock-o'></i> <i>ocorreu um erro tente novamente...</i>",
+                                    color: "#C46A69",
+                                    iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                                    timeout: 4000
+                                });
                             }
                         });
-                    }
-                }
 
-                $('#filtro-categoria').change(function (a) {
-                    categoriaSelected = a.target.value;
-                    if(!$("div#itens-categoria-all:hidden").length){
-                        $('div#itens-categoria-all').toggle('fast');
                     }
-                    SYSTEM.loadItensCategoria();
-                });
 
+                    SYSTEM.limparItensSelecionados = function () {
+                        // desmarca itens selecionados do filtro
+                        $('#itens-categoria-all input:checked').map(function (_, el) {
+                            $(el).attr('checked', false);
+                        });
+                        SYSTEM.filtrarEmpresa();
+                    }
+
+                    SYSTEM.loadItensCategoria = function () {
+
+                        $('div#ckeckbox-itens').html('');
+                        if (!categoriaSelected) {
+                            $('button#btn-itens-categoria').attr('disabled', true);
+
+                        } else {
+                            var itens = $.ajax({
+                                url: 'index.php?r=empresa/itens-categoria',
+                                type: 'POST',
+                                data: {'categoria': categoriaSelected},
+                                dataType: "jsonp"
+                            });
+
+                            itens.always(function (data) {
+                                retorno = data.responseText;
+                                if (retorno) {
+                                    // exibe itens da categoria no filtro
+                                    $('div#ckeckbox-itens').html(retorno);
+                                    $('button#btn-itens-categoria').attr('disabled', false);
+                                }
+                            });
+                        }
+                    }
+
+                    $('#filtro-categoria').change(function (a) {
+                        categoriaSelected = a.target.value;
+                        if (!$("div#itens-categoria-all:hidden").length) {
+                            $('div#itens-categoria-all').toggle('fast');
+                        }
+                        SYSTEM.loadItensCategoria();
+                    });
+
+                    /*
+                     * CONVERT DIALOG TITLE TO HTML
+                     * REF: http://stackoverflow.com/questions/14488774/using-html-in-a-dialogs-title-in-jquery-ui-1-10
+                     */
+                    $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+                        _title: function (title) {
+                            if (!this.options.title) {
+                                title.html("&#160;");
+                            } else {
+                                title.html(this.options.title);
+                            }
+                        }
+                    }));
+
+
+                    // CONVIDAR AMIGO ------------------------------------------
+                    $('#convidar_amigo_link').click(function () {
+                        $('#convidar_amigo_dialog').dialog('open');
+                        return false;
+                    });
+                    
+                    $('#convidar_amigo_dialog').dialog({
+                        autoOpen: false,
+                        width: 300,
+                        height: 380,
+                        resizable: false,
+                        modal: true,
+                        title: "<div class='widget-header'><h4>INDIQUE UM AMIGO</h4></div>",
+//                        buttons: [{
+//                                html: "<i class='fa fa-trash-o'></i>&nbsp; Delete all items",
+//                                "class": "btn btn-danger",
+//                                click: function () {
+//                                    $(this).dialog("close");
+//                                }
+//                            }, {
+//                                html: "<i class='fa fa-times'></i>&nbsp; Cancel",
+//                                "class": "btn btn-default",
+//                                click: function () {
+//                                    $(this).dialog("close");
+//                                }
+//                            }]
+                    });
+                    
+                    // SAIR ----------------------------------------------------
+                    $("#menu_sair").click(function(e) {
+                        $.sound_on = false;
+                        $.sound_on = true;
+                        $.SmartMessageBox({
+                            title : "Deseja sair?",
+                            //content : "",
+                            buttons : '[Não][Sim]'
+                        }, function(ButtonPressed) {
+                            if (ButtonPressed === "Sim") {
+                                $('form[name=form-sair]').submit();
+                            }
+                        });
+                    });
+                    
+
+                };
+                
+                // run pagefunction on load
+                pagefunction();
+                
+                
             });
+
+            
         </script>
 
     </head>
@@ -190,12 +293,37 @@ SmartAdminAsset::register($this);
                 <span>MEU SALDO:</span>
                 R$ <?= $this->params['saldo'] ?>
             </div>
+<!--            
             <a href="#" id="meu-saldo-btn">
                 <span class="fa fa-lg fa-chevron-circle-right"></span>
-            </a>
-            <!-- #PROJECTS: projects dropdown -->
-            <div class="project-context hidden-xs"></div>
-            <!-- end projects dropdown -->
+            </a>-->
+
+            <div class="air air-top-right float-right padding-10">
+                <span class="btn btn-primary btn-circle btn-sm" data-toggle="dropdown" aria-expanded="true">                
+                    <i class="glyphicon glyphicon-list"></i>
+                </span>
+                <ul class="dropdown-menu float-right no-padding">
+                    <li>
+                        <a href="javascript:void(0);" id=""><i class="fa fa-lg fa-user"></i> <?= $user->name ?></a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="javascript:void(0);"><i class="fa fa-gear fa-spin"></i> Configurações</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" id="convidar_amigo_link"><i class="fa fa-user-plus"></i> Indicar amigo</a>
+                    </li>
+                    <li class="divider"></li>
+                    <?=
+                      Html::beginForm(['/site/logout'], 'post', ['name'=>'form-sair'])
+                    . Html::endForm()
+                    . '<li>'
+                    . Html::a('<i class="fa fa-power-off"></i> Sair', 'javascript:void(0);', ['id' => 'menu_sair'])
+                    . '</li>';
+                    ?>
+                </ul>
+            </div>
+
 
             <div class="widget-body">
                 <ul id="menu-tab" class="nav nav-tabs bordered">
@@ -210,66 +338,68 @@ SmartAdminAsset::register($this);
                     </li>
                 </ul>
             </div>
+
             <!-- end widget content -->
 
-        </header>
+            <div id="menu-filtro">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="input-group">
 
+                            <div class="icon-addon addon-md">
+                                <select class="form-control" id="filtro-categoria">
+                                    <?= $this->params['categorias'] ?>
+                                </select>
+                                <span for="Categoria" class="fa fa-book" rel="tooltip" title="" data-original-title="Categorias"></span>
+                            </div>
 
-        <div id="menu-filtro">
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="input-group">
+                            <div class="input-group-btn">
+                                <button id="btn-itens-categoria" title="itens da categoria" type="button" class="btn btn-default" tabindex="0" onclick="SYSTEM.itensCategoria()" disabled="">
+                                    <span class="fa fa-filter"></span>
+                                </button>
+                            </div>
 
-                        <div class="icon-addon addon-md">
-                            <select class="form-control" id="filtro-categoria">
-                                <?= $this->params['categorias'] ?>
-                            </select>
-                            <span for="Categoria" class="fa fa-book" rel="tooltip" title="" data-original-title="Categorias"></span>
-                        </div>
-
-                        <div class="input-group-btn">
-                            <button id="btn-itens-categoria" title="itens da categoria" type="button" class="btn btn-default" tabindex="0" onclick="SYSTEM.itensCategoria()" disabled="">
-                                <span class="fa fa-filter"></span>
-                            </button>
-                        </div>
-
-                        <div class="input-group-btn">
-                            <button id="btn-filtrar" title="buscar empresas" type="button" class="btn btn-default" tabindex="-1" onclick="SYSTEM.filtrarEmpresa()">
-                                <span class="fa fa-search"></span>
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="itens-categoria" style="display: block">
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12 no-padding-bottom">
-                    <div id="itens-categoria-selected">
-                        <span class="fa fa-lg fa-trash-o float-right padding-2 btn btn-default" title="limpar filtros" onclick="SYSTEM.limparItensSelecionados()"></span>
-                        <strong>Filtro:</strong> <i>Item 1, Item 2, Item 3</i>
-                    </div>
-
-                    <div id="itens-categoria-all">
-                        <span class="fa fa-close float-right padding-2 btn btn-default" title="fechar filtro" onclick="SYSTEM.itensCategoria()"></span>
-                        <div class="row">
-
-                            <div id="ckeckbox-itens"></div>
-
-                            <div class="col-md-1 col-sm-1 col-xs-1"></div>
-
-                            <div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="margin-left: -10px!important">
-                                <div class="note float-left no-padding">Selecione as opções para filtrar.</div>
-                                <span class="float-right fa fa-check btn btn-default" style="margin-right: -10px" title="fechar filtro" onclick="SYSTEM.filtrarEmpresa()"> Aplicar filtro</span>
+                            <div class="input-group-btn">
+                                <button id="btn-filtrar" title="buscar empresas" type="button" class="btn btn-default" tabindex="-1" onclick="SYSTEM.filtrarEmpresa()">
+                                    <span class="fa fa-search"></span>
+                                </button>
                             </div>
 
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div id="itens-categoria" style="display: block">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 no-padding-bottom">
+                        <div id="itens-categoria-selected">
+                            <span class="fa fa-lg fa-trash-o float-right padding-2 btn btn-default" title="limpar filtros" onclick="SYSTEM.limparItensSelecionados()"></span>
+                            <strong>Filtro:</strong> <i></i>
+                        </div>
+
+                        <div id="itens-categoria-all">
+                            <span class="fa fa-close float-right padding-2 btn btn-default" title="fechar filtro" onclick="SYSTEM.itensCategoria()"></span>
+                            <div class="row">
+
+                                <div id="ckeckbox-itens"></div>
+
+                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
+
+                                <div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="margin-left: -10px!important">
+                                    <div class="note float-left no-padding">Selecione as opções para filtrar.</div>
+                                    <span class="float-right fa fa-check btn btn-default" style="margin-right: -10px" title="fechar filtro" onclick="SYSTEM.filtrarEmpresa()"> Aplicar filtro</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </header>
+
 
 
         <!-- END HEADER -->
@@ -297,6 +427,24 @@ SmartAdminAsset::register($this);
             </div>
         </div>
         <!-- END FOOTER -->
+        
+        
+        <!--Modal convidar amigo-->
+        <div id="convidar_amigo_dialog" class="ui-dialog-content ui-widget-content text-align-center">
+            <i class='fa fa-lg fa-5x fa-group padding-top-15 padding-bottom-10'></i>
+            <p class="text-justify font-md">
+                Assim que seu amigo começar a utilizar o CashBack, você e ele <strong>ganham R$ 10,00</strong> cada!
+            </p>
+            <div class="alert alert-info no-margin text-align-right">
+                <textarea rows="3" class="width-100 font-xs text-justify" id="texto-convite-amigo" style="width: 100%; overflow: hidden" onclick="Util.copyElement($(this))" readonly="true"><?= \common\models\SYS01PARAMETROSGLOBAIS::getValor('1') . $user->getAuthKey() ?></textarea>
+                <small class="font-xs"><i>Sua mensagem personalizada</i></small>
+            </div>
+            <button class="btn btn-default btn-info margin-top-10" onclick="Util.copyElement($('textarea#texto-convite-amigo'))"><i class="fa fa-copy"></i> copiar </button>
+            &nbsp; &nbsp;
+            <button class="btn btn-default btn-success margin-top-10"><i class="fa fa-share-alt"></i> compartilhar </button>
+        </div>
+
+
 
         <!--================================================== -->
 

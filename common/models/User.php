@@ -20,6 +20,7 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property string $cpf_cnpj
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -81,6 +82,17 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * Finds user by cpf_cnpj
+     *
+     * @param string $cpf_cnpj
+     * @return static|null
+     */
+    public static function findByCpfCnpj($cpf_cnpj)
+    {
+        return static::findOne(['cpf_cnpj' => $cpf_cnpj, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -191,4 +203,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(Company::className(), ['id_company' => 'id_company']);
     }
+    
+    public static function getIdByAuthKey($authKey)
+    {
+        return (($user = self::findOne(['auth_key' => $authKey]))) ? $user->id : false;
+    }
+
 }
