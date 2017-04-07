@@ -211,11 +211,11 @@ ini_set('display_errors', 1);
                                         
                                         // itens do produto -------------------------------
                                         $itens_produto = itensTable($produto['ITEM']);
-                                        $tabs_content .= (!$itens_produto) ? '' : '<p class="font-md no-margin border-top"><span class="fa fa-check-square-o"></span> &nbsp;Itens</p>' . $itens_produto;
+                                        $tabs_content .= (!$itens_produto) ? '' : '<p class="font-md no-margin border-top"><span class="fa fa-check-square-o"></span> &nbsp;Essa suíte possui:</p>' . $itens_produto;
                                         
                                         // cashback do produto ---------------------------------
                                         $cashback_produto = cashBackTable($produto['CASHBACK']);
-                                        $tabs_content .= (!$cashback_produto) ? '' : '<p class="font-md no-margin border-top"><span class="fa fa-money"></span> &nbsp;Crédito</p>' . $cashback_produto;
+                                        $tabs_content .= (!$cashback_produto) ? '' : '<p class="font-md no-margin border-top"><span class="fa fa-money"></span> &nbsp;Dinheiro de volta:</p>' . $cashback_produto;
 
                                         // variação do produto ---------------------------------
                                         if (!empty($produto['VARIACAO'])) {
