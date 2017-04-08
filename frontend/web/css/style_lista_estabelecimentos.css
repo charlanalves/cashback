@@ -505,3 +505,10 @@ div.meu-saldo, div.widget-body{
 .ui-dialog-buttonpane, .ui-widget-content, .ui-helper-clearfix {
     margin-top: 0px!important;
 }
+
+.ui-dialog-titlebar-close:before {
+    font-size: 29px;
+    position: relative;
+    left: -3px;
+    top: -9px;
+}
