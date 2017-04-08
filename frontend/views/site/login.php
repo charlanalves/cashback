@@ -11,7 +11,7 @@ $this->title = 'Login - CashBack';
 
 $fieldOptions1 = [
     'options' => ['class' => 'form-group has-feedback'],
-    'inputTemplate' => "{input}<span class='glyphicon glyphicon-envelope form-control-feedback'></span>"
+    'inputTemplate' => "{input}<span class='glyphicon glyphicon-user form-control-feedback'></span>"
 ];
 
 $fieldOptions2 = [
@@ -28,19 +28,19 @@ $urlResetPass = Url::to(['site/request']);
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">Informe seu usuário e senha:</p>
+        <p class="login-box-msg">Informe seu CPF/CNPJ e Senha:</p>
 
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
 
         <?= $form
-            ->field($model, 'username', $fieldOptions1)
+            ->field($model, 'cpf_cnpj', $fieldOptions1)
             ->label(false)
-            ->textInput(['placeholder' => $model->getAttributeLabel('username')]) ?>
+            ->textInput(['placeholder' => 'CPF/CNPJ', 'title' => 'CPF ou CNPJ']) ?>
 
         <?= $form
             ->field($model, 'password', $fieldOptions2)
             ->label(false)
-            ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
+            ->passwordInput(['placeholder' => 'Senha', 'title' => 'Senha']) ?>
 
         <div class="row">
             <div class="col-xs-8">
@@ -66,7 +66,7 @@ $urlResetPass = Url::to(['site/request']);
         <!-- /.social-auth-links -->
 
         <!--<a href="$urlResetPass">Esqueci minha senha</a><br>-->
-        <!--<a href="register.html" class="text-center">Register a new membership</a>-->
+        <a href="index.php?r=site/cadastro" class="text-center"><span class="fa fa-user-plus"></span> Cadastre-se aqui</a>
 
     </div>
     <!-- /.login-box-body -->

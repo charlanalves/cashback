@@ -10,6 +10,12 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\DbManager'
         ],
+        'v' => [
+            'class' => 'common\components\ValidationComponent',
+        ],
+        'u' => [
+            'class' => 'common\components\UtilComponent',
+        ],
       
     ],
     
@@ -22,7 +28,10 @@ return [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/login',          
-            'site/logout',          
+            'site/logout',
+            'site/cadastro',
+            'gii/*',
+            'admin/*'
             
             // The actions listed here will be allowed to everyone including guests.
             // So, 'admin/*' should not appear here in the production, of course.

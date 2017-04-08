@@ -3,7 +3,7 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=cashback',
+            'dsn' => 'mysql:host=localhost;dbname=cashbackdev',
             'username' => 'root',
             'password' => '@by02016Abio#',
             'charset' => 'utf8',
@@ -12,11 +12,11 @@ return [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
         ],
-       'authManager' => [
+        'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ]
+     
     ],
-    
      'modules' => [
         'admin' => [
             'class' => 'mdm\admin\Module',
