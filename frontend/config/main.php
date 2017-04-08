@@ -41,6 +41,6 @@ return [
         
     ],
     'homeUrl' => 'index.php?r=empresa',
-    'defaultRoute' => 'index.php?r=empresa',
+    'defaultRoute' => 'empresa',
     'params' => $params,
 ];
