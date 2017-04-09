@@ -13,7 +13,7 @@ use common\models\SYS01PARAMETROSGLOBAIS;
  * Empresa controller
  */
 class EmpresaController extends GlobalBaseController {
-    
+  
     public function actionIndex() {
         
         $this->layout = 'smartAdminEmpresa';
