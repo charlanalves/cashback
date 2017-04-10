@@ -244,7 +244,7 @@ ini_set('display_errors', 1);
                                             // Campo importante do produto -------------------------------
                                             $tabela_variacao .= (!$produto['CB05_IMPORTANTE']) ? '' : '
                                                         <tr>
-                                                            <td colspan="2">	
+                                                            <td colspan="2">
                                                                 <p class="alert alert-warning no-margin">
                                                                     <span class="glyphicon glyphicon-info-sign"></span>&nbsp; <span class="font-md">Informações Importantes:</span><br/>
                                                                     ' . nl2br($produto['CB05_IMPORTANTE']) . '

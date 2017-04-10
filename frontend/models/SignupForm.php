@@ -11,6 +11,8 @@ use common\models\AuthAssignment;
  */
 class SignupForm extends Model {
 
+    public $cpf_or_cnpj;
+    
     public $username;
     public $name;
     public $cpf_cnpj;
@@ -25,12 +27,17 @@ class SignupForm extends Model {
      */
     public function rules() {
         return [
+            ['cpf_or_cnpj', 'safe'],
+            
             ['name', 'trim'],
             ['name', 'required'],
             ['name', 'string', 'min' => 5, 'max' => 255],
 
             ['cpf_cnpj', 'trim'],
             ['cpf_cnpj', 'required'],
+            ['cpf_cnpj', 'filter', 'filter' => function($value) {
+                return preg_replace('/[^0-9]/', '', $value);
+            }],
             ['cpf_cnpj', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este CPF/CNPJ já foi usado.'],
             ['cpf_cnpj', 'string', 'min' => 11, 'max' => 14],
             

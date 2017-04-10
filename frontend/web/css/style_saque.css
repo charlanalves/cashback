@@ -59,8 +59,8 @@
 }
 
 .fixed-header #header {
+    position: relative;
     width: 100%;
-    max-width: 700px!important; 
     z-index: 905;
     top: 0;
     border-bottom: 2px solid #999;
@@ -69,13 +69,6 @@
     padding: 0 !important;
 }
 
-.fixed-header #main {
-    margin-top: 129px!important;
-}
-
-#header>div{
-    height: auto;
-}
 
 @media (max-width:50px) {
     .col-xs-custom-50{
@@ -200,7 +193,6 @@ div#form-bootstrapWizard {
     /*margin-top: 99px !important; */
 }
 #main {
-    height: 100%!important;
     min-height: 420px !important;
     margin: 0!important;
 }
@@ -334,16 +326,6 @@ div#main{
     margin-top: 0px !important;
 }
 
-.dropdown-menu{
-    top: auto;
-    right: 0px;
-    left: auto;
-}
-
-.dropdown-menu li{
-    margin: 8px 3px;
-}
-
 div#main div.container{
     width: 100%;
     max-width: 700px!important; 
@@ -357,6 +339,7 @@ div.meu-saldo{
     font-size: 28px!important;
     padding: 0 10px;
     /*border: 1px silver solid;*/
+    height: 100%;
     width: auto;
     margin: 0 auto;
     line-height: 20px
@@ -380,7 +363,7 @@ ul#menu-tab{
 }
 
 ul#menu-tab li{
-    width: 33.33%;
+    width: 50%;
     margin: 0 auto !important;
     padding: 0px!important;
     text-align: center;
@@ -389,6 +372,8 @@ ul#menu-tab li{
 
 ul#menu-tab li a{
     margin: 0 auto !important;
+    font-size: 12px;
+    padding: 9px 5px 10px;
 }
 
 div#menu-filtro {
@@ -498,19 +483,6 @@ div#itens-categoria div#itens-categoria-all label{
     }
 }
 
-div.meu-saldo, div.widget-body{
-    height: 49px!important;
-}
-
-.ui-dialog-buttonpane, .ui-widget-content, .ui-helper-clearfix {
-    margin-top: 0px!important;
-}
-
-
 #header>div {
     height: 48px!important;
-}
-
-div#menu-filtro {
-    height: 32px!important;
 }

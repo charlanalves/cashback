@@ -79,35 +79,23 @@ $user = Yii::$app->user->identity;
         <script type="text/javascript">
             
             SYSTEM = {};
-            var Util,
-                categoriaSelected = '',
+            var categoriaSelected = '',
                 itensCatSelected = [];
             
             document.addEventListener("DOMContentLoaded", function (event) {
 
-                Util = {
-                    copyElement: function ($element)
-                    {
-                        $element.select();
-                        this.copyText($element.text());  
-                    },
-                    copyText:function(text)
-                    {
-                        var $tempInput =  $("<textarea>");
-                        $("body").append($tempInput);
-                        $tempInput.val(text).select();
-                        document.execCommand("copy");
-                        $tempInput.remove();
-
-                        $.smallBox({
-                            title : "Copiado...",
-                            color : "#739E73",
-                            iconSmall : "fa fa-copy",
-                            timeout : 1000
-                        });
-                    }
-                };
-
+                $('li#aba-estabelecimentos').on('click', function(){
+                    return true;
+                });
+                
+                $('li#aba-favoritos').on('click', function(){
+                    return false;
+                });
+                
+                $('li#aba-especiais').on('click', function(){
+                    return false;
+                });
+                
                 pageSetUp();
 
                 // pagefunction
@@ -228,7 +216,43 @@ $user = Yii::$app->user->identity;
                     }));
 
 
+                    // SOLICITAR SAQUE -----------------------------------------
+                    $('#solicitar_saque_link').click(function () {
+                        document.location.href = "index.php?r=saque";
+                        return false;
+                    });
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     // CONVIDAR AMIGO ------------------------------------------
+                    
+                    // texto
+                    txtConvite = <?= json_encode(\common\models\SYS01PARAMETROSGLOBAIS::getValor('1') . $user->getAuthKey()) ?>;        
+                    
+                    // copia convite ao clicar no text (textarea)
+                    $('textarea#texto-convite-amigo').html(txtConvite).click(function () {
+                        Util.copyElement($(this));
+                        return false;
+                    }).scrollTop(0);
+                    
+                    
+                    // copia convite ao clicar no botao
+                    $('#btn-copiar-convite-amigo').click(function () {
+                        Util.copyElement($('textarea#texto-convite-amigo'));
+                        return false;
+                    });
+                    
+                    // copia compartilar
+                    $('#btn-compartilhar-convite-amigo').click(function () {
+                        document.location.href = "whatsapp://send?text=" + encodeURIComponent(txtConvite);
+                        return false;
+                    });
+                    
+                    // abre convite
                     $('#convidar_amigo_link').click(function () {
                         $('#convidar_amigo_dialog').dialog('open');
                         return false;
@@ -241,19 +265,6 @@ $user = Yii::$app->user->identity;
                         resizable: false,
                         modal: true,
                         title: "<div class='widget-header'><h4>INDIQUE UM AMIGO</h4></div>",
-//                        buttons: [{
-//                                html: "<i class='fa fa-trash-o'></i>&nbsp; Delete all items",
-//                                "class": "btn btn-danger",
-//                                click: function () {
-//                                    $(this).dialog("close");
-//                                }
-//                            }, {
-//                                html: "<i class='fa fa-times'></i>&nbsp; Cancel",
-//                                "class": "btn btn-default",
-//                                click: function () {
-//                                    $(this).dialog("close");
-//                                }
-//                            }]
                     });
                     
                     // SAIR ----------------------------------------------------
@@ -291,7 +302,7 @@ $user = Yii::$app->user->identity;
         <header id="header" class="height-top">
             <div class="meu-saldo">
                 <span>MEU SALDO:</span>
-                R$ <?= $this->params['saldo'] ?>
+                R$ <?= number_format($this->params['saldo'], 2, ",", ".") ?>
             </div>
 <!--            
             <a href="#" id="meu-saldo-btn">
@@ -304,11 +315,14 @@ $user = Yii::$app->user->identity;
                 </span>
                 <ul class="dropdown-menu float-right no-padding">
                     <li>
-                        <a href="javascript:void(0);" id=""><i class="fa fa-lg fa-user"></i> <?= $user->name ?></a>
+                        <a href="javascript:void(0);" id=""><i class="fa fa-3x fa-user margin-right-5"></i> <span class="font-md"><?= $user->name ?></span></a>
                     </li>
                     <li class="divider"></li>
-                    <li>
+<!--                    <li>
                         <a href="javascript:void(0);"><i class="fa fa-gear fa-spin"></i> Configurações</a>
+                    </li>-->
+                    <li>
+                        <a href="javascript:void(0);" id="solicitar_saque_link"><i class="fa fa-dollar"></i> Solicitar saque</a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" id="convidar_amigo_link"><i class="fa fa-user-plus"></i> Indicar amigo</a>
@@ -327,13 +341,13 @@ $user = Yii::$app->user->identity;
 
             <div class="widget-body">
                 <ul id="menu-tab" class="nav nav-tabs bordered">
-                    <li class="active">
+                    <li id="aba-estabelecimentos" class="active">
                         <a href="#s1" data-toggle="tab"><i class="glyphicon fa-lg glyphicon-tags"></i></a>
                     </li> 
-                    <li>
+                    <li id="aba-favoritos" class="disabled">
                         <a href="#s2" data-toggle="tab"><i class="glyphicon fa-lg glyphicon-heart"></i></a>
                     </li> 
-                    <li>
+                    <li id="aba-especiais" class="disabled">
                         <a href="#s3" data-toggle="tab"><i class="glyphicon fa-lg glyphicon-fire"></i></a>
                     </li>
                 </ul>
@@ -370,7 +384,7 @@ $user = Yii::$app->user->identity;
                 </div>
             </div>
 
-            <div id="itens-categoria" style="display: block">
+            <div id="itens-categoria" style="display: block; height: auto!important">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12 no-padding-bottom">
                         <div id="itens-categoria-selected">
@@ -436,15 +450,13 @@ $user = Yii::$app->user->identity;
                 Assim que seu amigo começar a utilizar o CashBack, você e ele <strong>ganham R$ 10,00</strong> cada!
             </p>
             <div class="alert alert-info no-margin text-align-right">
-                <textarea rows="3" class="width-100 font-xs text-justify" id="texto-convite-amigo" style="width: 100%; overflow: hidden" onclick="Util.copyElement($(this))" readonly="true"><?= \common\models\SYS01PARAMETROSGLOBAIS::getValor('1') . $user->getAuthKey() ?></textarea>
+                <textarea rows="3" class="width-100 font-xs text-justify" id="texto-convite-amigo" style="width: 100%; overflow: hidden" readonly="true"></textarea>
                 <small class="font-xs"><i>Sua mensagem personalizada</i></small>
             </div>
-            <button class="btn btn-default btn-info margin-top-10" onclick="Util.copyElement($('textarea#texto-convite-amigo'))"><i class="fa fa-copy"></i> copiar </button>
+            <button class="btn btn-default btn-info margin-top-10" id="btn-copiar-convite-amigo"><i class="fa fa-copy"></i> copiar </button>
             &nbsp; &nbsp;
-            <button class="btn btn-default btn-success margin-top-10"><i class="fa fa-share-alt"></i> compartilhar </button>
+            <button class="btn btn-default btn-success margin-top-10" id="btn-compartilhar-convite-amigo"><i class="fa fa-share-alt"></i> compartilhar </button>
         </div>
-
-
 
         <!--================================================== -->
 
@@ -517,6 +529,8 @@ $user = Yii::$app->user->identity;
         <!-- SmartChat UI : plugin -->
         <script src="js/smart-chat-ui/smart.chat.ui.min.js"></script>
         <script src="js/smart-chat-ui/smart.chat.manager.min.js"></script>
+        
+        <script src="js/global.js"></script>
 
     </body>
 
