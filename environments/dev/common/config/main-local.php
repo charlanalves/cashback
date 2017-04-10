@@ -3,9 +3,9 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=cashback',
+            'dsn' => 'mysql:host=localhost;dbname=cashbackdev',
             'username' => 'root',
-            'password' => '',
+            'password' => '@by02016Abio#',
             'charset' => 'utf8',
         ],
         'mailer' => [

@@ -12,7 +12,7 @@ use common\models\CB11ITEMCATEGORIA;
  * Empresa controller
  */
 class EmpresaController extends GlobalBaseController {
-    
+
     private $user;
 
     public function __construct($id, $module, $config = []) {
