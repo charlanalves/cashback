@@ -506,6 +506,14 @@ div.meu-saldo, div.widget-body{
     margin-top: 0px!important;
 }
 
+#header>div {
+    height: 48px!important;
+}
+
+div#menu-filtro {
+    height: 32px!important;
+}
+  
 .ui-dialog-titlebar-close:before {
     font-size: 29px;
     position: relative;

@@ -7,24 +7,27 @@ use common\models\VIEWEXTRATOCLIENTE;
 use common\models\CB10CATEGORIA;
 use common\models\CB04EMPRESA;
 use common\models\CB11ITEMCATEGORIA;
-use common\models\SYS01PARAMETROSGLOBAIS;
 
 /**
  * Empresa controller
  */
 class EmpresaController extends GlobalBaseController {
-  
+
+    private $user;
+
+    public function __construct($id, $module, $config = []) {
+        $this->user = \Yii::$app->user->identity;
+        parent::__construct($id, $module, $config);
+    }
+
     public function actionIndex() {
         
         $this->layout = 'smartAdminEmpresa';
-        
-        $cliente = 1;
-
+        $idUser = $this->user->id;
         $layout = $data = [];
         
-
         // saldo do cliente
-        $layout['saldo'] = VIEWEXTRATOCLIENTE::saldoAtualByCliente($cliente);
+        $layout['saldo'] = VIEWEXTRATOCLIENTE::saldoAtualByCliente($idUser);
 
         // categorias ativas
         $layout['categorias'] = self::optionsSelect(CB10CATEGORIA::findAll(['CB10_STATUS' => 1]), [''=>'Todas as categorias']);

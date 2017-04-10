@@ -15,6 +15,8 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
+        'js/plugin/masked-input/jquery.maskedinput.min.js',
+        'js/plugin/masked-input/jquery.maskMoney.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
