@@ -9,6 +9,11 @@ use yii\helpers\Url;
 
 $this->title = 'Cadastro - CashBack';
 
+$fieldOptions0 = [
+    'options' => ['class' => 'form-group has-feedback'],
+    'inputTemplate' => "{input}"
+];
+
 $fieldOptions1 = [
     'options' => ['class' => 'form-group has-feedback'],
     'inputTemplate' => "{input}<span class='glyphicon glyphicon-user form-control-feedback'></span>"
@@ -36,7 +41,6 @@ $fieldOptions5 = [
 
 $urlResetPass = Url::to(['site/request']);
 
-        // cpf_cnpj, name, email, password
 ?>
 
 <div class="login-box">
@@ -48,19 +52,12 @@ $urlResetPass = Url::to(['site/request']);
         <p class="login-box-msg">Cadastre-se e receba dinheiro de volta!</p>
 
         <?php $form = ActiveForm::begin(['id' => 'signup-form', 'enableClientValidation' => false]); ?>
-        
-        <div class="radio">
-            <label>
-                <input type="radio" class="radiobox style-0" checked="checked" name="cpf_or_cnpj" value="CPF">
-                <span>CPF</span> 
-            </label>
-            &nbsp; &nbsp; &nbsp;
-            <label>
-                <input type="radio" class="radiobox style-0" name="cpf_or_cnpj" value="CNPJ">
-                <span>CNPJ</span> 
-            </label>
-        </div>
-        
+
+        <?= $form
+            ->field($model, 'cpf_or_cnpj', $fieldOptions0)
+            ->label(false)
+            ->radioList(['CPF','CNPJ']) ?>
+
         <?= $form
             ->field($model, 'cpf_cnpj', $fieldOptions1)
             ->label(false)
@@ -128,17 +125,32 @@ $urlResetPass = Url::to(['site/request']);
     <!-- /.login-box-body -->
 </div><!-- /.login-box -->
 
+<style>
+    div#signupform-cpf_or_cnpj div.radio{
+        
+    }
+    .login-box-msg{
+        padding-bottom: 0px; 
+    }
+</style>
+
 <script>
 
     document.addEventListener("DOMContentLoaded", function (event) {
         // CPF ou CNPJ
-        $("input[name=cpf_or_cnpj]").click(function(){
-            if($(this).val() == 'CPF'){
-                
+        function validaMask_CPF_CNPJ (){
+            if($("input[name='SignupForm[cpf_or_cnpj]']:checked").val() == '0') {
+                $("#signupform-cpf_cnpj").mask("999.999.999-99").attr('placeholder', 'CPF');
             } else {
-                
+                $("#signupform-cpf_cnpj").mask("99.999.999/9999-99").attr('placeholder', 'CNPJ');
             }
-        }); 
+        }
+        
+        $("input[name='SignupForm[cpf_or_cnpj]']").click(function(){
+            validaMask_CPF_CNPJ();
+        });
+        
+        validaMask_CPF_CNPJ();
     });
 
 </script>

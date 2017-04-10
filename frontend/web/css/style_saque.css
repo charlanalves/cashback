@@ -363,17 +363,17 @@ ul#menu-tab{
 }
 
 ul#menu-tab li{
-    width: 33.33%;
+    width: 50%;
     margin: 0 auto !important;
     padding: 0px!important;
     text-align: center;
     display:inline-block!important;
 }
 
-ul.nav-tabs li a{
+ul#menu-tab li a{
     margin: 0 auto !important;
-    font-size: 11px!important;
-    padding: 8px 6px!important;
+    font-size: 12px;
+    padding: 9px 5px 10px;
 }
 
 div#menu-filtro {
@@ -481,4 +481,8 @@ div#itens-categoria div#itens-categoria-all label{
         padding-left: 0px;
         padding-right: 0px;
     }
+}
+
+#header>div {
+    height: 48px!important;
 }
