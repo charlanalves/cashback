@@ -309,7 +309,7 @@ $user = Yii::$app->user->identity;
                 <span class="fa fa-lg fa-chevron-circle-right"></span>
             </a>-->
 
-<!--            <div class="air air-top-right float-right padding-10">
+            <div class="air air-top-right float-right padding-10">
                 <span class="btn btn-primary btn-circle btn-sm" data-toggle="dropdown" aria-expanded="true">                
                     <i class="glyphicon glyphicon-list"></i>
                 </span>
@@ -328,15 +328,15 @@ $user = Yii::$app->user->identity;
                         <a href="javascript:void(0);" id="convidar_amigo_link"><i class="fa fa-user-plus"></i> Indicar amigo</a>
                     </li>
                     <li class="divider"></li>
-                    <?/*=
+                    <?=
                       Html::beginForm(['/site/logout'], 'post', ['name'=>'form-sair'])
                     . Html::endForm()
                     . '<li>'
                     . Html::a('<i class="fa fa-power-off"></i> Sair', 'javascript:void(0);', ['id' => 'menu_sair'])
                     . '</li>';
-                    */?>
+                    ?>
                 </ul>
-            </div>-->
+            </div>
 
 
             <div class="widget-body">
