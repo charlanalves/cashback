@@ -13,7 +13,7 @@ use common\models\CB15LIKEEMPRESA;
  * Empresa controller
  */
 class EmpresaController extends GlobalBaseController {
-    
+
     private $user;
 
     public function __construct($id, $module, $config = []) {
