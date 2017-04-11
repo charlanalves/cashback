@@ -358,7 +358,7 @@ $user = Yii::$app->user->identity;
             <div id="menu-filtro">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="input-group">
+                        <div class="input-group bg-color-white">
 
                             <div class="icon-addon addon-md">
                                 <select class="form-control" id="filtro-categoria">

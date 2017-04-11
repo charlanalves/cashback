@@ -12,6 +12,7 @@ use common\models\CB14FOTOPRODUTO;
 use common\models\CB07CASHBACK;
 use common\models\CB06VARIACAO;
 use common\models\CB11ITEMCATEGORIA;
+use common\models\CB15LIKEEMPRESA;
 
 /**
  * This is the model class for table "CB04_EMPRESA".
@@ -193,11 +194,14 @@ class CB04EMPRESA extends \common\models\GlobalModel {
     /**
      * @inheritdoc
      */
-    public static function getEmpresa($id) {
+    public static function getEmpresa($id, $idUser = null) {
         $retorno = [];
 
         // dados da empresa
         if (($retorno['empresa'] = self::find()->where('CB04_ID=' . $id . ' AND CB04_STATUS = 1')->one())) {
+            
+            // like
+            $retorno['like'] = ($idUser) ? ((bool) CB15LIKEEMPRESA::findOne(['CB15_EMPRESA_ID' => $id, 'CB15_USER_ID' => $idUser])) : false;
 
             // imagens da empresa
             $retorno['img_empresa'] = CB13FOTOEMPRESA::find()
