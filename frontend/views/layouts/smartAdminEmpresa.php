@@ -304,11 +304,11 @@ $user = Yii::$app->user->identity;
                 <span>MEU SALDO:</span>
                 R$ <?= number_format($this->params['saldo'], 2, ",", ".") ?>
             </div>
-<!--            
+          
+            <!--
             <a href="#" id="meu-saldo-btn">
                 <span class="fa fa-lg fa-chevron-circle-right"></span>
-            </a>-->
-
+            </a>
             <div class="air air-top-right float-right padding-10">
                 <span class="btn btn-primary btn-circle btn-sm" data-toggle="dropdown" aria-expanded="true">                
                     <i class="glyphicon glyphicon-list"></i>
@@ -318,9 +318,6 @@ $user = Yii::$app->user->identity;
                         <a href="javascript:void(0);" id=""><i class="fa fa-3x fa-user margin-right-5"></i> <span class="font-md"><?= $user->name ?></span></a>
                     </li>
                     <li class="divider"></li>
-<!--                    <li>
-                        <a href="javascript:void(0);"><i class="fa fa-gear fa-spin"></i> Configurações</a>
-                    </li>-->
                     <li>
                         <a href="javascript:void(0);" id="solicitar_saque_link"><i class="fa fa-dollar"></i> Solicitar saque</a>
                     </li>
@@ -328,16 +325,18 @@ $user = Yii::$app->user->identity;
                         <a href="javascript:void(0);" id="convidar_amigo_link"><i class="fa fa-user-plus"></i> Indicar amigo</a>
                     </li>
                     <li class="divider"></li>
-                    <?=
-                      Html::beginForm(['/site/logout'], 'post', ['name'=>'form-sair'])
+                    <?php 
+                    /*
+                    echo Html::beginForm(['/site/logout'], 'post', ['name'=>'form-sair'])
                     . Html::endForm()
                     . '<li>'
                     . Html::a('<i class="fa fa-power-off"></i> Sair', 'javascript:void(0);', ['id' => 'menu_sair'])
                     . '</li>';
+                    */
                     ?>
                 </ul>
             </div>
-
+            -->
 
             <div class="widget-body">
                 <ul id="menu-tab" class="nav nav-tabs bordered">
