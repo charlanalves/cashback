@@ -28,6 +28,8 @@ return [
             'site/login',          
             'site/logout',
             'site/cadastro',
+            'estabelecimento/login',
+            'estabelecimento/logout',
             'gii/*',
             'admin/*',
             'cliente/*'

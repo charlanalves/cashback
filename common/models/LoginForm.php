@@ -9,6 +9,7 @@ use yii\base\Model;
  */
 class LoginForm extends Model
 {
+    public $id;
     public $username;
     public $cpf_cnpj;
     public $password;
@@ -18,6 +19,14 @@ class LoginForm extends Model
     private $_cpf_cnpj;
 
 
+    const SCENARIOESTABELECIMENTO = 'SCENARIOESTABELECIMENTO';
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIOESTABELECIMENTO] = ['cpf_cnpj', 'password', 'rememberMe', 'id'];
+        return $scenarios;
+    }
+    
     /**
      * @inheritdoc
      */
@@ -30,6 +39,16 @@ class LoginForm extends Model
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            // validar estabelecimento
+            ['cpf_cnpj', 'string', 'length' => 14, 'message' => 'Informe um CNPJ válido.', 'on' => self::SCENARIOESTABELECIMENTO],
+            ['id', 'filter', 'filter' => function ($idUser) {
+                if (!AuthAssignment::findOne(['user_id' => $idUser, 'item_name' => 'estabelecimento'])) {
+                    $this->addError('cpf_cnpj', '');
+                    $this->addError('password', 'Seu usuário não tem permissão de acesso, entre em contato com o administrador do sistema.');
+                } else {
+                    return true;
+                }
+            }, 'on' => self::SCENARIOESTABELECIMENTO],
         ];
     }
     
@@ -52,6 +71,8 @@ class LoginForm extends Model
             $user = $this->getCpfCnpj();
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Usuário ou senha incorretos.');
+            } else {
+                $this->id = $user->id;
             }
         }
     }
