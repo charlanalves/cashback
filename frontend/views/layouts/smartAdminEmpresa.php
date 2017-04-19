@@ -305,7 +305,6 @@ $user = Yii::$app->user->identity;
                 R$ <?= number_format($this->params['saldo'], 2, ",", ".") ?>
             </div>
           
-            <!--
             <a href="#" id="meu-saldo-btn">
                 <span class="fa fa-lg fa-chevron-circle-right"></span>
             </a>
@@ -326,17 +325,14 @@ $user = Yii::$app->user->identity;
                     </li>
                     <li class="divider"></li>
                     <?php 
-                    /*
                     echo Html::beginForm(['/site/logout'], 'post', ['name'=>'form-sair'])
                     . Html::endForm()
                     . '<li>'
                     . Html::a('<i class="fa fa-power-off"></i> Sair', 'javascript:void(0);', ['id' => 'menu_sair'])
                     . '</li>';
-                    */
                     ?>
                 </ul>
             </div>
-            -->
 
             <div class="widget-body">
                 <ul id="menu-tab" class="nav nav-tabs bordered">

@@ -2,6 +2,8 @@
 
 /* @var $this yii\web\View */
 
+var_dump($v);
+
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">

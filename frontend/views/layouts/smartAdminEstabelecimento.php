@@ -8,6 +8,7 @@ use common\widgets\Alert;
 
 $this->title = 'Estabelecimento';
 
+frontend\assets\DhtmlxAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -96,17 +97,99 @@ $this->title = 'Estabelecimento';
                 width: 100%;
             }
         </style>
-        
-        <script type="text/javascript">
+
+        <script>
+
+            var SYSTEM = cesta = {};
+
             document.addEventListener("DOMContentLoaded", function (event) {
 
+                var SYSTEM = (function () {
+                    
+                    $.blockUI.defaults.css.border = 'none';
+                    $.blockUI.defaults.css.padding = '0px';
+                    $.blockUI.defaults.css.textAlign = 'center';
+                    $.blockUI.defaults.css.backgroundColor = 'rgba(8, 4, 4, 1))';
+                    $.blockUI.defaults.css.opacity = .3;
+                    $.blockUI.defaults.message = '<img src="<?= \Yii::getAlias('@vendor'); ?>/js/layoutMask/loading.svg">';
+                    $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+
+                    cesta.boot = function () {
+                        SYSTEM.Layout = loadLayout();
+                        dhtmlx.image_path = "<?= \Yii::getAlias('@vendor'); ?>/js/dhtmlx/terrace/imgs/";
+                        SYSTEM.Toolbar = loadToolbar();
+                    }
+
+                    return cesta;
+                })();
+
+                function loadLayout() {
+                    var outerLayout = new dhtmlXLayoutObject(document.getElementById('layout-view'), "1C");
+                    var innerLayout = outerLayout.cells("a").attachLayout("1C");
+
+                    innerLayout.setEffect('resize', true);
+                    innerLayout.setEffect('collapse', true);
+
+                    return{
+                        innerLayout: innerLayout,
+                        outerLayout: outerLayout,
+                        tela: innerLayout.cells("a"),
+                        //Define título das células
+                        tituloCell: function (cell, titulo) {
+                            innerLayout.cells(cell).setText(titulo);
+                            innerLayout.setCollapsedText(cell, titulo);
+                        },
+                    }
+                }
+
+                function loadToolbar() {
+                    var toolbar = SYSTEM.Layout.outerLayout.cells("a").attachToolbar();
+                    //Declarando um método apto a ser sobrescrito sob necessidade, para trabalhar com os ícones da toolbar
+                    toolbar.doWithItem = function (itemId) {};
+                    toolbar.setIconsPath("<?= \Yii::getAlias('@vendor'); ?>/js/layoutMask/imgs/");
+                    toolbar.loadXML("<?= \Yii::getAlias('@vendor'); ?>/js/layoutMask/dhxtoolbar.xml?etc=" + new Date().getTime());
+                    toolbar.attachEvent("onXLE", function () {
+                        toolbar.addSpacer("titulo");
+                        toolbar.forEachItem(function (itemId) {
+                            toolbar.hideItem(itemId);
+                            //Chamando o método genérico para cada item
+                            toolbar.doWithItem(itemId);
+                        });
+                    });
+
+                    return {
+                        core: toolbar,
+                        icones: function (iconsIds) {
+                            setTimeout(function () {
+                                for (var i = 0; iconsIds.length > i; i++) {
+                                    toolbar.showItem(iconsIds[i]);
+                                }
+                            }, 1000);
+                        },
+                        setIconesAcoes: function (iconsIds) {
+                            SYSTEM.Layout.icons = iconsIds;
+                            setTimeout(function () {
+                                $.each(iconsIds[0], function (icon, action) {
+                                    toolbar.showItem(icon);
+                                });
+                            }, 1000);
+                        },
+                        titulo: function (titulo) {
+                            setTimeout(function () {
+                                toolbar.showItem('titulo');
+                                toolbar.setItemText('titulo', titulo);
+                            }, 1000);
+                        }
+                    }
+                }
+
                 // SAIR ----------------------------------------------------
-                $("#menu_sair").click(function(e) {
+                $("#menu_sair").click(function (e) {
                     $.SmartMessageBox({
-                        title : "Deseja sair?",
+                        title: "Deseja sair?",
                         //content : "",
-                        buttons : '[Não][Sim]'
-                    }, function(ButtonPressed) {
+                        buttons: '[Não][Sim]'
+                    }, function (ButtonPressed) {
                         if (ButtonPressed === "Sim") {
                             $('form[name=form-sair]').submit();
                         }
@@ -115,12 +198,14 @@ $this->title = 'Estabelecimento';
                 });
 
             });
+
         </script>
 
     </head>
 
 
-    <body class="smart-style-0 desktop-detected fixed-header fixed-navigation">
+    <body class="desktop-detected fixed-header fixed-navigation">
+<?php $this->beginBody() ?> 
 
         <header id="header">
             <div id="logo-group">
@@ -135,21 +220,21 @@ $this->title = 'Estabelecimento';
             <nav>
                 <ul>
                     <li class="top-menu-invisible open active">
-                        <a href="#" title="Principal"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+                        <a href="#" title="Principal"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Home</span></a>
                     </li>
                     <li class="">
-                        <a href="#" title="Empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>
+                        <a href="<?= \yii\helpers\Url::to('index.php?r=estabelecimento/empresa') ?>" title="Empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>
                     </li>
                     <li class="">
                         <a href="#" title="Empresa"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
                     </li>
-                    <?=
-                      Html::beginForm(['/estabelecimento/logout'], 'post', ['name'=>'form-sair'])
-                    . Html::endForm()
-                    . '<li>'
-                    . Html::a('<i class="fa fa-lg fa-fw fa-power-off"></i> Sair', '#', ['id' => 'menu_sair'])
-                    . '</li>';
-                    ?>
+<?=
+Html::beginForm(['/estabelecimento/logout'], 'post', ['name' => 'form-sair'])
+ . Html::endForm()
+ . '<li>'
+ . Html::a('<i class="fa fa-lg fa-fw fa-power-off"></i> Sair', '#', ['id' => 'menu_sair'])
+ . '</li>';
+?>
                 </ul>
             </nav>
 
@@ -162,8 +247,8 @@ $this->title = 'Estabelecimento';
         <div id="main" role="main">
 
             <!-- #MAIN CONTENT -->
-            <div class="container">
-                <?= $content ?>
+            <div class="container" id="main-container">
+<?= $content ?>
             </div>
             <!-- END #MAIN CONTENT -->
 
@@ -254,5 +339,7 @@ $this->title = 'Estabelecimento';
         <script src="js/smart-chat-ui/smart.chat.ui.min.js"></script>
         <script src="js/smart-chat-ui/smart.chat.manager.min.js"></script>
 
+<?php $this->endBody() ?>
     </body>
 </html>
+<?php $this->endPage() ?>

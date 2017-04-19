@@ -11,8 +11,14 @@ return [
         'v' => [
             'class' => 'common\components\ValidationComponent',
         ],
+        'pagamento' => [
+            'class' => 'common\components\PagamentoComponent',
+        ],
         'u' => [
             'class' => 'common\components\UtilComponent',
+        ],
+        'dataDumpComponent' => [
+            'class' => 'common\components\dataDumpComponent',
         ],
       
     ],
@@ -21,6 +27,12 @@ return [
         'admin' => [
             'class' => 'mdm\admin\Module',
         ]
+    ],
+     'aliases' => [
+        '@common' => '../../common',
+        '@vendor' => '../../vendor',
+        '@assetsPath' => '../../vendor',
+        '@dhtmlxImg' => '../../../../vendor/dhtmlx/imgs',
     ],
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',

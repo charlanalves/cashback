@@ -73,22 +73,22 @@ class CB04EMPRESA extends \common\models\GlobalModel {
      */
     public function attributeLabels() {
         return [
-            'CB04_ID' => Yii::t('app', 'Cb04  ID'),
-            'CB04_NOME' => Yii::t('app', 'Cb04  Nome'),
-            'CB04_CATEGORIA_ID' => Yii::t('app', 'Cb04  Categoria  ID'),
-            'CB04_FUNCIONAMENTO' => Yii::t('app', 'Cb04  Funcionamento'),
-            'CB04_OBSERVACAO' => Yii::t('app', 'Cb04  Observacao'),
-            'CB04_URL_LOGOMARCA' => Yii::t('app', 'Cb04  ULR Logomarca'),
-            'CB04_STATUS' => Yii::t('app', 'Cb04  Status'),
-            'CB04_QTD_FAVORITO' => Yii::t('app', 'Cb04  Qtd  Favorito'),
-            'CB04_QTD_COMPARTILHADO' => Yii::t('app', 'Cb04  Qtd  Compartilhado'),
-            'CB04_END_LOGRADOURO' => Yii::t('app', 'Cb04  End  Logradouro'),
-            'CB04_END_BAIRRO' => Yii::t('app', 'Cb04  End  Bairro'),
-            'CB04_END_CIDADE' => Yii::t('app', 'Cb04  End  Cidade'),
-            'CB04_END_UF' => Yii::t('app', 'Cb04  End  Uf'),
-            'CB04_END_NUMERO' => Yii::t('app', 'Cb04  End  Numero'),
-            'CB04_END_COMPLEMENTO' => Yii::t('app', 'Cb04  End  Complemento'),
-            'CB04_END_CEP' => Yii::t('app', 'Cb04  End  Cep'),
+            'CB04_ID' => Yii::t('app', 'ID'),
+            'CB04_NOME' => Yii::t('app', 'Nome'),
+            'CB04_CATEGORIA_ID' => Yii::t('app', 'Categoria'),
+            'CB04_FUNCIONAMENTO' => Yii::t('app', 'Funcionamento'),
+            'CB04_OBSERVACAO' => Yii::t('app', 'Observação'),
+            'CB04_URL_LOGOMARCA' => Yii::t('app', 'Logomarca'),
+            'CB04_STATUS' => Yii::t('app', 'Status'),
+            'CB04_QTD_FAVORITO' => Yii::t('app', 'Favoritos'),
+            'CB04_QTD_COMPARTILHADO' => Yii::t('app', 'Compartilhamentos'),
+            'CB04_END_LOGRADOURO' => Yii::t('app', 'Logradouro'),
+            'CB04_END_BAIRRO' => Yii::t('app', 'Bairro'),
+            'CB04_END_CIDADE' => Yii::t('app', 'Cidade'),
+            'CB04_END_UF' => Yii::t('app', 'UF'),
+            'CB04_END_NUMERO' => Yii::t('app', 'Numero'),
+            'CB04_END_COMPLEMENTO' => Yii::t('app', 'Complemento'),
+            'CB04_END_CEP' => Yii::t('app', 'CEP'),
         ];
     }
 
