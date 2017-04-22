@@ -113,7 +113,7 @@ class SiteController extends Controller
             echo json_encode(['userdata'=>'teste','error'=> false,'error_msg' => null]);
         } else {
              $error = (empty($model->getFirstErrors()) ? 'Usuário e senha inválidos' : $model->getFirstErrors());
-             echo json_encode(['userdata'=> null, 'error'=> true, 'error_msg' => utf8_encode($error)]);
+             echo json_encode(['userdata'=> null, 'error'=> true, 'error_msg' => $error]);
         }
         \Yii::$app->end();
     }
