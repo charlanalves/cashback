@@ -71,13 +71,13 @@ class GlobalModel extends ActiveRecord
     /**
     * @inheritdoc
     */
-    public static function findCombo($table, $columnId, $columnText, $whereCustom='', $limit)
+    public static function findCombo($table, $columnId, $columnText, $whereCustom='', $limit = null)
     {
         if (empty($table) || empty($columnId) || empty($columnText)) {
             return false;
         }
         
-        $limit = isset($limit) ? 'LIMIT ' . $limit : 'LIMIT 100';
+        $limit = (is_numeric($limit)) ? 'LIMIT ' . $limit : 'LIMIT 100';
         
         $query =  "SELECT DISTINCT $columnId AS ".self::ALIAS_ID_COMBO.", $columnText AS ".self::ALIAS_TEXT_COMBO." 
                     FROM $table 

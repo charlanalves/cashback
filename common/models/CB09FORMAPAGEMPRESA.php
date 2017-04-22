@@ -15,6 +15,8 @@ use Yii;
  */
 class CB09FORMAPAGEMPRESA extends \common\models\GlobalModel
 {
+    public $FORMAPAGAMENTO;
+    
     /**
      * @inheritdoc
      */
@@ -29,6 +31,7 @@ class CB09FORMAPAGEMPRESA extends \common\models\GlobalModel
     public function rules()
     {
         return [
+            [['FORMAPAGAMENTO'], 'safe'],
             [['CB09_EMPRESA_ID', 'CB09_FORMA_PAG_ID'], 'required'],
             [['CB09_EMPRESA_ID', 'CB09_FORMA_PAG_ID'], 'integer'],
             [['CB09_EMPRESA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => CB04EMPRESA::className(), 'targetAttribute' => ['CB09_EMPRESA_ID' => 'CB04_ID']],
@@ -71,4 +74,5 @@ class CB09FORMAPAGEMPRESA extends \common\models\GlobalModel
     {
         return new CB09FORMAPAGEMPRESAQuery(get_called_class());
     }
+
 }

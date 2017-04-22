@@ -6,8 +6,9 @@ use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 
-$this->title = 'Estabelecimento';
+$this->title = '';
 
+frontend\assets\DhtmlxAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -16,10 +17,6 @@ $this->title = 'Estabelecimento';
         <meta charset="utf-8">
         <meta name="description" content="">
         <meta name="author" content="">
-
-        <?= Html::csrfMetaTags() ?>
-        <title><?= Html::encode($this->title) ?></title>
-        <?php $this->head() ?>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
@@ -71,7 +68,11 @@ $this->title = 'Estabelecimento';
         <link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
         <link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
         <link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
-        <!--<link rel="stylesheet" type="text/css" media="screen" href="css/your_style2.css"> -->
+        <!--<link rel="stylesheet" type="text/css" media="screen" href="css/your_style2.css">-->
+
+        <?= Html::csrfMetaTags() ?>
+        <title><?= Html::encode($this->title) ?></title>
+        <?php $this->head() ?>
 
         <style>
             .fixed-navigation nav>ul {
@@ -99,7 +100,88 @@ $this->title = 'Estabelecimento';
 
         <script>
 
+            var SYSTEM = cesta = {};
+
             document.addEventListener("DOMContentLoaded", function (event) {
+
+                var SYSTEM = (function () {
+                    
+                    $.blockUI.defaults.css.border = 'none';
+                    $.blockUI.defaults.css.padding = '0px';
+                    $.blockUI.defaults.css.textAlign = 'center';
+                    $.blockUI.defaults.css.backgroundColor = 'rgba(8, 4, 4, 1))';
+                    $.blockUI.defaults.css.opacity = .3;
+                    $.blockUI.defaults.message = '<img src="<?= \Yii::getAlias('@vendor'); ?>/js/layoutMask/loading.svg">';
+                    $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+
+                    cesta.boot = function () {
+                        SYSTEM.Layout = loadLayout();
+                        dhtmlx.image_path = "<?= \Yii::getAlias('@vendor'); ?>/js/dhtmlx/terrace/imgs/";
+                        SYSTEM.Toolbar = loadToolbar();
+                    }
+
+                    return cesta;
+                })();
+
+                function loadLayout() {
+                    var outerLayout = new dhtmlXLayoutObject(document.getElementById('layout-view'), "1C");
+                    var innerLayout = outerLayout.cells("a").attachLayout("1C");
+
+                    innerLayout.setEffect('resize', true);
+                    innerLayout.setEffect('collapse', true);
+
+                    return{
+                        innerLayout: innerLayout,
+                        outerLayout: outerLayout,
+                        tela: innerLayout.cells("a"),
+                        //Define título das células
+                        tituloCell: function (cell, titulo) {
+                            innerLayout.cells(cell).setText(titulo);
+                            innerLayout.setCollapsedText(cell, titulo);
+                        },
+                    }
+                }
+
+                function loadToolbar() {
+                    var toolbar = SYSTEM.Layout.outerLayout.cells("a").attachToolbar();
+                    //Declarando um método apto a ser sobrescrito sob necessidade, para trabalhar com os ícones da toolbar
+                    toolbar.doWithItem = function (itemId) {};
+                    toolbar.setIconsPath("<?= \Yii::getAlias('@vendor'); ?>/js/layoutMask/imgs/");
+                    toolbar.loadXML("<?= \Yii::getAlias('@vendor'); ?>/js/layoutMask/dhxtoolbar.xml?etc=" + new Date().getTime());
+                    toolbar.attachEvent("onXLE", function () {
+                        toolbar.addSpacer("titulo");
+                        toolbar.forEachItem(function (itemId) {
+                            toolbar.hideItem(itemId);
+                            //Chamando o método genérico para cada item
+                            toolbar.doWithItem(itemId);
+                        });
+                    });
+
+                    return {
+                        core: toolbar,
+                        icones: function (iconsIds) {
+                            setTimeout(function () {
+                                for (var i = 0; iconsIds.length > i; i++) {
+                                    toolbar.showItem(iconsIds[i]);
+                                }
+                            }, 1000);
+                        },
+                        setIconesAcoes: function (iconsIds) {
+                            SYSTEM.Layout.icons = iconsIds;
+                            setTimeout(function () {
+                                $.each(iconsIds[0], function (icon, action) {
+                                    toolbar.showItem(icon);
+                                });
+                            }, 1000);
+                        },
+                        titulo: function (titulo) {
+                            setTimeout(function () {
+                                toolbar.showItem('titulo');
+                                toolbar.setItemText('titulo', titulo);
+                            }, 1000);
+                        }
+                    }
+                }
 
                 // SAIR ----------------------------------------------------
                 $("#menu_sair").click(function (e) {
@@ -122,8 +204,8 @@ $this->title = 'Estabelecimento';
     </head>
 
 
-    <body class="fixed-header fixed-navigation ">
-        <?php $this->beginBody() ?> 
+    <body class="desktop-detected fixed-header fixed-navigation">
+<?php $this->beginBody() ?> 
 
         <header id="header">
             <div id="logo-group">
@@ -166,7 +248,7 @@ $this->title = 'Estabelecimento';
 
             <!-- #MAIN CONTENT -->
             <div class="container" id="main-container">
-                <?= $content ?>
+            <?= $content ?>
             </div>
             <!-- END #MAIN CONTENT -->
 
@@ -256,9 +338,8 @@ $this->title = 'Estabelecimento';
         <!-- SmartChat UI : plugin -->
         <script src="js/smart-chat-ui/smart.chat.ui.min.js"></script>
         <script src="js/smart-chat-ui/smart.chat.manager.min.js"></script>
-        <script src="js/global.js"></script>
 
-        <?php $this->endBody() ?>
+    <?php $this->endBody() ?>
     </body>
 </html>
 <?php $this->endPage() ?>
