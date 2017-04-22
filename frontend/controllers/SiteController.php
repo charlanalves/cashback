@@ -98,6 +98,19 @@ class SiteController extends Controller
             ]);
         }
     }
+    
+    public function actionLoginApp()
+    {
+        $model = new LoginForm();
+        $model->scenario = $model::SCENARIO_COMPANY_LOGIN;
+        
+        if ($model->load(Yii::$app->request->post()) && $model->loginCpfCnpj()) {
+            echo json_encode(['userdata'=>'teste','error'=> false,'error_msg' => null]);
+        } else {
+             echo json_encode(['userdata'=> null, 'error'=> true, 'error_msg' => $model->getFirstErrors()[0] ]);
+        }
+        \Yii::$app->end();
+    }
 
     /**
      * Logs out the current user.

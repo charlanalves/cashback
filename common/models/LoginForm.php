@@ -13,9 +13,12 @@ class LoginForm extends Model
     public $cpf_cnpj;
     public $password;
     public $rememberMe = true;
+    public $isCompanyLogin;
 
     private $_user;
     private $_cpf_cnpj;
+    
+    const SCENARIO_COMPANY_LOGIN = 'SCENARIO_COMPANY_LOGIN';
 
 
     /**
@@ -30,6 +33,7 @@ class LoginForm extends Model
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            ['cpf_cnpj', 'isUserCompany' , 'on' => self::SCENARIO_COMPANY_LOGIN],
         ];
     }
     
@@ -39,6 +43,14 @@ class LoginForm extends Model
             'rememberMe' => 'Lembrar-me',        
         ];
     }
+    
+    public function isUserCompany($attribute, $params) 
+    {   
+        if (strlen($this->cpf_cnpj) < 8 ) {
+                $this->addError($attribute, 'Erro ao tentar logar. O usuário não tem permissões para acessar essa área');
+        }
+    }
+    
     /**
      * Validates the password.
      * This method serves as the inline validation for password.
