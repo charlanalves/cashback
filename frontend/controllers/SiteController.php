@@ -112,7 +112,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->loginCpfCnpj()) {
             echo json_encode(['userdata'=>'teste','error'=> false,'error_msg' => null]);
         } else {
-             echo json_encode(['userdata'=> null, 'error'=> true, 'error_msg' => $model->getFirstErrors()[0] ]);
+             echo json_encode(['userdata'=> null, 'error'=> true, 'error_msg' => $model->getFirstErrors() ]);
         }
         \Yii::$app->end();
     }
