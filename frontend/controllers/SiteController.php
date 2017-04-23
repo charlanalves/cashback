@@ -101,24 +101,24 @@ class SiteController extends Controller
     
     public function actionLoginApp()
     {
-        $model = new LoginForm();
-        $model->scenario = $model::SCENARIO_COMPANY_LOGIN;
-        
-        if (empty(Yii::$app->request->post('cpf_cnpj'))) {
-            $_POST['cpf_cnpj'] = 'teste';
-            $_POST['password'] = 123456;
-        }
-        
-        if ($model->load(Yii::$app->request->post()) && $model->loginCpfCnpj()) {
-            $msg = ['userdata'=>'teste','error'=> false,'error_msg' => null];
-        } else {
-             $error = (empty($model->getFirstErrors()) ? 'Usuário e senha inválidos' : $model->getFirstErrors());
-            $msg = ['userdata'=> null, 'error'=> true, 'error_msg' => $error];
-        }
-        
+//        $model = new LoginForm();
+//        $model->scenario = $model::SCENARIO_COMPANY_LOGIN;
+//        
+//        if (empty(Yii::$app->request->post('cpf_cnpj'))) {
+//            $_POST['cpf_cnpj'] = 'teste';
+//            $_POST['password'] = 123456;
+//        }
+//        
+//        if ($model->load(Yii::$app->request->post()) && $model->loginCpfCnpj()) {
+//            $msg = ['userdata'=>'teste','error'=> false,'error_msg' => null];
+//        } else {
+//             $error = (empty($model->getFirstErrors()) ? 'Usuário e senha inválidos' : $model->getFirstErrors());
+//            $msg = ['userdata'=> null, 'error'=> true, 'error_msg' => $error];
+//        }
+//        
       $this->layout=false;
 header('Content-type: application/json');
-echo json_encode($msg);
+echo json_encode(['userdata'=> null, 'error'=> true, 'error_msg' => $error]);
 Yii::app()->end(); 
     }
 
