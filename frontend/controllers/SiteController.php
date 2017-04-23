@@ -104,12 +104,12 @@ class SiteController extends Controller
         $model = new LoginForm();
         $model->scenario = $model::SCENARIO_COMPANY_LOGIN;
         
-        if (empty(Yii::$app->request->post('cpf_cnpj'))) {
+        if (empty(Yii::$app->request->get('cpf_cnpj'))) {
             $_POST['cpf_cnpj'] = 'teste';
             $_POST['password'] = 123456;
         }
         
-        if ($model->load(Yii::$app->request->post()) && $model->loginCpfCnpj()) {
+        if ($model->load(Yii::$app->request->get()) && $model->loginCpfCnpj()) {
             $msg = ['userdata'=>'teste','error'=> false,'error_msg' => null];
         } else {
              $error = (empty($model->getFirstErrors()) ? 'Usuário e senha inválidos' : $model->getFirstErrors());
