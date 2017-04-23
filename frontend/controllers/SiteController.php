@@ -109,11 +109,11 @@ class SiteController extends Controller
             $_POST['password'] = 123456;
         }
         
-        if ($model->load(Yii::$app->request->get()) && $model->loginCpfCnpj()) {
+        if ($model->load(Yii::$app->request->get(),'') && $model->loginCpfCnpj()) {
             $msg = ['userdata'=>'teste','error'=> false,'error_msg' => null];
         } else {
              $error = (empty($model->getFirstErrors()) ? 'Usuário e senha inválidos' : $model->getFirstErrors());
-            $msg = ['userdata'=> null, 'error'=> true, 'error_msg' => $error];
+            $msg = ['userdata'=> 'eoroasdkoaskdokad', 'error'=> true, 'error_msg' => $error];
         }
 //        
       $this->layout=false;
