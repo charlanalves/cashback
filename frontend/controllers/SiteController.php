@@ -101,12 +101,6 @@ class SiteController extends Controller
     
     public function actionLoginApp()
     {
-       
-        $response = Yii::$app->response;
-        $response->format = \yii\web\Response::FORMAT_JSON;
-        
-
-    
         $model = new LoginForm();
         $model->scenario = $model::SCENARIO_COMPANY_LOGIN;
         
@@ -116,13 +110,16 @@ class SiteController extends Controller
         }
         
         if ($model->load(Yii::$app->request->post()) && $model->loginCpfCnpj()) {
-            $response->data = ['userdata'=>'teste','error'=> false,'error_msg' => null];
+            $msg = ['userdata'=>'teste','error'=> false,'error_msg' => null];
         } else {
              $error = (empty($model->getFirstErrors()) ? 'Usuário e senha inválidos' : $model->getFirstErrors());
-            $response->data = ['userdata'=> null, 'error'=> true, 'error_msg' => $error];
+            $msg = ['userdata'=> null, 'error'=> true, 'error_msg' => $error];
         }
         
-        return $response;
+      $this->layout=false;
+header('Content-type: application/json');
+echo json_encode($msg);
+Yii::app()->end(); 
     }
 
     /**
