@@ -119,7 +119,7 @@ class SiteController extends Controller
       $this->layout=false;
 header('Content-type: application/json');
 echo json_encode($msg);
-Yii::app()->end(); 
+\Yii::$app->end();
     }
 
     /**
