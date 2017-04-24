@@ -45,11 +45,15 @@ class LoginForm extends Model
     }
     
     public function isUserCompany($attribute, $params) 
-    {   
-        $userType = $this->_cpf_cnpj->getAttributes()['user_type'];
-        if ($userType != 2) {
-                $this->addError($attribute, 'Erro ao tentar logar. O usuário não tem permissões para acessar essa área');
-        }
+    { 
+        $userData = $this->getUserByCpfCnpj();
+        
+        if ( !empty($userData) ){
+            $userType = $userData->getAttributes()['user_type'];
+            if ($userType != 2) {
+                    $this->addError($attribute, 'Erro ao tentar logar. O usuário não tem permissões para acessar essa área');
+            }
+        } 
     }
     
     public function getUserByCpfCnpj(){
