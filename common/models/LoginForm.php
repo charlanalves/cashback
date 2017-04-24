@@ -46,9 +46,14 @@ class LoginForm extends Model
     
     public function isUserCompany($attribute, $params) 
     {   
-        if (strlen($this->cpf_cnpj) < 8 ) {
+        $userType = $this->_cpf_cnpj->getAttributes()['user_type'];
+        if ($userType != 2) {
                 $this->addError($attribute, 'Erro ao tentar logar. O usuário não tem permissões para acessar essa área');
         }
+    }
+    
+    public function getUserByCpfCnpj(){
+        return User::findByCpfCnpj($this->cpf_cnpj);
     }
     
     /**
