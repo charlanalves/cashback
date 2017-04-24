@@ -101,6 +101,7 @@ class SiteController extends Controller
     
     public function actionLoginApp()
     {
+        header('Content-type: application/json');
         $model = new LoginForm();
         $model->scenario = $model::SCENARIO_COMPANY_LOGIN;
         
@@ -112,7 +113,7 @@ class SiteController extends Controller
         }
 //        
       $this->layout = false;
-      header('Content-type: application/json');
+  
       echo json_encode($msg);
       \Yii::$app->end();
     }
