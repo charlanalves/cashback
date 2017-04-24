@@ -14,9 +14,12 @@ class LoginForm extends Model
     public $cpf_cnpj;
     public $password;
     public $rememberMe = true;
+    public $isCompanyLogin;
 
     private $_user;
     private $_cpf_cnpj;
+    
+    const SCENARIO_COMPANY_LOGIN = 'SCENARIO_COMPANY_LOGIN';
 
 
     const SCENARIOESTABELECIMENTO = 'SCENARIOESTABELECIMENTO';
@@ -39,6 +42,7 @@ class LoginForm extends Model
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+
             // validar estabelecimento
             ['cpf_cnpj', 'string', 'length' => 14, 'message' => 'Informe um CNPJ válido.', 'on' => self::SCENARIOESTABELECIMENTO],
             ['id', 'filter', 'filter' => function ($idUser) {
@@ -49,6 +53,9 @@ class LoginForm extends Model
                     return true;
                 }
             }, 'on' => self::SCENARIOESTABELECIMENTO],
+
+            ['cpf_cnpj', 'isUserCompany' , 'on' => self::SCENARIO_COMPANY_LOGIN],
+
         ];
     }
     
@@ -58,6 +65,23 @@ class LoginForm extends Model
             'rememberMe' => 'Lembrar-me',        
         ];
     }
+    
+    public function isUserCompany($attribute, $params) 
+    { 
+        $userData = $this->getUserByCpfCnpj();
+        
+        if ( !empty($userData) ){
+            $userType = $userData->getAttributes()['user_type'];
+            if ($userType != 2) {
+                    $this->addError($attribute, 'Erro ao tentar logar. O usuário não tem permissões para acessar essa área');
+            }
+        } 
+    }
+    
+    public function getUserByCpfCnpj(){
+        return User::findByCpfCnpj($this->cpf_cnpj);
+    }
+    
     /**
      * Validates the password.
      * This method serves as the inline validation for password.

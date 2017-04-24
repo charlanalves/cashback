@@ -98,6 +98,25 @@ class SiteController extends Controller
             ]);
         }
     }
+    
+    public function actionLoginApp()
+    {
+        header('Content-type: application/json');
+        $model = new LoginForm();
+        $model->scenario = $model::SCENARIO_COMPANY_LOGIN;
+        
+        if ($model->load(Yii::$app->request->get(),'') && $model->loginCpfCnpj()) {
+            $msg = ['userdata'=> $model->getUserByCpfCnpj()->getAttributes(), 'error'=> false,'error_msg' => null];
+        } else {
+             $error = (empty($model->getFirstErrors()) ? 'Usuário e senha inválidos' : $model->getFirstErrors());
+            $msg = ['userdata'=> null, 'error'=> true, 'error_msg' => array_values($error)[0]];
+        }
+//        
+      $this->layout = false;
+  
+      echo json_encode($msg);
+      \Yii::$app->end();
+    }
 
     /**
      * Logs out the current user.

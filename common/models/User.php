@@ -95,6 +95,7 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['cpf_cnpj' => $cpf_cnpj, 'status' => self::STATUS_ACTIVE]);
     }
 
+
     /**
      * Finds user by password reset token
      *
