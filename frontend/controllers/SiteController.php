@@ -105,7 +105,7 @@ class SiteController extends Controller
         $model->scenario = $model::SCENARIO_COMPANY_LOGIN;
         
         if ($model->load(Yii::$app->request->get(),'') && $model->loginCpfCnpj()) {
-            $msg = ['userdata'=> $model->getUserByCpfCnpj(), 'error'=> false,'error_msg' => null];
+            $msg = ['userdata'=> $model->getUserByCpfCnpj()->getAttributes(), 'error'=> false,'error_msg' => null];
         } else {
              $error = (empty($model->getFirstErrors()) ? 'Usuário e senha inválidos' : $model->getFirstErrors());
             $msg = ['userdata'=> null, 'error'=> true, 'error_msg' => array_values($error)[0]];
