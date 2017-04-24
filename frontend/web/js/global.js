@@ -1,16 +1,57 @@
+var Form = function (formId) {
+    this.form = $('#' + formId);
+    this.setFormData = function (data)
+    {
+        var $inputs = this.form.find(':input');
+        $inputs.each(function(k, v) {
+            nameCompare = v.name.replace('[','').replace(']','');
+            // input
+            if(typeof data[nameCompare] != "undefined"){
+                
+                if(v.type == 'checkbox' || v.type == 'radio'){
+                    if(Object.prototype.toString.call(data[nameCompare]) == "[object Array]"){
+                       for(var i in data[nameCompare]){
+                            if($(this).val() == data[nameCompare][i]){
+                               $(this).prop('checked', true);
+                           }
+                       }
+                    } else {
+                        if($(this).val() == data[nameCompare]){
+                            $(this).prop('checked', true);
+                        }
+                    }
 
-function globalGetEnderecoByCEP (cep, callback) {
-	cep = cep.replace('-','');
-	var ajax = $.ajax({
-		url: 'http://viacep.com.br/ws/'+ cep +'/json/',
-		//type: 'GET',
-		dataType: "json"
-	});
-	ajax.always(function (data) {
-		callback(data);
-	});
-}
+                } else {
+                    $(this).val(data[nameCompare]);
 
+                }
+            }
+        });
+    },
+    this.addOptionsSelect = function (selectName, data)
+    {
+        var select = this.form.find('select[name=' + selectName + ']');
+        $.each(data, function(key, value) {
+            if(typeof value == "object"){
+                key = value.ID;
+                value = value.TEXTO;
+            }
+            select.append($("<option></option>").attr("value",key).text(value)); 
+        });
+    },
+    this.addCheckboxInLine = function (destinyId, checkboxName, data)
+    {
+        var destiny = this.form.find('#' + destinyId), checkbox = '';
+        $.each(data, function(key, value) {
+            if(typeof value == "object"){
+                key = value.ID;
+                value = value.TEXTO;
+            }
+            checkbox += '<label class="checkbox"><input type="checkbox" name="' + checkboxName + '[]" value="' + key + '"><i></i>' + value + '</label>'+"\n";
+        });
+        destiny.append($("<div></div>").attr("class","inline-group").html(checkbox)); 
+    }
+};
 
 var Util = {
     copyElement: function ($element)
@@ -43,5 +84,16 @@ var Util = {
         i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
         j = (j = i.length) > 3 ? j % 3 : 0;
        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-     }
+    },
+    getEnderecoByCEP: function(cep, callback) {
+        cep = cep.replace('-','');
+        var ajax = $.ajax({
+            url: 'http://viacep.com.br/ws/'+ cep +'/json/',
+            //type: 'GET',
+            dataType: "json"
+        });
+        ajax.always(function (data) {
+            callback(data);
+        });
+    }
 };

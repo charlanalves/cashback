@@ -29,6 +29,20 @@ ini_set('display_errors', 1);
     .border-top{
         border-top: dashed 2px #EEE;
     }
+    .btn-compartilhar {
+        background-color: white;
+        color: silver;
+    }
+    .btn-like {
+        background-color: white;
+        color: silver;
+    }
+    .btn-like-active {
+        background-color: white;
+        color: red;
+        font-size: 15px;
+    }
+    
 </style>
 
 <div class="row">
@@ -42,8 +56,12 @@ ini_set('display_errors', 1);
                 <div class="col-sm-12">
                     <div id="myCarousel" class="carousel slide profile-carousel">
                         <div class="air air-bottom-right padding-5">
-                            <a href="whatsapp://send?text=<?= $empresa['categoria']['CB10_NOME'] ?>" class="btn txt-color-white bg-color-teal btn-circle">
+                            <a href="whatsapp://send?text=<?= $empresa['categoria']['CB10_NOME'] ?>" class="btn txt-color-white bg-color-teal btn-circle" title="Compartilar estabelecimento">
                                 <i class="fa fa-share-alt"></i>
+                            </a>
+                            &nbsp; 
+                            <a href="#" id="btn-like" class="btn btn-like btn-circle" title="Favoritos">
+                                <i class="fa fa-heart"></i>
                             </a>
                         </div>
                         <div class="air air-top-left padding-5">
@@ -313,12 +331,68 @@ ini_set('display_errors', 1);
 </div>
 
 <script>
+    
+    var like = <?= (int)$empresa['like'] ?>,
+        estabelecimento = <?= (int)$empresa['empresa']['CB04_ID'] ?>,
+        eventLike = {};
+    
     document.addEventListener("DOMContentLoaded", function (event) {
+        
         $('.carousel.fade').carousel({
             interval: 3000,
             cycle: true
         });
+        
+        eventLike = function (obj, flg) {
+            if (flg) {
+                $(obj).removeClass("btn-like").addClass("btn-like-active");
+            } else {
+                $(obj).removeClass("btn-like-active").addClass("btn-like");
+            }
+            $(obj).blur();
+        }
+        
+        $('a#btn-like').on('click', function(){
+            var r = $.ajax({
+                url: 'index.php?r=empresa/like',
+                type: 'GET',
+                data: {'estabelecimento': estabelecimento},
+                dataType: "jsonp"
+            });
+            r.always(function (data) {
+                if (data.responseText) {
+                    like = like ? 0 : 1;
+                    if (like) {
+                        message = 'Estabelecimento adicionado aos Favoritos';
+                        ico = 'fa-smile-o';
+                        efeito = 'bounce';
+                        cor = '#3276B1';
+                    } else {
+                        message = 'Estabelecimento removido dos Favoritos';
+                        ico = 'fa-meh-o';
+                        efeito = '';
+                        cor = '#C46A69';
+                    }
+                    
+                    eventLike('a#btn-like', like);
+
+                    $.smallBox({
+                        title : message,
+                        content : "",
+                        color : cor,
+                        iconSmall : "fa " + ico + " " + efeito + " animated",
+                        timeout : 3000
+                    });
+                }
+            });
+            
+            return false;
+        });
+        
+        eventLike('a#btn-like', like);
+        
     });
+    
 </script>
 <?php 
 //var_dump($empresa); 
