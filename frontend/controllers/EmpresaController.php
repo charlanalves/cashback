@@ -7,6 +7,7 @@ use common\models\VIEWEXTRATOCLIENTE;
 use common\models\CB10CATEGORIA;
 use common\models\CB04EMPRESA;
 use common\models\CB11ITEMCATEGORIA;
+use common\models\CB15LIKEEMPRESA;
 
 /**
  * Empresa controller
@@ -64,8 +65,24 @@ class EmpresaController extends GlobalBaseController {
      */
     public function actionDetalhe($empresa) {
         $this->layout = 'smartAdminEmpresaDetalhe';
-        $dados = CB04EMPRESA::getEmpresa($empresa);
+        $dados = CB04EMPRESA::getEmpresa($empresa, $this->user->id);
         return $this->render(($dados) ? 'detalhe' : 'error', ['empresa' => $dados]);
+    }
+    
+    /*
+     * Like empresa
+     */
+    public function actionLike($estabelecimento) {
+        $CB15LIKEEMPRESA = new CB15LIKEEMPRESA();
+        if($like = $CB15LIKEEMPRESA->findOne(['CB15_EMPRESA_ID' => $estabelecimento, 'CB15_USER_ID' => $this->user->id])){
+            $like->delete();
+            
+        } else {
+            $CB15LIKEEMPRESA->setAttributes(['CB15_EMPRESA_ID' => $estabelecimento, 'CB15_USER_ID' => $this->user->id]);
+            $CB15LIKEEMPRESA->save();
+            
+        }
+        return ($like || $CB15LIKEEMPRESA || false);
     }
 
 }

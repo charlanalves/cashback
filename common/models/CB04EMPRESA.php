@@ -12,6 +12,7 @@ use common\models\CB14FOTOPRODUTO;
 use common\models\CB07CASHBACK;
 use common\models\CB06VARIACAO;
 use common\models\CB11ITEMCATEGORIA;
+use common\models\CB15LIKEEMPRESA;
 
 /**
  * This is the model class for table "CB04_EMPRESA".
@@ -62,6 +63,7 @@ class CB04EMPRESA extends \common\models\GlobalModel {
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
             [['CB04_END_UF'], 'string', 'max' => 2],
             [['CB04_END_NUMERO'], 'string', 'max' => 5],
+            [['CB04_END_CEP'], 'filter', 'filter' => function ($v){return str_replace('-', '', $v);}],
             [['CB04_END_CEP'], 'string', 'max' => 8],
             [['CB04_CATEGORIA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => CB10CATEGORIA::className(), 'targetAttribute' => ['CB04_CATEGORIA_ID' => 'CB10_ID']],
         ];
@@ -72,22 +74,22 @@ class CB04EMPRESA extends \common\models\GlobalModel {
      */
     public function attributeLabels() {
         return [
-            'CB04_ID' => Yii::t('app', 'Cb04  ID'),
-            'CB04_NOME' => Yii::t('app', 'Cb04  Nome'),
-            'CB04_CATEGORIA_ID' => Yii::t('app', 'Cb04  Categoria  ID'),
-            'CB04_FUNCIONAMENTO' => Yii::t('app', 'Cb04  Funcionamento'),
-            'CB04_OBSERVACAO' => Yii::t('app', 'Cb04  Observacao'),
-            'CB04_URL_LOGOMARCA' => Yii::t('app', 'Cb04  ULR Logomarca'),
-            'CB04_STATUS' => Yii::t('app', 'Cb04  Status'),
-            'CB04_QTD_FAVORITO' => Yii::t('app', 'Cb04  Qtd  Favorito'),
-            'CB04_QTD_COMPARTILHADO' => Yii::t('app', 'Cb04  Qtd  Compartilhado'),
-            'CB04_END_LOGRADOURO' => Yii::t('app', 'Cb04  End  Logradouro'),
-            'CB04_END_BAIRRO' => Yii::t('app', 'Cb04  End  Bairro'),
-            'CB04_END_CIDADE' => Yii::t('app', 'Cb04  End  Cidade'),
-            'CB04_END_UF' => Yii::t('app', 'Cb04  End  Uf'),
-            'CB04_END_NUMERO' => Yii::t('app', 'Cb04  End  Numero'),
-            'CB04_END_COMPLEMENTO' => Yii::t('app', 'Cb04  End  Complemento'),
-            'CB04_END_CEP' => Yii::t('app', 'Cb04  End  Cep'),
+            'CB04_ID' => Yii::t('app', 'ID'),
+            'CB04_NOME' => Yii::t('app', 'Nome'),
+            'CB04_CATEGORIA_ID' => Yii::t('app', 'Categoria'),
+            'CB04_FUNCIONAMENTO' => Yii::t('app', 'Funcionamento'),
+            'CB04_OBSERVACAO' => Yii::t('app', 'Observação'),
+            'CB04_URL_LOGOMARCA' => Yii::t('app', 'Logomarca'),
+            'CB04_STATUS' => Yii::t('app', 'Status'),
+            'CB04_QTD_FAVORITO' => Yii::t('app', 'Favoritos'),
+            'CB04_QTD_COMPARTILHADO' => Yii::t('app', 'Compartilhamentos'),
+            'CB04_END_LOGRADOURO' => Yii::t('app', 'Logradouro'),
+            'CB04_END_BAIRRO' => Yii::t('app', 'Bairro'),
+            'CB04_END_CIDADE' => Yii::t('app', 'Cidade'),
+            'CB04_END_UF' => Yii::t('app', 'UF'),
+            'CB04_END_NUMERO' => Yii::t('app', 'Numero'),
+            'CB04_END_COMPLEMENTO' => Yii::t('app', 'Complemento'),
+            'CB04_END_CEP' => Yii::t('app', 'CEP'),
         ];
     }
 
@@ -193,11 +195,14 @@ class CB04EMPRESA extends \common\models\GlobalModel {
     /**
      * @inheritdoc
      */
-    public static function getEmpresa($id) {
+    public static function getEmpresa($id, $idUser = null) {
         $retorno = [];
 
         // dados da empresa
         if (($retorno['empresa'] = self::find()->where('CB04_ID=' . $id . ' AND CB04_STATUS = 1')->one())) {
+            
+            // like
+            $retorno['like'] = ($idUser) ? ((bool) CB15LIKEEMPRESA::findOne(['CB15_EMPRESA_ID' => $id, 'CB15_USER_ID' => $idUser])) : false;
 
             // imagens da empresa
             $retorno['img_empresa'] = CB13FOTOEMPRESA::find()
@@ -271,6 +276,20 @@ class CB04EMPRESA extends \common\models\GlobalModel {
         }
 
         return $retorno;
+    }
+    
+    
+    /**
+     * @inheritdoc
+     * @return CB09FORMAPAGEMPRESAQuery the active query used by this AR class.
+     */
+    public static function getFormaPagamento($id)
+    {
+        return explode(',', CB09FORMAPAGEMPRESA::findBySql(
+            "SELECT GROUP_CONCAT(CB09_FORMA_PAG_ID) AS FORMAPAGAMENTO
+            FROM CB09_FORMA_PAG_EMPRESA
+            WHERE CB09_EMPRESA_ID = " . $id . "
+            GROUP BY CB09_EMPRESA_ID")->one()->FORMAPAGAMENTO);
     }
 
 }
