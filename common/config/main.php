@@ -38,6 +38,8 @@ return [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/login',          
+            'site/loginApp',          
+            'site/login-app',          
             'site/logout',
             'site/cadastro',
             'estabelecimento/login',
