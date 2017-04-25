@@ -160,9 +160,9 @@ class ApiController extends Controller
         $prodNew = [];
         foreach ($prodVariacoes as $key => $value) 
         {
-            $prodNew[$value['CB05_TITULO']][$value['CB06_DESCRICAO']]['descricao'] = $value['CB06_DESCRICAO'];
-            $prodNew[$value['CB05_TITULO']][$value['CB06_DESCRICAO']]['preco'] = $value['CB06_PRECO'];
-            $prodNew[$value['CB05_TITULO']][$value['CB06_DESCRICAO']]['percentual'] = $value['CB07_PERCENTUAL'];
+            $prodNew['produtos'][$value['CB05_TITULO']]['variacao'][$value['CB06_DESCRICAO']]['descricao'] = $value['CB06_DESCRICAO'];
+            $prodNew['produtos'][$value['CB05_TITULO']]['variacao'][$value['CB06_DESCRICAO']]['preco'] = $value['CB06_PRECO'];
+            $prodNew['produtos'][$value['CB05_TITULO']]['variacao'][$value['CB06_DESCRICAO']]['percentual'] = $value['CB07_PERCENTUAL'];
         }
         return $prodNew;
     }

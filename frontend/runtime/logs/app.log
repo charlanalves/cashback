@@ -13300,3 +13300,548 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1493078709.661
     'REQUEST_TIME' => 1493078709
 ]
+2017-04-25 02:28:22 [::1][-][ggk0v3t5o5ju4memgfmrb9ksg2][error][yii\db\Exception] exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)' in C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php:630
+Stack trace:
+#0 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(630): PDO->__construct('mysql:host=loca...', 'root', '', NULL)
+#1 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(563): yii\db\Connection->createPdoInstance()
+#2 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(896): yii\db\Connection->open()
+#3 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(883): yii\db\Connection->getMasterPdo()
+#4 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(219): yii\db\Connection->getSlavePdo()
+#5 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(896): yii\db\Command->prepare('<span class="ke...')
+#6 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(376): yii\db\Command->queryInternal('<span class="st...', '<span class="ke...')
+#7 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Query.php(253): yii\db\Command->queryOne()
+#8 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\ActiveQuery.php(295): yii\db\Query->one('<span class="ke...')
+#9 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\BaseActiveRecord.php(107): yii\db\ActiveQuery->one()
+#10 C:\SERVER\www\realsoftware\cashback\common\models\User.php(65): yii\db\BaseActiveRecord::findOne('[<span class="s...')
+#11 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(657): common\models\User::findIdentity('<span class="nu...')
+#12 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(188): yii\web\User->renewAuthStatus()
+#13 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Component.php(132): yii\web\User->getIdentity()
+#14 C:\SERVER\www\realsoftware\cashback\frontend\controllers\EmpresaController.php(20): yii\base\Component->__get('<span class="st...')
+#15 [internal function]: frontend\controllers\EmpresaController->__construct('<span class="st...', Object(yii\web\Application), '[]')
+#16 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\di\Container.php(375): ReflectionClass->newInstanceArgs('[<span class="s...')
+#17 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\di\Container.php(156): yii\di\Container->build('<span class="st...', '[<span class="s...', '[]')
+#18 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\BaseYii.php(340): yii\di\Container->get('<span class="st...', '[<span class="s...')
+#19 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(638): yii\BaseYii::createObject('<span class="st...', '[<span class="s...')
+#20 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(591): yii\base\Module->createControllerByID('<span class="st...')
+#21 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(517): yii\base\Module->createController('<span class="st...')
+#22 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\Application.php(102): yii\base\Module->runAction('<span class="st...', '[<span class="s...')
+#23 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#24 C:\SERVER\www\realsoftware\cashback\frontend\web\index.php(17): yii\base\Application->run()
+#25 {main}
+
+Next exception 'yii\db\Exception' with message 'SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)' in C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php:568
+Stack trace:
+#0 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(896): yii\db\Connection->open()
+#1 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(883): yii\db\Connection->getMasterPdo()
+#2 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(219): yii\db\Connection->getSlavePdo()
+#3 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(896): yii\db\Command->prepare('<span class="ke...')
+#4 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(376): yii\db\Command->queryInternal('<span class="st...', '<span class="ke...')
+#5 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Query.php(253): yii\db\Command->queryOne()
+#6 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\ActiveQuery.php(295): yii\db\Query->one('<span class="ke...')
+#7 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\BaseActiveRecord.php(107): yii\db\ActiveQuery->one()
+#8 C:\SERVER\www\realsoftware\cashback\common\models\User.php(65): yii\db\BaseActiveRecord::findOne('[<span class="s...')
+#9 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(657): common\models\User::findIdentity('<span class="nu...')
+#10 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(188): yii\web\User->renewAuthStatus()
+#11 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Component.php(132): yii\web\User->getIdentity()
+#12 C:\SERVER\www\realsoftware\cashback\frontend\controllers\EmpresaController.php(20): yii\base\Component->__get('<span class="st...')
+#13 [internal function]: frontend\controllers\EmpresaController->__construct('<span class="st...', Object(yii\web\Application), '[]')
+#14 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\di\Container.php(375): ReflectionClass->newInstanceArgs('[<span class="s...')
+#15 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\di\Container.php(156): yii\di\Container->build('<span class="st...', '[<span class="s...', '[]')
+#16 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\BaseYii.php(340): yii\di\Container->get('<span class="st...', '[<span class="s...')
+#17 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(638): yii\BaseYii::createObject('<span class="st...', '[<span class="s...')
+#18 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(591): yii\base\Module->createControllerByID('<span class="st...')
+#19 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(517): yii\base\Module->createController('<span class="st...')
+#20 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\Application.php(102): yii\base\Module->runAction('<span class="st...', '[<span class="s...')
+#21 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#22 C:\SERVER\www\realsoftware\cashback\frontend\web\index.php(17): yii\base\Application->run()
+#23 {main}
+Additional Information:
+
+2017-04-25 02:28:22 [::1][-][ggk0v3t5o5ju4memgfmrb9ksg2][info][application] $_GET = [
+    'XDEBUG_SESSION_START' => 'netbeans-xdebug'
+]
+
+$_COOKIE = [
+    '_identity-backend' => '0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"0v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_\",2592000]\";}'
+    '_csrf-frontend' => '5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN\";}'
+    'advanced-frontend' => 'ggk0v3t5o5ju4memgfmrb9ksg2'
+    '_identity-frontend' => '6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa:2:{i:0;s:18:\"_identity-frontend\";i:1;s:47:\"[19,\"GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm\",2592000]\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 19
+]
+
+$_SERVER = [
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.8'
+    'HTTP_COOKIE' => '_identity-backend=0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%220v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_%22%2C2592000%5D%22%3B%7D; _csrf-frontend=5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN%22%3B%7D; advanced-frontend=ggk0v3t5o5ju4memgfmrb9ksg2; _identity-frontend=6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa%3A2%3A%7Bi%3A0%3Bs%3A18%3A%22_identity-frontend%22%3Bi%3A1%3Bs%3A47%3A%22%5B19%2C%22GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm%22%2C2592000%5D%22%3B%7D'
+    'PATH' => 'C:\\ProgramData\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\SERVIDOR\\www\\pdvsolinter\\vendor\\phalcon\\devtools\\;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\TortoiseSVN\\bin;C:\\Program Files\\nodejs\\;C:\\SERVER\\bin\\php\\php5.5.12;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Skype\\Phone\\;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.9 (Win64) PHP/5.5.12 Server at localhost Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.9 (Win64) PHP/5.5.12'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'SERVER_ADMIN' => 'admin@example.com'
+    'SCRIPT_FILENAME' => 'C:/SERVER/www/realsoftware/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '60344'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'XDEBUG_SESSION_START=netbeans-xdebug'
+    'REQUEST_URI' => '/realsoftware/cashback/frontend/web/index.php?XDEBUG_SESSION_START=netbeans-xdebug'
+    'SCRIPT_NAME' => '/realsoftware/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/realsoftware/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1493080102.392
+    'REQUEST_TIME' => 1493080102
+]
+2017-04-25 02:28:23 [::1][-][ggk0v3t5o5ju4memgfmrb9ksg2][error][yii\db\Exception] exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)' in C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php:630
+Stack trace:
+#0 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(630): PDO->__construct('mysql:host=loca...', 'root', '', NULL)
+#1 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(563): yii\db\Connection->createPdoInstance()
+#2 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(896): yii\db\Connection->open()
+#3 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(883): yii\db\Connection->getMasterPdo()
+#4 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(219): yii\db\Connection->getSlavePdo()
+#5 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(896): yii\db\Command->prepare(true)
+#6 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(376): yii\db\Command->queryInternal('fetch', NULL)
+#7 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Query.php(253): yii\db\Command->queryOne()
+#8 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\ActiveQuery.php(295): yii\db\Query->one(NULL)
+#9 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\BaseActiveRecord.php(107): yii\db\ActiveQuery->one()
+#10 C:\SERVER\www\realsoftware\cashback\common\models\User.php(65): yii\db\BaseActiveRecord::findOne(Array)
+#11 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(657): common\models\User::findIdentity(19)
+#12 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(188): yii\web\User->renewAuthStatus()
+#13 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(333): yii\web\User->getIdentity()
+#14 C:\SERVER\www\realsoftware\cashback\vendor\mdmsoft\yii2-admin\components\AccessControl.php(103): yii\web\User->getIsGuest()
+#15 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\ActionFilter.php(71): mdm\admin\components\AccessControl->isActive(Object(yii\base\InlineAction))
+#16 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#17 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Component.php(545): call_user_func(Array, Object(yii\base\ActionEvent))
+#18 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(676): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#19 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Controller.php(144): yii\base\Module->beforeAction(Object(yii\base\InlineAction))
+#20 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(523): yii\base\Controller->runAction('toolbar', Array)
+#21 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\Application.php(102): yii\base\Module->runAction('debug/default/t...', Array)
+#22 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#23 C:\SERVER\www\realsoftware\cashback\frontend\web\index.php(17): yii\base\Application->run()
+#24 {main}
+
+Next exception 'yii\db\Exception' with message 'SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)' in C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php:568
+Stack trace:
+#0 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(896): yii\db\Connection->open()
+#1 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(883): yii\db\Connection->getMasterPdo()
+#2 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(219): yii\db\Connection->getSlavePdo()
+#3 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(896): yii\db\Command->prepare(true)
+#4 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(376): yii\db\Command->queryInternal('fetch', NULL)
+#5 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Query.php(253): yii\db\Command->queryOne()
+#6 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\ActiveQuery.php(295): yii\db\Query->one(NULL)
+#7 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\BaseActiveRecord.php(107): yii\db\ActiveQuery->one()
+#8 C:\SERVER\www\realsoftware\cashback\common\models\User.php(65): yii\db\BaseActiveRecord::findOne(Array)
+#9 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(657): common\models\User::findIdentity(19)
+#10 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(188): yii\web\User->renewAuthStatus()
+#11 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(333): yii\web\User->getIdentity()
+#12 C:\SERVER\www\realsoftware\cashback\vendor\mdmsoft\yii2-admin\components\AccessControl.php(103): yii\web\User->getIsGuest()
+#13 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\ActionFilter.php(71): mdm\admin\components\AccessControl->isActive(Object(yii\base\InlineAction))
+#14 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#15 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Component.php(545): call_user_func(Array, Object(yii\base\ActionEvent))
+#16 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(676): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#17 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Controller.php(144): yii\base\Module->beforeAction(Object(yii\base\InlineAction))
+#18 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(523): yii\base\Controller->runAction('toolbar', Array)
+#19 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\Application.php(102): yii\base\Module->runAction('debug/default/t...', Array)
+#20 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#21 C:\SERVER\www\realsoftware\cashback\frontend\web\index.php(17): yii\base\Application->run()
+#22 {main}
+Additional Information:
+
+2017-04-25 02:28:23 [::1][-][ggk0v3t5o5ju4memgfmrb9ksg2][info][application] $_GET = [
+    'r' => 'debug/default/toolbar'
+    'tag' => '58fe982692400'
+]
+
+$_COOKIE = [
+    '_identity-backend' => '0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"0v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_\",2592000]\";}'
+    '_csrf-frontend' => '5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN\";}'
+    'advanced-frontend' => 'ggk0v3t5o5ju4memgfmrb9ksg2'
+    '_identity-frontend' => '6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa:2:{i:0;s:18:\"_identity-frontend\";i:1;s:47:\"[19,\"GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm\",2592000]\";}'
+    'XDEBUG_SESSION' => 'netbeans-xdebug'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 19
+]
+
+$_SERVER = [
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ACCEPT' => 'text/html'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36'
+    'HTTP_REFERER' => 'http://localhost/realsoftware/cashback/frontend/web/index.php?XDEBUG_SESSION_START=netbeans-xdebug'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.8'
+    'HTTP_COOKIE' => '_identity-backend=0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%220v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_%22%2C2592000%5D%22%3B%7D; _csrf-frontend=5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN%22%3B%7D; advanced-frontend=ggk0v3t5o5ju4memgfmrb9ksg2; _identity-frontend=6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa%3A2%3A%7Bi%3A0%3Bs%3A18%3A%22_identity-frontend%22%3Bi%3A1%3Bs%3A47%3A%22%5B19%2C%22GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm%22%2C2592000%5D%22%3B%7D; XDEBUG_SESSION=netbeans-xdebug'
+    'PATH' => 'C:\\ProgramData\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\SERVIDOR\\www\\pdvsolinter\\vendor\\phalcon\\devtools\\;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\TortoiseSVN\\bin;C:\\Program Files\\nodejs\\;C:\\SERVER\\bin\\php\\php5.5.12;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Skype\\Phone\\;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.9 (Win64) PHP/5.5.12 Server at localhost Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.9 (Win64) PHP/5.5.12'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'SERVER_ADMIN' => 'admin@example.com'
+    'SCRIPT_FILENAME' => 'C:/SERVER/www/realsoftware/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '60348'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=debug%2Fdefault%2Ftoolbar&tag=58fe982692400'
+    'REQUEST_URI' => '/realsoftware/cashback/frontend/web/index.php?r=debug%2Fdefault%2Ftoolbar&tag=58fe982692400'
+    'SCRIPT_NAME' => '/realsoftware/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/realsoftware/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1493080102.967
+    'REQUEST_TIME' => 1493080102
+]
+2017-04-25 02:28:23 [::1][-][ggk0v3t5o5ju4memgfmrb9ksg2][error][yii\db\Exception] exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)' in C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php:630
+Stack trace:
+#0 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(630): PDO->__construct('mysql:host=loca...', 'root', '', NULL)
+#1 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(563): yii\db\Connection->createPdoInstance()
+#2 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(896): yii\db\Connection->open()
+#3 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(883): yii\db\Connection->getMasterPdo()
+#4 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(219): yii\db\Connection->getSlavePdo()
+#5 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(896): yii\db\Command->prepare(true)
+#6 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(376): yii\db\Command->queryInternal('fetch', NULL)
+#7 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Query.php(253): yii\db\Command->queryOne()
+#8 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\ActiveQuery.php(295): yii\db\Query->one(NULL)
+#9 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\BaseActiveRecord.php(107): yii\db\ActiveQuery->one()
+#10 C:\SERVER\www\realsoftware\cashback\common\models\User.php(65): yii\db\BaseActiveRecord::findOne(Array)
+#11 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(657): common\models\User::findIdentity(19)
+#12 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(188): yii\web\User->renewAuthStatus()
+#13 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(333): yii\web\User->getIdentity()
+#14 C:\SERVER\www\realsoftware\cashback\vendor\mdmsoft\yii2-admin\components\AccessControl.php(103): yii\web\User->getIsGuest()
+#15 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\ActionFilter.php(71): mdm\admin\components\AccessControl->isActive(Object(yii\base\InlineAction))
+#16 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#17 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Component.php(545): call_user_func(Array, Object(yii\base\ActionEvent))
+#18 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(676): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#19 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Controller.php(144): yii\base\Module->beforeAction(Object(yii\base\InlineAction))
+#20 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(523): yii\base\Controller->runAction('toolbar', Array)
+#21 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\Application.php(102): yii\base\Module->runAction('debug/default/t...', Array)
+#22 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#23 C:\SERVER\www\realsoftware\cashback\frontend\web\index.php(17): yii\base\Application->run()
+#24 {main}
+
+Next exception 'yii\db\Exception' with message 'SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)' in C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php:568
+Stack trace:
+#0 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(896): yii\db\Connection->open()
+#1 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Connection.php(883): yii\db\Connection->getMasterPdo()
+#2 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(219): yii\db\Connection->getSlavePdo()
+#3 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(896): yii\db\Command->prepare(true)
+#4 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Command.php(376): yii\db\Command->queryInternal('fetch', NULL)
+#5 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\Query.php(253): yii\db\Command->queryOne()
+#6 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\ActiveQuery.php(295): yii\db\Query->one(NULL)
+#7 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\db\BaseActiveRecord.php(107): yii\db\ActiveQuery->one()
+#8 C:\SERVER\www\realsoftware\cashback\common\models\User.php(65): yii\db\BaseActiveRecord::findOne(Array)
+#9 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(657): common\models\User::findIdentity(19)
+#10 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(188): yii\web\User->renewAuthStatus()
+#11 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\User.php(333): yii\web\User->getIdentity()
+#12 C:\SERVER\www\realsoftware\cashback\vendor\mdmsoft\yii2-admin\components\AccessControl.php(103): yii\web\User->getIsGuest()
+#13 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\ActionFilter.php(71): mdm\admin\components\AccessControl->isActive(Object(yii\base\InlineAction))
+#14 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#15 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Component.php(545): call_user_func(Array, Object(yii\base\ActionEvent))
+#16 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(676): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#17 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Controller.php(144): yii\base\Module->beforeAction(Object(yii\base\InlineAction))
+#18 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(523): yii\base\Controller->runAction('toolbar', Array)
+#19 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\Application.php(102): yii\base\Module->runAction('debug/default/t...', Array)
+#20 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#21 C:\SERVER\www\realsoftware\cashback\frontend\web\index.php(17): yii\base\Application->run()
+#22 {main}
+Additional Information:
+
+2017-04-25 02:28:23 [::1][-][ggk0v3t5o5ju4memgfmrb9ksg2][info][application] $_GET = [
+    'r' => 'debug/default/toolbar'
+    'tag' => '58fe982692400'
+]
+
+$_COOKIE = [
+    '_identity-backend' => '0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"0v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_\",2592000]\";}'
+    '_csrf-frontend' => '5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN\";}'
+    'advanced-frontend' => 'ggk0v3t5o5ju4memgfmrb9ksg2'
+    '_identity-frontend' => '6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa:2:{i:0;s:18:\"_identity-frontend\";i:1;s:47:\"[19,\"GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm\",2592000]\";}'
+    'XDEBUG_SESSION' => 'netbeans-xdebug'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 19
+]
+
+$_SERVER = [
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ACCEPT' => 'text/html'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36'
+    'HTTP_REFERER' => 'http://localhost/realsoftware/cashback/frontend/web/index.php?XDEBUG_SESSION_START=netbeans-xdebug'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.8'
+    'HTTP_COOKIE' => '_identity-backend=0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%220v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_%22%2C2592000%5D%22%3B%7D; _csrf-frontend=5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN%22%3B%7D; advanced-frontend=ggk0v3t5o5ju4memgfmrb9ksg2; _identity-frontend=6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa%3A2%3A%7Bi%3A0%3Bs%3A18%3A%22_identity-frontend%22%3Bi%3A1%3Bs%3A47%3A%22%5B19%2C%22GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm%22%2C2592000%5D%22%3B%7D; XDEBUG_SESSION=netbeans-xdebug'
+    'PATH' => 'C:\\ProgramData\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\SERVIDOR\\www\\pdvsolinter\\vendor\\phalcon\\devtools\\;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\TortoiseSVN\\bin;C:\\Program Files\\nodejs\\;C:\\SERVER\\bin\\php\\php5.5.12;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Skype\\Phone\\;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.9 (Win64) PHP/5.5.12 Server at localhost Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.9 (Win64) PHP/5.5.12'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'SERVER_ADMIN' => 'admin@example.com'
+    'SCRIPT_FILENAME' => 'C:/SERVER/www/realsoftware/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '60351'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=debug%2Fdefault%2Ftoolbar&tag=58fe982692400'
+    'REQUEST_URI' => '/realsoftware/cashback/frontend/web/index.php?r=debug%2Fdefault%2Ftoolbar&tag=58fe982692400'
+    'SCRIPT_NAME' => '/realsoftware/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/realsoftware/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1493080103.386
+    'REQUEST_TIME' => 1493080103
+]
+2017-04-25 02:30:03 [::1][19][ggk0v3t5o5ju4memgfmrb9ksg2][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request: api/login-app' in C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Controller.php:127
+Stack trace:
+#0 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(523): yii\base\Controller->runAction('login-app', Array)
+#1 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\Application.php(102): yii\base\Module->runAction('api/login-app', Array)
+#2 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 C:\SERVER\www\realsoftware\cashback\frontend\web\index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message 'Page not found.' in C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\Application.php:114
+Stack trace:
+#0 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 C:\SERVER\www\realsoftware\cashback\frontend\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2017-04-25 02:30:03 [::1][19][ggk0v3t5o5ju4memgfmrb9ksg2][info][application] $_GET = [
+    'r' => 'api/login-app'
+    'cpf_cnpj' => '09480912660'
+    'password' => '123456'
+]
+
+$_COOKIE = [
+    '_identity-backend' => '0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"0v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_\",2592000]\";}'
+    '_csrf-frontend' => '5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN\";}'
+    'advanced-frontend' => 'ggk0v3t5o5ju4memgfmrb9ksg2'
+    '_identity-frontend' => '6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa:2:{i:0;s:18:\"_identity-frontend\";i:1;s:47:\"[19,\"GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm\",2592000]\";}'
+    'XDEBUG_SESSION' => 'netbeans-xdebug'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 19
+]
+
+$_SERVER = [
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.8'
+    'HTTP_COOKIE' => '_identity-backend=0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%220v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_%22%2C2592000%5D%22%3B%7D; _csrf-frontend=5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN%22%3B%7D; advanced-frontend=ggk0v3t5o5ju4memgfmrb9ksg2; _identity-frontend=6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa%3A2%3A%7Bi%3A0%3Bs%3A18%3A%22_identity-frontend%22%3Bi%3A1%3Bs%3A47%3A%22%5B19%2C%22GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm%22%2C2592000%5D%22%3B%7D; XDEBUG_SESSION=netbeans-xdebug'
+    'PATH' => 'C:\\ProgramData\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\SERVIDOR\\www\\pdvsolinter\\vendor\\phalcon\\devtools\\;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\TortoiseSVN\\bin;C:\\Program Files\\nodejs\\;C:\\SERVER\\bin\\php\\php5.5.12;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Skype\\Phone\\;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.9 (Win64) PHP/5.5.12 Server at localhost Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.9 (Win64) PHP/5.5.12'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'SERVER_ADMIN' => 'admin@example.com'
+    'SCRIPT_FILENAME' => 'C:/SERVER/www/realsoftware/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '60498'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=api/login-app&cpf_cnpj=09480912660&password=123456'
+    'REQUEST_URI' => '/realsoftware/cashback/frontend/web/index.php?r=api/login-app&cpf_cnpj=09480912660&password=123456'
+    'SCRIPT_NAME' => '/realsoftware/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/realsoftware/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1493080203.549
+    'REQUEST_TIME' => 1493080203
+]
+2017-04-25 02:30:04 [::1][19][ggk0v3t5o5ju4memgfmrb9ksg2][error][yii\web\HttpException:403] exception 'yii\web\ForbiddenHttpException' with message 'You are not allowed to perform this action.' in C:\SERVER\www\realsoftware\cashback\vendor\mdmsoft\yii2-admin\components\AccessControl.php:88
+Stack trace:
+#0 C:\SERVER\www\realsoftware\cashback\vendor\mdmsoft\yii2-admin\components\AccessControl.php(73): mdm\admin\components\AccessControl->denyAccess(Object(yii\web\User))
+#1 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\ActionFilter.php(75): mdm\admin\components\AccessControl->beforeAction(Object(yii\base\InlineAction))
+#2 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#3 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Component.php(545): call_user_func(Array, Object(yii\base\ActionEvent))
+#4 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(676): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#5 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Controller.php(144): yii\base\Module->beforeAction(Object(yii\base\InlineAction))
+#6 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(523): yii\base\Controller->runAction('toolbar', Array)
+#7 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\Application.php(102): yii\base\Module->runAction('debug/default/t...', Array)
+#8 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#9 C:\SERVER\www\realsoftware\cashback\frontend\web\index.php(17): yii\base\Application->run()
+#10 {main}
+2017-04-25 02:30:04 [::1][19][ggk0v3t5o5ju4memgfmrb9ksg2][info][application] $_GET = [
+    'r' => 'debug/default/toolbar'
+    'tag' => '58fe988bb6280'
+]
+
+$_COOKIE = [
+    '_identity-backend' => '0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"0v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_\",2592000]\";}'
+    '_csrf-frontend' => '5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN\";}'
+    'advanced-frontend' => 'ggk0v3t5o5ju4memgfmrb9ksg2'
+    'XDEBUG_SESSION' => 'netbeans-xdebug'
+    '_identity-frontend' => '6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa:2:{i:0;s:18:\"_identity-frontend\";i:1;s:47:\"[19,\"GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm\",2592000]\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 19
+]
+
+$_SERVER = [
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ACCEPT' => 'text/html'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36'
+    'HTTP_REFERER' => 'http://localhost/realsoftware/cashback/frontend/web/index.php?r=api/login-app&cpf_cnpj=09480912660&password=123456'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.8'
+    'HTTP_COOKIE' => '_identity-backend=0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%220v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_%22%2C2592000%5D%22%3B%7D; _csrf-frontend=5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN%22%3B%7D; advanced-frontend=ggk0v3t5o5ju4memgfmrb9ksg2; XDEBUG_SESSION=netbeans-xdebug; _identity-frontend=6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa%3A2%3A%7Bi%3A0%3Bs%3A18%3A%22_identity-frontend%22%3Bi%3A1%3Bs%3A47%3A%22%5B19%2C%22GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm%22%2C2592000%5D%22%3B%7D'
+    'PATH' => 'C:\\ProgramData\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\SERVIDOR\\www\\pdvsolinter\\vendor\\phalcon\\devtools\\;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\TortoiseSVN\\bin;C:\\Program Files\\nodejs\\;C:\\SERVER\\bin\\php\\php5.5.12;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Skype\\Phone\\;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.9 (Win64) PHP/5.5.12 Server at localhost Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.9 (Win64) PHP/5.5.12'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'SERVER_ADMIN' => 'admin@example.com'
+    'SCRIPT_FILENAME' => 'C:/SERVER/www/realsoftware/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '60499'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=debug%2Fdefault%2Ftoolbar&tag=58fe988bb6280'
+    'REQUEST_URI' => '/realsoftware/cashback/frontend/web/index.php?r=debug%2Fdefault%2Ftoolbar&tag=58fe988bb6280'
+    'SCRIPT_NAME' => '/realsoftware/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/realsoftware/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1493080204.016
+    'REQUEST_TIME' => 1493080204
+]
+2017-04-25 02:30:05 [::1][19][ggk0v3t5o5ju4memgfmrb9ksg2][error][yii\web\HttpException:403] exception 'yii\web\ForbiddenHttpException' with message 'You are not allowed to perform this action.' in C:\SERVER\www\realsoftware\cashback\vendor\mdmsoft\yii2-admin\components\AccessControl.php:88
+Stack trace:
+#0 C:\SERVER\www\realsoftware\cashback\vendor\mdmsoft\yii2-admin\components\AccessControl.php(73): mdm\admin\components\AccessControl->denyAccess(Object(yii\web\User))
+#1 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\ActionFilter.php(75): mdm\admin\components\AccessControl->beforeAction(Object(yii\base\InlineAction))
+#2 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#3 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Component.php(545): call_user_func(Array, Object(yii\base\ActionEvent))
+#4 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(676): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#5 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Controller.php(144): yii\base\Module->beforeAction(Object(yii\base\InlineAction))
+#6 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Module.php(523): yii\base\Controller->runAction('toolbar', Array)
+#7 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\web\Application.php(102): yii\base\Module->runAction('debug/default/t...', Array)
+#8 C:\SERVER\www\realsoftware\cashback\vendor\yiisoft\yii2\base\Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#9 C:\SERVER\www\realsoftware\cashback\frontend\web\index.php(17): yii\base\Application->run()
+#10 {main}
+2017-04-25 02:30:04 [::1][19][ggk0v3t5o5ju4memgfmrb9ksg2][info][application] $_GET = [
+    'r' => 'debug/default/toolbar'
+    'tag' => '58fe988bb6280'
+]
+
+$_COOKIE = [
+    '_identity-backend' => '0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"0v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_\",2592000]\";}'
+    '_csrf-frontend' => '5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN\";}'
+    'advanced-frontend' => 'ggk0v3t5o5ju4memgfmrb9ksg2'
+    'XDEBUG_SESSION' => 'netbeans-xdebug'
+    '_identity-frontend' => '6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa:2:{i:0;s:18:\"_identity-frontend\";i:1;s:47:\"[19,\"GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm\",2592000]\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 19
+]
+
+$_SERVER = [
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ACCEPT' => 'text/html'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36'
+    'HTTP_REFERER' => 'http://localhost/realsoftware/cashback/frontend/web/index.php?r=api/login-app&cpf_cnpj=09480912660&password=123456'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.8'
+    'HTTP_COOKIE' => '_identity-backend=0714621318091cfc5b9cb99f397a7beccaf20c3a4410963663e22521ab4e933aa%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%220v4PI8YWT9XXN95DCOT4Oi7sm2vXiAP_%22%2C2592000%5D%22%3B%7D; _csrf-frontend=5c1709a24c209bbec9f6875851f9de0c0b2396511eecd3281ad6ae4bb4b90837a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22CaVIzh9rDGxitcK5PpgQgOHiZe21e1lN%22%3B%7D; advanced-frontend=ggk0v3t5o5ju4memgfmrb9ksg2; XDEBUG_SESSION=netbeans-xdebug; _identity-frontend=6f2c8f8e21c997b5bcdd7c928c28c8e01593d3fadff88ebc2ac40fc24853d8aaa%3A2%3A%7Bi%3A0%3Bs%3A18%3A%22_identity-frontend%22%3Bi%3A1%3Bs%3A47%3A%22%5B19%2C%22GKJL3cwIYVQhWmsGq-ZLt9ri5KoGhFZm%22%2C2592000%5D%22%3B%7D'
+    'PATH' => 'C:\\ProgramData\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\SERVIDOR\\www\\pdvsolinter\\vendor\\phalcon\\devtools\\;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\TortoiseSVN\\bin;C:\\Program Files\\nodejs\\;C:\\SERVER\\bin\\php\\php5.5.12;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Skype\\Phone\\;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.9 (Win64) PHP/5.5.12 Server at localhost Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.9 (Win64) PHP/5.5.12'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/SERVER/www/'
+    'SERVER_ADMIN' => 'admin@example.com'
+    'SCRIPT_FILENAME' => 'C:/SERVER/www/realsoftware/cashback/frontend/web/index.php'
+    'REMOTE_PORT' => '60499'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=debug%2Fdefault%2Ftoolbar&tag=58fe988bb6280'
+    'REQUEST_URI' => '/realsoftware/cashback/frontend/web/index.php?r=debug%2Fdefault%2Ftoolbar&tag=58fe988bb6280'
+    'SCRIPT_NAME' => '/realsoftware/cashback/frontend/web/index.php'
+    'PHP_SELF' => '/realsoftware/cashback/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1493080204.804
+    'REQUEST_TIME' => 1493080204
+]
