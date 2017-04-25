@@ -75,7 +75,7 @@ class ApiController extends Controller
         return $this->render('index');
     }
 
-    public function actionLoginApp()
+    public function actionLoginAppPdv()
     {
         header('Content-type: application/json');
         $model = new LoginForm();
