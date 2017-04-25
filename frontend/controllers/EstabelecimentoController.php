@@ -8,16 +8,22 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\CB04EMPRESA;
 use common\models\CB09FORMAPAGEMPRESA;
+use common\models\CB05PRODUTO;
+use common\models\CB11ITEMCATEGORIA;
 
 /**
  * Estabelecimento controller
  */
 class EstabelecimentoController extends \common\controllers\GlobalBaseController {
 
-    private $user;
+    private $user = null;
+    private $estabelecimento = null;
 
     public function __construct($id, $module, $config = []) {
-        $this->user = (\Yii::$app->user->identity)? : null;
+        if (($identity = \Yii::$app->user->identity)) {
+            $this->user = $identity;
+            $this->estabelecimento = \common\models\GlobalModel::findTable('CB04_EMPRESA', 'CB04_ID = ' . $this->user->id_company)[0];
+        }
         parent::__construct($id, $module, $config);
     }
 
@@ -122,13 +128,12 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     public function actionEmpresa() {
         $this->layout = 'smartAdminEstabelecimento';
         $salvo = null;
-        
+
         $model = new CB04EMPRESA();
         $al = $model->attributeLabels();
         $dataEstabelecimento = $model->findOne($this->user->id_company);
         if (($post = Yii::$app->request->post())) {
-            $dataEstabelecimento->setAttributes($post);
-            $salvo = ($dataEstabelecimento->save()) ? true : false ;
+            $salvo = $dataEstabelecimento->saveEstabelecimento($post);
         }
 
         $dataEstabelecimento = $dataEstabelecimento->getAttributes();
@@ -142,6 +147,67 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'estabelecimento' => $dataEstabelecimento,
                     'categorias' => $dataCategoria,
                     'formaPagamento' => $dataFormaPagamento,
+                    'al' => $al,
+                    'salvo' => $salvo
+        ]);
+    }
+
+    public function actionProduto() {
+        $this->layout = 'smartAdminEstabelecimento';
+        $salvo = null;
+
+        $model = new CB05PRODUTO();
+        $al = $model->attributeLabels();
+        $dataProduto = $model
+                ->find()
+                ->where(['CB05_EMPRESA_ID' => $this->user->id_company])
+                ->orderBy('CB05_NOME_CURTO')
+                ->all();
+
+        if (($post = Yii::$app->request->post())) {
+            //$salvo = $dataProduto->saveProduto($post);
+        }
+
+        return $this->render('produto', [
+                    'tituloTela' => 'Produto',
+                    'usuario' => $this->user->attributes,
+                    'produto' => $dataProduto,
+                    'al' => $al,
+                    'salvo' => $salvo
+        ]);
+    }
+
+    public function actionProdutoForm($produto = null) {
+        
+        \Yii::$app->view->title = '';
+        
+        $this->layout = 'empty';
+        $salvo = null;
+        $dataProduto = [];
+        
+        $model = new CB05PRODUTO();
+        $al = $model->attributeLabels();
+
+        $dataItemProduto = CB04EMPRESA::findCombo('CB11_ITEM_CATEGORIA', 'CB11_ID', 'CB11_DESCRICAO', 'CB11_STATUS=1 AND CB11_CATEGORIA_ID=' . $this->estabelecimento['CB04_CATEGORIA_ID']);
+        
+        if (is_numeric($produto)) {
+            $dataProduto = $model
+                    ->find()
+                    ->where(['CB05_EMPRESA_ID' => $this->user->id_company, 'CB05_ID' => $produto])
+                    ->orderBy('CB05_NOME_CURTO')
+                    ->all();
+            $dataProduto = $dataProduto->getAttributes();
+        }
+
+        if (($post = Yii::$app->request->post())) {
+            //$salvo = $dataProduto->saveProduto($post);
+        }
+
+        return $this->render('produtoForm', [
+                    'tituloTela' => 'Produto',
+                    'usuario' => $this->user->attributes,
+                    'produto' => $dataProduto,
+                    'itemProduto' => $dataItemProduto,
                     'al' => $al,
                     'salvo' => $salvo
         ]);

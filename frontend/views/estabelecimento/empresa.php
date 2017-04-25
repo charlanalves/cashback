@@ -105,7 +105,7 @@ $this->title = '';
                         required: true
                     },
                     CB04_END_LOGRADOURO: {
-                        required: true,
+                        required: true
                     },
                     CB04_END_BAIRRO: {
                         required: true

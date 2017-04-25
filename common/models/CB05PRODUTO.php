@@ -50,12 +50,12 @@ class CB05PRODUTO extends \common\models\GlobalModel
     public function attributeLabels()
     {
         return [
-            'CB05_ID' => Yii::t('app', 'Cb05  ID'),
-            'CB05_EMPRESA_ID' => Yii::t('app', 'Cb05  Empresa  ID'),
-            'CB05_TITULO' => Yii::t('app', 'Cb05  Titulo'),
-            'CB05_NOME_CURTO' => Yii::t('app', 'Cb05  Nome Curto'),
-            'CB05_DESCRICAO' => Yii::t('app', 'Cb05  Descricao'),
-            'CB05_IMPORTANTE' => Yii::t('app', 'Cb05  Importante'),
+            'CB05_ID' => Yii::t('app', 'ID'),
+            'CB05_EMPRESA_ID' => Yii::t('app', 'Empresa'),
+            'CB05_TITULO' => Yii::t('app', 'Titulo'),
+            'CB05_NOME_CURTO' => Yii::t('app', 'Nome Curto'),
+            'CB05_DESCRICAO' => Yii::t('app', 'Descrição'),
+            'CB05_IMPORTANTE' => Yii::t('app', 'Importante'),
         ];
     }
 
