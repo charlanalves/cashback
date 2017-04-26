@@ -7,8 +7,37 @@ $this->title = '';
 <script type="text/javascript">
 
     var ultimoCEP = '',
-            salvo = '<?= $salvo ?>',
-            produto = JSON.parse('<?= json_encode($produto) ?>');
+            salvo = '<?= $salvo ?>';
+
+    function modalProduto(id) {
+        if (typeof id == 'undefined') {
+            titulo = "Novo produto";
+            urlGet = "";
+        } else {
+            titulo = "Editar produto";
+            urlGet = "&produto=" + id;
+        }
+
+        $('#remoteModalProdutoLabel').text(titulo);
+        $('#remoteModalProduto').modal('show')
+                .find('.modal-body')
+                .load('index.php?r=estabelecimento/produto-form' + urlGet);
+    }
+
+    function produtoAtivo(id) {
+        var checkbox = $('#ativo-' + id)[0], status = checkbox.checked;
+        var ajax = $.ajax({
+            url: 'index.php?r=estabelecimento/produto-ativar&produto=' + id + '&status=' + (status ? 1 : 0),
+            type: 'GET',
+            dataType: "json"
+        });
+        ajax.always(function (data) {
+            if (data.responseText) {
+                checkbox.checked = !status;
+                Util.smallBox('Opss, tente novamente...', '', 'danger', 'close');
+            }
+        });
+    }
 
     document.addEventListener("DOMContentLoaded", function (event) {
 
@@ -33,8 +62,25 @@ $this->title = '';
     });
 </script>
 
+<style>
+    th {
+        text-align: center;
+    }
+    .table-bordered tbody:hover {
+
+    }
+    .table-bordered tbody tr h3 {
+        margin: 0px
+    }
+</style>
+
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <!-- Button trigger modal produto -->
+        <a href="javascript:void(0)" onclick="modalProduto()" class="btn btn-success pull-right">
+            <i class="fa fa-circle-arrow-up fa-lg"></i> 
+            Cadastrar produto &nbsp;<i class="fa fa-plus-circle"></i>
+        </a>
         <h1 class="page-title txt-color-blueDark">
             <i class="fa-fw fa fa-pencil-square-o"></i> 
             Produto <span></span>
@@ -42,25 +88,22 @@ $this->title = '';
     </div>
 </div>
 
-
-<div class="row">
-    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
-
-
-        <!-- Button trigger modal produto -->
-        <a href="index.php?r=estabelecimento/produto-form" data-toggle="modal" data-target="#remoteModalProduto" class="btn btn-success pull-right">
-            <i class="fa fa-circle-arrow-up fa-lg"></i> 
-            Cadastrar produto
-        </a>
-
-        <!-- MODAL PRODUTO -->
-        <div class="modal fade" id="remoteModalProduto" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content"></div>
+<!-- MODAL PRODUTO -->
+<div class="modal fade" id="remoteModalProduto" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 800px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="remoteModalProdutoLabel"></h4>
             </div>
+            <div class="modal-body no-padding"></div>
         </div>
-        <!-- END MODAL -->
+    </div>
+</div>
+<!-- END MODAL -->
 
+<div class="row bg-color-white">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
 
         <div role="content">
 
@@ -71,50 +114,45 @@ $this->title = '';
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Column name</th>
-                                <th>Column name</th>
-                                <th>Column name</th>
-                                <th>Column name</th>
+                                <th style="width: 100%; text-align: left">PRODUTOS</th>
+                                <th>ATIVO</th>
+                                <th colspan="4">AÇÕES</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Row 1</td>
-                                <td>Row 2</td>
-                                <td>Row 3</td>
-                                <td>Row 4</td>
-                            </tr>
-                            <tr>
-                                <td>Row 1</td>
-                                <td>Row 2</td>
-                                <td>Row 3</td>
-                                <td>Row 4</td>
-                            </tr>
-                            <tr>
-                                <td>Row 1</td>
-                                <td>Row 2</td>
-                                <td>Row 3</td>
-                                <td>Row 4</td>
-                            </tr>
-                            <tr>
-                                <td>Row 1</td>
-                                <td>Row 2</td>
-                                <td>Row 3</td>
-                                <td>Row 4</td>
-                            </tr>
-                            <tr>
-                                <td>Row 1</td>
-                                <td>Row 2</td>
-                                <td>Row 3</td>
-                                <td>Row 4</td>
-                            </tr>
-                            <tr>
-                                <td>Row 1</td>
-                                <td>Row 2</td>
-                                <td>Row 3</td>
-                                <td>Row 4</td>
-                            </tr>
-                        </tbody>
+                        <?php
+                        foreach ($produto as $value) {
+                            $at = $value->attributes;
+                            ?>
+                            <tbody>
+                                <tr id="tr-produto-<?= $at['CB05_ID'] ?>">
+                                    <td><?= "<h3>" . $at['CB05_NOME_CURTO'] . " <small>" . $at['CB05_TITULO'] . "</small></h3>" ?></td>
+                                    <td class="smart-form" style="padding: 5px 16px;">
+                                        <label class="checkbox">
+                                            <input type="checkbox" id="ativo-<?= $at['CB05_ID'] ?>" onchange="produtoAtivo(<?= $at['CB05_ID'] ?>)" value="<?= $at['CB05_ID'] ?>" <?= ($at['CB05_ATIVO']) ? "checked" : "" ?> /><i></i>
+                                        </label>
+                                    </td>
+                                    <td align="center"><button class="btn btn-warning btn-xs" onclick="modalCashback(<?= $at['CB05_ID'] ?>)">CASHBACK &nbsp;<i class="fa fa-money"></i></button></td>
+                                    <td align="center"><button class="btn btn-success btn-xs" onclick="modalPromocao(<?= $at['CB05_ID'] ?>)">Promoção &nbsp;<i class="fa fa-tags"></i></button></td>
+                                    <td align="center"><button class="btn btn-primary btn-xs" onclick="modalProduto(<?= $at['CB05_ID'] ?>)">Editar &nbsp;<i class="fa fa-edit"></i></button></td>
+                                    <td align="center"><button class="btn btn-danger btn-xs" onclick="excluir(<?= $at['CB05_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
+                                </tr>
+
+                                <tr id="tr-promocao-<?= $at['CB05_ID'] ?>">
+                                    <td colspan="6" style="padding:0px 0px 20px 25px;border-top: 0px;">
+                                        <table class="table" style="border-right: 0px">
+                                            <tr>
+                                                <td style="width: 100%;">
+                                                    Pernoite: de 21h até as 14h: R$ 130,00
+                                                </td>
+                                                <td align="center"><button class="btn btn-danger btn-xs" onclick="excluir(<?= $at['CB05_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <?php
+                        }
+                        ?>
                     </table>
 
                 </div>

@@ -10,7 +10,20 @@ $this->title = '';
             salvo = '<?= $salvo ?>',
             FormProduto = {},
             produto = JSON.parse('<?= json_encode($produto) ?>'),
-            itemProduto = JSON.parse('<?= json_encode($itemProduto) ?>');
+            itemProduto = JSON.parse('<?= json_encode($itemProduto) ?>'),
+            callbackSaveProduto = function (data) {
+                if (data.status == true) {
+                    message = 'Dados salvos com sucesso.';
+                    type = 'success';
+                    ico = 'check-circle';
+                    $('#remoteModalProduto').modal('hide');
+                } else {
+                    message = 'Os dados não foram atualizados, tente novamente.';
+                    type = 'danger';
+                    ico = 'frown-o';
+                }
+                Util.smallBox(message, '', type, ico);
+            };
 
     // obj form
     FormProduto = new Form('produto-form');
@@ -76,6 +89,9 @@ $this->title = '';
             },
             errorPlacement: function (error, element) {
                 error.insertAfter(element.parent());
+            },
+            submitHandler: function () {
+                FormProduto.send('index.php?r=estabelecimento/global-crud&action=saveProduto', callbackSaveProduto);
             }
         });
     };
@@ -85,15 +101,6 @@ $this->title = '';
 
 </script>
 
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h1 class="page-title txt-color-blueDark">
-            <i class="fa-fw fa fa-pencil-square-o"></i> 
-            Produto <span></span>
-        </h1>
-    </div>
-</div>
-
 
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
@@ -102,9 +109,9 @@ $this->title = '';
 
             <div class="widget-body no-padding">
 
-
                 <form action="" id="produto-form" class="smart-form" novalidate="novalidate" method="post">
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" />
+                    <input type="hidden" name="CB05_ID" value="" />
                     <fieldset>
                         <h3>Sobre o produto</h3>
                         <div class="row padding-top-15">
@@ -114,7 +121,7 @@ $this->title = '';
                                 </label>
                             </section>
                             <section class="col col-6">
-                                <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
+                                <label class="input"> <i class="icon-prepend fa fa-tags"></i>
                                     <input type="text" name="CB05_NOME_CURTO" placeholder="<?= $al['CB05_NOME_CURTO'] ?>">
                                 </label>
                             </section>
@@ -122,12 +129,12 @@ $this->title = '';
                         <div class="row">
                             <section class="col col-6">
                                 <label class="textarea"> <i class="icon-prepend fa fa-suitcase"></i>
-                                    <textarea rows="4" name="CB05_DESCRICAO" placeholder="<?= $al['CB05_DESCRICAO'] ?>"></textarea> 
+                                    <textarea rows="5" name="CB05_DESCRICAO" placeholder="<?= $al['CB05_DESCRICAO'] ?>"></textarea> 
                                 </label>
                             </section>
                             <section class="col col-6">
                                 <label class="textarea"> <i class="icon-prepend fa fa-info-circle"></i>
-                                    <textarea rows="4" name="CB05_IMPORTANTE" placeholder="<?= $al['CB05_IMPORTANTE'] ?>"></textarea> 
+                                    <textarea rows="5" name="CB05_IMPORTANTE" placeholder="<?= $al['CB05_IMPORTANTE'] ?>"></textarea> 
                                 </label>
                             </section>
                         </div>
@@ -143,11 +150,11 @@ $this->title = '';
                         <div class="row no-margin padding-top-15">
 
                             <section>
-                                <div class="widget-body dropzone dz-clickable">
+                                <div class="widget-body dropzone dz-clickable" style="min-height: 140px">
                                     <div class="dz-default dz-message">
                                         <span>
                                             <span class="text-center">
-                                                <span class="font-lg visible-xs-block visible-sm-block visible-lg-block">
+                                                <span class="font-lg">
                                                     <span class="font-lg"><i class="fa fa-cloud-upload text-danger"></i> Enviar fotos </span><span>&nbsp;&nbsp;<h4 class="display-inline"> (clique aqui)</h4></span>
                                                 </span>
                                             </span>
@@ -158,12 +165,15 @@ $this->title = '';
                         </div>
                     </fieldset>
 
-                    <footer>
-                        <button id="btn-salvar" type="button" class="btn btn-primary">
+                    <footer style="padding: 10px;">
+                        <button id="btn-salvar" type="button" class="btn btn-success" style="margin:0px 4px">
                             Salvar
                         </button>
-                        <button id="btn-reset" type="button" class="btn btn-default">
+                        <button id="btn-reset" type="button" class="btn btn-primary" style="margin:0px 4px">
                             Restaurar informações
+                        </button>
+                        <button id="btn-cancelar" type="button" class="btn btn-danger" data-dismiss="modal" style="margin:0px 4px">
+                            Cancelar
                         </button>
                     </footer>
                 </form>

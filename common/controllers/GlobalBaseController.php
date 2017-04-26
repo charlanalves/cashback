@@ -731,5 +731,11 @@ class GlobalBaseController extends Controller {
 
         exit(json_encode(['excel' => $excel, 'fileName' => $filename]));
     }
+    
+    public function callMethodDynamically($action, $data, $returnThowException = true) {
+        $methodExists = method_exists($this, $action);
+        Yii::$app->v->isFalse(['methodExists' => $methodExists], '', 'app', $returnThowException);
+        call_user_func_array([$this, $action], [$data]);
+    }
 
 }

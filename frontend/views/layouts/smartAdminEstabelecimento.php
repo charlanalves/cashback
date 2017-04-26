@@ -95,6 +95,9 @@ $this->title = 'Estabelecimento';
             .container {
                 width: 100%;
             }
+            .smart-form fieldset{
+                padding: 10px 14px 5px!important;
+            }
         </style>
 
         <script>

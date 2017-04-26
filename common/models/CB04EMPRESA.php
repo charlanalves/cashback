@@ -287,22 +287,18 @@ class CB04EMPRESA extends \common\models\GlobalModel {
     public static function getFormaPagamento($id) {
         return explode(',', CB09FORMAPAGEMPRESA::findBySql(
                         "SELECT GROUP_CONCAT(CB09_FORMA_PAG_ID) AS FORMAPAGAMENTO
-            FROM CB09_FORMA_PAG_EMPRESA
-            WHERE CB09_EMPRESA_ID = " . $id . "
-            GROUP BY CB09_EMPRESA_ID")->one()->FORMAPAGAMENTO);
+                        FROM CB09_FORMA_PAG_EMPRESA
+                        WHERE CB09_EMPRESA_ID = " . $id . "
+                        GROUP BY CB09_EMPRESA_ID")->one()->FORMAPAGAMENTO);
     }
 
     public function saveEstabelecimento($data) {
-
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
         try {
-            $connection = \Yii::$app->db;
-            $transaction = $connection->beginTransaction();
-
-
             // dados do estabelecimento
             $this->setAttributes($data);
             $this->save();
-
             // dados da forma de pagamento (exclui e cadastra)
             CB09FORMAPAGEMPRESA::deleteAll(['CB09_EMPRESA_ID' => $this->CB04_ID]);
             foreach ($data['FORMA-PAGAMENTO'] as $fp) {
@@ -310,9 +306,7 @@ class CB04EMPRESA extends \common\models\GlobalModel {
                 $CB09FORMAPAGEMPRESA->setAttributes(['CB09_EMPRESA_ID' => $this->CB04_ID, 'CB09_FORMA_PAG_ID' => $fp]);
                 $CB09FORMAPAGEMPRESA->save();
             }
-
             $transaction->commit();
-
             return true;
         } catch (\Exception $e) {
             $transaction->rollBack();

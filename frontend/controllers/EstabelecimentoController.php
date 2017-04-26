@@ -10,6 +10,7 @@ use common\models\CB04EMPRESA;
 use common\models\CB09FORMAPAGEMPRESA;
 use common\models\CB05PRODUTO;
 use common\models\CB11ITEMCATEGORIA;
+use common\models\CB12ITEMCATEGEMPRESA;
 
 /**
  * Estabelecimento controller
@@ -164,10 +165,6 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                 ->orderBy('CB05_NOME_CURTO')
                 ->all();
 
-        if (($post = Yii::$app->request->post())) {
-            //$salvo = $dataProduto->saveProduto($post);
-        }
-
         return $this->render('produto', [
                     'tituloTela' => 'Produto',
                     'usuario' => $this->user->attributes,
@@ -177,29 +174,42 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         ]);
     }
 
+    public function actionProdutoAtivar($produto, $status) {
+        $CB05PRODUTO = CB05PRODUTO::findOne($produto);
+        $CB05PRODUTO->setAttribute('CB05_ATIVO', $status);
+        return ($CB05PRODUTO->save()) ? '' : 'error';
+    }
+
     public function actionProdutoForm($produto = null) {
-        
+
         \Yii::$app->view->title = '';
-        
+
         $this->layout = 'empty';
         $salvo = null;
         $dataProduto = [];
-        
+
         $model = new CB05PRODUTO();
         $al = $model->attributeLabels();
 
         $dataItemProduto = CB04EMPRESA::findCombo('CB11_ITEM_CATEGORIA', 'CB11_ID', 'CB11_DESCRICAO', 'CB11_STATUS=1 AND CB11_CATEGORIA_ID=' . $this->estabelecimento['CB04_CATEGORIA_ID']);
-        
+
         if (is_numeric($produto)) {
+            // dados do produto
             $dataProduto = $model
                     ->find()
                     ->where(['CB05_EMPRESA_ID' => $this->user->id_company, 'CB05_ID' => $produto])
                     ->orderBy('CB05_NOME_CURTO')
-                    ->all();
+                    ->one();
             $dataProduto = $dataProduto->getAttributes();
+            $dataProduto['CB05_DESCRICAO'] = str_replace("\r\n", '\r\n', $dataProduto['CB05_DESCRICAO']);
+            $dataProduto['CB05_IMPORTANTE'] = str_replace("\r\n", '\r\n', $dataProduto['CB05_IMPORTANTE']);
+
+            // itens selecionados
+            $dataProduto["ITEM-PRODUTO"] = CB05PRODUTO::getItem($produto);
         }
 
         if (($post = Yii::$app->request->post())) {
+            $salvo = true;
             //$salvo = $dataProduto->saveProduto($post);
         }
 
@@ -211,6 +221,13 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'al' => $al,
                     'salvo' => $salvo
         ]);
+    }
+
+    public function saveProduto($param) {
+        $param['CB05_EMPRESA_ID'] = $this->user->id_company;
+        $modelId = CB05PRODUTO::primaryKey()[0];
+        $CB05PRODUTO = (empty($param[$modelId])) ? new CB05PRODUTO() : CB05PRODUTO::findOne($param[$modelId]);
+        $CB05PRODUTO->saveProduto($param);
     }
 
 }

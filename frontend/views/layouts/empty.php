@@ -1,3 +1,3 @@
-<div style="padding: 15px 28px">
+<div style="padding: 15px 15px">
     <?= $content ?>
 </div>
