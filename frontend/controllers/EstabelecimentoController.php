@@ -11,6 +11,8 @@ use common\models\CB09FORMAPAGEMPRESA;
 use common\models\CB05PRODUTO;
 use common\models\CB11ITEMCATEGORIA;
 use common\models\CB12ITEMCATEGEMPRESA;
+use common\models\CB06VARIACAO;
+use common\models\CB07CASHBACK;
 
 /**
  * Estabelecimento controller
@@ -159,12 +161,11 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
 
         $model = new CB05PRODUTO();
         $al = $model->attributeLabels();
-        $dataProduto = $model
-                ->find()
-                ->where(['CB05_EMPRESA_ID' => $this->user->id_company])
-                ->orderBy('CB05_NOME_CURTO')
-                ->all();
 
+        $dataProduto = $model->getProdutoVariacao($this->user->id_company);
+//        print_r('<pre>');
+//        print_r($dataProduto);
+//        exit();
         return $this->render('produto', [
                     'tituloTela' => 'Produto',
                     'usuario' => $this->user->attributes,
@@ -181,11 +182,8 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     }
 
     public function actionProdutoForm($produto = null) {
-
         \Yii::$app->view->title = '';
-
         $this->layout = 'empty';
-        $salvo = null;
         $dataProduto = [];
 
         $model = new CB05PRODUTO();
@@ -208,18 +206,12 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
             $dataProduto["ITEM-PRODUTO"] = CB05PRODUTO::getItem($produto);
         }
 
-        if (($post = Yii::$app->request->post())) {
-            $salvo = true;
-            //$salvo = $dataProduto->saveProduto($post);
-        }
-
         return $this->render('produtoForm', [
                     'tituloTela' => 'Produto',
                     'usuario' => $this->user->attributes,
                     'produto' => $dataProduto,
                     'itemProduto' => $dataItemProduto,
-                    'al' => $al,
-                    'salvo' => $salvo
+                    'al' => $al
         ]);
     }
 
@@ -228,6 +220,73 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $modelId = CB05PRODUTO::primaryKey()[0];
         $CB05PRODUTO = (empty($param[$modelId])) ? new CB05PRODUTO() : CB05PRODUTO::findOne($param[$modelId]);
         $CB05PRODUTO->saveProduto($param);
+    }
+
+    public function actionPromocaoForm($produto) {
+        \Yii::$app->view->title = '';
+        $this->layout = 'empty';
+
+        $model = new CB06VARIACAO();
+        $al = $model->attributeLabels();
+
+        return $this->render('promocaoForm', [
+                    'tituloTela' => 'Promoção',
+                    'usuario' => $this->user->attributes,
+                    'produto' => ['CB06_PRODUTO_ID' => $produto],
+                    'al' => $al
+        ]);
+    }
+
+    public function savePromocao($param) {
+        $CB06VARIACAO = new CB06VARIACAO();
+        $CB06VARIACAO->setAttributes($param);
+        $CB06VARIACAO->save();
+    }
+
+    /*
+     * Excluir o cashback e a variacao
+     */
+
+    public function deletePromocao($promocao) {
+        CB07CASHBACK::deleteAll(['CB07_VARIACAO_ID' => $promocao]);
+        CB06VARIACAO::deleteAll(['CB06_ID' => $promocao]);
+    }
+
+    public function actionCashbackForm($produto) {
+        \Yii::$app->view->title = '';
+        $this->layout = 'empty';
+
+        $dataProduto = CB05PRODUTO::findOne($produto)->getAttributes();
+        $dataVariacao = CB04EMPRESA::findCombo('CB06_VARIACAO', 'CB06_ID', 'CB06_DESCRICAO', 'CB06_PRODUTO_ID=' . $produto);
+
+        $dataProduto['CB05_DESCRICAO'] = str_replace("\r\n", '\r\n', $dataProduto['CB05_DESCRICAO']);
+        $dataProduto['CB05_IMPORTANTE'] = str_replace("\r\n", '\r\n', $dataProduto['CB05_IMPORTANTE']);
+
+        return $this->render('cashbackForm', [
+                    'tituloTela' => 'CASHBACK',
+                    'usuario' => $this->user->attributes,
+                    'produto' => $dataProduto,
+                    'variacao' => $dataVariacao
+        ]);
+    }
+
+    public function actionCashbackGrid($produto) {
+        \Yii::$app->view->title = '';
+        $this->layout = 'empty';
+
+        $dataCashback = CB07CASHBACK::getCashback($produto);
+            
+        return $this->render('cashbackGrid', ['cashback' => $dataCashback]);
+    }
+
+    public function saveCashback($param) {
+        $CB06VARIACAO = new CB06VARIACAO();
+        $CB06VARIACAO->setAttributes($param);
+        $CB06VARIACAO->save();
+    }
+
+    public function deleteCashback($promocao) {
+        CB06VARIACAO::deleteAll(['CB06_ID' => $promocao]);
     }
 
 }

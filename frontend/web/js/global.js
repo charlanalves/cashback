@@ -1,5 +1,23 @@
 var Form = function (formId) {
-    this.form = $('#' + formId);
+    this.form = $('#' + formId),
+    this.getMoney = [],
+    this.setMoney = function (input) { 
+        if(typeof input != 'undefined' && Array.isArray(input)) {
+            for (var i in input) {
+                $(this[input[i]]).maskMoney({thousands:'.', decimal:',', allowZero: true});
+                this.getMoney.push(input[i]);
+            }
+        }
+    },
+    this.inputs = function () {
+        var $inputs = this.form.find(':input'), data = {};
+        $inputs.each(function (k, v) {
+            if (v.name) {
+                data[v.name] = this;
+            }
+        });
+        return data;
+    },
     this.send = function (url, callback)
     {
         var ajax = $.ajax({
@@ -15,7 +33,7 @@ var Form = function (formId) {
     },
     this.getFormData = function ()
     {
-        var $inputs = this.form.find(':input'), data = {};
+        var form = this, $inputs = form.form.find(':input'), data = {};
         $inputs.each(function (k, v) {
             if (v.name) {
                 if (v.type == 'checkbox' || v.type == 'radio') {
@@ -26,7 +44,12 @@ var Form = function (formId) {
                         data[v.name].push(v.value);
                     }
                 } else {
-                    data[v.name] = v.value;
+                    // teste se é valor monetario
+                    if (form.getMoney.indexOf(v.name) !== -1) {
+                        data[v.name] = $(form[v.name]).maskMoney('unmasked')[0];
+                    } else {
+                        data[v.name] = v.value;
+                    }
                 }
             }
         });
@@ -82,7 +105,15 @@ var Form = function (formId) {
             checkbox += '<label class="checkbox"><input type="checkbox" name="' + checkboxName + '[]" value="' + key + '"><i></i>' + value + '</label>' + "\n";
         });
         destiny.append($("<div></div>").attr("class", "inline-group").html(checkbox));
-    }
+    };
+    
+    var $inputs = this.form.find(':input'), data = this;
+    $inputs.each(function (k, v) {
+        if (v.name) {
+            data[v.name] = this;
+        }
+    });
+    
 };
 
 var Util = {

@@ -7,7 +7,6 @@ $this->title = '';
 <script type="text/javascript">
 
     var ultimoCEP = '',
-            salvo = '<?= $salvo ?>',
             FormProduto = {},
             produto = JSON.parse('<?= json_encode($produto) ?>'),
             itemProduto = JSON.parse('<?= json_encode($itemProduto) ?>'),
@@ -17,6 +16,7 @@ $this->title = '';
                     type = 'success';
                     ico = 'check-circle';
                     $('#remoteModalProduto').modal('hide');
+                    reloadPage();
                 } else {
                     message = 'Os dados não foram atualizados, tente novamente.';
                     type = 'danger';
@@ -47,16 +47,6 @@ $this->title = '';
     pageSetUp();
 
     var pagefunction = function () {
-
-        if (salvo) {
-            $.smallBox({
-                title: "Dados atualizados",
-                //content: "<i class='fa fa-clock-o'></i> <i></i>",
-                color: "#739e73",
-                iconSmall: "fa fa-check-circle fadeInRight animated",
-                timeout: 4000
-            });
-        }
 
         var $produtoForm = FormProduto.form.validate({
             rules: {
@@ -116,13 +106,13 @@ $this->title = '';
                         <h3>Sobre o produto</h3>
                         <div class="row padding-top-15">
                             <section class="col col-6">
-                                <label class="input"> <i class="icon-prepend fa fa-product-hunt"></i>
-                                    <input type="text" name="CB05_TITULO" placeholder="<?= $al['CB05_TITULO'] ?>">
+                                <label class="input"> <i class="icon-prepend fa fa-tags"></i>
+                                    <input type="text" name="CB05_NOME_CURTO" placeholder="<?= $al['CB05_NOME_CURTO'] ?>">
                                 </label>
                             </section>
                             <section class="col col-6">
-                                <label class="input"> <i class="icon-prepend fa fa-tags"></i>
-                                    <input type="text" name="CB05_NOME_CURTO" placeholder="<?= $al['CB05_NOME_CURTO'] ?>">
+                                <label class="input"> <i class="icon-prepend fa fa-product-hunt"></i>
+                                    <input type="text" name="CB05_TITULO" placeholder="<?= $al['CB05_TITULO'] ?>">
                                 </label>
                             </section>
                         </div>

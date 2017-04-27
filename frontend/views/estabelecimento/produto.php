@@ -7,7 +7,8 @@ $this->title = '';
 <script type="text/javascript">
 
     var ultimoCEP = '',
-            salvo = '<?= $salvo ?>';
+            salvo = '<?= $salvo ?>',
+            reloadPage = function () {window.location.reload(false);};
 
     function modalProduto(id) {
         if (typeof id == 'undefined') {
@@ -22,6 +23,44 @@ $this->title = '';
         $('#remoteModalProduto').modal('show')
                 .find('.modal-body')
                 .load('index.php?r=estabelecimento/produto-form' + urlGet);
+    }
+
+    function modalPromocao(id) {
+        $('#remoteModalPromocaoLabel').text('Nova promoção');
+        $('#remoteModalPromocao').modal('show')
+                .find('.modal-body')
+                .load('index.php?r=estabelecimento/promocao-form&produto=' + id);
+    }
+
+    function modalCashback(id) {
+        $('#remoteModalCashbackLabel').text('CASHBACK');
+        $('#remoteModalCashback').modal('show')
+                .find('.modal-body')
+                .load('index.php?r=estabelecimento/cashback-form&produto=' + id);
+    }
+
+    function excluirVariacao(id) {
+        $.SmartMessageBox({
+            title: "Deseja excluir a promoção?",
+            buttons: '[Não][Sim]'
+        }, function (ButtonPressed) {
+            if (ButtonPressed === "Sim") {
+                var ajax = $.ajax({
+                    url: 'index.php?r=estabelecimento/global-crud&action=deletePromocao',
+                    type: 'POST',
+                    data: {promocao: id},
+                    dataType: "json"
+                });
+                ajax.always(function (data) {
+                    if (data.responseText) {
+                        checkbox.checked = !status;
+                        Util.smallBox('Opss, tente novamente...', '', 'danger', 'close');
+                    } else {
+                        reloadPage();
+                    }
+                });
+            }
+        });
     }
 
     function produtoAtivo(id) {
@@ -88,6 +127,34 @@ $this->title = '';
     </div>
 </div>
 
+<!-- MODAL CASHBACK -->
+<div class="modal fade" id="remoteModalCashback" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 900px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="remoteModalCashbackLabel"></h4>
+            </div>
+            <div class="modal-body no-padding"></div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL -->
+
+<!-- MODAL PROMOCAO -->
+<div class="modal fade" id="remoteModalPromocao" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="remoteModalPromocaoLabel"></h4>
+            </div>
+            <div class="modal-body no-padding"></div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL -->
+
 <!-- MODAL PRODUTO -->
 <div class="modal fade" id="remoteModalProduto" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="width: 800px">
@@ -121,9 +188,9 @@ $this->title = '';
                         </thead>
                         <?php
                         foreach ($produto as $value) {
-                            $at = $value->attributes;
+                            $at = $value['PRODUTO'];
                             ?>
-                            <tbody>
+                            <tbody style="background-color: #EFF5FB">
                                 <tr id="tr-produto-<?= $at['CB05_ID'] ?>">
                                     <td><?= "<h3>" . $at['CB05_NOME_CURTO'] . " <small>" . $at['CB05_TITULO'] . "</small></h3>" ?></td>
                                     <td class="smart-form" style="padding: 5px 16px;">
@@ -134,21 +201,32 @@ $this->title = '';
                                     <td align="center"><button class="btn btn-warning btn-xs" onclick="modalCashback(<?= $at['CB05_ID'] ?>)">CASHBACK &nbsp;<i class="fa fa-money"></i></button></td>
                                     <td align="center"><button class="btn btn-success btn-xs" onclick="modalPromocao(<?= $at['CB05_ID'] ?>)">Promoção &nbsp;<i class="fa fa-tags"></i></button></td>
                                     <td align="center"><button class="btn btn-primary btn-xs" onclick="modalProduto(<?= $at['CB05_ID'] ?>)">Editar &nbsp;<i class="fa fa-edit"></i></button></td>
-                                    <td align="center"><button class="btn btn-danger btn-xs" onclick="excluir(<?= $at['CB05_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
+                                    <td align="center"><button class="btn btn-danger btn-xs" onclick="excluirProduto(<?= $at['CB05_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
                                 </tr>
-
-                                <tr id="tr-promocao-<?= $at['CB05_ID'] ?>">
-                                    <td colspan="6" style="padding:0px 0px 20px 25px;border-top: 0px;">
-                                        <table class="table" style="border-right: 0px">
-                                            <tr>
-                                                <td style="width: 100%;">
-                                                    Pernoite: de 21h até as 14h: R$ 130,00
-                                                </td>
-                                                <td align="center"><button class="btn btn-danger btn-xs" onclick="excluir(<?= $at['CB05_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
+                                <?php
+                                if (!empty($at['VARIACAO'])) {
+                                    ?>
+                                    <tr id="tr-promocao-<?= $at['CB05_ID'] ?>">
+                                        <td colspan="6" style="padding:0px 0px 0px 30px;border-top: 0px;">
+                                            <table class="table" style="border-right: 0px; background-color: #FAFAFA; margin-bottom: 10px">
+                                                <?php
+                                                foreach ($at['VARIACAO'] as $variacao) {
+                                                    ?>
+                                                    <tr>
+                                                        <td style="width: 100%;">
+                                                            <?= $variacao['CB06_DESCRICAO'] ?> &rarr; R$ <?= $variacao['CB06_PRECO'] ?>
+                                                        </td>
+                                                        <td align="center"><button class="btn btn-danger btn-xs" onclick="excluirVariacao(<?= $variacao['CB06_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
+                                                    </tr>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                                ?>
                             </tbody>
                             <?php
                         }

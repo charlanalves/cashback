@@ -230,6 +230,9 @@ $this->title = 'Estabelecimento';
         <!-- JQUERY MASKED INPUT -->
         <script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
 
+        <!-- JQUERY MASKED MONEY -->
+        <script src="js/plugin/masked-input/jquery.maskMoney.min.js"></script>
+
         <!-- JQUERY SELECT2 INPUT -->
         <script src="js/plugin/select2/select2.min.js"></script>
 
