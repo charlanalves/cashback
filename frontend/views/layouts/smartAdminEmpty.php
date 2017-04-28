@@ -6,8 +6,6 @@ use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 
-$this->title = 'Estabelecimento';
-
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -80,14 +78,11 @@ $this->title = 'Estabelecimento';
                 overflow-y: hidden;
             }
             #main {
-                margin-left: 180px;
+                height: auto;
+                min-height: 0px;
+                margin: 0px!important;
                 padding: 15px;
-                padding-bottom: 52px;
-                min-height: 500px;
                 position: relative;
-            }
-            .fixed-header #main {
-                margin-top: 49px;
             }
             #header>:first-child, aside {
                 width: 180px;
@@ -95,74 +90,13 @@ $this->title = 'Estabelecimento';
             .container {
                 width: 100%;
             }
-            .smart-form fieldset{
-                padding: 10px 14px 5px!important;
-            }
         </style>
-
-        <script>
-
-            document.addEventListener("DOMContentLoaded", function (event) {
-
-                // SAIR ----------------------------------------------------
-                $("#menu_sair").click(function (e) {
-                    $.SmartMessageBox({
-                        title: "Deseja sair?",
-                        //content : "",
-                        buttons: '[Não][Sim]'
-                    }, function (ButtonPressed) {
-                        if (ButtonPressed === "Sim") {
-                            $('form[name=form-sair]').submit();
-                        }
-                    });
-                    return false;
-                });
-
-            });
-
-        </script>
 
     </head>
 
 
     <body class="fixed-header fixed-navigation ">
         <?php $this->beginBody() ?> 
-
-        <header id="header">
-            <div id="logo-group">
-                <!-- PLACE YOUR LOGO HERE -->
-                <span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>
-                <!-- END LOGO PLACEHOLDER -->
-            </div>
-        </header>
-
-        <aside id="left-panel">
-
-            <nav>
-                <ul>
-                    <li class="top-menu-invisible open active">
-                        <a href="#" title="Principal"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Home</span></a>
-                    </li>
-                    <li class="">
-                        <a href="<?= \yii\helpers\Url::to('index.php?r=estabelecimento/empresa') ?>" title="Empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>
-                    </li>
-                    <li class="">
-                        <a href="<?= \yii\helpers\Url::to('index.php?r=estabelecimento/produto') ?>" title="Produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
-                    </li>
-                    <?=
-                    Html::beginForm(['/estabelecimento/logout'], 'post', ['name' => 'form-sair'])
-                     . Html::endForm()
-                     . '<li>'
-                     . Html::a('<i class="fa fa-lg fa-fw fa-power-off"></i> Sair', '#', ['id' => 'menu_sair'])
-                     . '</li>';
-                    ?>
-                </ul>
-            </nav>
-
-
-            <span class="minifyme" data-action="minifyMenu"> <i class="fa fa-arrow-circle-left hit"></i> </span>
-
-        </aside>
 
         <!-- #MAIN PANEL -->
         <div id="main" role="main">
@@ -175,18 +109,6 @@ $this->title = 'Estabelecimento';
 
         </div>
         <!-- END #MAIN PANEL -->
-
-        <!-- #PAGE FOOTER -->
-        <div class="page-footer">
-            <div class="row">
-                <div class="col-xs-12 col-sm-6">
-                    <span class="txt-color-white">
-
-                    </span>
-                </div>
-            </div>
-        </div>
-        <!-- END FOOTER -->
 
         <!--================================================== -->
 
@@ -229,9 +151,6 @@ $this->title = 'Estabelecimento';
 
         <!-- JQUERY MASKED INPUT -->
         <script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
-
-        <!-- JQUERY MASKED MONEY -->
-        <script src="js/plugin/masked-input/jquery.maskMoney.min.js"></script>
 
         <!-- JQUERY SELECT2 INPUT -->
         <script src="js/plugin/select2/select2.min.js"></script>

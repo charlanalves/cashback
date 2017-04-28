@@ -63,7 +63,9 @@ class CB04EMPRESA extends \common\models\GlobalModel {
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
             [['CB04_END_UF'], 'string', 'max' => 2],
             [['CB04_END_NUMERO'], 'string', 'max' => 5],
-            [['CB04_END_CEP'], 'filter', 'filter' => function ($v){return str_replace('-', '', $v);}],
+            [['CB04_END_CEP'], 'filter', 'filter' => function ($v) {
+            return str_replace('-', '', $v);
+        }],
             [['CB04_END_CEP'], 'string', 'max' => 8],
             [['CB04_CATEGORIA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => CB10CATEGORIA::className(), 'targetAttribute' => ['CB04_CATEGORIA_ID' => 'CB10_ID']],
         ];
@@ -200,7 +202,7 @@ class CB04EMPRESA extends \common\models\GlobalModel {
 
         // dados da empresa
         if (($retorno['empresa'] = self::find()->where('CB04_ID=' . $id . ' AND CB04_STATUS = 1')->one())) {
-            
+
             // like
             $retorno['like'] = ($idUser) ? ((bool) CB15LIKEEMPRESA::findOne(['CB15_EMPRESA_ID' => $id, 'CB15_USER_ID' => $idUser])) : false;
 
@@ -262,7 +264,7 @@ class CB04EMPRESA extends \common\models\GlobalModel {
                         ->where(['CB06_PRODUTO_ID' => $p['CB05_ID']])
                         ->orderBy('CB06_DESCRICAO')
                         ->all();
-                
+
                 // cashback por da variação
                 foreach ($retornoProduto['VARIACAO'] as $v) {
                     $retornoProduto['CASHBACK_VARIACAO'][$v['CB06_ID']] = CB07CASHBACK::find()
@@ -270,26 +272,46 @@ class CB04EMPRESA extends \common\models\GlobalModel {
                             ->orderBy('CB07_DIA_SEMANA')
                             ->all();
                 }
-                
+
                 $retorno['produto'][] = $retornoProduto;
             }
         }
 
         return $retorno;
     }
-    
-    
+
     /**
      * @inheritdoc
      * @return CB09FORMAPAGEMPRESAQuery the active query used by this AR class.
      */
-    public static function getFormaPagamento($id)
-    {
+    public static function getFormaPagamento($id) {
         return explode(',', CB09FORMAPAGEMPRESA::findBySql(
-            "SELECT GROUP_CONCAT(CB09_FORMA_PAG_ID) AS FORMAPAGAMENTO
-            FROM CB09_FORMA_PAG_EMPRESA
-            WHERE CB09_EMPRESA_ID = " . $id . "
-            GROUP BY CB09_EMPRESA_ID")->one()->FORMAPAGAMENTO);
+                        "SELECT GROUP_CONCAT(CB09_FORMA_PAG_ID) AS FORMAPAGAMENTO
+                        FROM CB09_FORMA_PAG_EMPRESA
+                        WHERE CB09_EMPRESA_ID = " . $id . "
+                        GROUP BY CB09_EMPRESA_ID")->one()->FORMAPAGAMENTO);
+    }
+
+    public function saveEstabelecimento($data) {
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            // dados do estabelecimento
+            $this->setAttributes($data);
+            $this->save();
+            // dados da forma de pagamento (exclui e cadastra)
+            CB09FORMAPAGEMPRESA::deleteAll(['CB09_EMPRESA_ID' => $this->CB04_ID]);
+            foreach ($data['FORMA-PAGAMENTO'] as $fp) {
+                $CB09FORMAPAGEMPRESA = new CB09FORMAPAGEMPRESA();
+                $CB09FORMAPAGEMPRESA->setAttributes(['CB09_EMPRESA_ID' => $this->CB04_ID, 'CB09_FORMA_PAG_ID' => $fp]);
+                $CB09FORMAPAGEMPRESA->save();
+            }
+            $transaction->commit();
+            return true;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
     }
 
 }

@@ -105,7 +105,7 @@ $this->title = '';
                         required: true
                     },
                     CB04_END_LOGRADOURO: {
-                        required: true,
+                        required: true
                     },
                     CB04_END_BAIRRO: {
                         required: true
@@ -254,11 +254,11 @@ $this->title = '';
                         <div class="row no-margin padding-top-15">
 
                             <section>
-                                <div class="widget-body dropzone dz-clickable">
+                                <div class="widget-body dropzone dz-clickable" style="min-height: 200px">
                                     <div class="dz-default dz-message">
                                         <span>
                                             <span class="text-center">
-                                                <span class="font-lg visible-xs-block visible-sm-block visible-lg-block">
+                                                <span class="font-lg">
                                                     <span class="font-lg"><i class="fa fa-cloud-upload text-danger"></i> Enviar fotos </span><span>&nbsp;&nbsp;<h4 class="display-inline"> (clique aqui)</h4></span>
                                                 </span>
                                             </span>

@@ -2,8 +2,6 @@
 
 /* @var $this yii\web\View */
 
-var_dump($v);
-
 $this->title = 'Home';
 ?>
 

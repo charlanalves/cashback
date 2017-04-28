@@ -43,10 +43,10 @@ class CB06VARIACAO extends \common\models\GlobalModel
     public function attributeLabels()
     {
         return [
-            'CB06_ID' => Yii::t('app', 'Cb06  ID'),
-            'CB06_PRODUTO_ID' => Yii::t('app', 'Cb06  Produto  ID'),
-            'CB06_DESCRICAO' => Yii::t('app', 'Cb06  Descricao'),
-            'CB06_PRECO' => Yii::t('app', 'Cb06  Preco'),
+            'CB06_ID' => Yii::t('app', 'ID'),
+            'CB06_PRODUTO_ID' => Yii::t('app', 'Produto'),
+            'CB06_DESCRICAO' => Yii::t('app', 'Descrição'),
+            'CB06_PRECO' => Yii::t('app', 'Preço'),
         ];
     }
 

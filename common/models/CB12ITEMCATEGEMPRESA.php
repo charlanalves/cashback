@@ -18,6 +18,9 @@ use Yii;
  */
 class CB12ITEMCATEGEMPRESA extends \common\models\GlobalModel
 {
+    
+    public $ITEM;
+    
     /**
      * @inheritdoc
      */
@@ -32,7 +35,7 @@ class CB12ITEMCATEGEMPRESA extends \common\models\GlobalModel
     public function rules()
     {
         return [
-            [['CB12_ITEM_ID'], 'required'],
+            [['ITEM'], 'safe'],
             [['CB12_ITEM_ID', 'CB12_EMPRESA_ID', 'CB12_PRODUTO_ID'], 'integer'],
             [['CB12_ITEM_ID'], 'exist', 'skipOnError' => true, 'targetClass' => CB11ITEMCATEGORIA::className(), 'targetAttribute' => ['CB12_ITEM_ID' => 'CB11_ID']],
             [['CB12_EMPRESA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => CB04EMPRESA::className(), 'targetAttribute' => ['CB12_EMPRESA_ID' => 'CB04_ID']],
