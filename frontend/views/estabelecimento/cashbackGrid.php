@@ -3,7 +3,28 @@
 ?>
 
 <script type="text/javascript">
-
+    function excluirCashback(param) {
+        $.SmartMessageBox({
+            title: "Deseja excluir o Cashback?",
+            buttons: '[Não][Sim]'
+        }, function (ButtonPressed) {
+            if (ButtonPressed === "Sim") {
+                var ajax = $.ajax({
+                    url: 'index.php?r=estabelecimento/global-crud&action=deleteCashback',
+                    type: 'POST',
+                    data: param,
+                    dataType: "json"
+                });
+                ajax.always(function (data) {
+                    if (data.responseText) {
+                        Util.smallBox('Opss, tente novamente...', '', 'danger', 'close');
+                    } else {
+                        loadGridCashback(produto.CB05_ID);
+                    }
+                });
+            }
+        });
+    }
 </script>
 
 <style>
@@ -19,9 +40,16 @@
     <tbody>
         <?php
         foreach ($cashback as $value) {
+            if ($value['PRODUTO']) {
+                $texto = $value['PRODUTO'];
+                $param = "{CB07_PRODUTO_ID:" . $value['PRODUTO_ID'] . "}";
+            } else {
+                $texto = $value['VARIACAO'];
+                $param = "{CB07_VARIACAO_ID:" . $value['VARIACAO_ID'] . "}";
+            }
             ?>
             <tr>
-                <td style="width: 100%"><?= $value['PRODUTO'] ? : $value['VARIACAO'] ?></td>
+                <td style="width: 100%"><?= $texto ?></td>
                 <td>
                     <table class="table table-bordered table-striped table-cashback-produto no-margin">
                         <thead>
@@ -51,7 +79,7 @@
                         </thead>
                     </table>
                 </td>
-                <td align="center"><button class="btn btn-danger btn-xs no-margin" style="height: 100%" onclick="excluirCahsback()">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
+                <td align="center"><button class="btn btn-danger btn-xs no-margin" style="height: 100%" onclick="excluirCashback(<?= $param ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
             </tr>
             <?php
         }

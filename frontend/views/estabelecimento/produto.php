@@ -39,6 +39,29 @@ $this->title = '';
                 .load('index.php?r=estabelecimento/cashback-form&produto=' + id);
     }
 
+    function excluirProduto(id) {
+        $.SmartMessageBox({
+            title: "Deseja excluir o produto?",
+            buttons: '[Não][Sim]'
+        }, function (ButtonPressed) {
+            if (ButtonPressed === "Sim") {
+                var ajax = $.ajax({
+                    url: 'index.php?r=estabelecimento/global-crud&action=deleteProduto',
+                    type: 'POST',
+                    data: {produto: id},
+                    dataType: "json"
+                });
+                ajax.always(function (data) {
+                    if (data.responseText) {
+                        Util.smallBox('Opss, tente novamente...', '', 'danger', 'close');
+                    } else {
+                        reloadPage();
+                    }
+                });
+            }
+        });
+    }
+
     function excluirVariacao(id) {
         $.SmartMessageBox({
             title: "Deseja excluir a promoção?",
@@ -53,7 +76,6 @@ $this->title = '';
                 });
                 ajax.always(function (data) {
                     if (data.responseText) {
-                        checkbox.checked = !status;
                         Util.smallBox('Opss, tente novamente...', '', 'danger', 'close');
                     } else {
                         reloadPage();

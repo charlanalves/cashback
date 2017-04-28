@@ -1,6 +1,11 @@
 <?php
 /* @var $this yii\web\View */
 
+if ($maxProduto) {
+    echo '<script type="text/javascript"> $("#remoteModalProduto").modal("hide"); Util.smallBox("' . $maxProduto . '", "", "danger", "frown-o", 8000);</script>';
+    exit();
+}
+
 $this->title = '';
 ?>
 

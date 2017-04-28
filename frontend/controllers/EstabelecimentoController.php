@@ -13,6 +13,7 @@ use common\models\CB11ITEMCATEGORIA;
 use common\models\CB12ITEMCATEGEMPRESA;
 use common\models\CB06VARIACAO;
 use common\models\CB07CASHBACK;
+use common\models\SYS01PARAMETROSGLOBAIS;
 
 /**
  * Estabelecimento controller
@@ -182,8 +183,9 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     }
 
     public function actionProdutoForm($produto = null) {
-        \Yii::$app->view->title = '';
+        \Yii::$app->view->title = $maxProduto = "";
         $this->layout = 'empty';
+
         $dataProduto = [];
 
         $model = new CB05PRODUTO();
@@ -199,11 +201,17 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     ->orderBy('CB05_NOME_CURTO')
                     ->one();
             $dataProduto = $dataProduto->getAttributes();
-            $dataProduto['CB05_DESCRICAO'] = str_replace("\r\n", '\r\n', $dataProduto['CB05_DESCRICAO']);
-            $dataProduto['CB05_IMPORTANTE'] = str_replace("\r\n", '\r\n', $dataProduto['CB05_IMPORTANTE']);
+            $dataProduto['CB05_DESCRICAO'] = str_replace("\n", '\r\n', $dataProduto['CB05_DESCRICAO']);
+            $dataProduto['CB05_IMPORTANTE'] = str_replace("\n", '\r\n', $dataProduto['CB05_IMPORTANTE']);
 
             // itens selecionados
             $dataProduto["ITEM-PRODUTO"] = CB05PRODUTO::getItem($produto);
+        } else {
+            $qtdMaxProduto = (int) SYS01PARAMETROSGLOBAIS::getValor('3');
+            $qtdProduto = CB05PRODUTO::find()->where(['CB05_EMPRESA_ID' => $this->user->id_company])->count();
+            if ($qtdMaxProduto <= $qtdProduto) {
+                $maxProduto = "Você atingiu o limite de produtos do sistema.";
+            }
         }
 
         return $this->render('produtoForm', [
@@ -211,7 +219,8 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'usuario' => $this->user->attributes,
                     'produto' => $dataProduto,
                     'itemProduto' => $dataItemProduto,
-                    'al' => $al
+                    'al' => $al,
+                    'maxProduto' => $maxProduto,
         ]);
     }
 
@@ -222,6 +231,13 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $CB05PRODUTO->saveProduto($param);
     }
 
+    public function deleteProduto($produto) {
+        //CB07CASHBACK::deleteAll(['CB07_PRODUTO_ID' => $produto]);
+        //CB06VARIACAO::deleteAll(['CB06_PRODUTO_ID' => $produto]);
+        //CB12ITEMCATEGEMPRESA::deleteAll(['CB06_PRODUTO_ID' => $produto]);
+        CB05PRODUTO::deleteAll(['CB05_ID' => $produto]);
+    }
+
     public function actionPromocaoForm($produto) {
         \Yii::$app->view->title = '';
         $this->layout = 'empty';
@@ -229,11 +245,16 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $model = new CB06VARIACAO();
         $al = $model->attributeLabels();
 
+        $qtdMaxPromocao = (int) SYS01PARAMETROSGLOBAIS::getValor('4');
+        $qtdPromocao = CB06VARIACAO::find()->where(['CB06_PRODUTO_ID' => $produto])->count();
+        $maxPromocao = ($qtdMaxPromocao <= $qtdPromocao) ? "Você atingiu o limite de promoções por produto." : "";
+
         return $this->render('promocaoForm', [
                     'tituloTela' => 'Promoção',
                     'usuario' => $this->user->attributes,
                     'produto' => ['CB06_PRODUTO_ID' => $produto],
-                    'al' => $al
+                    'al' => $al,
+                    'maxPromocao' => $maxPromocao,
         ]);
     }
 
@@ -259,8 +280,8 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $dataProduto = CB05PRODUTO::findOne($produto)->getAttributes();
         $dataVariacao = CB04EMPRESA::findCombo('CB06_VARIACAO', 'CB06_ID', 'CB06_DESCRICAO', 'CB06_PRODUTO_ID=' . $produto);
 
-        $dataProduto['CB05_DESCRICAO'] = str_replace("\r\n", '\r\n', $dataProduto['CB05_DESCRICAO']);
-        $dataProduto['CB05_IMPORTANTE'] = str_replace("\r\n", '\r\n', $dataProduto['CB05_IMPORTANTE']);
+        $dataProduto['CB05_DESCRICAO'] = str_replace("\n", '\r\n', $dataProduto['CB05_DESCRICAO']);
+        $dataProduto['CB05_IMPORTANTE'] = str_replace("\n", '\r\n', $dataProduto['CB05_IMPORTANTE']);
 
         return $this->render('cashbackForm', [
                     'tituloTela' => 'CASHBACK',
@@ -273,20 +294,18 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     public function actionCashbackGrid($produto) {
         \Yii::$app->view->title = '';
         $this->layout = 'empty';
-
         $dataCashback = CB07CASHBACK::getCashback($produto);
-            
         return $this->render('cashbackGrid', ['cashback' => $dataCashback]);
     }
 
     public function saveCashback($param) {
-        $CB06VARIACAO = new CB06VARIACAO();
-        $CB06VARIACAO->setAttributes($param);
-        $CB06VARIACAO->save();
+        $CB07CASHBACK = new CB07CASHBACK();
+        $CB07CASHBACK->saveCashback($param);
     }
 
-    public function deleteCashback($promocao) {
-        CB06VARIACAO::deleteAll(['CB06_ID' => $promocao]);
+    public function deleteCashback($param) {
+        $CB07CASHBACK = new CB07CASHBACK();
+        $CB07CASHBACK->deleteCashback($param);
     }
 
 }

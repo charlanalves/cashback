@@ -102,4 +102,38 @@ class CB07CASHBACK extends \common\models\GlobalModel
         
         return $reader->readAll();
     }
+    
+    public function saveCashback($data) {
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try {
+            
+            // verifica se é produto ou variacao
+            if (substr($data['PRODUTO_VARIACAO'], 0, 1) == 'P') {
+                $data_['CB07_PRODUTO_ID'] = substr($data['PRODUTO_VARIACAO'], 1);
+            } else {
+                $data_['CB07_VARIACAO_ID'] = $data['PRODUTO_VARIACAO'];
+            }
+
+            $this->deleteCashback($data_);
+            for ($i = 0; $i <= 6; $i++) {
+                $data_['CB07_DIA_SEMANA'] = $i;
+                $data_['CB07_PERCENTUAL'] = $data['DIA_' . $i];
+
+                $CB07CASHBACK = new CB07CASHBACK();
+                $CB07CASHBACK->setAttributes($data_);
+                $CB07CASHBACK->save();
+            }
+
+            $transaction->commit();
+            return true;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+    
+    public function deleteCashback($data) {
+        self::deleteAll($data);
+    }
 }

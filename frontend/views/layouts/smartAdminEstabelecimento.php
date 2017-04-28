@@ -147,7 +147,7 @@ $this->title = 'Estabelecimento';
                         <a href="<?= \yii\helpers\Url::to('index.php?r=estabelecimento/empresa') ?>" title="Empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>
                     </li>
                     <li class="">
-                        <a href="#" title="Empresa"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
+                        <a href="<?= \yii\helpers\Url::to('index.php?r=estabelecimento/produto') ?>" title="Produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
                     </li>
                     <?=
                     Html::beginForm(['/estabelecimento/logout'], 'post', ['name' => 'form-sair'])
