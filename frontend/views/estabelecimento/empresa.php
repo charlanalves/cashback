@@ -181,7 +181,7 @@ $this->title = '';
                             </section>
                             <section class="col col-6">
                                 <label class="select">
-                                    <select name="CB04_CATEGORIA_ID">
+                                    <select name="CB04_CATEGORIA_ID" disabled="">
                                         <option value="" selected="" disabled="">Categoria...</option>
                                     </select> <i></i> 
                                 </label>

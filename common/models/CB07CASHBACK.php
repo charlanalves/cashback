@@ -34,7 +34,7 @@ class CB07CASHBACK extends \common\models\GlobalModel
         return [
             [['CB07_PRODUTO_ID', 'CB07_VARIACAO_ID', 'CB07_DIA_SEMANA'], 'integer'],
             [['CB07_PERCENTUAL'], 'required'],
-            [['CB07_PERCENTUAL'], 'number'],
+            [['CB07_PERCENTUAL'], 'number', 'max' => 100, 'message' => "{attribute}: O valor máximo é de 100%."],
             [['CB07_PRODUTO_ID'], 'exist', 'skipOnError' => true, 'targetClass' => CB05PRODUTO::className(), 'targetAttribute' => ['CB07_PRODUTO_ID' => 'CB05_ID']],
             [['CB07_VARIACAO_ID'], 'exist', 'skipOnError' => true, 'targetClass' => CB06VARIACAO::className(), 'targetAttribute' => ['CB07_VARIACAO_ID' => 'CB06_ID']],
         ];

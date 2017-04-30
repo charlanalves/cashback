@@ -98,7 +98,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $this->layout = 'main-login';
 
         if (!\Yii::$app->user->isGuest) {
-            $this->redirect(\yii\helpers\Url::to('index.php?r=estabelecimento/principal'));
+            $this->redirect(\yii\helpers\Url::to('index.php?r=estabelecimento/produto'));
             return;
         }
 
@@ -125,8 +125,8 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     }
 
     public function actionPrincipal() {
-        $this->layout = 'smartAdminEstabelecimento';
-        return $this->render('index', ['v' => $this->user->attributes]);
+        $this->redirect(\yii\helpers\Url::to('index.php?r=estabelecimento/produto'));
+        return;
     }
 
     public function actionEmpresa() {

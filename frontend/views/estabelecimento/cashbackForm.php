@@ -13,15 +13,19 @@ $this->title = '';
             callbackSaveCashback = function (data) {
                 if (data.status == true) {
                     message = 'Cashback cadastrado.';
+                    messageBody = '';
                     type = 'success';
                     ico = 'check-circle';
+                    time = 4000;
                     loadGridCashback(produto.CB05_ID);
                 } else {
-                    message = 'O cashback não foi cadastrado, tente novamente.';
+                    message = 'O cashback não foi cadastrado.';
+                    messageBody = data.message;
                     type = 'danger';
                     ico = 'frown-o';
+                    time = 8000;
                 }
-                Util.smallBox(message, '', type, ico);
+                Util.smallBox(message, messageBody, type, ico, time);
             };
 
     // obj form
@@ -30,7 +34,9 @@ $this->title = '';
     FormCashback.setMoney(['DIA_1', 'DIA_2', 'DIA_3', 'DIA_4', 'DIA_5', 'DIA_6', 'DIA_0']);
 
     FormCashback.setFormData({DIA_1: '0,00', DIA_2: '0,00', DIA_3: '0,00', DIA_4: '0,00', DIA_5: '0,00', DIA_6: '0,00', DIA_0: '0,00'});
-
+    
+    
+    
     // add opcoes no select
     FormCashback.addOptionsSelect('PRODUTO_VARIACAO', [{ID: 'P' + produto.CB05_ID, TEXTO: produto.CB05_NOME_CURTO + ' - ' + produto.CB05_TITULO}]);
     FormCashback.addOptionsSelect('PRODUTO_VARIACAO', promocao);
@@ -95,7 +101,7 @@ $this->title = '';
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" />
                     <fieldset>
                         <div class="row">
-                            <section class="col col-4">
+                            <section class="col col-3">
                                 <h3>Produto/Promoção</h3>
                                 <label class="select">
                                     <select name="PRODUTO_VARIACAO">
@@ -103,31 +109,31 @@ $this->title = '';
                                     </select> <i></i> 
                                 </label>
                             </section>
-                            <section class="col col-8">
-                                <h3>CASHBACK</h3>
+                            <section class="col col-9" style="padding-left: 0px;">
+                                <h3>Cashback</h3>
                                 <table class="table table-bordered table-striped table-cashback-produto">
                                     <thead>
                                         <tr>
                                             <th>
-                                                <div>SEG<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_1" placeholder="" maxlength="5"></label></div>
+                                                <div>SEG<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_1" placeholder="" maxlength="6"></label></div>
                                             </th>
                                             <th>
-                                                <div>TER<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_2" placeholder="" maxlength="5"></label></div>
+                                                <div>TER<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_2" placeholder="" maxlength="6"></label></div>
                                             </th>
                                             <th>
-                                                <div>QUA<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_3" placeholder="" maxlength="5"></label></div>
+                                                <div>QUA<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_3" placeholder="" maxlength="6"></label></div>
                                             </th>
                                             <th>
-                                                <div>QUI<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_4" placeholder="" maxlength="5"></label></div>
+                                                <div>QUI<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_4" placeholder="" maxlength="6"></label></div>
                                             </th>
                                             <th>
-                                                <div>SEX<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_5" placeholder="" maxlength="5"></label></div>
+                                                <div>SEX<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_5" placeholder="" maxlength="6"></label></div>
                                             </th>
                                             <th>
-                                                <div>SAB<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_6" placeholder="" maxlength="5"></label></div>
+                                                <div>SAB<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_6" placeholder="" maxlength="6"></label></div>
                                             </th>
                                             <th>
-                                                <div>DOM<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_0" placeholder="" maxlength="5"></label></div>
+                                                <div>DOM<br><label class="input"><i class="icon-append fa fa-percent"></i><input type="text" name="DIA_0" placeholder="" maxlength="6"></label></div>
                                             </th>
                                         </tr>
                                     </thead>
