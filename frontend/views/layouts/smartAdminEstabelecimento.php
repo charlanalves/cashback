@@ -101,6 +101,9 @@ $this->title = 'Estabelecimento';
             label.error {
                 color: red;
             }
+            .dropzone {
+                min-height: 200px;
+            }
         </style>
 
         <script>
@@ -219,6 +222,9 @@ $this->title = 'Estabelecimento';
 
         <!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
         <script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> 
+
+        <!-- JS DROPZONE -->
+        <!--<script src="js/plugin/dropzone/dropzone.min.js"></script>--> 
 
         <!-- BOOTSTRAP JS -->
         <script src="js/bootstrap/bootstrap.min.js"></script>

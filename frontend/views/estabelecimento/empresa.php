@@ -49,6 +49,26 @@ $this->title = '';
         }
     }
 
+    function loadGaleria() {
+        Util.galeria('galeria', [
+            {
+                imgUrl: 'img/superbox/superbox-thumb-1.jpg',
+                imgTitle: 'teste 1',
+                imgDelete: 'excluirImg(1)'
+            },
+            {
+                imgUrl: 'img/superbox/superbox-thumb-2.jpg',
+                imgTitle: 'teste 2',
+                imgDelete: ''
+            }
+        ]);
+    }
+    
+    function excluirImg(id) {
+        alert('excluir: ' + id);
+        loadGaleria();
+    }
+
     document.addEventListener("DOMContentLoaded", function (event) {
 
         function fix_height() {
@@ -78,11 +98,19 @@ $this->title = '';
         $("#btn-salvar").click(function (e) {
             FormEmpresa.form.submit();
         });
+        
+        Util.dropZone('dropzone', {
+            urlSave: "index.php?r=estabelecimento/global-crud&action=fotoEmpresa&param=save",
+            maxFiles: 3,
+            message: "Enviar fotos",
+        });
 
+        loadGaleria();
+        
         pageSetUp();
 
         var pagefunction = function () {
-            
+
             if (salvo) {
                 $.smallBox({
                     title: "Dados atualizados",
@@ -150,6 +178,7 @@ $this->title = '';
         loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
         
     });
+    
 </script>
 
 <div class="row">
@@ -161,7 +190,6 @@ $this->title = '';
     </div>
 </div>
 
-
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
 
@@ -169,7 +197,7 @@ $this->title = '';
 
             <div class="widget-body no-padding">
 
-                <form action="" id="empresa-form" class="smart-form" novalidate="novalidate" method="post">
+                <form action="#" id="empresa-form" class="smart-form" novalidate="novalidate" method="post">
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" />
                     <fieldset>
                         <h3>Sobre a empresa</h3>
@@ -252,21 +280,9 @@ $this->title = '';
                     <fieldset>
                         <h3>Fotos</h3>
                         <div class="row no-margin padding-top-15">
-
-                            <section>
-                                <div class="widget-body dropzone dz-clickable" style="min-height: 200px">
-                                    <div class="dz-default dz-message">
-                                        <span>
-                                            <span class="text-center">
-                                                <span class="font-lg">
-                                                    <span class="font-lg"><i class="fa fa-cloud-upload text-danger"></i> Enviar fotos </span><span>&nbsp;&nbsp;<h4 class="display-inline"> (clique aqui)</h4></span>
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </section>
+                            <div id="dropzone"></div>
                         </div>
+                        <div id="galeria"></div>
                     </fieldset>
 
                     <footer>

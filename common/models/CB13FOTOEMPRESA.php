@@ -30,7 +30,7 @@ class CB13FOTOEMPRESA extends \common\models\GlobalModel
     public function rules()
     {
         return [
-            [['CB13_EMPRESA_ID', 'CB13_CAMPA', 'CB13_URL'], 'required'],
+            [['CB13_EMPRESA_ID', 'CB13_URL'], 'required'],
             [['CB13_EMPRESA_ID', 'CB13_CAMPA'], 'integer'],
             [['CB13_URL'], 'string', 'max' => 50],
             [['CB13_EMPRESA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => CB04EMPRESA::className(), 'targetAttribute' => ['CB13_EMPRESA_ID' => 'CB04_ID']],

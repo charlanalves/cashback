@@ -13,6 +13,7 @@ use common\models\CB11ITEMCATEGORIA;
 use common\models\CB12ITEMCATEGEMPRESA;
 use common\models\CB06VARIACAO;
 use common\models\CB07CASHBACK;
+use common\models\CB13FOTOEMPRESA;
 use common\models\SYS01PARAMETROSGLOBAIS;
 
 /**
@@ -147,7 +148,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
 
         $dataEstabelecimento['CB04_FUNCIONAMENTO'] = str_replace("\r\n", '\r\n', $dataEstabelecimento['CB04_FUNCIONAMENTO']);
         $dataEstabelecimento['CB04_OBSERVACAO'] = str_replace("\r\n", '\r\n', $dataEstabelecimento['CB04_OBSERVACAO']);
-        
+
         return $this->render('empresa', [
                     'tituloTela' => 'Empresa',
                     'usuario' => $this->user->attributes,
@@ -157,6 +158,41 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'al' => $al,
                     'salvo' => $salvo
         ]);
+    }
+
+    public function fotoEmpresa() {
+        $getAction = Yii::$app->request->get('param');
+        $empresa = $this->user->id_company;
+        
+        // salva imagem
+        if ($getAction == 'save') {
+            $infoFile = \Yii::$app->u->infoFile($_FILES['file']);
+            $infoFile['path'] = 'img/fotos/estabelecimento/';
+            $infoFile['newName'] = uniqid($empresa."_") . '.' . $infoFile['ex'];
+            
+            $CB13FOTOEMPRESA = new CB13FOTOEMPRESA();
+            $CB13FOTOEMPRESA->setAttributes([
+                'CB13_EMPRESA_ID' => $empresa,
+                'CB13_URL' => $infoFile['path'] . $infoFile['newName']
+            ]);
+            $CB13FOTOEMPRESA->save();
+            
+            $file = \yii\web\UploadedFile::getInstanceByName('file');
+            $file->saveAs($infoFile['path'] . $infoFile['newName']);
+            
+        // deleta imagem
+        } else if ($getAction == 'delete') {
+            $foto = Yii::$app->request->post('foto');
+            if ($foto) {
+                $modelFoto = CB13FOTOEMPRESA::findOne(['CB13_ID' => $foto, 'CB13_EMPRESA_ID' => $empresa]);
+                if ($modelFoto) {
+                    var_dump($modelFoto);
+                    exit();
+                    $modelFoto->delete();
+                    @unlink($modelFoto->CB13_URL);
+                }
+            }
+        }
     }
 
     public function actionProduto() {

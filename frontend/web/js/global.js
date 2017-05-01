@@ -140,12 +140,12 @@ var Util = {
     formatNumber: function (n, c, d, t)
     {
         var n,
-                c = isNaN(c = Math.abs(c)) ? 2 : c,
-                d = d == undefined ? "." : d,
-                t = t == undefined ? "," : t,
-                s = n < 0 ? "-" : "",
-                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
-                j = (j = i.length) > 3 ? j % 3 : 0;
+            c = isNaN(c = Math.abs(c)) ? 2 : c,
+            d = d == undefined ? "." : d,
+            t = t == undefined ? "," : t,
+            s = n < 0 ? "-" : "",
+            i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+            j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
     },
     getEnderecoByCEP: function (cep, callback) {
@@ -177,5 +177,109 @@ var Util = {
             iconSmall: "fa fa-" + ico + " fadeInRight animated",
             timeout: time
         });
+    },
+    dropZone: function (destinyId, settings, data)
+    {
+        var myDropzone = {}, settings = (settings || {});
+        settings.urlSave = (settings.urlSave || '#');
+        settings.urlRemove = (settings.urlRemove || false);
+        settings.typeFile = (settings.typeFile || 'image/*');
+        settings.maxFiles = (settings.maxFiles || 3);
+        settings.message = (settings.message || 'Enviar arquivos');
+        
+        form = '<form action="' + settings.url + '" class="dropzone">' + 
+                '<div class="fallback">' + 
+                  '<input name="file" type="file" multiple />' + 
+                '</div>' + 
+              '</form>';
+        
+        $("#" + destinyId).append($("<div></div>").attr("class", "").html(form));
+        
+        pageSetUp();
+        
+	var dropzonefunction = function() {
+            Dropzone.autoDiscover = false;
+            myDropzone = $("#" + destinyId + ' div form').dropzone({
+                url: settings.urlSave,
+                addRemoveLinks : true,
+                maxFilesize: 0.5,
+                acceptedFiles: settings.typeFile,
+                maxFiles: settings.maxFiles,
+                dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg"><i class="fa fa-cloud-upload text-danger"></i> ' + settings.message + ' </span><span>&nbsp;&nbsp;<h4 class="display-inline"> (clique aqui)</h4></span>',
+                dictResponseError: 'Error ao tentar enviar!',
+                dictRemoveFile: '',
+                init: function() {
+                    
+                    
+//                    var mockFile = { name: "116_big_550_3", size: 0};
+//                    // Call the default addedfile event handler
+//                    this.emit("addedfile", mockFile);
+//                    // And optionally show the thumbnail of the file:
+//                    this.emit("thumbnail", mockFile, "img/fotos/estabelecimento/116_big_550_3.jpg");
+//                    // If you use the maxFiles option, make sure you adjust it to the
+//                    // correct amount:
+//                    var existingFileCount = 1; // The number of files already uploaded
+//                    this.options.maxFiles = this.options.maxFiles - existingFileCount;
+                    
+                    
+                    this.on("maxfilesexceeded", function(file) { 
+                        this.removeFile(file); 
+                    });
+                    
+                    if (settings.urlRemove) {
+                        this.on("addedfile", function(file) {
+
+                            var file = (file || {});
+
+                            // Create the remove button
+                            var removeButton = Dropzone.createElement("<button class='btn btn-danger btn-xs center'>Excluir</button>");
+
+                            // Capture the Dropzone instance as closure.
+                            var _this = this;
+
+                            // Listen to the click event
+                            removeButton.addEventListener("click", function(e) {
+
+                                // Make sure the button click doesn't submit the form:
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                var ajax = $.ajax({
+                                    url: settings.urlRemove,
+                                    type: 'POST',
+                                    data: {'fileName': file.name},
+                                    dataType: "json"
+                                });
+                                ajax.always(function (data) {
+                                    data = data.responseText;
+                                    if(data.status){
+                                        _this.removeFile(file);
+                                    } else {
+                                        Util.smallBox((data.message || 'O arquivo não foi excluido'), '', 'danger');
+                                    }
+                                });
+                            });
+                            file.previewElement.appendChild(removeButton);
+                        });
+                    }
+                }
+            });  
+	};
+	loadScript("js/plugin/dropzone/dropzone.min.js", dropzonefunction);
+        
+    },
+    galeria: function (destinyId, data)
+    {
+        var estrutura = '', imgUrl = '', imgTitle = '', imgDelete = '';
+        for (var i in data){
+            imgUrl = data[i].imgUrl;
+            imgTitle = data[i].imgTitle;
+            imgDelete = (data[i].imgDelete || false);
+            
+            estrutura += '<div class="superbox-list">';
+            estrutura += (imgDelete === false ? '' : '<div class="air air-top-right padding-5"><a href="#" onclick="' + imgDelete + '; return false;" class="btn btn-danger btn-excluir btn-xs" title="excluir"><i class="fa fa-close"></i></a></div>');
+            estrutura += '<img src="' + imgUrl + '" title="' + imgTitle + '" class="superbox-img"></div>';
+        }
+        $("#" + destinyId).html($("<div></div>").attr("class", "superbox col-sm-12").html(estrutura));
     }
 };
