@@ -231,7 +231,7 @@ class CB04EMPRESA extends \common\models\GlobalModel {
 
             // produtos
             $produto = CB05PRODUTO::find()
-                    ->where(['CB05_EMPRESA_ID' => $retorno['empresa']['CB04_ID']])
+                    ->where(['CB05_EMPRESA_ID' => $retorno['empresa']['CB04_ID'], 'CB05_ATIVO' => 1])
                     ->orderBy('CB05_NOME_CURTO')
                     ->all();
 
@@ -266,12 +266,16 @@ class CB04EMPRESA extends \common\models\GlobalModel {
                         ->all();
 
                 // cashback por da variação
-                foreach ($retornoProduto['VARIACAO'] as $v) {
-                    $retornoProduto['CASHBACK_VARIACAO'][$v['CB06_ID']] = CB07CASHBACK::find()
-                            ->where(['CB07_VARIACAO_ID' => $v['CB06_ID']])
-                            ->orderBy('CB07_DIA_SEMANA')
-                            ->all();
-                }
+                
+                    $retornoProduto['CASHBACK_VARIACAO'] =  
+                        \Yii::$app->db->createCommand('
+                            SELECT * 
+                            FROM view_variacao_produto 
+                            WHERE CB05_ID = :CB05_ID 
+                            ORDER BY CB07_PERCENTUAL DESC
+                        ')
+                        ->bindValue(':CB05_ID', $p['CB05_ID'])
+                        ->queryAll();
 
                 $retorno['produto'][] = $retornoProduto;
             }

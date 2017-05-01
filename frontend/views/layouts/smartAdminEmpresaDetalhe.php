@@ -251,6 +251,7 @@ SmartAdminAsset::register($this);
 	<script src="js/libs/jquery.mobile-1.4.5.min.js"></script>
 
 
+
         <script src="js/jquery.priceformat.min.js"></script>
 
         <!-- IMPORTANT: APP CONFIG -->
