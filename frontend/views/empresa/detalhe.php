@@ -4,6 +4,26 @@ ini_set('display_errors', 1);
 ?>
 
 <style>
+    .height-30{
+        height: 30px;
+    }
+    .width-100{
+        width: 100%;
+    }
+    
+    .float-left{
+        float: left;
+    }
+    .width-42{
+        width: 42%;
+    }
+     .width-33{
+        width: 33%;
+    }
+    
+    .width-15{
+        width: 15%;
+    }
     .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
         border: 0px solid #ddd;
     }
@@ -42,7 +62,131 @@ ini_set('display_errors', 1);
         color: red;
         font-size: 15px;
     }
+    .cb {
+         width: 66%;
+        float: left;
+        font-weight: normal;
+        font-size: 13px;
+    }
+    .cb-valores{
+        width: 34%;
+         float: left;
+         font-weight: normal;
+         font-size: 13px;
+         margin-top: 8px;
+         font-weight: bold;
+    }
+    .desc-promo {
+    margin-top: 3px;
+}
+    .titulo-promo{
+      margin: 0px;
+      font-weight: bold;
+      margin-top: 7px;
+      font-size: 16px;
+    }
+    .cb-valores .preco {
+        color: #bf1347;
+    }
+    .cb-valores .cashbackm {
+        color: #079100;
+    }
+    .cashbackp {
+        color: #7d7d7d;
+    }
+    .margin-top3{
+        margin-top: 3px;
+    }
+    label.ui-btn.ui-corner-all.ui-btn-inherit.ui-btn-icon-left.ui-radio-off {
+        background-color: white;
+    }
+    label.ui-btn.ui-corner-all.ui-btn-inherit.ui-btn-icon-left.ui-radio-on {
+        background: #fdfdfd;
+    }
+    #footer-comprar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #a90329;
+    line-height: 2;
+    text-align: center;
+    box-shadow: 0 0 15px #00214B;
+    z-index: 9999;
+      
+}
+.height-30.width-100.pague-text {
+         text-shadow: none;
+    color: white;
+    margin: 0;
+    padding-left: 12px;
+    text-align: left;
+    padding-bottom: 20px;
+    font-size: 12px;
+    position: relative;
+    top: 11px;
+}
+.width-15.currency {
+    text-shadow: none;
+    font-size: 33px;
+    color: white;
+    font-weight: bold;
+    padding-left: 14px;
+}
+.float-left.width-100.preco-bar {
+    text-shadow: none;
+    color: white;
+    font-weight: bold;
+    line-height: 39px;
+    position: relative;
+    top: -9px;
+    padding-left: 4px;
+}
+span.currency{
+        font-size: 22px;
+}
+span.preco-bar-currency{
+    font-size: 37px;
+    padding-left: 7px;
+    position: relative;
+    top: 6px;
+}
+.height-30.width-100.receba-text {
+    text-shadow: none;
+    color: white;
+    font-size: 11px;
+    position: relative;
+    top: 18px;
+    padding-left: 3px;
     
+}
+.float-left.receba {   
+    width: 29%;
+    color: white;
+    text-shadow: none;
+    text-align: left;
+    position: relative;
+    top: 7px;
+}
+.btn-comprar{
+    width: 29%;
+}
+.padding-left-33{
+    padding-left: 33px;
+}
+button.btn-comprar.btn.btn-primary.ui-btn.ui-shadow.ui-corner-all{
+    width: 88%;
+    color: white;
+    text-shadow: none;
+    text-transform: uppercase;
+    background-color: #09285f;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(255, 249, 249, 0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 1px -3px 5px 0px rgba(173, 173, 173, 0.75);
+}
+.float-left.width-42.pague {
+    margin-left: 14%;
+}
+
 </style>
 
 <div class="row">
@@ -233,7 +377,7 @@ ini_set('display_errors', 1);
                                         
                                         // cashback do produto ---------------------------------
                                         $cashback_produto = cashBackTable($produto['CASHBACK']);
-                                        $tabs_content .= (!$cashback_produto) ? '' : '<p class="font-md no-margin border-top"><span class="fa fa-money"></span> &nbsp;Crédito</p>' . $cashback_produto;
+                                        $tabs_content .= (!$cashback_produto) ? '' : '<p class="credito font-md no-margin border-top"><span class="fa fa-money"></span> &nbsp;Crédito</p>' . $cashback_produto;
 
                                         // variação do produto ---------------------------------
                                         if (!empty($produto['VARIACAO'])) {
@@ -291,7 +435,78 @@ ini_set('display_errors', 1);
                                             <?= $tabs_content ?>
                                         </div>
                                     </div>
-
+                                    
+                                    
+                                   <input type="radio" name="radio-choice-1" id="radio-choice-1" value="choice-1" checked="checked">
+                                   <label for="radio-choice-1">   
+                                       <div class="cb">
+                                            <div class="titulo-promo">
+                                                Pernoite Segunda a quinta
+                                            </div>
+                                            <div class="desc-promo">
+                                                   Perdida: das 7h às 17h OU Pernoite de segunda a quinta:20h ás 12h
+                                             </div>                                            
+                                       </div>
+                                       <div class="cb-valores text-align-right">
+                                           <div class="margin-top3 preco">Pague R$ 75,00</div>
+                                            <div class="margin-top3 cashbackm">Receba R$ 75,00</div>
+                                            <div class="margin-top3 cashbackp">100% DE VOLTA</div>
+                                       </div>
+                                   </label>
+                                     <input type="radio" name="radio-choice-1" id="radio-choice-2" value="choice-1" checked="checked">
+                                   <label for="radio-choice-2">   
+                                       <div class="cb">
+                                            <div class="titulo-promo">
+                                                Pernoite Segunda a quinta
+                                            </div>
+                                            <div class="desc-promo">
+                                                   Perdida: das 7h às 17h OU Pernoite de segunda a quinta:20h ás 12h
+                                             </div>                                            
+                                       </div>
+                                       <div class="cb-valores text-align-right">
+                                           <div class="margin-top3 preco">Pague R$ 75,00</div>
+                                            <div class="margin-top3 cashbackm">Receba R$ 75,00</div>
+                                            <div class="margin-top3 cashbackp">100% DE VOLTA</div>
+                                       </div>
+                                   </label>
+                                     
+                                       <input type="radio" name="radio-choice-1" id="radio-choice-3" value="choice-1" checked="checked">
+                                   <label for="radio-choice-3">   
+                                       <div class="cb">
+                                            <div class="titulo-promo">
+                                                Pernoite Segunda a quinta
+                                            </div>
+                                            <div class="desc-promo">
+                                                   Perdida: das 7h às 17h OU Pernoite de segunda a quinta:20h ás 12h
+                                             </div>                                            
+                                       </div>
+                                       <div class="cb-valores text-align-right">
+                                           <div class="margin-top3 preco">Pague R$ 75,00</div>
+                                            <div class="margin-top3 cashbackm">Receba R$ 75,00</div>
+                                            <div class="margin-top3 cashbackp">100% DE VOLTA</div>
+                                       </div>
+                                   </label>
+                                       
+                                         <input type="radio" name="radio-choice-1" id="radio-choice-4" value="choice-1" checked="checked">
+                                   <label for="radio-choice-4">   
+                                       <div class="cb">
+                                            <div class="titulo-promo">
+                                                Pernoite Segunda a quinta
+                                            </div>
+                                            <div class="desc-promo">
+                                                   Perdida: das 7h às 17h OU Pernoite de segunda a quinta:20h ás 12h
+                                             </div>                                            
+                                       </div>
+                                       <div class="cb-valores text-align-right">
+                                           <div class="margin-top3 preco">Pague R$ 75,00</div>
+                                            <div class="margin-top3 cashbackm">Receba R$ 75,00</div>
+                                            <div class="margin-top3 cashbackp">100% DE VOLTA</div>
+                                       </div>
+                                   </label>
+                                   
+                                   
+                                   
+                                   
                                 </div>
                                 <!-- end widget content -->
 
@@ -337,7 +552,18 @@ ini_set('display_errors', 1);
         eventLike = {};
     
     document.addEventListener("DOMContentLoaded", function (event) {
-        
+
+    var p = $( "#tab-produto1" );
+    var offset = p.offset();
+    offset = offset.top;
+
+    $(document).scroll(function () {  
+        if ($(document).scrollTop()   >  offset ) {
+            $('#footer-comprar').fadeIn();
+        }else {
+            $('#footer-comprar').fadeOut(); 
+        }
+    });
         $('.carousel.fade').carousel({
             interval: 3000,
             cycle: true
@@ -394,6 +620,20 @@ ini_set('display_errors', 1);
     });
     
 </script>
-<?php 
-//var_dump($empresa); 
-?>
+
+<div id="footer-comprar" style="display:none;">
+    <div class="float-left width-42 pague">
+        <div class="height-30 width-100 pague-text">Pague</div>
+        <div class="float-left width-100 preco-bar">
+            <span class="currency">R$</span> 
+            <span class="preco-bar-currency">75,90</span>
+        </div>
+    </div>
+    <div class="float-left width-33 receba">
+        <div class="height-30 width-100 receba-text">Receba</div>
+         <div class="float-left width-100 cashback-bar">
+            100% de volta
+        </div>
+    </div>
+    <p class="padding-left-33"><button type="button" class="btn-comprar btn btn-primary">Comprar</button></p>
+</div>
