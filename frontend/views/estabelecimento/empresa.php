@@ -11,6 +11,7 @@ $this->title = '';
             FormEmpresa = {},
             estabelecimento = JSON.parse('<?= json_encode($estabelecimento) ?>'),
             categorias = JSON.parse('<?= json_encode($categorias) ?>'),
+            limitFotos = JSON.parse('<?= json_encode($limitFotos) ?>'),
             formaPagamento = JSON.parse('<?= json_encode($formaPagamento) ?>');
 
     function buscaCEP(v) {
@@ -49,6 +50,25 @@ $this->title = '';
         }
     }
 
+    function loadGaleria() {
+        var loadImgens = function (retorno) {
+            fotos = JSON.parse(retorno.message);
+            objFotos = [];  
+            for (var i in fotos) {
+                objFotos.push({
+                    imgUrl: fotos[i].TEXTO,
+                    imgDelete: 'excluirImg(' + fotos[i].ID + ')'
+                });
+            }
+            Util.galeria('galeria', objFotos);
+        }
+        Util.ajaxGet('index.php?r=estabelecimento/global-crud', {action: 'fotoEmpresa', param: 'read'}, loadImgens);
+    }
+    
+    function excluirImg(id) {
+        Util.ajaxGet('index.php?r=estabelecimento/global-crud', {action: 'fotoEmpresa', param: 'delete', foto: id}, loadGaleria);
+    }
+
     document.addEventListener("DOMContentLoaded", function (event) {
 
         function fix_height() {
@@ -78,11 +98,21 @@ $this->title = '';
         $("#btn-salvar").click(function (e) {
             FormEmpresa.form.submit();
         });
+        
+        Util.dropZone('dropzone', {
+            urlSave: "index.php?r=estabelecimento/global-crud&action=fotoEmpresa&param=save",
+//            maxFiles: limitFotos,
+            message: "Enviar fotos",
+        }, loadGaleria);
+
+        loadGaleria();
+        
+        $('#limitFotos').html("Permitido o envio de até <strong>" + limitFotos + "</strong> fotos.");
 
         pageSetUp();
 
         var pagefunction = function () {
-            
+
             if (salvo) {
                 $.smallBox({
                     title: "Dados atualizados",
@@ -150,6 +180,7 @@ $this->title = '';
         loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
         
     });
+    
 </script>
 
 <div class="row">
@@ -161,7 +192,6 @@ $this->title = '';
     </div>
 </div>
 
-
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
 
@@ -169,7 +199,7 @@ $this->title = '';
 
             <div class="widget-body no-padding">
 
-                <form action="" id="empresa-form" class="smart-form" novalidate="novalidate" method="post">
+                <form action="#" id="empresa-form" class="smart-form" novalidate="novalidate" method="post">
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" />
                     <fieldset>
                         <h3>Sobre a empresa</h3>
@@ -181,7 +211,7 @@ $this->title = '';
                             </section>
                             <section class="col col-6">
                                 <label class="select">
-                                    <select name="CB04_CATEGORIA_ID">
+                                    <select name="CB04_CATEGORIA_ID" disabled="">
                                         <option value="" selected="" disabled="">Categoria...</option>
                                     </select> <i></i> 
                                 </label>
@@ -252,21 +282,10 @@ $this->title = '';
                     <fieldset>
                         <h3>Fotos</h3>
                         <div class="row no-margin padding-top-15">
-
-                            <section>
-                                <div class="widget-body dropzone dz-clickable" style="min-height: 200px">
-                                    <div class="dz-default dz-message">
-                                        <span>
-                                            <span class="text-center">
-                                                <span class="font-lg">
-                                                    <span class="font-lg"><i class="fa fa-cloud-upload text-danger"></i> Enviar fotos </span><span>&nbsp;&nbsp;<h4 class="display-inline"> (clique aqui)</h4></span>
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </section>
+                            <div id="dropzone"></div>
                         </div>
+                        <div id="galeria"></div>
+                        <small id="limitFotos"></small>
                     </fieldset>
 
                     <footer>

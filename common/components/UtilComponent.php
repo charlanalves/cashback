@@ -15,6 +15,29 @@ use yii\base\Component;
  * */
 class UtilComponent extends Component {
 
+    public function infoFile($file) {
+        $retorno = $file;
+        switch ($file['type']) {
+            case 'image/png' :
+                $retorno['ex'] = 'png';
+            break;
+            case 'image/jpeg' :
+                $retorno['ex'] = 'jpeg';
+            break;
+            case 'image/jpg' :
+                $retorno['ex'] = 'jpg';
+            break;
+            case 'image/gif' :
+                $retorno['ex'] = 'gif';
+            break;
+            default :
+                $retorno['ex'] = '';
+            break;
+        }
+        
+        return $retorno;
+    }
+
     public function moedaReal($num) {
         return number_format((float) $num, 2, ',', '.');
     }

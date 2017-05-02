@@ -98,13 +98,27 @@ $this->title = 'Estabelecimento';
             .smart-form fieldset{
                 padding: 10px 14px 5px!important;
             }
+            label.error {
+                color: red;
+            }
+            .dropzone {
+                min-height: 180px!important;
+            }
         </style>
 
         <script>
 
             document.addEventListener("DOMContentLoaded", function (event) {
-
-                // SAIR ----------------------------------------------------
+                $("a#menu-empresa").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/empresa';
+                    return false;
+                });
+                $("a#menu-produto").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/produto';
+                    return false;
+                });
+                
+                // SAIR ----------------------------------------------------                
                 $("#menu_sair").click(function (e) {
                     $.SmartMessageBox({
                         title: "Deseja sair?",
@@ -140,14 +154,14 @@ $this->title = 'Estabelecimento';
 
             <nav>
                 <ul>
-                    <li class="top-menu-invisible open active">
+<!--                    <li class="top-menu-invisible open active">
                         <a href="#" title="Principal"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Home</span></a>
+                    </li>-->
+                    <li class="">
+                        <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
                     </li>
                     <li class="">
-                        <a href="<?= \yii\helpers\Url::to('index.php?r=estabelecimento/empresa') ?>" title="Empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>
-                    </li>
-                    <li class="">
-                        <a href="<?= \yii\helpers\Url::to('index.php?r=estabelecimento/produto') ?>" title="Produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
+                        <a href="#" title="Empresa" id="menu-empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>
                     </li>
                     <?=
                     Html::beginForm(['/estabelecimento/logout'], 'post', ['name' => 'form-sair'])
@@ -208,6 +222,9 @@ $this->title = 'Estabelecimento';
 
         <!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
         <script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> 
+
+        <!-- JS DROPZONE -->
+        <!--<script src="js/plugin/dropzone/dropzone.min.js"></script>--> 
 
         <!-- BOOTSTRAP JS -->
         <script src="js/bootstrap/bootstrap.min.js"></script>

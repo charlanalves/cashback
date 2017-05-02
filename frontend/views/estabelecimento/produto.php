@@ -38,6 +38,12 @@ $this->title = '';
                 .find('.modal-body')
                 .load('index.php?r=estabelecimento/cashback-form&produto=' + id);
     }
+    
+    function acaoProduto(obj, id) {
+        funcao = window[obj.val()];
+        funcao(id);
+        obj.val('');
+    }
 
     function excluirProduto(id) {
         $.SmartMessageBox({
@@ -151,7 +157,7 @@ $this->title = '';
 
 <!-- MODAL CASHBACK -->
 <div class="modal fade" id="remoteModalCashback" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width: 900px">
+    <div class="modal-dialog" style="width: 950px">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -205,7 +211,7 @@ $this->title = '';
                             <tr>
                                 <th style="width: 100%; text-align: left">PRODUTOS</th>
                                 <th>ATIVO</th>
-                                <th colspan="4">AÇÕES</th>
+                                <th>AÇÕES</th>
                             </tr>
                         </thead>
                         <?php
@@ -220,16 +226,21 @@ $this->title = '';
                                             <input type="checkbox" id="ativo-<?= $at['CB05_ID'] ?>" onchange="produtoAtivo(<?= $at['CB05_ID'] ?>)" value="<?= $at['CB05_ID'] ?>" <?= ($at['CB05_ATIVO']) ? "checked" : "" ?> /><i></i>
                                         </label>
                                     </td>
-                                    <td align="center"><button class="btn btn-warning btn-xs" onclick="modalCashback(<?= $at['CB05_ID'] ?>)">CASHBACK &nbsp;<i class="fa fa-money"></i></button></td>
-                                    <td align="center"><button class="btn btn-success btn-xs" onclick="modalPromocao(<?= $at['CB05_ID'] ?>)">Promoção &nbsp;<i class="fa fa-tags"></i></button></td>
-                                    <td align="center"><button class="btn btn-primary btn-xs" onclick="modalProduto(<?= $at['CB05_ID'] ?>)">Editar &nbsp;<i class="fa fa-edit"></i></button></td>
-                                    <td align="center"><button class="btn btn-danger btn-xs" onclick="excluirProduto(<?= $at['CB05_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
+                                    <td>
+                                        <select class="btn btn-primary btn-xs" onchange="acaoProduto($(this), <?= $at['CB05_ID'] ?>)">
+                                            <option value="">Selecione</option>
+                                            <option value="modalCashback">Cashback</option>
+                                            <option value="modalPromocao">Promoçõse</option>
+                                            <option value="modalProduto">Editar</option>
+                                            <option value="excluirProduto">Excluir</option>
+                                        </select>
+                                    </td>
                                 </tr>
                                 <?php
                                 if (!empty($at['VARIACAO'])) {
                                     ?>
                                     <tr id="tr-promocao-<?= $at['CB05_ID'] ?>">
-                                        <td colspan="6" style="padding:0px 0px 0px 30px;border-top: 0px;">
+                                        <td colspan="3" style="padding:0px 0px 0px 30px;border-top: 0px;">
                                             <table class="table" style="border-right: 0px; background-color: #FAFAFA; margin-bottom: 10px">
                                                 <?php
                                                 foreach ($at['VARIACAO'] as $variacao) {
