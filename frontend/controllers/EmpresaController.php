@@ -66,7 +66,9 @@ class EmpresaController extends GlobalBaseController {
     public function actionDetalhe($empresa) {
         $this->layout = 'smartAdminEmpresaDetalhe';
         $dados = CB04EMPRESA::getEmpresa($empresa, $this->user->id);
-        return $this->render(($dados) ? 'detalhe' : 'error', ['empresa' => $dados]);
+       
+        
+        return $this->render(($dados) ? 'detalhe_motel' : 'error', ['empresa' => $dados]);
     }
     
     /*

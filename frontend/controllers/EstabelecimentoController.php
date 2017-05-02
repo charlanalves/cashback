@@ -25,53 +25,14 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     private $user = null;
     private $estabelecimento = null;
 
-    public function __construct($id, $module, $config = []) {
+    public function __construct($id, $module, $config = []) 
+    {
         if (($identity = \Yii::$app->user->identity)) {
             $this->user = $identity;
             $this->estabelecimento = \common\models\GlobalModel::findTable('CB04_EMPRESA', 'CB04_ID = ' . $this->user->id_company)[0];
         }
         parent::__construct($id, $module, $config);
     }
-
-    /**
-     * @inheritdoc
-     */
-//    public function behaviors() {
-//        return [
-//            'access' => [
-//                'class' => AccessControl::className(),
-//                'only' => ['logout'],
-//                'rules' => [
-//                    [
-//                        'actions' => ['logout'],
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//            ],
-//            'verbs' => [
-//                'class' => VerbFilter::className(),
-//                'actions' => [
-//                    'logout' => ['post'],
-//                ],
-//            ],
-//        ];
-//    }
-
-    /**
-     * @inheritdoc
-     */
-//    public function actions() {
-//        return [
-//            'error' => [
-//                'class' => 'yii\web\ErrorAction',
-//            ],
-//            'captcha' => [
-//                'class' => 'yii\captcha\CaptchaAction',
-//                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-//            ],
-//        ];
-//    }
 
     public function beforeAction($action) {
         $this->enableCsrfValidation = false;

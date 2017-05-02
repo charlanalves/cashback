@@ -179,7 +179,33 @@ SmartAdminAsset::register($this);
 
             });
         </script>
-
+<link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+     <link rel="stylesheet" type="text/css" media="screen" href="css/style_detalhe_empresa.css">
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="css/jqm-demos.css">
+	
+	<style id="custom-icon">
+            .ui-radio .ui-btn.ui-radio-on:after {
+    background-image: none;
+    background-color: #fff;
+    width: 8px;
+    height: 8px;
+    border-width: 9px;
+    border-style: double;
+}
+.ui-checkbox-off:after, .ui-btn.ui-radio-off:after {
+    filter: Alpha(Opacity=30);
+    opacity: 4.3;
+    background: white;    
+    border: solid #898989;
+}
+        .ui-icon-custom:after {
+			background-image: url("../_assets/img/glyphish-icons/21-skull.png");
+			background-position: 3px 3px;
+			background-size: 70%;
+		}
+    </style>
     </head>
 
     <body class="smart-style-0 fixed-header">
@@ -219,6 +245,11 @@ SmartAdminAsset::register($this);
         <script src="js/libs/jquery-2.1.1.min.js"></script>
 
         <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
+        
+        
+	
+	<script src="js/libs/jquery.mobile-1.4.5.min.js"></script>
+
 
 
         <script src="js/jquery.priceformat.min.js"></script>
