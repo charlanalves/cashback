@@ -15,6 +15,7 @@ $this->title = '';
             FormProduto = {},
             produto = JSON.parse('<?= json_encode($produto) ?>'),
             itemProduto = JSON.parse('<?= json_encode($itemProduto) ?>'),
+            limitFotos = JSON.parse('<?= json_encode($limitFotos) ?>'),
             callbackSaveProduto = function (data) {
                 if (data.status == true) {
                     message = 'Dados salvos com sucesso.';
@@ -30,6 +31,25 @@ $this->title = '';
                 Util.smallBox(message, '', type, ico);
             };
 
+    function loadGaleria() {
+        var loadImgens = function (retorno) {
+            fotos = JSON.parse(retorno.message);
+            objFotos = [];  
+            for (var i in fotos) {
+                objFotos.push({
+                    imgUrl: fotos[i].TEXTO,
+                    imgDelete: 'excluirImg(' + fotos[i].ID + ')'
+                });
+            }
+            Util.galeria('galeria', objFotos);
+        }
+        Util.ajaxGet('index.php?r=estabelecimento/global-crud', {action: 'fotoProduto', param: 'read', produto: produto.CB05_ID}, loadImgens);
+    }
+    
+    function excluirImg(id) {
+        Util.ajaxGet('index.php?r=estabelecimento/global-crud', {action: 'fotoProduto', param: 'delete', foto: id,  produto: produto.CB05_ID}, loadGaleria);
+    }
+    
     // obj form
     FormProduto = new Form('produto-form');
 
@@ -37,8 +57,17 @@ $this->title = '';
     FormProduto.addCheckboxInLine("item-produto", "ITEM-PRODUTO", itemProduto);
 
     // Preenche o form com os dados da produto se for edicao
-    if (produto) {
+    if (produto.CB05_ID) {
         FormProduto.setFormData(produto);
+
+        Util.dropZone('dropzone', {
+            urlSave: "index.php?r=estabelecimento/global-crud&action=fotoProduto&param=save&produto=" + produto.CB05_ID,
+//            maxFiles: limitFotos,
+            message: "Enviar fotos",
+        }, loadGaleria);
+        loadGaleria();
+        $('#limitFotos').html("Permitido o envio de até <strong>" + limitFotos + "</strong> fotos.");
+        $('#fieldset-fotos').show();
     }
 
     $("#btn-reset").click(function (e) {
@@ -48,6 +77,7 @@ $this->title = '';
     $("#btn-salvar").click(function (e) {
         FormProduto.form.submit();
     });
+
 
     pageSetUp();
 
@@ -140,24 +170,13 @@ $this->title = '';
                         <section id="item-produto" class="padding-top-15"></section>
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset id="fieldset-fotos" style="display: none">
                         <h3>Fotos</h3>
                         <div class="row no-margin padding-top-15">
-
-                            <section>
-                                <div class="widget-body dropzone dz-clickable" style="min-height: 140px">
-                                    <div class="dz-default dz-message">
-                                        <span>
-                                            <span class="text-center">
-                                                <span class="font-lg">
-                                                    <span class="font-lg"><i class="fa fa-cloud-upload text-danger"></i> Enviar fotos </span><span>&nbsp;&nbsp;<h4 class="display-inline"> (clique aqui)</h4></span>
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </section>
+                            <div id="dropzone"></div>
                         </div>
+                        <div id="galeria"></div>
+                        <small id="limitFotos"></small>
                     </fieldset>
 
                     <footer style="padding: 10px;">

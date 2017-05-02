@@ -178,13 +178,13 @@ var Util = {
             timeout: time
         });
     },
-    dropZone: function (destinyId, settings, data)
+    dropZone: function (destinyId, settings, callback)
     {
-        var myDropzone = {}, settings = (settings || {});
+        var myDropzone = {}, settings = (settings || {}), callback = (typeof callback == 'function' ? callback : function(){});
         settings.urlSave = (settings.urlSave || '#');
         settings.urlRemove = (settings.urlRemove || false);
         settings.typeFile = (settings.typeFile || 'image/*');
-        settings.maxFiles = (settings.maxFiles || 3);
+        settings.maxFiles = (settings.maxFiles || 100);
         settings.message = (settings.message || 'Enviar arquivos');
         
         form = '<form action="' + settings.url + '" class="dropzone">' + 
@@ -210,17 +210,20 @@ var Util = {
                 dictRemoveFile: '',
                 init: function() {
                     
-                    
-//                    var mockFile = { name: "116_big_550_3", size: 0};
-//                    // Call the default addedfile event handler
-//                    this.emit("addedfile", mockFile);
-//                    // And optionally show the thumbnail of the file:
-//                    this.emit("thumbnail", mockFile, "img/fotos/estabelecimento/116_big_550_3.jpg");
-//                    // If you use the maxFiles option, make sure you adjust it to the
-//                    // correct amount:
-//                    var existingFileCount = 1; // The number of files already uploaded
-//                    this.options.maxFiles = this.options.maxFiles - existingFileCount;
-                    
+                    this.on("complete", function(file) {
+                        var retorno = JSON.parse(file.xhr.response);
+                        
+                        //  ok
+                        if(retorno.status) {
+                            Util.smallBox('Enviado com sucesso!', '', 'success', 'check-circle', 5000);
+                            callback(file);
+                        // error
+                        } else {
+                            msg = (retorno.message || "Não foi possível enviar o arquivo: " + file.name);
+                            Util.smallBox("Ocorreu um erro...", msg, 'danger', 'close', 5000);
+                        }
+                        this.removeFile(file);
+                    });
                     
                     this.on("maxfilesexceeded", function(file) { 
                         this.removeFile(file); 
@@ -272,14 +275,36 @@ var Util = {
     {
         var estrutura = '', imgUrl = '', imgTitle = '', imgDelete = '';
         for (var i in data){
-            imgUrl = data[i].imgUrl;
-            imgTitle = data[i].imgTitle;
-            imgDelete = (data[i].imgDelete || false);
-            
-            estrutura += '<div class="superbox-list">';
-            estrutura += (imgDelete === false ? '' : '<div class="air air-top-right padding-5"><a href="#" onclick="' + imgDelete + '; return false;" class="btn btn-danger btn-excluir btn-xs" title="excluir"><i class="fa fa-close"></i></a></div>');
-            estrutura += '<img src="' + imgUrl + '" title="' + imgTitle + '" class="superbox-img"></div>';
+            if ((imgUrl = data[i].imgUrl)) {
+                imgTitle = (data[i].imgTitle || '');
+                imgDelete = (data[i].imgDelete || false);
+
+                estrutura += '<div class="superbox-list">';
+                estrutura += (imgDelete === false ? '' : '<div class="air air-top-right padding-5"><a href="#" onclick="' + imgDelete + '; return false;" class="btn btn-danger btn-excluir btn-xs" title="excluir"><i class="fa fa-close"></i></a></div>');
+                estrutura += '<img src="' + imgUrl + '" title="' + imgTitle + '" class="superbox-img"></div>';
+            }
         }
         $("#" + destinyId).html($("<div></div>").attr("class", "superbox col-sm-12").html(estrutura));
+    },
+    ajaxPost: function (url, param, callback, dataType) {
+        this.ajax('POST', url, param, callback, dataType);
+    },
+    ajaxGet: function (url, param, callback, dataType) {
+        this.ajax('GET', url, param, callback, dataType);
+    },
+    ajax: function (method, url, param, callback, dataType) {
+        var callback = (callback || null), 
+            ajax = $.ajax({
+                url: url,
+                type: method,
+                data: (param || ''),
+                dataType: (dataType || "json")
+            });
+        ajax.always(function (data) {
+            if(typeof callback == 'function') {
+                callback(data);
+            }
+        });
     }
+
 };

@@ -11,6 +11,7 @@ $this->title = '';
             FormEmpresa = {},
             estabelecimento = JSON.parse('<?= json_encode($estabelecimento) ?>'),
             categorias = JSON.parse('<?= json_encode($categorias) ?>'),
+            limitFotos = JSON.parse('<?= json_encode($limitFotos) ?>'),
             formaPagamento = JSON.parse('<?= json_encode($formaPagamento) ?>');
 
     function buscaCEP(v) {
@@ -50,23 +51,22 @@ $this->title = '';
     }
 
     function loadGaleria() {
-        Util.galeria('galeria', [
-            {
-                imgUrl: 'img/superbox/superbox-thumb-1.jpg',
-                imgTitle: 'teste 1',
-                imgDelete: 'excluirImg(1)'
-            },
-            {
-                imgUrl: 'img/superbox/superbox-thumb-2.jpg',
-                imgTitle: 'teste 2',
-                imgDelete: ''
+        var loadImgens = function (retorno) {
+            fotos = JSON.parse(retorno.message);
+            objFotos = [];  
+            for (var i in fotos) {
+                objFotos.push({
+                    imgUrl: fotos[i].TEXTO,
+                    imgDelete: 'excluirImg(' + fotos[i].ID + ')'
+                });
             }
-        ]);
+            Util.galeria('galeria', objFotos);
+        }
+        Util.ajaxGet('index.php?r=estabelecimento/global-crud', {action: 'fotoEmpresa', param: 'read'}, loadImgens);
     }
     
     function excluirImg(id) {
-        alert('excluir: ' + id);
-        loadGaleria();
+        Util.ajaxGet('index.php?r=estabelecimento/global-crud', {action: 'fotoEmpresa', param: 'delete', foto: id}, loadGaleria);
     }
 
     document.addEventListener("DOMContentLoaded", function (event) {
@@ -101,12 +101,14 @@ $this->title = '';
         
         Util.dropZone('dropzone', {
             urlSave: "index.php?r=estabelecimento/global-crud&action=fotoEmpresa&param=save",
-            maxFiles: 3,
+//            maxFiles: limitFotos,
             message: "Enviar fotos",
-        });
+        }, loadGaleria);
 
         loadGaleria();
         
+        $('#limitFotos').html("Permitido o envio de até <strong>" + limitFotos + "</strong> fotos.");
+
         pageSetUp();
 
         var pagefunction = function () {
@@ -283,6 +285,7 @@ $this->title = '';
                             <div id="dropzone"></div>
                         </div>
                         <div id="galeria"></div>
+                        <small id="limitFotos"></small>
                     </fieldset>
 
                     <footer>
