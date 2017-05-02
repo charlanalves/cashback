@@ -633,16 +633,16 @@ div#tab-promocoes {
 
         });
 
-   $(document).scroll(function(){
-        var threshold = 300; // number of pixels before bottom of page that you want to start fading
-        var op = (($(document).height() - $(window).height()) - $(window).scrollTop()) / threshold;
-              if( op <= 0 ){
-                      $("#tab-produto1").hide();
-              } else {
-                      $("#tab-produto1").show();
-              }
-              $("div#tab-produto1").css("opacity", op ); 
-      });
+//   $(document).scroll(function(){
+//        var threshold = 300; // number of pixels before bottom of page that you want to start fading
+//        var op = (($(document).height() - $(window).height()) - $(window).scrollTop()) / threshold;
+//              if( op <= 0 ){
+//                      $("#tab-produto1").hide();
+//              } else {
+//                      $("#tab-produto1").show();
+//              }
+//              $("div#tab-produto1").css("opacity", op ); 
+//      });
       
       
       
