@@ -11,7 +11,7 @@ return [
         'v' => [
             'class' => 'common\components\ValidationComponent',
         ],
-        'pagamento' => [
+        'pagamentoComponent' => [
             'class' => 'common\components\PagamentoComponent',
         ],
         'u' => [

@@ -442,15 +442,16 @@ div#tab-promocoes {
                                                     
                                                     $percentualCB = $variacao['CB07_PERCENTUAL'];
                                                     $valorCB = $variacao['VALOR_CB'];
-                                                 
-                                                if (!$cont) {
-                                                    $checked = 'checked';
-                                                    $barraComprarPreco = number_format($variacao['CB06_PRECO'], 2, ',', '.');
-                                                    $barraComprarValorCB = number_format($valorCB, 2, ',', '.');
-                                                    $barraComprarPercentCB = round ($percentualCB);
-                                                }
-                                                    $promocoes .=  '<input type="radio" name="radio-promo" id="radio-choice-'. $produto["CB05_ID"]. $cont .'" value="choice-1" '. $checked .'>
-                                                        <label for="radio-choice-'. $produto["CB05_ID"] . $cont . '">   
+
+                                                    if (!$cont) {
+                                                        $checked = 'checked';
+                                                        $barraComprarPreco = number_format($variacao['CB06_PRECO'], 2, ',', '.');
+                                                        $barraComprarValorCB = number_format($valorCB, 2, ',', '.');
+                                                        $barraComprarPercentCB = round ($percentualCB);
+                                                    }
+                                                    
+                                                    $promocoes .=  '<input type="radio" name="radio-promo" id="variacao-'. $produto["CB05_ID"] .'-'. $variacao['CB06_ID']  . '" value="choice-1" '. $checked .'>
+                                                        <label for="variacao-'. $produto["CB05_ID"] .'-'. $variacao['CB06_ID']  . '">   
                                                             <div class="cb">
                                                                  <div class="titulo-promo">
                                                                     '. $variacao['CB06_TITULO'] .'
@@ -597,7 +598,7 @@ div#tab-promocoes {
             <span class="receba-percentcb"></span>% de volta
         </div>
     </div>
-    <p class="padding-left-33"><button type="button" class="btn-comprar btn btn-primary">Comprar</button></p>
+    <p class="padding-left-33"><button type="button" class="btn-comprar btn btn-primary" id="btnComprar">Comprar</button></p>
 </div>
 
 

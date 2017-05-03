@@ -8,6 +8,10 @@ use common\models\CB10CATEGORIA;
 use common\models\CB04EMPRESA;
 use common\models\CB11ITEMCATEGORIA;
 use common\models\CB15LIKEEMPRESA;
+use common\models\CB16PEDIDO;
+use common\models\CB17PRODUTOPEDIDO;
+use common\models\CB05PRODUTO;
+use common\models\CB06VARIACAO;
 
 /**
  * Empresa controller
@@ -86,5 +90,63 @@ class EmpresaController extends GlobalBaseController {
         }
         return ($like || $CB15LIKEEMPRESA || false);
     }
+    
+    public function actionSavePedido() {
+        
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        
+        try {
 
+            $get = \Yii::$app->request->get();
+            
+            if(($produto = $get['produto']) && ($variacao = $get['variacao'])) {
+
+                $dadosP = CB05PRODUTO::findOne(['CB05_ID' => $produto]);
+                $dadosV = CB06VARIACAO::findOne(['CB06_ID' => $variacao]);
+
+                if($dadosP && $dadosV) {
+                
+                    $dadosP = $dadosP->attributes;
+                    $dadosV = $dadosV->attributes;
+                    
+                    // salva pedido
+                    $pedido = new CB16PEDIDO();
+                    $pedido->CB16_EMPRESA_ID = $dadosP['CB05_EMPRESA_ID'];
+                    $pedido->CB16_USER_ID = $this->user->id;
+                    $pedido->CB16_VALOR = $dadosV['CB06_PRECO'];
+                    $pedido->save();
+                    $idPedido = $pedido->CB16_ID;
+
+                    // salva itens pedido
+                    $produtoPedido = new CB17PRODUTOPEDIDO();
+                    $produtoPedido->CB17_PEDIDO_ID = $idPedido;
+                    $produtoPedido->CB17_PRODUTO_ID = $dadosP['CB05_ID'];
+                    $produtoPedido->CB17_NOME_PRODUTO =  $dadosP['CB05_TITULO'] . ' - ' . $dadosV['CB06_DESCRICAO'];
+                    $produtoPedido->CB17_VLR_UNID = $dadosV['CB06_PRECO'];
+                    $produtoPedido->CB17_VARIACAO_ID = $dadosV['CB06_ID'];
+                    $produtoPedido->CB17_QTD = 1;
+                    $produtoPedido->save();
+
+                    $transaction->commit();
+                    return $idPedido;
+                }
+            }
+            return false;
+            
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            var_dump($exc->getMessage());
+            return;   
+        }
+        
+    }
+    
+    protected static function formatDataForm($dados) {
+        $newData = [];
+        foreach ($dados as $v) {
+            $newData[$v['name']] = $v['value'];
+        }
+        return $newData;
+    }
 }
