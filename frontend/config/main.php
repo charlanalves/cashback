@@ -12,6 +12,11 @@ return [
     'bootstrap' => ['log','debug'],
     'controllerNamespace' => 'frontend\controllers',
     'defaultRoute' => 'empresa',
+    'modules' => [
+        'pagamento' => [
+            'class' => 'common\modules\pagamento\Pagamento',
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',

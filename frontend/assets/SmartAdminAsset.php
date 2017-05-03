@@ -20,14 +20,12 @@ class SmartAdminAsset extends AssetBundle
         '//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700',
         'css/site.css',
 
-
         'css/bootstrap.min.css',
         'css/font-awesome.min.css',
         'css/smartadmin-production-plugins.min.css',
         'css/smartadmin-production.min.css',
         'css/smartadmin-skins.min.css',
-        'css/smartadmin-rtl.min.css',
-        'css/your_style.css',
+        'css/smartadmin-rtl.min.css'
     ];
     public $js = [
         'js/libs/jquery-2.1.1.min.js',
