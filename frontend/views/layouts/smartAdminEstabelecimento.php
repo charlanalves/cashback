@@ -117,6 +117,10 @@ $this->title = 'Estabelecimento';
                     document.location.href = 'index.php?r=estabelecimento/produto';
                     return false;
                 });
+                $("a#menu-baixar-compra").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/baixar-compra';
+                    return false;
+                });
                 
                 // SAIR ----------------------------------------------------                
                 $("#menu_sair").click(function (e) {
@@ -157,6 +161,9 @@ $this->title = 'Estabelecimento';
 <!--                    <li class="top-menu-invisible open active">
                         <a href="#" title="Principal"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Home</span></a>
                     </li>-->
+                    <li class="">
+                        <a href="#" title="Baixar Compra" id="menu-baixar-compra"><i class="fa fa-lg fa-fw  fa-arrow-circle-down"></i> <span class="menu-item-parent">Baixar Compra</span></a>
+                    </li>
                     <li class="">
                         <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
                     </li>
@@ -213,7 +220,8 @@ $this->title = 'Estabelecimento';
         <script src="js/libs/jquery-2.1.1.min.js"></script>
 
         <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
-
+        
+        <script src="js/plugin/jquery-block/jquery.blockUI.js"></script>
 
         <script src="js/jquery.priceformat.min.js"></script>
 
