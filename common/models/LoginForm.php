@@ -20,13 +20,16 @@ class LoginForm extends Model
     private $_cpf_cnpj;
     
     const SCENARIO_COMPANY_LOGIN = 'SCENARIO_COMPANY_LOGIN';
-
-
+    
+    const SCENARIOADMINISTRADOR = 'SCENARIOADMINISTRADOR';
     const SCENARIOESTABELECIMENTO = 'SCENARIOESTABELECIMENTO';
+    
     public function scenarios()
     {
         $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIOADMINISTRADOR] = ['username', 'password', 'rememberMe', 'id'];
         $scenarios[self::SCENARIOESTABELECIMENTO] = ['cpf_cnpj', 'password', 'rememberMe', 'id'];
+        $scenarios[self::SCENARIO_COMPANY_LOGIN] = ['cpf_cnpj', 'password', 'rememberMe', 'id'];
         return $scenarios;
     }
     
@@ -53,6 +56,17 @@ class LoginForm extends Model
                     return true;
                 }
             }, 'on' => self::SCENARIOESTABELECIMENTO],
+                    
+            // validar administrador
+            ['username', 'required', 'on' => self::SCENARIOADMINISTRADOR],
+            ['id', 'filter', 'filter' => function ($idUser) {
+                if (!AuthAssignment::findOne(['user_id' => $idUser, 'item_name' => 'administrador'])) {
+                    $this->addError('username', '');
+                    $this->addError('password', 'O usuário não tem permissões de acesso.');
+                } else {
+                    return true;
+                }
+            }, 'on' => self::SCENARIOADMINISTRADOR],
 
             ['cpf_cnpj', 'isUserCompany' , 'on' => self::SCENARIO_COMPANY_LOGIN],
 
@@ -92,7 +106,13 @@ class LoginForm extends Model
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $user = $this->getCpfCnpj();
+            
+            if($this->cpf_cnpj){
+                $user = $this->getCpfCnpj();
+            } else if($this->username){
+                $user = $this->getUser();
+            }
+            
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Usuário ou senha incorretos.');
             } else {
