@@ -121,8 +121,9 @@ use common\widgets\Alert;
         <script src="js/libs/jquery-2.1.1.min.js"></script>
 
         <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
-
-
+        
+        <script src="js/plugin/jquery-block/jquery.blockUI.js"></script>
+        
         <script src="js/jquery.priceformat.min.js"></script>
 
         <!-- IMPORTANT: APP CONFIG -->

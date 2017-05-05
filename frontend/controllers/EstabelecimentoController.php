@@ -16,6 +16,7 @@ use common\models\CB07CASHBACK;
 use common\models\CB13FOTOEMPRESA;
 use common\models\CB14FOTOPRODUTO;
 use common\models\SYS01PARAMETROSGLOBAIS;
+use common\models\CB16PEDIDO;
 
 /**
  * Estabelecimento controller
@@ -367,5 +368,47 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $CB07CASHBACK = new CB07CASHBACK();
         $CB07CASHBACK->deleteCashback($param);
     }
+    
+    public function actionBaixarCompra() {
+        $this->layout = 'smartAdminEstabelecimento';
+        $salvo = null;
+
+        $model = new CB05PRODUTO();
+        $al = $model->attributeLabels();
+
+        $dataProduto = $model->getProdutoVariacao($this->user->id_company);
+        return $this->render('baixarCompra', [
+                    'tituloTela' => 'Baixar Compra',
+                    'usuario' => $this->user->attributes,
+                    'produto' => $dataProduto,
+                    'al' => $al,
+                    'salvo' => $salvo
+        ]);
+    }
+    
+    public function actionBaixarCompraGrid() {
+        $cpf = (string) Yii::$app->request->get('cpf');
+        if($cpf){
+            $cpfFormatado = preg_replace('/[^0-9]/', '', $cpf);
+            $model = new CB16PEDIDO();
+            $pedidos = $model->getPedidoByCPF($cpfFormatado, $this->user->id_company);
+            if ($pedidos) {
+                $param = ['pedidos' => $pedidos, 'status' => $model->status_pedido, 'cpf' => $cpf];
+            } else {
+                $param = ['error' => 'Nenhum registro encontrado para o CPF informado: <strong>' . $cpf . '</strong>'];
+            }
+            return $this->renderPartial('baixarCompraGrid', $param);
+        }
+    }
+    
+    // permite baixar apenas os pedidos pagos
+    public function saveBaixaCompra($param) {        
+        $CB16PEDIDO = CB16PEDIDO::findOne(['CB16_ID' => $param['pedido'], 'CB16_STATUS' => 30]);
+        if ($CB16PEDIDO) {
+            $CB16PEDIDO->setAttribute('CB16_STATUS', 20);
+            $CB16PEDIDO->save();     
+        }
+    }
+
 
 }

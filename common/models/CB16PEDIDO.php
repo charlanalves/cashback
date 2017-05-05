@@ -23,6 +23,10 @@ use Yii;
  */
 class CB16PEDIDO extends \common\models\GlobalModel
 {
+    
+    // status do pagamento
+    public $status_pedido = [1 => 'CANCELADO', 10 => 'AGUARDANDO PAGAMENTO', 20 => 'BAIXADO', 30 => 'PAGO'];
+
     /**
      * @inheritdoc
      */
@@ -113,6 +117,24 @@ class CB16PEDIDO extends \common\models\GlobalModel
         $command->bindValue(':pedido', $pedido);
         $command->bindValue(':usuario', $usuario);
         return $command->query()->readAll()[0];
+        
+    }
+    
+    public static function getPedidoByCPF($cpf, $empresa = null)
+    {
+        
+        $sql = "SELECT CB16_PEDIDO.*, CB17_PRODUTO_PEDIDO.*, user.name, DATE_FORMAT(CB16_DT,'%d/%m/%Y') as CB16_DT 
+                FROM CB16_PEDIDO 
+                INNER JOIN CB17_PRODUTO_PEDIDO ON(CB16_PEDIDO.CB16_ID = CB17_PRODUTO_PEDIDO.CB17_PEDIDO_ID)
+                INNER JOIN user ON(user.id = CB16_USER_ID)
+                WHERE CB16_EMPRESA_ID = :empresa AND cpf_cnpj = :usuario
+                ORDER BY CB16_STATUS DESC, CB16_DT DESC";
+
+        $connection = \Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        $command->bindValue(':usuario', $cpf);
+        $command->bindValue(':empresa', $empresa);
+        return $command->query()->readAll();
         
     }
     

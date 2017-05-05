@@ -305,6 +305,8 @@ var Util = {
                 callback(data);
             }
         });
+    },
+    reloadPage: function () {
+        window.location.reload(false);
     }
-
 };
