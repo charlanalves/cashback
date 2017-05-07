@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<toolbar>
+	<item id="titulo" type="text"  text="Lorem Ipsum"/>
+
+    <item id="voltar" type="button"  img="voltar.png" imgdis="voltar.png" title="Voltar"/>
+    <item id="avancar" type="button"  img="avancar.png" imgdis="avancar.png" title="Avançar"/>
+	<item id="adicionar" type="button"  img="adicionar.png" imgdis="adicionar_dis.png" title="Adicionar"/>
+	<item id="editar" type="button"  img="editar.png" imgdis="editar_dis.png" title="Editar"/>
+    <item id="excluir" type="button"  img="excluir.png" imgdis="excluir_dis.png" title="Excluir"/>
+	<item id="abrir" type="button"  img="abrir.png" imgdis="abrir_dis.png" title="Abrir"/>
+	<item id="salvar" type="button"  img="salvar.png" imgdis="salvar_dis.png" title="Salvar"	/>
+	<item id="salvar_como" type="button" img="salvar_como.png" imgdis="salvar_como_dis.png"  title="Salvar Como"/>
+	<item id="sequenciar" type="button"  img="sequenciar.png" imgdis="sequenciar_dis.png" title="Sequenciar Dados"/>
+	<item id="atualizar" type="button"  img="atualizar.png" imgdis="atualizar_dis.png" title="Atualizar"/>
+	<item id="atualizar_sequencia" type="button"  img="atualizar_sequencia.png" imgdis="atualizar_sequencia_dis.png" title="Atualizar Sequencia"/>
+	<item id="export_word" type="button"  img="word.png" imgdis="word_dis.png" title="Exportar Word"/>
+    <item id="export_excel" type="button"  img="excel.png" imgdis="excel_dis.png" title="Exportar Excel"/>
+    <item id="export_pdf" type="button"  img="pdf.png" imgdis="pdf_dis.png" title="Exportar PDF"/>
+   	<item id="imprimir" type="button"  img="imprimir.png" imgdis="imprimir_dis.png" title="Imprimir"/>
+	<item id="testar_impressoara" type="button"  img="testar_print.png" imgdis="testar_impressoara_dis.png" title="Testar Impressora"/>
+	<item id="emitir_alerta_critico" type="button"  img="alerta_critic.png" imgdis="alerta_critic_dis.png" title="Emitir Alerta de Crítico"/>
+    <item id="emitir_parada_linha" type="button"  img="emitir_parada_linha.png" imgdis="emitir_parada_linha_dis.png" title="Emitir Parada de Linha"/>
+    <item id="alarm" type="button"  img="alarm.png" imgdis="alarm_dis.png" title="Avisar na Chegada do Item"/>
+    <item id="ajuda" type="button"  img="ajuda.png" imgdis="ajuda_dis.png" title="Ajuda"/>
+    <item id="renomear" type="button"  img="renomear.png" imgdis="renomear_dis.png" title="Renomear"/>
+    <item id="duplicar" type="button"  img="duplicar.png" imgdis="duplicar_dis.png" title="Duplicar"/>
+    <item id="exibir_detalhes" type="button"  img="exibir_detalhes.png" imgdis="exibir_detalhes.png" title="Exibir Detalhes"/>
+    <item id="expedicao_lista" type="button"  img="expedicao_lista.png" imgdis="expedicao_lista.png" title="Expedição de Lista"/>
+    <item id="emitir_nf" type="button"  img="emitir_nof.png" imgdis="emitir_nf.png" title="Emitir Nota Fiscal"/>
+    <item id="enviar_arq" type="button"  img="env_arq.png" imgdis="env_arq.png" title="Enviar Arquivo"/>
+    <item id="liberar" type="button"  img="liberar.png" imgdis="liberar.png" title="Liberado"/>
+	<item id="etapa" type="button"  img="etapa.png" imgdis="etapa.png" title="Etapas" text="Etapas"/>
+	<item id="transicao" type="button"  img="transicao.png" imgdis="transicao.png" title="Transições" text="Transições"/>
+	<item id="relacionar" type="button"  img="relacionar.png" imgdis="relacionar.png" title="Relacionar" text="Relacionar"/>
+	<item id="definir_embalagem" type="button"  img="emb_definir.png" imgdis="emb_definir_dis.png" title="Definir Embalagem" text="Denifir Embalagem"/>
+	<item id="embalagem_definida" type="button"  img="emb_definida.png" imgdis="emb_definida_dis.png" title="Embalagem já Definida" text="Embalagem já Definida"/>
+	<item id="editar_rodada" type="button"  img="editar.png" imgdis="editar_dis.png" title="Editar" text="Editar Rodada"/>
+	<item id="visualizar_rodada" type="button"  img="lupa.png" imgdis="editar_dis.png" title="Visualizar Rodada" text="Visualizar Rodada"/>
+	<item id="enviar_compras" type="button"  img="enviar.png" imgdis="enviar.png" title="Enviar Compras" text="Enviar para Compras"/>
+	<item id="cotar_embalagem" type="button"  img="cotacao.png" imgdis="editar_dis.png" title="Cotar Embalagem" text="Cotar Embalagem"/>
+	<item id="excluir_rodada" type="button"  img="excluir.png" imgdis="excluir.png" title="Excluir Rodada" text="Excluir Rodada"/>
+	<item id="efetivar" type="button" img="efetivar.png" imgdis="efetivar.png"  title="Efetivar" text="Efetivar"/>
+	<item id="forcar_execucao" type="button" img="forca_execucao.png" imgdis="forca_execucao_dis.png"  title="Forçar Execução" text="Forçar Execução"/>
+	<item id="reprocessar" type="button" img="reprocessar.png" imgdis="reprocessar_dis.png"  title="Reprocessar" text="Reprocessar"/>
+</toolbar>
