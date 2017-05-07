@@ -20,16 +20,37 @@ var Form = function (formId) {
     },
     this.send = function (url, callback)
     {
-        var ajax = $.ajax({
-            url: url,
-            type: 'POST',
-            data: this.getFormData(),
-            dataType: "json"
-        });
-        ajax.always(function (data) {
-            if (typeof callback == 'function')
-                callback(data);
-        });
+        var ajaxParams = {},
+            data = this.getFormData(),
+            inputFiles = this.form.find(':input[type="file"]');
+
+            ajaxParams.url = url;
+            ajaxParams.type = 'POST';
+            ajaxParams.data = data;
+            ajaxParams.dataType = 'json';
+
+            if (inputFiles.length > 0) {
+                var newAjaxParams = Util.getInputFilesData(inputFiles, ajaxParams);
+                $.extend(ajaxParams, newAjaxParams);
+            }
+
+            var ajax = $.ajax(ajaxParams);
+            ajax.always(function (data) {
+                if (typeof callback == 'function')
+                    callback(data);
+            });
+//
+//        
+//        var ajax = $.ajax({
+//            url: url,
+//            type: 'POST',
+//            data: this.getFormData(),
+//            dataType: "json"
+//        });
+//        ajax.always(function (data) {
+//            if (typeof callback == 'function')
+//                callback(data);
+//        });
     },
     this.getFormData = function ()
     {
@@ -62,23 +83,24 @@ var Form = function (formId) {
             nameCompare = v.name.replace('[', '').replace(']', '');
             // input
             if (typeof data[nameCompare] != "undefined") {
-
-                if (v.type == 'checkbox' || v.type == 'radio') {
-                    if (Object.prototype.toString.call(data[nameCompare]) == "[object Array]") {
-                        for (var i in data[nameCompare]) {
-                            if ($(this).val() == data[nameCompare][i]) {
+                if (v.type != 'file') {
+                    if (v.type == 'checkbox' || v.type == 'radio') {
+                        if (Object.prototype.toString.call(data[nameCompare]) == "[object Array]") {
+                            for (var i in data[nameCompare]) {
+                                if ($(this).val() == data[nameCompare][i]) {
+                                    $(this).prop('checked', true);
+                                }
+                            }
+                        } else {
+                            if ($(this).val() == data[nameCompare]) {
                                 $(this).prop('checked', true);
                             }
                         }
+
                     } else {
-                        if ($(this).val() == data[nameCompare]) {
-                            $(this).prop('checked', true);
-                        }
+                        $(this).val(data[nameCompare]);
+                        
                     }
-
-                } else {
-                    $(this).val(data[nameCompare]);
-
                 }
             }
         });
@@ -117,13 +139,11 @@ var Form = function (formId) {
 };
 
 var Util = {
-    copyElement: function ($element)
-    {
+    copyElement: function ($element) {
         $element.select();
         this.copyText($element.text());
     },
-    copyText: function (text)
-    {
+    copyText: function (text) {
         var $tempInput = $("<textarea>");
         $("body").append($tempInput);
         $tempInput.val(text).select();
@@ -137,8 +157,7 @@ var Util = {
             timeout: 1000
         });
     },
-    formatNumber: function (n, c, d, t)
-    {
+    formatNumber: function (n, c, d, t) {
         var n,
             c = isNaN(c = Math.abs(c)) ? 2 : c,
             d = d == undefined ? "," : d,
@@ -178,8 +197,7 @@ var Util = {
             timeout: time
         });
     },
-    dropZone: function (destinyId, settings, callback)
-    {
+    dropZone: function (destinyId, settings, callback) {
         var myDropzone = {}, settings = (settings || {}), callback = (typeof callback == 'function' ? callback : function(){});
         settings.urlSave = (settings.urlSave || '#');
         settings.urlRemove = (settings.urlRemove || false);
@@ -271,8 +289,7 @@ var Util = {
 	loadScript("js/plugin/dropzone/dropzone.min.js", dropzonefunction);
         
     },
-    galeria: function (destinyId, data)
-    {
+    galeria: function (destinyId, data) {
         var estrutura = '', imgUrl = '', imgTitle = '', imgDelete = '';
         for (var i in data){
             if ((imgUrl = data[i].imgUrl)) {
@@ -308,5 +325,50 @@ var Util = {
     },
     reloadPage: function () {
         window.location.reload(false);
+    },
+    getInputFilesData: function(inputFiles, ajaxParams) {
+
+        var formData = new FormData(),
+        extraData = ajaxParams.data;
+
+        // Seta parametros necessários para a request funcionar com input file
+        ajaxParams.cache = false;
+        ajaxParams.contentType = false;
+        ajaxParams.processData = false;
+
+        for (var i in inputFiles) {
+            if (typeof inputFiles[i].files != 'undefined') {
+                if (inputFiles[i].files.length > 0) {
+                    formData.append(inputFiles[i].name, inputFiles[i].files[0]);
+                }
+            }
+        }
+
+        // Inserindo os dados extras do form no obj formdata (requisito para funcionar com input file)
+        if (typeof extraData != 'undefined' && Object.keys(extraData).length > 0) {
+        $.each(extraData, function(k,v) {
+
+                // tipo de valor
+                var vType = Object.prototype.toString.call(v);
+
+                // verifica se o valor é um ARRAY
+                if (vType == '[object Array]') {
+                        for (var i in v) { formData.append(k, v[i]); }
+
+                // verifica se o valor é um OBJECT
+                        } else if (vType == '[object Object]') {
+                        for (var i in v) { formData.append(k + '[' + i + ']', v[i]); }
+
+                } else {
+                formData.append(k, v);
+
+                }
+
+        });
+        }
+
+        ajaxParams.data = formData;
+
+        return ajaxParams;
     }
 };

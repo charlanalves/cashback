@@ -316,7 +316,7 @@ class CB04EMPRESA extends \common\models\GlobalModel {
                 }
             }
             $transaction->commit();
-            return true;
+            return $this->CB04_ID;
         } catch (\Exception $e) {
             $transaction->rollBack();
             throw $e;

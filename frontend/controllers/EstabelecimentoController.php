@@ -101,7 +101,31 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $al = $model->attributeLabels();
         $dataEstabelecimento = $model->findOne($this->user->id_company);
         if (($post = Yii::$app->request->post())) {
+            unset($post['CB04_URL_LOGOMARCA']);
             $salvo = $dataEstabelecimento->saveEstabelecimento($post);
+
+            if (!empty($_FILES['CB04_URL_LOGOMARCA']['name'])) {
+
+                $infoFile = \Yii::$app->u->infoFile($_FILES['CB04_URL_LOGOMARCA']);
+                if($infoFile['family'] == 'image') {
+                    $infoFile['path'] = 'img/fotos/estabelecimento/';
+                    $infoFile['newName'] = uniqid("logo_" . $salvo . "_") . '.' . $infoFile['ex'];
+
+                    $file = \yii\web\UploadedFile::getInstanceByName('CB04_URL_LOGOMARCA');
+                    $pathCompleto = $infoFile['path'] . $infoFile['newName'];
+
+                    if ($file->saveAs($pathCompleto)) {
+
+                        if(!empty($dataEstabelecimento->CB04_URL_LOGOMARCA)) {
+                            @unlink($dataEstabelecimento->CB04_URL_LOGOMARCA);
+                        }
+
+                        $dataEstabelecimento->setAttribute('CB04_URL_LOGOMARCA', $pathCompleto);
+                        $dataEstabelecimento->save();
+                    }
+                }
+            }
+            
         }
 
         $dataEstabelecimento = $dataEstabelecimento->getAttributes();

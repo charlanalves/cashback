@@ -3,8 +3,6 @@
     // functions
     var loadGrid = modalEmpresa = {};
 
-    var salvo = JSON.parse('<?= json_encode($salvo) ?>');
-
     document.addEventListener("DOMContentLoaded", function (event) {
 
         function fix_height() {
@@ -41,20 +39,6 @@
         };
 
         loadGrid();
-
-
-        if (salvo) {
-            var msgSmallBox = setInterval(function () {
-                $.smallBox({
-                    title: "Dados atualizados",
-                    //content: "<i class='fa fa-clock-o'></i> <i></i>",
-                    color: "#739e73",
-                    iconSmall: "fa fa-check-circle fadeInRight animated",
-                    timeout: 4000
-                });
-                clearInterval(msgSmallBox);
-            }, 100);
-        }
 
     });
 

@@ -85,22 +85,14 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     }
 
     public function actionPrincipal() {
-        $this->redirect(\yii\helpers\Url::to('index.php?r=estabelecimento/empresa'));
+        $this->redirect(\yii\helpers\Url::to('index.php?r=administrador/empresa'));
         return;
     }
 
     public function actionEmpresa() {
-
-        $salvo = '';
-        if (($post = Yii::$app->request->post())) {
-            $model = (!$post['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($post['CB04_ID']);
-            $salvo = $model->saveEstabelecimento($post);
-        }
-        
         return $this->render('empresa', [
                     'tituloTela' => 'Empresa',
-                    'usuario' => $this->user->attributes,
-                    'salvo' => $salvo
+                    'usuario' => $this->user->attributes
         ]);
     }
 
@@ -153,172 +145,68 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         return $this->renderPartial('empresaGrid', $param);
     }
 
-    
     public function actionEmpresaAtivar($empresa, $status) {
         $CB04EMPRESA = CB04EMPRESA::findOne($empresa);
         $CB04EMPRESA->setAttribute('CB04_STATUS', $status);
         return ($CB04EMPRESA->save()) ? '' : 'error';
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public function saveEmpresa($param) {
+        unset($param['CB04_URL_LOGOMARCA']);
+        $model = (!$param['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($param['CB04_ID']);
+        $id = $model->saveEstabelecimento($param);
+        
+        if (!empty($_FILES['CB04_URL_LOGOMARCA']['name'])) {
+            
+            $infoFile = \Yii::$app->u->infoFile($_FILES['CB04_URL_LOGOMARCA']);
+            if($infoFile['family'] == 'image') {
+                $infoFile['path'] = 'img/fotos/estabelecimento/';
+                $infoFile['newName'] = uniqid("logo_" . $id . "_") . '.' . $infoFile['ex'];
+
+                $file = \yii\web\UploadedFile::getInstanceByName('CB04_URL_LOGOMARCA');
+                $pathCompleto = $infoFile['path'] . $infoFile['newName'];
+
+                if ($file->saveAs($pathCompleto)) {
+                    if(!empty($model->CB04_URL_LOGOMARCA)) {
+                        @unlink($model->CB04_URL_LOGOMARCA);
+                    }
+                    $model->setAttribute('CB04_URL_LOGOMARCA', $pathCompleto);
+                    $model->save();
+                }
+            }
+        }
+        
+        exit(json_encode(['message' => $id, 'status' => true]));
+    }
     
     
     public function fotoEmpresa() {
-        $getAction = Yii::$app->request->get('param');
-        $empresa = $this->user->id_company;
+        $get = Yii::$app->request->get();
+        
+        if(($empresa = $get['empresa'])) {
 
-        // salva imagem
-        if ($getAction == 'save') {
-
-            // testa quantidade de fotos
-            $limitFotos = SYS01PARAMETROSGLOBAIS::getValor(5); // limit de fotos da empresa
-            $qtdFotos = CB13FOTOEMPRESA::find()->where(['CB13_EMPRESA_ID' => $empresa])->count();
-            if ($limitFotos <= $qtdFotos) {
-                throw new \Exception('Limite de fotos atingido para o estabelecimento!');
-            }
-
-            $infoFile = \Yii::$app->u->infoFile($_FILES['file']);
-            $infoFile['path'] = 'img/fotos/estabelecimento/';
-            $infoFile['newName'] = uniqid($empresa . "_") . '.' . $infoFile['ex'];
-
-            $CB13FOTOEMPRESA = new CB13FOTOEMPRESA();
-            $CB13FOTOEMPRESA->setAttributes([
-                'CB13_EMPRESA_ID' => $empresa,
-                'CB13_URL' => $infoFile['path'] . $infoFile['newName']
-            ]);
-            $CB13FOTOEMPRESA->save();
-
-            $file = \yii\web\UploadedFile::getInstanceByName('file');
-            $file->saveAs($infoFile['path'] . $infoFile['newName']);
-
-            // deleta imagem
-        } else if ($getAction == 'delete') {
-            $foto = Yii::$app->request->get('foto');
-            if ($foto) {
-                $modelFoto = CB13FOTOEMPRESA::findOne(['CB13_ID' => $foto, 'CB13_EMPRESA_ID' => $empresa]);
-                if ($modelFoto) {
-                    $modelFoto->delete();
-                    @unlink($modelFoto->CB13_URL);
-                }
-            }
-        } else if ($getAction == 'read') {
-            $dataFotos = CB04EMPRESA::findCombo('CB13_FOTO_EMPRESA', 'CB13_ID', 'CB13_URL', 'CB13_EMPRESA_ID=' . $empresa);
-            throw new \Exception(json_encode($dataFotos));
-        }
-    }
-
-    public function actionProduto() {
-        $this->layout = 'smartAdminEstabelecimento';
-        $salvo = null;
-
-        $model = new CB05PRODUTO();
-        $al = $model->attributeLabels();
-
-        $dataProduto = $model->getProdutoVariacao($this->user->id_company);
-//        print_r('<pre>');
-//        print_r($dataProduto);
-//        exit();
-        return $this->render('produto', [
-                    'tituloTela' => 'Produto',
-                    'usuario' => $this->user->attributes,
-                    'produto' => $dataProduto,
-                    'al' => $al,
-                    'salvo' => $salvo
-        ]);
-    }
-
-    public function actionProdutoAtivar($produto, $status) {
-        $CB05PRODUTO = CB05PRODUTO::findOne($produto);
-        $CB05PRODUTO->setAttribute('CB05_ATIVO', $status);
-        return ($CB05PRODUTO->save()) ? '' : 'error';
-    }
-
-    public function actionProdutoForm($produto = null) {
-        \Yii::$app->view->title = $maxProduto = "";
-        $this->layout = 'empty';
-
-        $dataProduto = [];
-
-        $model = new CB05PRODUTO();
-        $al = $model->attributeLabels();
-
-        $dataItemProduto = CB04EMPRESA::findCombo('CB11_ITEM_CATEGORIA', 'CB11_ID', 'CB11_DESCRICAO', 'CB11_STATUS=1 AND CB11_CATEGORIA_ID=' . $this->estabelecimento['CB04_CATEGORIA_ID']);
-        $limitFotos = SYS01PARAMETROSGLOBAIS::getValor(6); // limit de fotos do produto
-
-        if (is_numeric($produto)) {
-            // dados do produto
-            $dataProduto = $model
-                    ->find()
-                    ->where(['CB05_EMPRESA_ID' => $this->user->id_company, 'CB05_ID' => $produto])
-                    ->orderBy('CB05_NOME_CURTO')
-                    ->one();
-            $dataProduto = $dataProduto->getAttributes();
-            $dataProduto['CB05_DESCRICAO'] = str_replace("\n", '\r\n', $dataProduto['CB05_DESCRICAO']);
-            $dataProduto['CB05_IMPORTANTE'] = str_replace("\n", '\r\n', $dataProduto['CB05_IMPORTANTE']);
-
-            // itens selecionados
-            $dataProduto["ITEM-PRODUTO"] = CB05PRODUTO::getItem($produto);
-        } else {
-            $qtdMaxProduto = (int) SYS01PARAMETROSGLOBAIS::getValor('3');
-            $qtdProduto = CB05PRODUTO::find()->where(['CB05_EMPRESA_ID' => $this->user->id_company])->count();
-            if ($qtdMaxProduto <= $qtdProduto) {
-                $maxProduto = "Você atingiu o limite de produtos do sistema.";
-            }
-        }
-
-        return $this->render('produtoForm', [
-                    'tituloTela' => 'Produto',
-                    'usuario' => $this->user->attributes,
-                    'produto' => $dataProduto,
-                    'itemProduto' => $dataItemProduto,
-                    'limitFotos' => $limitFotos,
-                    'al' => $al,
-                    'maxProduto' => $maxProduto,
-        ]);
-    }
-
-    public function fotoProduto() {
-        $getAction = Yii::$app->request->get('param');
-        $produto = Yii::$app->request->get('produto');
-        if ($produto) {
+            $getAction = $get['param'];
 
             // salva imagem
             if ($getAction == 'save') {
 
                 // testa quantidade de fotos
-                $limitFotos = SYS01PARAMETROSGLOBAIS::getValor(6); // limit de fotos do produto
-                $qtdFotos = CB14FOTOPRODUTO::find()->where(['CB14_PRODUTO_ID' => $produto])->count();
+                $limitFotos = SYS01PARAMETROSGLOBAIS::getValor(5); // limit de fotos da empresa
+                $qtdFotos = CB13FOTOEMPRESA::find()->where(['CB13_EMPRESA_ID' => $empresa])->count();
                 if ($limitFotos <= $qtdFotos) {
-                    throw new \Exception('Limite de fotos atingido para o produto!');
+                    throw new \Exception('Limite de fotos atingido para o estabelecimento!');
                 }
 
                 $infoFile = \Yii::$app->u->infoFile($_FILES['file']);
-                $infoFile['path'] = 'img/fotos/produto/';
-                $infoFile['newName'] = uniqid($produto . "_") . '.' . $infoFile['ex'];
+                $infoFile['path'] = 'img/fotos/estabelecimento/';
+                $infoFile['newName'] = uniqid($empresa . "_") . '.' . $infoFile['ex'];
 
-                $CB14FOTOPRODUTO = new CB14FOTOPRODUTO();
-                $CB14FOTOPRODUTO->setAttributes([
-                    'CB14_PRODUTO_ID' => $produto,
-                    'CB14_URL' => $infoFile['path'] . $infoFile['newName']
+                $CB13FOTOEMPRESA = new CB13FOTOEMPRESA();
+                $CB13FOTOEMPRESA->setAttributes([
+                    'CB13_EMPRESA_ID' => $empresa,
+                    'CB13_URL' => $infoFile['path'] . $infoFile['newName']
                 ]);
-                $CB14FOTOPRODUTO->save();
+                $CB13FOTOEMPRESA->save();
 
                 $file = \yii\web\UploadedFile::getInstanceByName('file');
                 $file->saveAs($infoFile['path'] . $infoFile['newName']);
@@ -327,58 +215,34 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
             } else if ($getAction == 'delete') {
                 $foto = Yii::$app->request->get('foto');
                 if ($foto) {
-                    $modelFoto = CB14FOTOPRODUTO::findOne(['CB14_ID' => $foto, 'CB14_PRODUTO_ID' => $produto]);
+                    $modelFoto = CB13FOTOEMPRESA::findOne(['CB13_ID' => $foto, 'CB13_EMPRESA_ID' => $empresa]);
                     if ($modelFoto) {
                         $modelFoto->delete();
-                        @unlink($modelFoto->CB14_URL);
+                        @unlink($modelFoto->CB13_URL);
                     }
                 }
             } else if ($getAction == 'read') {
-                $dataFotos = CB04EMPRESA::findCombo('CB14_FOTO_PRODUTO', 'CB14_ID', 'CB14_URL', 'CB14_PRODUTO_ID=' . $produto);
+                $dataFotos = CB04EMPRESA::findCombo('CB13_FOTO_EMPRESA', 'CB13_ID', 'CB13_URL', 'CB13_EMPRESA_ID=' . $empresa);
                 throw new \Exception(json_encode($dataFotos));
             }
         }
     }
 
-    public function saveProduto($param) {
-        $param['CB05_EMPRESA_ID'] = $this->user->id_company;
-        $modelId = CB05PRODUTO::primaryKey()[0];
-        $CB05PRODUTO = (empty($param[$modelId])) ? new CB05PRODUTO() : CB05PRODUTO::findOne($param[$modelId]);
-        $CB05PRODUTO->saveProduto($param);
-    }
-
-    public function deleteProduto($produto) {
-        //CB07CASHBACK::deleteAll(['CB07_PRODUTO_ID' => $produto]);
-        //CB06VARIACAO::deleteAll(['CB06_PRODUTO_ID' => $produto]);
-        //CB12ITEMCATEGEMPRESA::deleteAll(['CB06_PRODUTO_ID' => $produto]);
-        CB05PRODUTO::deleteAll(['CB05_ID' => $produto]);
-    }
-
-    public function actionPromocaoForm($produto) {
-        \Yii::$app->view->title = '';
-        $this->layout = 'empty';
-
-        $model = new CB06VARIACAO();
-        $al = $model->attributeLabels();
-
-        $qtdMaxPromocao = (int) SYS01PARAMETROSGLOBAIS::getValor('4');
-        $qtdPromocao = CB06VARIACAO::find()->where(['CB06_PRODUTO_ID' => $produto])->count();
-        $maxPromocao = ($qtdMaxPromocao <= $qtdPromocao) ? "Você atingiu o limite de promoções por produto." : "";
-
-        return $this->render('promocaoForm', [
-                    'tituloTela' => 'Promoção',
-                    'usuario' => $this->user->attributes,
-                    'produto' => ['CB06_PRODUTO_ID' => $produto],
-                    'al' => $al,
-                    'maxPromocao' => $maxPromocao,
-        ]);
-    }
-
-    public function savePromocao($param) {
-        $CB06VARIACAO = new CB06VARIACAO();
-        $CB06VARIACAO->setAttributes($param);
-        $CB06VARIACAO->save();
-    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     /*
      * Excluir o cashback e a variacao

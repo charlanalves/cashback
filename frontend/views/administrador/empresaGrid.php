@@ -30,7 +30,7 @@ if (!empty($error)) {
                 <select class="btn btn-primary btn-xs" onchange="gridEmpresa.acaoEmpresa($(this), <?= $cod ?>)">
                     <option value="">Selecione</option>
                     <option value="editar">Editar</option>
-                    <option value="excluir">Excluir</option>
+                    <!--<option value="excluir">Excluir</option>-->
                 </select>
             </td>
         </tr>

@@ -10,7 +10,15 @@
                     <input type="hidden" name="CB04_ID" value="" />
                     <fieldset>
                         <h3>Sobre a empresa</h3>
+                        <img src="img/sem_imagem.jpg" id="logo-empresa" class="thumbnail img-thumbnail air air-top-right" style="max-height: 120px;margin-right: 15px;" />
                         <div class="row padding-top-15">
+                            <section class="col col-9"><?= $al['CB04_URL_LOGOMARCA'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-image"></i>
+                                    <input type="file" name="CB04_URL_LOGOMARCA" placeholder="">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row">
                             <section class="col col-6"><?= $al['CB04_NOME'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
                                     <input type="text" name="CB04_NOME" placeholder="">
@@ -85,16 +93,7 @@
                             </label>
                         </section>
                     </fieldset>
-
-                    <fieldset style="display: none">
-                        <h3>Fotos</h3>
-                        <div class="row no-margin padding-top-15">
-                            <div id="dropzone"></div>
-                        </div>
-                        <div id="galeria"></div>
-                        <small id="limitFotos"></small>
-                    </fieldset>
-
+                    
                     <footer>
                         <button id="btn-salvar" type="button" class="btn btn-primary">
                             Salvar
@@ -103,6 +102,15 @@
                             Restaurar informações
                         </button>
                     </footer>
+
+                    <fieldset>
+                        <h3>Fotos</h3>
+                        <div class="row no-margin padding-top-15">
+                            <div id="dropzone"></div>
+                        </div>
+                        <div id="galeria"></div>
+                        <small id="limitFotos"></small>
+                    </fieldset>
 
                 </form>
 
@@ -116,11 +124,27 @@
 <script>
 
     var ultimoCEP = '',
+            dropzoneAtivo = false,
             FormEmpresa = {},
             estabelecimento = JSON.parse('<?= json_encode($estabelecimento) ?>'),
             categorias = JSON.parse('<?= json_encode($categorias) ?>'),
             limitFotos = JSON.parse('<?= json_encode($limitFotos) ?>'),
-            formaPagamento = JSON.parse('<?= json_encode($formaPagamento) ?>');
+            formaPagamento = JSON.parse('<?= json_encode($formaPagamento) ?>'),
+            callbackSaveEmpresa = function (data) {
+                if (data.status == true) {
+                    message = 'Empresa salva.';
+                    type = 'success';
+                    ico = 'check-circle';
+                    loadDropzoneAndGaleria(data.message);
+                    $("div#dropzone").focus();
+                    loadGrid();
+                } else {
+                    message = 'Os dados da empresa não foram salvos, tente novamente.';
+                    type = 'danger';
+                    ico = 'frown-o';
+                }
+                Util.smallBox(message, '', type, ico);
+            };
 
     function buscaCEP(v) {
         v = v.replace('X', '');
@@ -129,7 +153,7 @@
             Util.getEnderecoByCEP(v, preencheEndereco);
         }
     }
-
+    
     function preencheEndereco(data) {
         if (data.erro) {
             $.smallBox({
@@ -160,23 +184,41 @@
 
     function loadGaleria() {
         var loadImgens = function (retorno) {
-            fotos = JSON.parse(retorno.message);
-            objFotos = [];
-            for (var i in fotos) {
-                objFotos.push({
-                    imgUrl: fotos[i].TEXTO,
-                    imgDelete: 'excluirImg(' + fotos[i].ID + ')'
-                });
+            if(typeof retorno.message != 'undefined') {
+                fotos = JSON.parse(retorno.message);
+                objFotos = [];
+                for (var i in fotos) {
+                    objFotos.push({
+                        imgUrl: fotos[i].TEXTO,
+                        imgDelete: 'excluirImg(' + fotos[i].ID + ')'
+                    });
+                }
+                Util.galeria('galeria', objFotos);
             }
-            Util.galeria('galeria', objFotos);
         }
-        Util.ajaxGet('index.php?r=estabelecimento/global-crud', {action: 'fotoEmpresa', param: 'read'}, loadImgens);
+        Util.ajaxGet('index.php?r=administrador/global-crud', {action: 'fotoEmpresa', param: 'read', empresa: estabelecimento.CB04_ID}, loadImgens);
     }
 
     function excluirImg(id) {
-        Util.ajaxGet('index.php?r=estabelecimento/global-crud', {action: 'fotoEmpresa', param: 'delete', foto: id}, loadGaleria);
+        if(id) {
+            Util.ajaxGet('index.php?r=administrador/global-crud', {action: 'fotoEmpresa', param: 'delete', foto: id, empresa: estabelecimento.CB04_ID}, loadGaleria);
+        }
     }
 
+    function loadDropzoneAndGaleria (id) {
+        if(id && dropzoneAtivo === false) {
+            estabelecimento.CB04_ID = id;
+            $('form#empresa-form input[name=CB04_ID]').val(id);
+            $('#limitFotos').html("Permitido o envio de até <strong>" + limitFotos + "</strong> fotos.");
+            dropzoneAtivo = true;
+            Util.dropZone('dropzone', {
+                urlSave: "index.php?r=administrador/global-crud&action=fotoEmpresa&param=save&empresa=" + id,
+                message: "Enviar fotos",
+            }, loadGaleria);
+
+            loadGaleria();
+        }
+    }
 
     // obj form
     FormEmpresa = new Form('empresa-form');
@@ -187,27 +229,32 @@
     // cria checkbox com as formas de pagamento
     FormEmpresa.addCheckboxInLine("forma-pagamento", "FORMA-PAGAMENTO", formaPagamento);
 
-    // Preenche o form com os dados da empresa
-    FormEmpresa.setFormData(estabelecimento);
-
-    $("#btn-reset").click(function (e) {
+    
+    if (typeof estabelecimento.CB04_ID != 'undefined') {
+    
+        if (estabelecimento.CB04_URL_LOGOMARCA) {
+            $('img#logo-empresa').attr('src', estabelecimento.CB04_URL_LOGOMARCA);
+        }
+    
+        // Preenche o form com os dados da empresa
         FormEmpresa.setFormData(estabelecimento);
-    });
+        
+        loadDropzoneAndGaleria(estabelecimento.CB04_ID);
+
+        $("#btn-reset").click(function (e) {
+            FormEmpresa.setFormData(estabelecimento);
+        });
+
+    } else {
+        $("#btn-reset").hide();
+        $('#limitFotos').html("Opção liberada após cadastrar a empresa.");
+    }
+
 
     $("#btn-salvar").click(function (e) {
         FormEmpresa.form.submit();
     });
-//
-//    Util.dropZone('dropzone', {
-//        urlSave: "index.php?r=estabelecimento/global-crud&action=fotoEmpresa&param=save",
-////            maxFiles: limitFotos,
-//        message: "Enviar fotos",
-//    }, loadGaleria);
-//
-//    loadGaleria();
-
-    $('#limitFotos').html("Permitido o envio de até <strong>" + limitFotos + "</strong> fotos.");
-
+    
     pageSetUp();
 
     var pagefunction = function () {
@@ -279,6 +326,9 @@
             },
             errorPlacement: function (error, element) {
                 error.insertAfter(element.parent());
+            },
+            submitHandler: function () {
+                FormEmpresa.send('index.php?r=administrador/global-crud&action=saveEmpresa', callbackSaveEmpresa);
             }
         });
     };

@@ -102,7 +102,7 @@ $this->title = 'Estabelecimento';
                 color: red;
             }
             .dropzone {
-                min-height: 180px!important;
+                min-height: 155px!important;
             }
         </style>
 
