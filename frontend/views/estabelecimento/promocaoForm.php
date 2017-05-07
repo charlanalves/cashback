@@ -17,23 +17,27 @@ $this->title = '';
             callbackSavePromocao = function (data) {
                 if (data.status == true) {
                     message = 'Promoção cadastrada.';
+                    text = '';
                     type = 'success';
                     ico = 'check-circle';
+                    time = 4000;
                     $('#remoteModalPromocao').modal('hide');
                     reloadPage();
                 } else {
                     message = 'A promoção não foi cadastrada, tente novamente.';
+                    text = (data.message || 'A promoção não foi cadastrada, tente novamente.');
                     type = 'danger';
                     ico = 'frown-o';
+                    time = 6000;
                 }
-                Util.smallBox(message, '', type, ico);
+                Util.smallBox(message, text, type, ico, time);
             };
 
     // obj form
     FormPromocao = new Form('promocao-form');
 
     // add formatação de moeda para o campo preço
-    FormPromocao.setMoney(['CB06_PRECO']);
+    FormPromocao.setMoney(['CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA']);
 
     // Preenche o form com os dados da produto se for edicao
     FormPromocao.setFormData(produto);
@@ -54,7 +58,13 @@ $this->title = '';
                 },
                 CB06_PRECO: {
                     required: true
-                }
+                },
+                CB06_PRECO_PROMOCIONAL: {
+                    required: true
+                },
+                CB06_DINHEIRO_VOLTA: {
+                    required: true
+                },
             },
             messages: {
                 CB06_DESCRICAO: {
@@ -62,7 +72,13 @@ $this->title = '';
                 },
                 CB06_PRECO: {
                     required: 'Campo obrigatório'
-                }
+                },
+                CB06_PRECO_PROMOCIONAL: {
+                    required: 'Campo obrigatório'
+                },
+                CB06_DINHEIRO_VOLTA: {
+                    required: 'Campo obrigatório'
+                },
             },
             errorPlacement: function (error, element) {
                 error.insertAfter(element.parent());
@@ -90,15 +106,24 @@ $this->title = '';
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" />
                     <input type="hidden" name="CB06_PRODUTO_ID" value="" />
                     <fieldset>
+                        <?= $al['CB06_DESCRICAO'] ?>
+                        <label class="input"> <i class="icon-prepend fa fa-tags"></i>
+                            <input type="text" name="CB06_DESCRICAO" placeholder="">
+                        </label>
                         <div class="row padding-top-15">
-                            <section class="col col-8">
-                                <label class="input"> <i class="icon-prepend fa fa-tags"></i>
-                                    <input type="text" name="CB06_DESCRICAO" placeholder="<?= $al['CB06_DESCRICAO'] ?>">
+                            <section class="col col-4"><?= $al['CB06_PRECO'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-usd"></i>
+                                    <input type="text" name="CB06_PRECO" placeholder="" maxlength="8">
                                 </label>
                             </section>
-                            <section class="col col-4">
+                            <section class="col col-4"><?= $al['CB06_PRECO_PROMOCIONAL'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-usd"></i>
-                                    <input type="text" name="CB06_PRECO" placeholder="<?= $al['CB06_PRECO'] ?>" maxlength="8">
+                                    <input type="text" name="CB06_PRECO_PROMOCIONAL" placeholder="">
+                                </label>
+                            </section>
+                            <section class="col col-4"><?= $al['CB06_DINHEIRO_VOLTA'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-percent"></i>
+                                    <input type="text" name="CB06_DINHEIRO_VOLTA" placeholder="" maxlength="8">
                                 </label>
                             </section>
                         </div>
