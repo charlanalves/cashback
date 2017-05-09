@@ -80,4 +80,31 @@ class CB06VARIACAO extends \common\models\GlobalModel
     {
         return new CB06VARIACAOQuery(get_called_class());
     }
+
+    /**
+     * @inheritdoc
+     * @return
+     */
+    public static function getPromocao($url)
+    {
+        
+        $sql = "
+            SELECT 
+                MAX(CB06_VARIACAO.CB06_DINHEIRO_VOLTA) AS CB06_DINHEIRO_VOLTA,
+                CB04_EMPRESA.CB04_NOME,
+                CB04_EMPRESA.CB04_END_COMPLEMENTO,
+                concat('" . $url . "', CB04_EMPRESA.CB04_URL_LOGOMARCA) AS CB04_URL_LOGOMARCA,
+                concat('" . $url . "', CB14_FOTO_PRODUTO.CB14_URL) AS CB14_URL,
+                CB05_PRODUTO.CB05_TITULO,
+                CB06_VARIACAO.CB06_DESCRICAO
+            FROM CB06_VARIACAO
+            INNER JOIN CB05_PRODUTO ON(CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID AND CB05_PRODUTO.CB05_ATIVO = 1)
+            INNER JOIN CB14_FOTO_PRODUTO ON(CB14_FOTO_PRODUTO.CB14_PRODUTO_ID = CB05_PRODUTO.CB05_ID AND CB14_FOTO_PRODUTO.CB14_CAPA = 1)
+            INNER JOIN CB04_EMPRESA ON(CB04_EMPRESA.CB04_ID = CB05_PRODUTO.CB05_EMPRESA_ID AND CB04_EMPRESA.CB04_STATUS = 1)
+            GROUP BY CB04_EMPRESA.CB04_NOME
+            ORDER BY CB06_DINHEIRO_VOLTA DESC";
+
+        $command = \Yii::$app->db->createCommand($sql);
+        return $command->queryAll();
+    }
 }
