@@ -171,7 +171,7 @@ $this->title = '';
 
 <!-- MODAL PROMOCAO -->
 <div class="modal fade" id="remoteModalPromocao" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width: 400px">
+    <div class="modal-dialog" style="width: 500px">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -230,7 +230,7 @@ $this->title = '';
                                         <select class="btn btn-primary btn-xs" onchange="acaoProduto($(this), <?= $at['CB05_ID'] ?>)">
                                             <option value="">Selecione</option>
                                             <option value="modalCashback">Cashback</option>
-                                            <option value="modalPromocao">Promoçõse</option>
+                                            <option value="modalPromocao">Promoções</option>
                                             <option value="modalProduto">Editar</option>
                                             <option value="excluirProduto">Excluir</option>
                                         </select>
@@ -247,9 +247,10 @@ $this->title = '';
                                                     ?>
                                                     <tr>
                                                         <td style="width: 100%;">
-                                                            <?= $variacao['CB06_DESCRICAO'] ?> &rarr; R$ <?= $variacao['CB06_PRECO'] ?>
+                                                            <strong>&bull; <?= $variacao['CB06_DESCRICAO'] ?></strong> <br /> 
+                                                            Valor original: <strong>R$ <?= \Yii::$app->u->moedaReal($variacao['CB06_PRECO']) ?></strong> | Valor promocional: <strong>R$ <?= \Yii::$app->u->moedaReal($variacao['CB06_PRECO_PROMOCIONAL']) ?></strong> | Dinheiro de volta: <strong><?= \Yii::$app->u->moedaReal($variacao['CB06_DINHEIRO_VOLTA']) ?>%</strong>
                                                         </td>
-                                                        <td align="center"><button class="btn btn-danger btn-xs" onclick="excluirVariacao(<?= $variacao['CB06_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
+                                                        <td align="center"><button class="btn btn-danger btn-xs margin-top-5" onclick="excluirVariacao(<?= $variacao['CB06_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
                                                     </tr>
                                                     <?php
                                                 }

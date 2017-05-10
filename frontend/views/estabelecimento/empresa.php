@@ -91,6 +91,11 @@ $this->title = '';
         // Preenche o form com os dados da empresa
         FormEmpresa.setFormData(estabelecimento);
 
+        // logomarca
+        if (estabelecimento.CB04_URL_LOGOMARCA) {
+            $('img#logo-empresa').attr('src', estabelecimento.CB04_URL_LOGOMARCA);
+        }
+
         $("#btn-reset").click(function (e) {
             FormEmpresa.setFormData(estabelecimento);
         });
@@ -199,17 +204,25 @@ $this->title = '';
 
             <div class="widget-body no-padding">
 
-                <form action="#" id="empresa-form" class="smart-form" novalidate="novalidate" method="post">
+                <form action="#" id="empresa-form" class="smart-form" novalidate="novalidate" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" />
                     <fieldset>
                         <h3>Sobre a empresa</h3>
+                        <img src="img/sem_imagem.jpg" id="logo-empresa" class="thumbnail img-thumbnail air air-top-right" style="max-height: 120px;margin-right: 15px;" />
                         <div class="row padding-top-15">
-                            <section class="col col-6">
-                                <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
-                                    <input type="text" name="CB04_NOME" placeholder="<?= $al['CB04_NOME'] ?>">
+                            <section class="col col-9"><?= $al['CB04_URL_LOGOMARCA'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-image"></i>
+                                    <input type="file" name="CB04_URL_LOGOMARCA" placeholder="">
                                 </label>
                             </section>
-                            <section class="col col-6">
+                        </div>
+                        <div class="row">
+                            <section class="col col-6"><?= $al['CB04_NOME'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
+                                    <input type="text" name="CB04_NOME" placeholder="">
+                                </label>
+                            </section>
+                            <section class="col col-6"><?= $al['CB04_CATEGORIA_ID'] ?>
                                 <label class="select">
                                     <select name="CB04_CATEGORIA_ID" disabled="">
                                         <option value="" selected="" disabled="">Categoria...</option>
@@ -218,14 +231,14 @@ $this->title = '';
                             </section>
                         </div>
                         <div class="row">
-                            <section class="col col-6">
+                            <section class="col col-6"><?= $al['CB04_FUNCIONAMENTO'] ?>
                                 <label class="textarea"> <i class="icon-prepend fa fa-suitcase"></i>
-                                    <textarea rows="4" name="CB04_FUNCIONAMENTO" placeholder="<?= $al['CB04_FUNCIONAMENTO'] ?>"></textarea> 
+                                    <textarea rows="4" name="CB04_FUNCIONAMENTO" placeholder=""></textarea> 
                                 </label>
                             </section>
-                            <section class="col col-6">
+                            <section class="col col-6"><?= $al['CB04_OBSERVACAO'] ?>
                                 <label class="textarea"> <i class="icon-prepend fa fa-info-circle"></i>
-                                    <textarea rows="4" name="CB04_OBSERVACAO" placeholder="<?= $al['CB04_OBSERVACAO'] ?>"></textarea> 
+                                    <textarea rows="4" name="CB04_OBSERVACAO" placeholder=""></textarea> 
                                 </label>
                             </section>
                         </div>
@@ -239,42 +252,42 @@ $this->title = '';
                     <fieldset>
                         <h3>Endereço</h3>
                         <div class="row padding-top-15">
-                            <section class="col col-2 form-padding-right">
+                            <section class="col col-2"><?= $al['CB04_END_CEP'] ?>
                                 <label class="input">
-                                    <input type="text" name="CB04_END_CEP" placeholder="<?= $al['CB04_END_CEP'] ?>" data-mask="99999-999" onkeyup="buscaCEP(this.value)">
+                                    <input type="text" name="CB04_END_CEP" placeholder="" data-mask="99999-999" onkeyup="buscaCEP(this.value)">
                                 </label>
                             </section>
-                            <section class="col col-8 form-padding-left">
+                            <section class="col col-8"><?= $al['CB04_END_LOGRADOURO'] ?>
                                 <label class="input">
-                                    <input type="text" name="CB04_END_LOGRADOURO" placeholder="<?= $al['CB04_END_LOGRADOURO'] ?>">
+                                    <input type="text" name="CB04_END_LOGRADOURO" placeholder="">
                                 </label>
                             </section>
-                            <section class="col col-2 form-padding-right">
+                            <section class="col col-2"><?= $al['CB04_END_NUMERO'] ?>
                                 <label class="input">
-                                    <input type="text" name="CB04_END_NUMERO" placeholder="<?= $al['CB04_END_NUMERO'] ?>">
+                                    <input type="text" name="CB04_END_NUMERO" placeholder="">
                                 </label>
                             </section>
                         </div>
                         <div class="row">
-                            <section class="col col-5 form-padding-right">
+                            <section class="col col-5"><?= $al['CB04_END_BAIRRO'] ?>
                                 <label class="input">
-                                    <input type="text" name="CB04_END_BAIRRO" placeholder="<?= $al['CB04_END_BAIRRO'] ?>">
+                                    <input type="text" name="CB04_END_BAIRRO" placeholder="">
                                 </label>
                             </section>
-                            <section class="col col-5 form-padding-left form-padding-right">
+                            <section class="col col-5"><?= $al['CB04_END_CIDADE'] ?>
                                 <label class="input">
-                                    <input type="text" name="CB04_END_CIDADE" placeholder="<?= $al['CB04_END_CIDADE'] ?>">
+                                    <input type="text" name="CB04_END_CIDADE" placeholder="">
                                 </label>
                             </section>
-                            <section class="col col-2">
+                            <section class="col col-2"><?= $al['CB04_END_UF'] ?>
                                 <label class="input">
-                                    <input type="text" name="CB04_END_UF" placeholder="<?= $al['CB04_END_UF'] ?>">
+                                    <input type="text" name="CB04_END_UF" placeholder="">
                                 </label>
                             </section>
                         </div>
                         <section>
-                            <label class="input">
-                                <input type="text" name="CB04_END_COMPLEMENTO" placeholder="<?= $al['CB04_END_COMPLEMENTO'] ?>">
+                            <label class="input"><?= $al['CB04_END_COMPLEMENTO'] ?>
+                                <input type="text" name="CB04_END_COMPLEMENTO" placeholder="">
                             </label>
                         </section>
                     </fieldset>

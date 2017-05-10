@@ -42,12 +42,19 @@ return [
             'site/login-app',          
             'site/logout',
             'site/cadastro',
+            'estabelecimento/index',
             'estabelecimento/login',
             'estabelecimento/logout',
             'gii/*',
             'admin/*',
             'cliente/*',
-            'api/*'
+            'api/*',
+            'administrador/index',
+            'administrador/login',
+            'administrador/logout',
+
+
+            'api-empresa/promocao',
             
             // The actions listed here will be allowed to everyone including guests.
             // So, 'admin/*' should not appear here in the production, of course.

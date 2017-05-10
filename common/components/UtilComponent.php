@@ -20,18 +20,23 @@ class UtilComponent extends Component {
         switch ($file['type']) {
             case 'image/png' :
                 $retorno['ex'] = 'png';
+                $retorno['family'] = 'image';
             break;
             case 'image/jpeg' :
                 $retorno['ex'] = 'jpeg';
+                $retorno['family'] = 'image';
             break;
             case 'image/jpg' :
                 $retorno['ex'] = 'jpg';
+                $retorno['family'] = 'image';
             break;
             case 'image/gif' :
                 $retorno['ex'] = 'gif';
+                $retorno['family'] = 'image';
             break;
             default :
                 $retorno['ex'] = '';
+                $retorno['family'] = '';
             break;
         }
         
