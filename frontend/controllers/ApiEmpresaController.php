@@ -5,6 +5,8 @@ namespace frontend\controllers;
 use common\controllers\GlobalBaseController;
 use common\models\LoginForm;
 use common\models\CB06VARIACAO;
+use common\models\CB10CATEGORIA;
+use common\models\VIEWSEARCH;
 
 /**
  * API Empresa controller
@@ -53,11 +55,45 @@ class ApiEmpresaController extends GlobalBaseController {
     
     
     /**
+     * Login Create.
+     */
+    public function actionLoginCreate()
+    {
+        $model = new \frontend\models\SignupForm();
+        $model->setAttributes(\Yii::$app->request->post());
+        $model->signup();
+        return json_encode(($model->errors ? ['error' => $model->errors] : $model->attributes));
+    }
+    
+    
+    /**
      * Promocoes
      */
     public function actionPromocao() {
-        $promocao = CB06VARIACAO::getPromocao($this->url);
-        return json_encode($promocao);
+        $CB06VARIACAO = CB06VARIACAO::getPromocao($this->url);
+        return json_encode($CB06VARIACAO);
+    }
+
+    
+    /**
+     * Pesquisa
+     */
+    public function actionSearch() {
+        $retorno = "{}";
+        if ( ($param = \Yii::$app->request->post('param')) ) {
+            $VIEWSEARCH = VIEWSEARCH::find()->where(['like', 'BUSCA_TEXTO', $param])->asArray()->all();
+            return json_encode($VIEWSEARCH);
+        }
+        return $retorno;
+    }
+    
+    
+    /**
+     * Categorias do filtro
+     */
+    public function actionFilterCategory() {
+        $CB10CATEGORIA = CB10CATEGORIA::find()->asArray()->all();
+        return json_encode($CB10CATEGORIA);
     }
 
 }
