@@ -7,6 +7,7 @@ use common\models\LoginForm;
 use common\models\CB06VARIACAO;
 use common\models\CB10CATEGORIA;
 use common\models\VIEWSEARCH;
+use common\models\SYS01PARAMETROSGLOBAIS;
 
 /**
  * API Empresa controller
@@ -94,6 +95,18 @@ class ApiEmpresaController extends GlobalBaseController {
     public function actionFilterCategory() {
         $CB10CATEGORIA = CB10CATEGORIA::find()->asArray()->all();
         return json_encode($CB10CATEGORIA);
+    }
+    
+    
+    /**
+     * Convidar amigo
+     */
+    public function actionInviteFriend() {
+        $SYS01PARAMETROSGLOBAIS = "";
+        if ( ($user = \Yii::$app->request->post('user_auth_key')) ) {
+            $SYS01PARAMETROSGLOBAIS = SYS01PARAMETROSGLOBAIS::getValor('1') . $user;
+        }
+        return json_encode($SYS01PARAMETROSGLOBAIS);
     }
 
 }
