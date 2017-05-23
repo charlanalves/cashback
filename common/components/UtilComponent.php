@@ -48,12 +48,11 @@ class UtilComponent extends Component {
     }
 
     public function getTipoContaBancaria() {
-        return ['' => '', 1 => 'CORRENTE', 2 => 'POUPANÇA'];
+        return [1 => 'CORRENTE', 2 => 'POUPANÇA'];
     }
 
     public function getBancos() {
         return [
-            "" => "",
             "654" => "Banco A.J.Renner S.A.",
             "246" => "Banco ABC Brasil S.A.",
             "25" => "Banco Alfa S.A.",

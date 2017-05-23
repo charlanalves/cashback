@@ -85,4 +85,10 @@ class VIEWEXTRATOCLIENTE extends \common\models\GlobalModel
     }
     
     
+    public static function saldoAtualByAuthKey($AuthKey)
+    {
+        return self::saldoAtualByCliente(User::getIdByAuthKey($AuthKey));
+    }
+    
+    
 }

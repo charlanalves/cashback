@@ -3,11 +3,15 @@
 namespace frontend\controllers;
 
 use common\controllers\GlobalBaseController;
+use common\models\User;
 use common\models\LoginForm;
+use common\models\CB03CONTABANC;
 use common\models\CB06VARIACAO;
 use common\models\CB10CATEGORIA;
 use common\models\VIEWSEARCH;
 use common\models\SYS01PARAMETROSGLOBAIS;
+use common\models\CB16PEDIDO;
+use common\models\VIEWEXTRATOCLIENTE;
 
 /**
  * API Empresa controller
@@ -15,9 +19,11 @@ use common\models\SYS01PARAMETROSGLOBAIS;
 class ApiEmpresaController extends GlobalBaseController {
 
     public $url;
+    public $urlController;
     
     public function __construct($id, $module, $config = []) {
         $this->url = \Yii::$app->request->hostInfo . '/cashback/frontend/web/';
+        $this->urlController = $this->url . 'index.php?r=api-empresa/';
         parent::__construct($id, $module, $config);
     }
     
@@ -71,8 +77,9 @@ class ApiEmpresaController extends GlobalBaseController {
      * Promocoes
      */
     public function actionPromocao() {
+        $saldoAtual = (!($user = \Yii::$app->request->post('user_auth_key'))) ? '0,00' : VIEWEXTRATOCLIENTE::saldoAtualByCliente(User::getIdByAuthKey($user));
         $CB06VARIACAO = CB06VARIACAO::getPromocao($this->url);
-        return json_encode($CB06VARIACAO);
+        return json_encode(['saldoAtual' =>  $saldoAtual, 'estabelecimentos' => $CB06VARIACAO]);
     }
 
     
@@ -107,6 +114,74 @@ class ApiEmpresaController extends GlobalBaseController {
             $SYS01PARAMETROSGLOBAIS = SYS01PARAMETROSGLOBAIS::getValor('1') . $user;
         }
         return json_encode($SYS01PARAMETROSGLOBAIS);
+    }
+    
+    
+    /**
+     * Sacar
+     */
+    public function actionCashOut() {
+        
+        $return = '';
+        $formData = \Yii::$app->request->post();
+        
+        if (($user = $formData['user_auth_key'])) {
+            
+            unset($formData['user_auth_key']);
+            if (($idUser = User::getIdByAuthKey($user))) {
+
+                $saldoAtual = VIEWEXTRATOCLIENTE::saldoAtualByCliente($idUser);
+                $saqueMax = (float) $saldoAtual;
+                $saqueMin = (float) SYS01PARAMETROSGLOBAIS::getValor('2');
+
+                $contaBancariaCliente = CB03CONTABANC::findOne(['CB03_CLIENTE_ID' => $idUser]);
+                $dadosSaque = ($contaBancariaCliente) ? : new CB03CONTABANC();
+                $dadosSaque->setAttribute('CB03_VALOR', '');
+
+                $dadosSaque->scenario = CB03CONTABANC::SCENARIO_SAQUE;
+
+                if ($formData) {
+                    $dadosSaque->setAttributes($formData);
+                    $dadosSaque->setAttribute('CB03_CLIENTE_ID', $idUser);
+                    $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
+                    $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
+
+                    if ($dadosSaque->validate()) {
+                        $dadosSaque->save(false);
+
+                    } else {
+                        // formata valor moeda REAL
+                        $dadosSaque->setAttribute('CB03_VALOR', (string) \Yii::$app->u->moedaReal($dadosSaque->attributes['CB03_VALOR']));
+                    }
+                }
+            }
+        }
+        
+        return json_encode([
+            'utl_action' => $this->urlController . 'cash-out',
+            'bancos' => \Yii::$app->u->getBancos(),
+            'tp_conta' => \Yii::$app->u->getTipoContaBancaria(),
+            'conta_bancaria' => $dadosSaque->getAttributes(),
+            'error' => ($dadosSaque->getErrors() ? : false)
+        ]);
+    }
+    
+    
+    /**
+     * Compras realizadas
+     */
+    public function actionShopping() {
+        $modelCB16PEDIDO = new CB16PEDIDO();
+        $CB16PEDIDO = (($user = \Yii::$app->request->post('user_auth_key'))) ? $modelCB16PEDIDO::getPedidoByAuthKey($user) : false;
+        return json_encode($CB16PEDIDO);
+    }
+    
+    
+    /**
+     * Compras realizadas
+     */
+    public function actionProfile() {
+        return '{}';
     }
 
 }
