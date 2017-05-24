@@ -44,11 +44,8 @@ class CB03CONTABANC extends \common\models\GlobalModel
             [['CB03_AGENCIA'], 'string', 'max' => 5],
             [['CB03_COD_BANCO'], 'string', 'max' => 10],
             [['CB03_CLIENTE_ID'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['CB03_CLIENTE_ID' => 'id']],
-            [['CB03_VALOR'], 'filter', 'filter' => function ($valor) {
-                return (float) str_replace(',', '.', str_replace('.', '', $valor));
-            }],
-            [['CB03_VALOR'], 'compare', 'operator' => '>=', 'compareAttribute' => 'CB03_SAQUE_MIN', 'type' => 'number', 'message' => 'O valor mínimo para saque é de R$ {compareValue}'],
-            [['CB03_VALOR'], 'compare', 'operator' => '<=', 'compareAttribute' => 'CB03_SAQUE_MAX', 'type' => 'number', 'message' => 'O valor não pode ser maior que seu saldo de R$ {compareValue}'],
+            [['CB03_VALOR'], 'compare', 'operator' => '>=', 'compareAttribute' => 'CB03_SAQUE_MIN', 'type' => 'number', 'message' => 'Valor mínimo para saque: R$ {compareValue}'],
+            [['CB03_VALOR'], 'compare', 'operator' => '<=', 'compareAttribute' => 'CB03_SAQUE_MAX', 'type' => 'number', 'message' => 'O valor informado é maior que seu saldo de R$ {compareValue}'],
         ];
     }
     

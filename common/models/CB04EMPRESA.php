@@ -178,8 +178,11 @@ class CB04EMPRESA extends \common\models\GlobalModel {
             CB04_END_UF,
             CB04_END_NUMERO,
             CB04_NOME,
-            CB04_URL_LOGOMARCA,
-            FORMAT(MAX(CB07_PERCENTUAL), 0, 'de_DE') AS CASHBACK
+            CASE CB04_URL_LOGOMARCA 
+                WHEN CB04_URL_LOGOMARCA IS NULL 
+                THEN CB04_URL_LOGOMARCA 
+                ELSE 'img/empresa_default.png' END AS CB04_URL_LOGOMARCA,
+            FORMAT(MAX(IFNULL(CB07_PERCENTUAL,0)), 0, 'de_DE') AS CASHBACK
         FROM CB04_EMPRESA
             LEFT JOIN CB05_PRODUTO ON(CB05_EMPRESA_ID = CB04_ID)
             LEFT JOIN CB06_VARIACAO ON(CB06_PRODUTO_ID = CB05_ID)
@@ -188,7 +191,8 @@ class CB04EMPRESA extends \common\models\GlobalModel {
             LEFT JOIN CB07_CASH_BACK ON(CB07_PRODUTO_ID = CB05_ID  OR CB07_VARIACAO_ID = CB06_ID)
         WHERE CB04_EMPRESA.CB04_STATUS = 1 $categoria $item
             GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPARTILHADO, CB04_END_LOGRADOURO, 
-            CB04_END_BAIRRO, CB04_END_CIDADE, CB04_END_UF, CB04_END_NUMERO, CB04_NOME";
+            CB04_END_BAIRRO, CB04_END_CIDADE, CB04_END_UF, CB04_END_NUMERO, CB04_NOME
+            ORDER BY RAND()";
 
         $command = \Yii::$app->db->createCommand($sql);
         return $command->queryAll();

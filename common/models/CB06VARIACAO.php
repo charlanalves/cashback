@@ -85,8 +85,10 @@ class CB06VARIACAO extends \common\models\GlobalModel
      * @inheritdoc
      * @return
      */
-    public static function getPromocao($url)
+    public static function getPromocao($url, $filter)
     {
+        // filter categoria e ordenacao
+        $filterBind = (empty($filter['cat']) || empty($filter['ord'])) ? false : true;
         
         $sql = "
             SELECT 
@@ -101,10 +103,15 @@ class CB06VARIACAO extends \common\models\GlobalModel
             INNER JOIN CB05_PRODUTO ON(CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID AND CB05_PRODUTO.CB05_ATIVO = 1)
             INNER JOIN CB14_FOTO_PRODUTO ON(CB14_FOTO_PRODUTO.CB14_PRODUTO_ID = CB05_PRODUTO.CB05_ID AND CB14_FOTO_PRODUTO.CB14_CAPA = 1)
             INNER JOIN CB04_EMPRESA ON(CB04_EMPRESA.CB04_ID = CB05_PRODUTO.CB05_EMPRESA_ID AND CB04_EMPRESA.CB04_STATUS = 1)
+            " . (!$filterBind ? "" : "WHERE CB04_CATEGORIA_ID = :categoria") . "
             GROUP BY CB04_EMPRESA.CB04_NOME
-            ORDER BY CB06_DINHEIRO_VOLTA DESC";
-
+            ORDER BY " . (!$filterBind ? 'CB06_DINHEIRO_VOLTA DESC' : ":ordem");
+        
         $command = \Yii::$app->db->createCommand($sql);
+        if ($filterBind) {
+            $command->bindValue(':categoria', $filter['cat']);
+            $command->bindValue(':ordem', \Yii::$app->u->filterOrder($filter['ord']));
+        }
         return $command->queryAll();
     }
 }

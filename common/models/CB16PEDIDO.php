@@ -26,7 +26,12 @@ class CB16PEDIDO extends \common\models\GlobalModel
     
     // status do pagamento
     public $status_pedido = [1 => 'CANCELADO', 10 => 'AGUARDANDO PAGAMENTO', 20 => 'BAIXADO', 30 => 'PAGO'];
-
+    
+    const status_cancelado = 1;
+    const status_aguardando_pagamento = 10;
+    const status_baixado = 20;
+    const status_pago = 30;
+    
     /**
      * @inheritdoc
      */
@@ -134,6 +139,32 @@ class CB16PEDIDO extends \common\models\GlobalModel
         $command = $connection->createCommand($sql);
         $command->bindValue(':usuario', $cpf);
         $command->bindValue(':empresa', $empresa);
+        return $command->query()->readAll();
+        
+    }
+    
+    
+    public static function getPedidoByAuthKey($key, $empresa = null)
+    {
+        
+        $sql = "SELECT CB16_PEDIDO.*, CB17_PRODUTO_PEDIDO.*, user.name, DATE_FORMAT(CB16_DT,'%d/%m/%Y') as CB16_DT, CB14_URL AS IMG, 
+                    CASE CB16_STATUS 
+                    WHEN " . self::status_cancelado . " THEN 'Cancelado'
+                    WHEN " . self::status_aguardando_pagamento . " THEN 'Aguardando pagamento'
+                    WHEN " . self::status_baixado . " THEN 'Utilizado'
+                    WHEN " . self::status_pago . " THEN 'Pago'
+                    ELSE '' END AS STATUS
+                FROM CB16_PEDIDO 
+                INNER JOIN CB17_PRODUTO_PEDIDO ON(CB16_PEDIDO.CB16_ID = CB17_PRODUTO_PEDIDO.CB17_PEDIDO_ID)
+                INNER JOIN user ON(user.id = CB16_USER_ID)
+                LEFT JOIN CB14_FOTO_PRODUTO ON(CB14_PRODUTO_ID = CB17_PRODUTO_ID AND CB14_CAPA = '1')
+                WHERE auth_key = :usuario
+                ORDER BY CB16_STATUS DESC, CB16_DT DESC";
+
+        $connection = \Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        $command->bindValue(':usuario', $key);
+//        $command->bindValue(':empresa', $empresa);
         return $command->query()->readAll();
         
     }

@@ -15,6 +15,30 @@ use yii\base\Component;
  * */
 class UtilComponent extends Component {
 
+    public function filterOrder($param) {
+        switch ($param) {
+            case 'destaque' :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+            case 'mais-proximos' :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+            case 'mais-vendidos' :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+            case 'menor-preco' :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+            case 'maior-preco' :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+            default :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+        }
+        return $retorno;
+    }
+
     public function infoFile($file) {
         $retorno = $file;
         switch ($file['type']) {
@@ -48,12 +72,11 @@ class UtilComponent extends Component {
     }
 
     public function getTipoContaBancaria() {
-        return ['' => '', 1 => 'CORRENTE', 2 => 'POUPANÇA'];
+        return [1 => 'CORRENTE', 2 => 'POUPANÇA'];
     }
 
     public function getBancos() {
         return [
-            "" => "",
             "654" => "Banco A.J.Renner S.A.",
             "246" => "Banco ABC Brasil S.A.",
             "25" => "Banco Alfa S.A.",
