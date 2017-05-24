@@ -26,6 +26,7 @@ class ApiEmpresaController extends GlobalBaseController {
         $this->url = \Yii::$app->request->hostInfo . '/cashback/frontend/web/';
         $this->urlController = $this->url . 'index.php?r=api-empresa/';
         parent::__construct($id, $module, $config);
+		header('Access-Control-Allow-Origin: *'); 
     }
     
     
@@ -57,6 +58,7 @@ class ApiEmpresaController extends GlobalBaseController {
      * Login
      */
     public function actionLogin() {
+		header('Access-Control-Allow-Origin: *'); 
         $model = new LoginForm();
         $model->setAttributes(\Yii::$app->request->post());
         $model->loginCpfCnpj(); 
