@@ -15,6 +15,30 @@ use yii\base\Component;
  * */
 class UtilComponent extends Component {
 
+    public function filterOrder($param) {
+        switch ($param) {
+            case 'destaque' :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+            case 'mais-proximos' :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+            case 'mais-vendidos' :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+            case 'menor-preco' :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+            case 'maior-preco' :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+            default :
+                $retorno = "CB06_DINHEIRO_VOLTA DESC";
+            break;
+        }
+        return $retorno;
+    }
+
     public function infoFile($file) {
         $retorno = $file;
         switch ($file['type']) {

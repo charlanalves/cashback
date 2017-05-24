@@ -6,6 +6,7 @@ use common\controllers\GlobalBaseController;
 use common\models\User;
 use common\models\LoginForm;
 use common\models\CB03CONTABANC;
+use common\models\CB04EMPRESA;
 use common\models\CB06VARIACAO;
 use common\models\CB10CATEGORIA;
 use common\models\VIEWSEARCH;
@@ -33,6 +34,17 @@ class ApiEmpresaController extends GlobalBaseController {
         return parent::beforeAction($action);
     }
 
+    
+    /**
+     * getSaldoAtual
+     * @param string/integer $user ID ou AUTHKEY do usuario
+     * @return string saldo atual do usuario
+     */
+    private function getSaldoAtual($user) {
+        return VIEWEXTRATOCLIENTE::saldoAtualByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : '0,00';
+    }
+    
+    
     /**
      * Index.
      */
@@ -77,8 +89,9 @@ class ApiEmpresaController extends GlobalBaseController {
      * Promocoes
      */
     public function actionPromocao() {
-        $saldoAtual = (!($user = \Yii::$app->request->post('user_auth_key'))) ? '0,00' : VIEWEXTRATOCLIENTE::saldoAtualByCliente(User::getIdByAuthKey($user));
-        $CB06VARIACAO = CB06VARIACAO::getPromocao($this->url);
+        $filter = \Yii::$app->request->post();
+        $saldoAtual = $this->getSaldoAtual(\Yii::$app->request->post('user_auth_key'));
+        $CB06VARIACAO = CB06VARIACAO::getPromocao($this->url, $filter);
         return json_encode(['saldoAtual' =>  $saldoAtual, 'estabelecimentos' => $CB06VARIACAO]);
     }
 
@@ -130,7 +143,7 @@ class ApiEmpresaController extends GlobalBaseController {
             unset($formData['user_auth_key']);
             if (($idUser = User::getIdByAuthKey($user))) {
 
-                $saldoAtual = VIEWEXTRATOCLIENTE::saldoAtualByCliente($idUser);
+                $saldoAtual = $this->getSaldoAtual($idUser);
                 $saqueMax = (float) $saldoAtual;
                 $saqueMin = (float) SYS01PARAMETROSGLOBAIS::getValor('2');
 
@@ -174,6 +187,15 @@ class ApiEmpresaController extends GlobalBaseController {
         $modelCB16PEDIDO = new CB16PEDIDO();
         $CB16PEDIDO = (($user = \Yii::$app->request->post('user_auth_key'))) ? $modelCB16PEDIDO::getPedidoByAuthKey($user) : false;
         return json_encode($CB16PEDIDO);
+    }
+    
+    
+    /**
+     * Estabelecimentos
+     */
+    public function actionEstablishment() {
+        $CB04EMPRESA = CB04EMPRESA::getEmpresas(\Yii::$app->request->post());
+        return json_encode($CB04EMPRESA);
     }
     
     
