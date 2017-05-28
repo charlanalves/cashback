@@ -260,9 +260,29 @@ class ComposerStaticInit803e5711e81d4a1db2edba4ac1e4f7d1
     );
 
     public static $classMap = array (
+        'APIChildResource' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/APIChildResource.php',
+        'APIResource' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/APIResource.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
+        'Iugu' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Base.php',
+        'IuguAuthenticationException' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Base.php',
+        'IuguException' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Base.php',
+        'IuguObjectNotFound' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Base.php',
+        'IuguRequestException' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Base.php',
+        'IuguResource' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Base.php',
+        'Iugu_APIRequest' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/APIRequest.php',
+        'Iugu_Charge' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Charge.php',
+        'Iugu_Customer' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Customer.php',
+        'Iugu_Factory' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Factory.php',
+        'Iugu_Invoice' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Invoice.php',
+        'Iugu_Object' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Object.php',
+        'Iugu_PaymentMethod' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/PaymentMethod.php',
+        'Iugu_PaymentToken' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/PaymentToken.php',
+        'Iugu_Plan' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Plan.php',
+        'Iugu_SearchResult' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/SearchResult.php',
+        'Iugu_Subscription' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Subscription.php',
+        'Iugu_Utilities' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Utilities.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
         'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',
         'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
@@ -702,6 +722,7 @@ class ComposerStaticInit803e5711e81d4a1db2edba4ac1e4f7d1
         'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => __DIR__ . '/..' . '/sebastian/recursion-context/src/InvalidArgumentException.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
+        'class_tools' => __DIR__ . '/..' . '/iugu/iugu/lib/Iugu/Backward_Compatibility.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

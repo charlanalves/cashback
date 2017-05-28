@@ -34,7 +34,44 @@ class ApiEmpresaController extends GlobalBaseController {
         $this->enableCsrfValidation = false;
         return parent::beforeAction($action);
     }
-
+    
+    public function actionIugu() 
+    {
+     require_once(\Yii::getAlias('@vendor/iugu/Iugu.php'));
+     
+    $a =  \Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
+  $teste = \Iugu_Charge::create(Array(
+    "method" => "bank_slip",
+    "email" => "teste@teste.com",
+    "items" => Array(
+        Array(
+            "description" => "Item Um",
+            "quantity" => "1",
+            "price_cents" => "1000"
+        )
+    ) ,
+    "payer" => Array(
+        "cpf_cnpj" => "12312312312",
+        "name" => "Item Um",
+        "phone_prefix" => "1",
+        "phone" => "1000",
+        "email" => "teste@teste.com",
+        "address" => Array(
+            "street" => "Rua Tal",
+            "number" => "700",
+            "city" => "São Paulo",
+            "state" => "SP",
+            "country" => "Brasil",
+            "zip_code" => "12122-00",
+            "complement" => "bloco 3, ap. 32"
+        )
+    )
+));
+    var_dump($teste);
+      
+    
+    
+    }
     
     /**
      * getSaldoAtual
