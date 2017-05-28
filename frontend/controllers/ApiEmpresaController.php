@@ -239,9 +239,17 @@ class ApiEmpresaController extends GlobalBaseController {
     
     
     /**
-     * Compras realizadas
+     * Perfil
      */
     public function actionProfile() {
+        return '{}';
+    }
+    
+    
+    /**
+     * Alterar senha
+     */
+    public function actionChangePassword() {
         return '{}';
     }
 
