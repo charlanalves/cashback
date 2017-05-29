@@ -23,7 +23,7 @@ class ApiEmpresaController extends GlobalBaseController {
     public $urlController;
     
     public function __construct($id, $module, $config = []) {
-        $this->url = \Yii::$app->request->hostInfo . '/cashback/frontend/web/';
+        $this->url = \Yii::$app->request->hostInfo . '/apiestalecas/frontend/web/';
         $this->urlController = $this->url . 'index.php?r=api-empresa/';
         parent::__construct($id, $module, $config);
 		header('Access-Control-Allow-Origin: *'); 
@@ -117,10 +117,8 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionLoginCreate()
     {
-        $model = new \frontend\models\SignupForm();
-        $model->setAttributes(\Yii::$app->request->post());
-        $model->signup();
-        return json_encode(($model->errors ? ['error' => $model->errors] : $model->attributes));
+       \Yii::$app->Iugu->execute('criarSalvarContaCliente', \Yii::$app->request->post());
+      
     }
     
     

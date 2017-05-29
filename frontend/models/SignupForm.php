@@ -9,7 +9,7 @@ use common\models\AuthAssignment;
 /**
  * Signup form
  */
-class SignupForm extends Model {
+class SignupForm extends \common\models\GlobalModel {
 
     public $cpf_or_cnpj;
     
@@ -61,37 +61,23 @@ class SignupForm extends Model {
      * @return User|null the saved model or null if saving fails
      */
     public function signup() {
-        if (!$this->validate()) {
-            return null;
-        }
+        $user = new User();
+        $user->cpf_cnpj = $this->cpf_cnpj;
+        $user->name = $this->name;
+        $user->email = $this->email;
+        $user->username = $this->cpf_cnpj;
+        $user->id_indicacao = $this->id_indicacao;
+        $user->setPassword($this->password);
+        $user->generateAuthKey();
+        $user->save();
 
-        $connection = \Yii::$app->db;
-        $transaction = $connection->beginTransaction();
-        
-        try {
-            
-            $user = new User();
-            $user->cpf_cnpj = $this->cpf_cnpj;
-            $user->name = $this->name;
-            $user->email = $this->email;
-            $user->username = $this->cpf_cnpj;
-            $user->id_indicacao = $this->id_indicacao;
-            $user->setPassword($this->password);
-            $user->generateAuthKey();
-            $user->save();
-            
-            $assignment = new AuthAssignment();
-            $assignment->item_name = $this->item_name;
-            $assignment->user_id = (string) $user->id;
-            $assignment->save();
-            
-            $transaction->commit();
-            return $user;
-    
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            return $e->getMessage();
-        }
+        $assignment = new AuthAssignment();
+        $assignment->item_name = $this->item_name;
+        $assignment->user_id = (string) $user->id;
+        $assignment->save();
+
+        return $user;
     }
 
-}
+}   
+
