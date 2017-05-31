@@ -208,10 +208,52 @@ class ApiEmpresaController extends GlobalBaseController {
     
     
     /**
-     * Alterar senha
+     * Alterar senha 
      */
     public function actionChangePassword() {
-        return '{}';
+        $post = \Yii::$app->request->post();
+        $current_password = $post['current-password'];
+        $new_password = $post['new-password'];
+        $auth_key = $post['auth_key'];
+        $retorno = [];
+        
+        // valida senha
+        if (\Yii::$app->security->validatePassword($current_password, User::getHashPasswordByAuthKey($auth_key))) {
+            $new_password_hash = \Yii::$app->security->generatePasswordHash($new_password);
+            $user = User::findOne(['auth_key' => $auth_key]);
+            $user->setAttribute('password_hash', $new_password_hash);
+            if ($user->save()) {
+                $retorno = ['message' => 'A senha foi alterada com sucesso!'];
+            } else {
+                $retorno = ['error' => [[['A senha não foi alterada, tente novamente!']]]];
+            }
+            
+        } else {
+            $retorno = ['error' => [[['A senha atual esta incorreta!']]]];
+            
+        }
+        
+        return json_encode($retorno);
+    }
+    
+    
+    /**
+     * Checkout
+     */
+    public function actionCheckout() {
+        $post = \Yii::$app->request->post();
+        $CB16PEDIDO = false;
+        
+        // verifica se o pedido é do usuario logado
+        if(($pedido = CB16PEDIDO::getPedidoByAuthKey($post['user_auth_key'], "", $post['order']))) {
+            $pedido = $pedido[0];
+            // verifica status do pedido
+            if ($pedido['CB16_STATUS'] == CB16PEDIDO::status_aguardando_pagamento) {
+                $CB16PEDIDO = $pedido;
+            }
+        }
+        
+        return json_encode($CB16PEDIDO);
     }
 
 }
