@@ -1,6 +1,6 @@
 /nbproject/private/
-/frontend/runtime/debug/index.data
-/frontend/runtime/logs/app.log
+/frontend/runtime/debug/*
+/frontend/runtime/logs/*
 /backend/*
 *.data
 *.bin

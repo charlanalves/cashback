@@ -133,29 +133,23 @@ class GlobalModel extends ActiveRecord
             parent::save($runValidation, $attributeNames);            
             
             $modelErro = $this->getFirstErrors();
-            
+            $msg = '';
             if (!empty($modelErro)) {
-                $errorMsg = ['message' => [
-                    'dev' => array_values($modelErro)[0], 
-                    'prod' => array_values($modelErro)[0]],
-                ];                
+                foreach ($modelErro as $m) {
+                    $msg .= $m . '<br />';
+                }
             } else {
                 $this->globalCheckAndUploadFiles();
             }
             
-            
         } catch (\Exception $e) {            
-            
-            $errorMsg = ['message' => ['dev' => $e->getMessage()]];
+            throw new \Exception($e->getMessage());    
         }
         
-        if (!empty($errorMsg)) {
-            $errorMsg = \Yii::$app->v->getErrorMsgCurrentEnv($errorMsg);   
-            throw new \Exception($errorMsg);            
+        if (!empty($modelErro)) {            
+            throw new \yii\base\UserException($msg);            
         }
-        
-
-		return true;
+        return true;
     }
     
     

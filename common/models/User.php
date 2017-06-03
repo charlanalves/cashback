@@ -22,7 +22,7 @@ use yii\web\IdentityInterface;
  * @property string $password write-only password
  * @property string $cpf_cnpj
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends GlobalModel implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
@@ -54,6 +54,30 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['cpf_or_cnpj', 'safe'],
+            
+            ['name', 'trim'],
+            ['name', 'required'],
+            ['name', 'string', 'min' => 5, 'max' => 255],
+
+            ['cpf_cnpj', 'trim'],
+            ['cpf_cnpj', 'required'],
+            ['cpf_cnpj', 'filter', 'filter' => function($value) {
+                return preg_replace('/[^0-9]/', '', $value);
+            }],
+            ['cpf_cnpj', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este CPF/CNPJ já foi usado.'],
+            ['cpf_cnpj', 'string', 'min' => 11, 'max' => 14],
+            
+            ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este Email já foi usado.'],
+            
+           
+            
+            ['id_indicacao', 'integer'],
+            ['id_indicacao', 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => 'id', 'message' => 'A indicação não é valida.'],
         ];
     }
 

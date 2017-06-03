@@ -20,6 +20,9 @@ return [
         'dataDumpComponent' => [
             'class' => 'common\components\dataDumpComponent',
         ],
+        'Iugu' => [
+            'class' => 'common\components\IuguComponent',
+        ],
       
     ],
     
