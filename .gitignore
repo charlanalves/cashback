@@ -1,9 +1,7 @@
 /nbproject/private/
+/frontend/runtime/debug/*
+/frontend/runtime/logs/*
 /backend/*
 *.data
 *.bin
-<<<<<<< HEAD
 *.log
-=======
-*.log
->>>>>>> 01331544a57bb3a6b06a7594ae5affc02c21a3de

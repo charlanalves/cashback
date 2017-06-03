@@ -233,5 +233,10 @@ class User extends GlobalModel implements IdentityInterface
     {
         return (($user = self::findOne(['auth_key' => $authKey]))) ? $user->id : false;
     }
+    
+    public static function getHashPasswordByAuthKey($authKey)
+    {
+        return (($user = self::findOne(['auth_key' => $authKey]))) ? $user->password_hash : false;
+    }
 
 }
