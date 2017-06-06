@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <toolbar>
 	<item id="titulo" type="text"  text="Lorem Ipsum"/>
-
     <item id="voltar" type="button"  img="voltar.png" imgdis="voltar.png" title="Voltar"/>
     <item id="avancar" type="button"  img="avancar.png" imgdis="avancar.png" title="Avançar"/>
 	<item id="adicionar" type="button"  img="adicionar.png" imgdis="adicionar_dis.png" title="Adicionar"/>

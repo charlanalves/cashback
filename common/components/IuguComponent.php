@@ -31,10 +31,14 @@ class IuguComponent extends PaymentBaseComponent {
     
     protected function processTransaction($data)
     {
+        $this->lastResponse =  \Iugu_Charge::create($data);
         
+        if (isset($this->lastResponse->errors)) {
+          throw new UserException("O cartão não foi autorizado tente novamente.");
+        }
     }
     
-    private function criarConta() 
+    private function createAccount() 
     {   
         $this->lastResponse = \Iugu_Marketplace::createAccount();      
         
@@ -43,7 +47,7 @@ class IuguComponent extends PaymentBaseComponent {
         }
     }
     
-    protected function criarSalvarContaCliente($atributos) 
+    protected function createSaveClienteAccount($atributos) 
     {
         $this->transaction = \Yii::$app->db->beginTransaction();
         
@@ -51,7 +55,7 @@ class IuguComponent extends PaymentBaseComponent {
         $model->setAttributes($atributos);
         $user = $model->signup();
         
-        $this->criarConta();
+        $this->createAccount();
         
         $user->DADOS_API_TOKEN = json_encode($this->lastResponse);
         $user->ID_CONTA_IUGU = $this->lastResponse->account_id;
@@ -61,9 +65,9 @@ class IuguComponent extends PaymentBaseComponent {
         return $user->attributes;
     }
     
-    private function criarSalvarContaEmpresa($atributos) 
+    private function createSaveCompanyAccount($atributos) 
     {
-      $this->criarConta();
+      $this->createAccount();
       
       $criacaoDadosBanc = \Iugu_Marketplace::UpdateBankData();
       

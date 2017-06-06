@@ -94,7 +94,7 @@ class Generator extends \yii\gii\Generator
         return array_merge(parent::attributeLabels(), [
             'ns' => 'Namespace',
             'db' => 'Database Connection ID',
-            'tableName' => 'Table Name',
+            'tableName' => 'Nome da Tabela',
             'modelClass' => 'Model Class',
             'baseClass' => 'Base Class',
             'generateRelations' => 'Generate Relations',
@@ -440,13 +440,14 @@ class Generator extends \yii\gii\Generator
     {
         if ($this->generateRelations === self::RELATIONS_NONE) {
             return [];
-        }
+        }   
 
         $db = $this->getDbConnection();
 
         $relations = [];
         foreach ($this->getSchemaNames() as $schemaName) {
-            foreach ($db->getSchema()->getTableSchemas($schemaName) as $table) {
+           $tables[] = $db->getSchema()->getTableSchema($this->tableName);
+            foreach ( $tables as $table) {
                 $className = $this->generateClassName($table->fullName);
                 foreach ($table->foreignKeys as $refs) {
                     $refTable = $refs[0];
@@ -715,7 +716,7 @@ class Generator extends \yii\gii\Generator
      * @return array the table names that match the pattern specified by [[tableName]].
      */
     protected function getTableNames()
-    {
+    {   
         if ($this->tableNames !== null) {
             return $this->tableNames;
         }

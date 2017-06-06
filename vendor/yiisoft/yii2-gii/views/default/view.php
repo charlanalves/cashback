@@ -15,39 +15,29 @@ use yii\gii\CodeFile;
 /* @var $answers array */
 
 $this->title = $generator->getName();
+
 $templates = [];
 foreach ($generator->templates as $name => $path) {
     $templates[$name] = "$name ($path)";
 }
 ?>
 <div class="default-view">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p><?= $generator->getDescription() ?></p>
 
     <?php $form = ActiveForm::begin([
         'id' => "$id-generator",
         'successCssClass' => '',
         'fieldConfig' => ['class' => ActiveField::className()],
+    	'enableAjaxValidation' => true,
     ]); ?>
+    	<input id ="idGenerator" type="hidden" value="<?= $id ?>" >
         <div class="row">
             <div class="col-lg-8 col-md-10">
                 <?= $this->renderFile($generator->formView(), [
                     'generator' => $generator,
                     'form' => $form,
+                    'templates' => $templates
                 ]) ?>
-                <?= $form->field($generator, 'template')->sticky()
-                    ->label('Code Template')
-                    ->dropDownList($templates)->hint('
-                        Please select which set of the templates should be used to generated the code.
-                ') ?>
-                <div class="form-group">
-                    <?= Html::submitButton('Preview', ['name' => 'preview', 'class' => 'btn btn-primary']) ?>
-
-                    <?php if (isset($files)): ?>
-                        <?= Html::submitButton('Generate', ['name' => 'generate', 'class' => 'btn btn-success']) ?>
-                    <?php endif; ?>
-                </div>
             </div>
         </div>
 

@@ -39,9 +39,9 @@ class ApiEmpresaController extends GlobalBaseController {
     {
      require_once(\Yii::getAlias('@vendor/iugu/Iugu.php'));
      
-    $a =  \Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
-  $teste = \Iugu_Charge::create(Array(
-    "method" => "bank_slip",
+    $a =  \Iugu::setApiKey("67dfbb35a60a62cb5cee9ca8730737a98");
+ $teste = \Iugu_Charge::create(Array(
+    "token" => "E4DE70F8-3574-4A69-A83E-0D507318DA26",
     "email" => "teste@teste.com",
     "items" => Array(
         Array(
@@ -51,7 +51,6 @@ class ApiEmpresaController extends GlobalBaseController {
         )
     ) ,
     "payer" => Array(
-        "cpf_cnpj" => "12312312312",
         "name" => "Item Um",
         "phone_prefix" => "1",
         "phone" => "1000",
@@ -62,8 +61,7 @@ class ApiEmpresaController extends GlobalBaseController {
             "city" => "São Paulo",
             "state" => "SP",
             "country" => "Brasil",
-            "zip_code" => "12122-00",
-            "complement" => "bloco 3, ap. 32"
+            "zip_code" => "12122-00"
         )
     )
 ));
@@ -117,7 +115,7 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionLoginCreate()
     {
-       \Yii::$app->Iugu->execute('criarSalvarContaCliente', \Yii::$app->request->post());
+       \Yii::$app->Iugu->execute('createSaveClienteAccount', \Yii::$app->request->post());
       
     }
     

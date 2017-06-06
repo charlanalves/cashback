@@ -121,7 +121,7 @@ class Generator extends \yii\gii\Generator
     /**
      * @inheritdoc
      */
-    public function successMessage()
+    public function successMessage($link = '')
     {
         $code = highlight_string($this->render('action.php'), true);
 

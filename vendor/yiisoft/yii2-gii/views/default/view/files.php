@@ -23,7 +23,7 @@ use yii\gii\CodeFile;
         </label>
     </div>
 
-    <p>Click on the above <code>Generate</code> button to generate the files selected below:</p>
+    <p>Click em <code>Preview/Gerar</code> para gerar os arquivos selecionados abaixo:</p>
 
     <table class="table table-bordered table-striped table-condensed">
         <thead>
@@ -78,7 +78,7 @@ use yii\gii\CodeFile;
                     if ($file->operation === CodeFile::OP_SKIP) {
                         echo '&nbsp;';
                     } else {
-                        echo Html::checkBox("answers[{$file->id}]", isset($answers) ? isset($answers[$file->id]) : ($file->operation === CodeFile::OP_CREATE));
+                        echo Html::checkBox("answers[{$file->id}]", isset($answers) ? isset($answers[$file->id]) : ($file->operation === CodeFile::OP_CREATE), ['class' => 'answers']);
                     }
                     ?>
                 </td>
