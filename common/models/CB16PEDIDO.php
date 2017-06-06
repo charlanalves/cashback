@@ -92,10 +92,10 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     }
     
     
-    public static function getPedidoByAuthKey($key, $empresa = null)
+    public static function getPedidoByAuthKey($key, $empresa = "", $pedido = "")
     {
         
-        $sql = "SELECT CB16_PEDIDO.*, CB17_PRODUTO_PEDIDO.*, user.name, DATE_FORMAT(CB16_DT,'%d/%m/%Y') as CB16_DT, CB14_URL AS IMG, 
+        $sql = "SELECT CB16_PEDIDO.*, CB17_PRODUTO_PEDIDO.*, user.*, DATE_FORMAT(CB16_DT,'%d/%m/%Y') as CB16_DT, CB14_URL AS IMG, 
                     CASE CB16_STATUS 
                     WHEN " . self::status_cancelado . " THEN 'Cancelado'
                     WHEN " . self::status_aguardando_pagamento . " THEN 'Aguardando pagamento'
@@ -106,13 +106,18 @@ class CB16PEDIDO extends BaseCB16PEDIDO
                 INNER JOIN CB17_PRODUTO_PEDIDO ON(CB16_PEDIDO.CB16_ID = CB17_PRODUTO_PEDIDO.CB17_PEDIDO_ID)
                 INNER JOIN user ON(user.id = CB16_USER_ID)
                 LEFT JOIN CB14_FOTO_PRODUTO ON(CB14_PRODUTO_ID = CB17_PRODUTO_ID AND CB14_CAPA = '1')
-                WHERE auth_key = :usuario
+                WHERE auth_key = :usuario " . (!$empresa ? "" : " AND CB16_EMPRESA_ID = :empresa") . (!$pedido ? "" : " AND CB16_ID = :pedido") . "
                 ORDER BY CB16_STATUS DESC, CB16_DT DESC";
 
         $connection = \Yii::$app->db;
         $command = $connection->createCommand($sql);
         $command->bindValue(':usuario', $key);
-//        $command->bindValue(':empresa', $empresa);
+        if ($empresa) {
+            $command->bindValue(':empresa', $empresa);
+        }
+        if ($pedido) {
+            $command->bindValue(':pedido', $pedido);
+        }
         return $command->query()->readAll();
         
     }
