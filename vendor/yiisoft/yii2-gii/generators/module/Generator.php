@@ -82,7 +82,7 @@ class Generator extends \yii\gii\Generator
     /**
      * @inheritdoc
      */
-    public function successMessage()
+    public function successMessage($link = '')
     {
         if (Yii::$app->hasModule($this->moduleID)) {
             $link = Html::a('try it now', Yii::$app->getUrlManager()->createUrl($this->moduleID), ['target' => '_blank']);

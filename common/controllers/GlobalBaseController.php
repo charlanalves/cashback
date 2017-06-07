@@ -17,7 +17,7 @@
 namespace common\controllers;
 
 use common\models\GlobalModel as GlobalModel;
-use Yii;
+use \Yii;
 use yii\web\Controller;
 use yii\base\Object;
 use yii\di\Instance;

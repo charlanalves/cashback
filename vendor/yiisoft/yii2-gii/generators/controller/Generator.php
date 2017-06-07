@@ -135,7 +135,7 @@ class Generator extends \yii\gii\Generator
     /**
      * @inheritdoc
      */
-    public function successMessage()
+    public function successMessage($link = '')
     {
         $actions = $this->getActionIDs();
         if (in_array('index', $actions)) {

@@ -5,12 +5,17 @@
 /* @var $hasError boolean */
 ?>
 <div class="default-view-results">
-    <?php
-    if ($hasError) {
-        echo '<div class="alert alert-danger">There was something wrong when generating the code. Please check the following messages.</div>';
-    } else {
-        echo '<div class="alert alert-success">' . $generator->successMessage() . '</div>';
-    }
-    ?>
-    <pre><?= nl2br($results) ?></pre>
+
+    <? if ($hasError == true) : ?>
+         <div class="alert alert-danger">
+         	Aconteceu um erro ao efetuar a geração:
+         </div>
+    <? endif;?>   
+    
+    <? if ($hasError == false) : ?>
+ 		<?php $ctrlUrl = './index.php?r='.$generator->controllerAction; ?>
+        <div class="alert alert-success"><?= $generator->successMessage($ctrlUrl) ?></div>
+    <? endif;?>    
+
+   <pre><?= nl2br($results) ?></pre>  
 </div>

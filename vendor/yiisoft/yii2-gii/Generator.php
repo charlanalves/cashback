@@ -151,7 +151,7 @@ abstract class Generator extends Model
      * Child classes may override this method to customize the message.
      * @return string the message to be displayed when the newly generated code is saved successfully.
      */
-    public function successMessage()
+    public function successMessage($link = '')
     {
         return 'The code has been generated successfully.';
     }
