@@ -1,47 +1,23 @@
 <?php
+
 namespace common\models;
 
 use Yii;
-use yii\base\NotSupportedException;
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
+use common\models\base\User as BaseUser;
 use yii\web\IdentityInterface;
 
 /**
- * User model
- *
- * @property integer $id
- * @property string $username
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $email
- * @property string $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password write-only password
- * @property string $cpf_cnpj
+ * This is the model class for table "user".
  */
-class User extends GlobalModel implements IdentityInterface
+class User extends BaseUser implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
+	
+	const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
-
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
-        return '{{%user}}';
-    }
-
-  
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
+ 	public function rules()
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -57,23 +33,23 @@ class User extends GlobalModel implements IdentityInterface
             ['cpf_cnpj', 'filter', 'filter' => function($value) {
                 return preg_replace('/[^0-9]/', '', $value);
             }],
-            ['cpf_cnpj', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este CPF/CNPJ jÃ¡ foi usado.'],
+            ['cpf_cnpj', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este CPF/CNPJ já foi usado.'],
             ['cpf_cnpj', 'string', 'min' => 11, 'max' => 14],
             
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este Email jÃ¡ foi usado.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este Email já foi usado.'],
             
            
             
             ['id_indicacao', 'integer'],
-            ['id_indicacao', 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => 'id', 'message' => 'A indicaÃ§Ã£o nÃ£o Ã© valida.'],
+            ['id_indicacao', 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => 'id', 'message' => 'A indicação não é valida.'],
         ];
     }
-
-    /**
+    
+ /**
      * @inheritdoc
      */
     public static function findIdentity($id)
@@ -225,5 +201,14 @@ class User extends GlobalModel implements IdentityInterface
     {
         return (($user = self::findOne(['auth_key' => $authKey]))) ? $user->id : false;
     }
+<<<<<<< HEAD
+	
+=======
+    
+    public static function getHashPasswordByAuthKey($authKey)
+    {
+        return (($user = self::findOne(['auth_key' => $authKey]))) ? $user->password_hash : false;
+    }
 
+>>>>>>> f20edd6b0a3679087af3168f9d4c1126d674591a
 }

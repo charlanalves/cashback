@@ -100,7 +100,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     public function actionTrans() 
     {	
         $pedido = \common\models\CB16PEDIDO::findOne(5);
-       \Yii::$app->Iugu->execute('criaTransacaoTransferencia', ['pedido' => $pedido]);
+       \Yii::$app->Iugu->execute('criaTransferencias', ['pedido' => $pedido]);
     }
     
     public function actionTransferencias() 
