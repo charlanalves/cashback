@@ -38,9 +38,9 @@ class IuguComponent extends PaymentBaseComponent {
         }
     }
     
-    private function createAccount() 
+    public function createAccount() 
     {   
-        $this->lastResponse = \Iugu_Marketplace::createAccount();      
+        $this->lastResponse = \Iugu_Marketplace::createAccount(['name'=>'SubMaster']);      
         
         if (isset($this->lastResponse->errors)) {
           throw new UserException("Erro ao criar conta.");

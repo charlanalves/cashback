@@ -11,8 +11,7 @@ use Yii;
  * This is the base model class for table "PAG04_TRANSFERENCIAS".
  *
  * @property integer $PAG04_ID
- * @property string $PAG04_DATA_CRIACAO
- * @property integer $PAG04_ID_TRANSACAO
+ * @property string $PAG04_DATA_CRIACAO 
  * @property integer $PAG04_ID_USER
  * @property string $PAG04_COD_CONTA_ORIGEM
  * @property string $PAG04_COD_CONTA_DESTINO
@@ -34,11 +33,12 @@ class PAG04TRANSFERENCIAS extends \common\models\GlobalModel
     public function rules()
     {
         return [
-            [['PAG04_DATA_CRIACAO', 'PAG04_ID_TRANSACAO', 'PAG04_VLR', 'PAG04_DT_PREV', 'PAG04_DT_DEP', 'PAG04_TIPO'], 'required'],
-            [['PAG04_DATA_CRIACAO', 'PAG04_DT_PREV', 'PAG04_DT_DEP'], 'safe'],
-            [['PAG04_ID_TRANSACAO', 'PAG04_ID_USER', 'PAG04_TIPO'], 'integer'],
+        [['PAG04_DATA_CRIACAO', 'PAG04_DT_PREV', 'PAG04_DT_DEP'], 'safe'],
+            [['PAG04_ID_PEDIDO', 'PAG04_VLR', 'PAG04_DT_PREV','PAG04_TIPO'], 'required'],
+            [['PAG04_ID_PEDIDO', 'PAG04_TIPO'], 'integer'],
             [['PAG04_VLR'], 'number'],
             [['PAG04_COD_CONTA_ORIGEM', 'PAG04_COD_CONTA_DESTINO'], 'string', 'max' => 200],
+            
             
             
         ];
@@ -62,8 +62,7 @@ class PAG04TRANSFERENCIAS extends \common\models\GlobalModel
         return [
             'PAG04_ID' => 'Pag04  ID',
             'PAG04_DATA_CRIACAO' => 'Pag04  Data  Criacao',
-            'PAG04_ID_TRANSACAO' => 'Pag04  Id  Transacao',
-            'PAG04_ID_USER' => 'Pag04  Id  User',
+            'PAG04_ID_PEDIDO' => 'Pag04  Id  Pedido',
             'PAG04_COD_CONTA_ORIGEM' => 'Pag04  Cod  Conta  Origem',
             'PAG04_COD_CONTA_DESTINO' => 'Pag04  Cod  Conta  Destino',
             'PAG04_VLR' => 'Pag04  Vlr',
@@ -73,21 +72,15 @@ class PAG04TRANSFERENCIAS extends \common\models\GlobalModel
         ];
     }
     
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPAG04IDTRANSACAO()
-    {
-        return $this->hasOne(\common\models\PAG01TRANSACAO::className(), ['PAG01_ID' => 'PAG04_ID_TRANSACAO']);
-    }
+
         
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPAG04IDUSER()
-    {
-        return $this->hasOne(\common\models\User::className(), ['id' => 'PAG04_ID_USER']);
-    }
+   public function getPAG04IDPEDIDO() 
+    { 
+        return $this->hasOne(\app\models\CB16PEDIDO::className(), ['CB16_ID' => 'PAG04_ID_PEDIDO']);
+    } 
     
 
 }

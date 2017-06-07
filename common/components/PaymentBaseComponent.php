@@ -82,21 +82,23 @@ abstract class PaymentBaseComponent extends Component {
     public function criaTransferencias($params) 
     {
    	   $params['idPedido'] = 5;
+ 
    	    
         $pedidos = \common\models\CB16PEDIDO::getPedidoCompleto($params['idPedido']);
-        $IuguMaster =  \app\common\models\SYS01PARAMETROSGLOBAIS::getValor('CT_DEV');
-        $IuguSubAdmin =  \app\common\models\SYS01PARAMETROSGLOBAIS::getValor('SB_DEV');
+          	   $pedidos[0]['CB16_DT_APROVACAO'] = date('Y-m-d');
+        $IuguMaster =  \common\models\SYS01PARAMETROSGLOBAIS::getValor('CT_DEV');
+        $IuguSubAdmin =  \common\models\SYS01PARAMETROSGLOBAIS::getValor('SB_PROD');
         
-        $transaction = Yii::$app->db->beginTransaction();
+        $this->transaction  = \Yii::$app->db->beginTransaction();
         foreach ($pedidos as $pedido) {
-        	$transacao = new \app\common\models\PAG01_TRANSACAO; 
-        	$dtPrevisao = $this->getDtPrevisao($pedido['CB08_PRAZO_DIAS_RECEBIMENTO'], $pedidos['CB16_DT_APROVACAO']);
+        	$trans = new \common\models\PAG04TRANSFERENCIAS; 
+        	$dtPrevisao = $this->getDtPrevisao($pedido['CB08_PRAZO_DIAS_RECEBIMENTO'], $pedido['CB16_DT_APROVACAO']);
         	$vlrCliente = floor($pedido['CB16_VLR_CB_TOTAL'] * 100) / 100;
-        	$vlrAdmin = floor((($pedido['CB16_PERC_ADMIN']/100) * $pedido['CB16_VLR']) * 100) / 100;
-        	$vlrAdq = floor((($pedido['CB16_PERC_ADQ']/100) * $pedido['CB16_VLR']) * 100) / 100;
+        	$vlrAdmin = floor((($pedido['CB16_PERC_ADMIN']/100) * $pedido['CB16_VALOR']) * 100) / 100;
+        	$vlrAdq = floor((($pedido['CB16_PERC_ADQ']/100) * $pedido['CB16_VALOR']) * 100) / 100;
         	
         	// TRANSFÊNCIA MASTER TO CLIENTE
-			$trans->PAG04_ID_PEDIDO = $pedidos['CB16_ID'];		
+			$trans->PAG04_ID_PEDIDO = $pedido['CB16_ID'];		
 			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
 			$trans->PAG04_COD_CONTA_DESTINO = $pedido['CB02_COD_CONTA_VIRTUAL'];
 			$trans->PAG04_VLR = $vlrCliente;
@@ -104,8 +106,10 @@ abstract class PaymentBaseComponent extends Component {
 			$trans->PAG04_TIPO = 1;
         	$trans->save();
         	
+        	 
         	// TRANSFÊNCIA MASTER TO ADMIN
-        	$trans->PAG04_ID_PEDIDO = $pedidos['CB16_ID'];		
+        	$trans = new \common\models\PAG04TRANSFERENCIAS;
+        	$trans->PAG04_ID_PEDIDO = $pedido['CB16_ID'];		
 			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
 			$trans->PAG04_COD_CONTA_DESTINO = $IuguSubAdmin;
 			$trans->PAG04_VLR = $vlrAdmin;
@@ -115,11 +119,12 @@ abstract class PaymentBaseComponent extends Component {
         	
         	
         	// TRANSFÊNCIA MASTER TO EMPRESA
-        	$trans->PAG04_ID_PEDIDO = $pedidos['CB16_ID'];		
+        	$trans = new \common\models\PAG04TRANSFERENCIAS; 
+        	$trans->PAG04_ID_PEDIDO = $pedido['CB16_ID'];		
 			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
 			$trans->PAG04_COD_CONTA_DESTINO =  $pedido['CB04_COD_CONTA_VIRTUAL'];;
-			$trans->PAG04_VLR = $pedido['CB16_VLR'] - $vlrCliente - $vlrAdmin - $vlrAdq;
-			$trans->PAG04_DT_PREV = $dtPrevisao			
+			$trans->PAG04_VLR = $pedido['CB16_VALOR'] - $vlrCliente - $vlrAdmin - $vlrAdq;
+			$trans->PAG04_DT_PREV = $dtPrevisao;			
 			$trans->PAG04_TIPO = 3;
         	$trans->save();
         }

@@ -123,6 +123,11 @@ class ApiEmpresaController extends GlobalBaseController {
       
     }
     
+	public function actionCmaster()
+    {
+       \Yii::$app->Iugu->execute('createAccount','');
+	      
+    }
     
     /**
      * Promocoes
