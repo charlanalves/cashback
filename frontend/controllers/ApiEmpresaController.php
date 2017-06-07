@@ -98,7 +98,7 @@ class ApiEmpresaController extends GlobalBaseController {
      * Login
      */
     public function actionLogin() {
-		header('Access-Control-Allow-Origin: *'); 
+        header('Access-Control-Allow-Origin: *'); 
         $model = new LoginForm();
         $model->setAttributes(\Yii::$app->request->post());
         $model->loginCpfCnpj(); 
