@@ -15,6 +15,10 @@ use yii\base\Component;
  * */
 class UtilComponent extends Component {
 
+    public function arredondar($vlr) {
+        return floor($vlr * 100) / 100;
+    }
+
     public function filterOrder($param) {
         switch ($param) {
             case 'destaque' :
