@@ -99,7 +99,7 @@ abstract class PaymentBaseComponent extends Component {
 			$trans->PAG04_ID_PEDIDO = $pedidos['CB16_ID'];		
 			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
 			$trans->PAG04_COD_CONTA_DESTINO = $pedido['CB02_COD_CONTA_VIRTUAL'];
-			$trans->PAG04_VLR DECIMAL = $vlrCliente;
+			$trans->PAG04_VLR = $vlrCliente;
 			$trans->PAG04_DT_PREV = $dtPrevisao;			
 			$trans->PAG04_TIPO = 1;
         	$trans->save();
@@ -108,7 +108,7 @@ abstract class PaymentBaseComponent extends Component {
         	$trans->PAG04_ID_PEDIDO = $pedidos['CB16_ID'];		
 			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
 			$trans->PAG04_COD_CONTA_DESTINO = $IuguSubAdmin;
-			$trans->PAG04_VLR DECIMAL = $vlrAdmin;
+			$trans->PAG04_VLR = $vlrAdmin;
 			$trans->PAG04_DT_PREV = $dtPrevisao;			
 			$trans->PAG04_TIPO = 2;
         	$trans->save();
@@ -118,7 +118,7 @@ abstract class PaymentBaseComponent extends Component {
         	$trans->PAG04_ID_PEDIDO = $pedidos['CB16_ID'];		
 			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
 			$trans->PAG04_COD_CONTA_DESTINO =  $pedido['CB04_COD_CONTA_VIRTUAL'];;
-			$trans->PAG04_VLR DECIMAL = $pedido['CB16_VLR'] - $vlrCliente - $vlrAdmin - $vlrAdq;
+			$trans->PAG04_VLR = $pedido['CB16_VLR'] - $vlrCliente - $vlrAdmin - $vlrAdq;
 			$trans->PAG04_DT_PREV = $dtPrevisao			
 			$trans->PAG04_TIPO = 3;
         	$trans->save();
