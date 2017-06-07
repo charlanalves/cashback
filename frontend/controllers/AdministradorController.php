@@ -89,11 +89,27 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         return;
     }
 
-    public function actionEmpresa() {
+    public function actionEmpresa() 
+    {
         return $this->render('empresa', [
                     'tituloTela' => 'Empresa',
                     'usuario' => $this->user->attributes
         ]);
+    }
+    
+    public function actionTrans() 
+    {	
+        $pedido = \common\models\CB16PEDIDO::findOne(5);
+       \Yii::$app->Iugu->execute('criaTransacaoTransferencia', ['pedido' => $pedido]);
+    }
+    
+    public function actionTransferencias() 
+    {	
+        
+        echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
+        echo $this->renderFile('@app/views/administrador/_form.php');
+        
+        return $this->render('trasferencias', ['tituloTela' => 'Empresa']);
     }
 
     public function actionEmpresaForm() {

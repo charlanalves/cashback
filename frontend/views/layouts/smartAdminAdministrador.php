@@ -8,6 +8,9 @@ use common\widgets\Alert;
 
 $this->title = 'Administrador';
 
+use app\assets\CashBackAsset;
+CashBackAsset::register($this);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -107,10 +110,15 @@ $this->title = 'Administrador';
         </style>
 
         <script>
-
+    
             document.addEventListener("DOMContentLoaded", function (event) {
                 $("a#menu-empresa").click(function (e) {
                     document.location.href = 'index.php?r=administrador/empresa';
+                    return false;
+                });
+                
+                 $("a#menu-transferencias").click(function (e) {                   
+                    document.location.href = 'index.php?r=administrador/transferencias';
                     return false;
                 });
                 
@@ -152,6 +160,9 @@ $this->title = 'Administrador';
                 <ul>
                     <li class="">
                         <a href="#" title="Empresa" id="menu-empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>
+                    </li>
+                    <li class="">
+                        <a href="#" title="Transferências" id="menu-transferencias"><i class="fa fa-exchange"></i> <span class="menu-item-parent">Transferências</span></a>
                     </li>
                     <?=
                     Html::beginForm(['/administrador/logout'], 'post', ['name' => 'form-sair'])

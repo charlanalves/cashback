@@ -111,4 +111,14 @@ return array (
       '@yii2mod/rbac' => $vendorDir . '/yii2mod/yii2-rbac',
     ),
   ),
+   'mmsgenerator15/mmsgenerator15' => 
+  array (
+    'name' => 'mmsgenerator15/yii2-enhanced-gii2',
+    'version' => '1.5.0-dev',
+    'alias' => 
+    array (
+      '@mmsgenerator15/enhancedgii' => $vendorDir . '/mmsgenerator1.5/yii2-enhanced-gii',
+    ),
+    'bootstrap' => 'mmsgenerator15\\enhancedgii\\Bootstrap',
+  ),
 );

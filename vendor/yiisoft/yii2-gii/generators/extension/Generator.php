@@ -132,7 +132,7 @@ class Generator extends \yii\gii\Generator
     /**
      * @inheritdoc
      */
-    public function successMessage()
+    public function successMessage($link = '')
     {
         $outputPath = realpath(\Yii::getAlias($this->outputPath));
         $output1 = <<<EOD
