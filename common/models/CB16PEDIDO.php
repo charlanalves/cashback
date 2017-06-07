@@ -25,15 +25,36 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     public function attributeLabels()
     {
         return [
-            'CB16_ID' => Yii::t('app', 'Cb16  ID'),
-            'CB16_EMPRESA_ID' => Yii::t('app', 'Cb16  Empresa  ID'),
-            'CB16_USER_ID' => Yii::t('app', 'Cb16  User  ID'),
-            'CB16_GATEWAY' => Yii::t('app', 'Cb16  Gateway'),
-            'CB16_VALOR' => Yii::t('app', 'Cb16  Valor'),
-            'CB16_FRETE' => Yii::t('app', 'Cb16  Frete'),
-            'CB16_NUM_PARCELA' => Yii::t('app', 'Cb16  Num  Parcela'),
-            'CB16_STATUS' => Yii::t('app', 'Cb16  Status'),
-            'CB16_DT' => Yii::t('app', 'Cb16  Dt'),
+      'CB16_ID' => 'Cb16  ID',
+            'CB16_TRANS_CRIADAS' => 'Cb16  Trans  Criadas',
+            'CB16_EMPRESA_ID' => 'Cb16  Empresa  ID',
+            'CB16_ID_COMPRADOR' => 'Cb16  Id  Comprador',
+            'CB16_ID_FORMA_PAG_EMPRESA' => 'Cb16  Id  Forma  Pag  Empresa',
+            'CB16_VLR' => 'Cb16  Vlr',
+            'CB16_PERC_ADMIN' => 'Cb16  Perc  Admin',
+            'CB16_PERC_ADQ' => 'Cb16  Perc  Adq',
+            'CB16_VLR_CB_TOTAL' => 'Cb16  Vlr  Cb  Total',
+            'CB16_FRETE' => 'Cb16  Frete',
+            'CB16_STATUS' => 'Cb16  Status',
+            'CB16_DT' => 'Cb16  Dt',
+            'CB16_DT_APROVACAO' => 'Cb16  Dt  Aprovacao',
+            'CB16_FORMA_PAG' => 'Cb16  Forma  Pag',
+            'CB16_CARTAO_TOKEN' => 'Cb16  Cartao  Token',
+            'CB16_CARTAO_NUM_PARCELA' => 'Cb16  Cartao  Num  Parcela',
+            'CB16_CARTAO_VLR_PARCELA' => 'Cb16  Cartao  Vlr  Parcela',
+            'CB16_COMPRADOR_NOME' => 'Cb16  Comprador  Nome',
+            'CB16_COMPRADOR_EMAIL' => 'Cb16  Comprador  Email',
+            'CB16_COMPRADOR_CPF' => 'Cb16  Comprador  Cpf',
+            'CB16_COMPRADOR_TEL_DDD' => 'Cb16  Comprador  Tel  Ddd',
+            'CB16_COMPRADOR_TEL_NUMERO' => 'Cb16  Comprador  Tel  Numero',
+            'CB16_COMPRADOR_END_LOGRADOURO' => 'Cb16  Comprador  End  Logradouro',
+            'CB16_COMPRADOR_END_NUMERO' => 'Cb16  Comprador  End  Numero',
+            'CB16_COMPRADOR_END_BAIRRO' => 'Cb16  Comprador  End  Bairro',
+            'CB16_COMPRADOR_END_CEP' => 'Cb16  Comprador  End  Cep',
+            'CB16_COMPRADOR_END_CIDADE' => 'Cb16  Comprador  End  Cidade',
+            'CB16_COMPRADOR_END_UF' => 'Cb16  Comprador  End  Uf',
+            'CB16_COMPRADOR_END_PAIS' => 'Cb16  Comprador  End  Pais',
+            'CB16_COMPRADOR_END_COMPLEMENTO' => 'Cb16  Comprador  End  Complemento',
         ];
     }
     
@@ -44,14 +65,17 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     public function rules()
     {
         return array_replace_recursive(parent::rules(),
-	    [
-            [['CB16_EMPRESA_ID', 'CB16_USER_ID', 'CB16_ID_COMPRADOR', 'CB16_VALOR'], 'required'],
-            [['CB16_EMPRESA_ID', 'CB16_USER_ID', 'CB16_ID_COMPRADOR', 'CB16_ID_FORMA_PAG_EMPRESA', 'CB16_NUM_PARCELA', 'CB16_STATUS'], 'integer'],
-            [['CB16_VALOR', 'CB16_FRETE'], 'number'],
-            [['CB16_DT'], 'safe'],
-            [['CB16_GATEWAY'], 'string', 'max' => 50],
-            
-            
+         [
+     
+            [['CB16_TRANS_CRIADAS', 'CB16_EMPRESA_ID', 'CB16_ID_COMPRADOR', 'CB16_VLR', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_VLR_CB_TOTAL', 'CB16_FORMA_PAG', 'CB16_CARTAO_TOKEN', 'CB16_CARTAO_NUM_PARCELA', 'CB16_CARTAO_VLR_PARCELA', 'CB16_COMPRADOR_NOME', 'CB16_COMPRADOR_EMAIL', 'CB16_COMPRADOR_CPF', 'CB16_COMPRADOR_TEL_DDD', 'CB16_COMPRADOR_TEL_NUMERO', 'CB16_COMPRADOR_END_LOGRADOURO', 'CB16_COMPRADOR_END_NUMERO', 'CB16_COMPRADOR_END_BAIRRO', 'CB16_COMPRADOR_END_CEP', 'CB16_COMPRADOR_END_CIDADE', 'CB16_COMPRADOR_END_UF', 'CB16_COMPRADOR_END_PAIS', 'CB16_COMPRADOR_END_COMPLEMENTO'], 'required'],
+            [['CB16_TRANS_CRIADAS', 'CB16_EMPRESA_ID', 'CB16_ID_COMPRADOR', 'CB16_ID_FORMA_PAG_EMPRESA', 'CB16_STATUS', 'CB16_CARTAO_NUM_PARCELA'], 'integer'],
+            [['CB16_VLR', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_VLR_CB_TOTAL', 'CB16_FRETE', 'CB16_CARTAO_VLR_PARCELA'], 'number'],
+            [['CB16_DT', 'CB16_DT_APROVACAO'], 'safe'],
+            [['CB16_CARTAO_TOKEN'], 'string'],
+            [['CB16_FORMA_PAG'], 'string', 'max' => 50],
+            [['CB16_COMPRADOR_NOME', 'CB16_COMPRADOR_EMAIL', 'CB16_COMPRADOR_CPF', 'CB16_COMPRADOR_TEL_DDD', 'CB16_COMPRADOR_TEL_NUMERO', 'CB16_COMPRADOR_END_LOGRADOURO', 'CB16_COMPRADOR_END_NUMERO', 'CB16_COMPRADOR_END_BAIRRO', 'CB16_COMPRADOR_END_CEP', 'CB16_COMPRADOR_END_CIDADE', 'CB16_COMPRADOR_END_UF'], 'string', 'max' => 100],
+            [['CB16_COMPRADOR_END_PAIS'], 'string', 'max' => 2],
+            [['CB16_COMPRADOR_END_COMPLEMENTO'], 'string', 'max' => 500],       
         ]);
     }
     
