@@ -22,7 +22,7 @@ class CB06VARIACAO extends BaseCB06VARIACAO
             [['CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'number'],
             [['CB06_TITULO'], 'string', 'max' => 500],
             [['CB06_DESCRICAO'], 'string', 'max' => 30],
-        ];
+        ]);
     }
 
     /**

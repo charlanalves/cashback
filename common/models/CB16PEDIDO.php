@@ -29,8 +29,9 @@ class CB16PEDIDO extends BaseCB16PEDIDO
             'CB16_TRANS_CRIADAS' => 'Cb16  Trans  Criadas',
             'CB16_EMPRESA_ID' => 'Cb16  Empresa  ID',
             'CB16_ID_COMPRADOR' => 'Cb16  Id  Comprador',
+            'CB16_USER_ID' => 'Id User',
             'CB16_ID_FORMA_PAG_EMPRESA' => 'Cb16  Id  Forma  Pag  Empresa',
-            'CB16_VLR' => 'Cb16  Vlr',
+            'CB16_VALOR' => 'Cb16  Vlr',
             'CB16_PERC_ADMIN' => 'Cb16  Perc  Admin',
             'CB16_PERC_ADQ' => 'Cb16  Perc  Adq',
             'CB16_VLR_CB_TOTAL' => 'Cb16  Vlr  Cb  Total',
@@ -67,9 +68,9 @@ class CB16PEDIDO extends BaseCB16PEDIDO
         return array_replace_recursive(parent::rules(),
          [
      
-             [['CB16_TRANS_CRIADAS', 'CB16_EMPRESA_ID', 'CB16_ID_COMPRADOR', 'CB16_ID_FORMA_PAG_EMPRESA', 'CB16_STATUS', 'CB16_CARTAO_NUM_PARCELA'], 'integer'],
-            [['CB16_EMPRESA_ID', 'CB16_ID_COMPRADOR', 'CB16_VLR', 'CB16_VLR_CB_TOTAL'], 'required'],
-            [['CB16_VLR', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_VLR_CB_TOTAL', 'CB16_FRETE', 'CB16_CARTAO_VLR_PARCELA'], 'number'],
+             [['CB16_TRANS_CRIADAS', 'CB16_EMPRESA_ID', 'CB16_ID_COMPRADOR', 'CB16_ID_FORMA_PAG_EMPRESA', 'CB16_STATUS', 'CB16_CARTAO_NUM_PARCELA','CB16_USER_ID'], 'integer'],
+            [['CB16_EMPRESA_ID', 'CB16_VALOR', 'CB16_VLR_CB_TOTAL','CB16_USER_ID'], 'required'],
+            [['CB16_VALOR', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_VLR_CB_TOTAL', 'CB16_FRETE', 'CB16_CARTAO_VLR_PARCELA'], 'number'],
             [['CB16_DT', 'CB16_DT_APROVACAO'], 'safe'],
             [['CB16_CARTAO_TOKEN'], 'string'],
             [['CB16_FORMA_PAG'], 'string', 'max' => 50],

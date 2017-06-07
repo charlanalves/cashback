@@ -48,7 +48,7 @@ class CB16PEDIDO extends \common\models\GlobalModel
         return [
             [['CB16_EMPRESA_ID', 'CB16_USER_ID', 'CB16_VALOR'], 'required'],
             [['CB16_EMPRESA_ID', 'CB16_USER_ID', 'CB16_NUM_PARCELA', 'CB16_STATUS'], 'integer'],
-            [['CB16_VALOR', 'CB16_FRETE'], 'number'],
+            [['CB16_VALOR', 'CB16_VLR_CB_TOTAL', 'CB16_FRETE'], 'number'],
             [['CB16_DT'], 'safe'],
             [['CB16_GATEWAY'], 'string', 'max' => 50],
             [['CB16_EMPRESA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => CB04EMPRESA::className(), 'targetAttribute' => ['CB16_EMPRESA_ID' => 'CB04_ID']],
@@ -67,6 +67,7 @@ class CB16PEDIDO extends \common\models\GlobalModel
             'CB16_USER_ID' => Yii::t('app', 'Cb16  User  ID'),
             'CB16_GATEWAY' => Yii::t('app', 'Cb16  Gateway'),
             'CB16_VALOR' => Yii::t('app', 'Cb16  Valor'),
+            'CB16_VLR_CB_TOTAL' => Yii::t('app', 'Cb16  Valor CB'),
             'CB16_FRETE' => Yii::t('app', 'Cb16  Frete'),
             'CB16_NUM_PARCELA' => Yii::t('app', 'Cb16  Num  Parcela'),
             'CB16_STATUS' => Yii::t('app', 'Cb16  Status'),
