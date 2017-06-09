@@ -22,7 +22,7 @@ class CB06VARIACAO extends BaseCB06VARIACAO
             [['CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'number'],
             [['CB06_TITULO'], 'string', 'max' => 500],
             [['CB06_DESCRICAO'], 'string', 'max' => 30],
-        ];
+        ]);
     }
 
     /**
@@ -72,8 +72,10 @@ class CB06VARIACAO extends BaseCB06VARIACAO
                 CB04_EMPRESA.CB04_ID,
                 CB04_EMPRESA.CB04_NOME,
                 CB04_EMPRESA.CB04_END_COMPLEMENTO,
-                concat('" . $url . "', CB04_EMPRESA.CB04_URL_LOGOMARCA) AS CB04_URL_LOGOMARCA,
-                concat('" . $url . "', CB14_FOTO_PRODUTO.CB14_URL) AS CB14_URL,
+                --concat('" . $url . "', CB04_EMPRESA.CB04_URL_LOGOMARCA) AS CB04_URL_LOGOMARCA,
+                --concat('" . $url . "', CB14_FOTO_PRODUTO.CB14_URL) AS CB14_URL,
+                CB04_EMPRESA.CB04_URL_LOGOMARCA AS CB04_URL_LOGOMARCA,
+                CB14_FOTO_PRODUTO.CB14_URL AS CB14_URL,
                 CB05_PRODUTO.CB05_ID,
                 CB05_PRODUTO.CB05_TITULO,
                 CB06_VARIACAO.CB06_DESCRICAO

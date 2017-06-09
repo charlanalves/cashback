@@ -15,6 +15,7 @@ use common\models\SYS01PARAMETROSGLOBAIS;
 use common\models\CB14FOTOPRODUTO;
 use common\models\CB16PEDIDO;
 use common\models\CB17PRODUTOPEDIDO;
+use common\models\CB18VARIACAOPEDIDO;
 use common\models\VIEWEXTRATOCLIENTE;
 
 /**
@@ -96,7 +97,7 @@ class ApiEmpresaController extends GlobalBaseController {
      * Login
      */
     public function actionLogin() {
-		header('Access-Control-Allow-Origin: *'); 
+        header('Access-Control-Allow-Origin: *'); 
         $model = new LoginForm();
         $model->setAttributes(\Yii::$app->request->post());
         $model->loginCpfCnpj(); 
@@ -424,7 +425,7 @@ class ApiEmpresaController extends GlobalBaseController {
 
                 $dadosP = CB05PRODUTO::findOne(['CB05_ID' => $produto]);
                 $dadosV = CB06VARIACAO::findOne(['CB06_ID' => $variacao]);
-
+                
                 if($dadosP && $dadosV) {
 
                     $dadosP = $dadosP->attributes;
@@ -434,7 +435,8 @@ class ApiEmpresaController extends GlobalBaseController {
                     $pedido = new CB16PEDIDO();
                     $pedido->CB16_EMPRESA_ID = $dadosP['CB05_EMPRESA_ID'];
                     $pedido->CB16_USER_ID = $idUser;
-                    $pedido->CB16_VALOR = $dadosV['CB06_PRECO'];
+                    $pedido->CB16_VALOR = $dadosV['CB06_PRECO_PROMOCIONAL'];
+                    $pedido->CB16_VLR_CB_TOTAL = \Yii::$app->u->arredondar(($dadosV['CB06_DINHEIRO_VOLTA'] / $dadosV['CB06_PRECO_PROMOCIONAL']) * 100);
                     $pedido->save();
                     $idPedido = $pedido->CB16_ID;
 
@@ -456,7 +458,7 @@ class ApiEmpresaController extends GlobalBaseController {
 
         } catch (\Exception $exc) {
             $transaction->rollBack();
-//            var_dump($exc->getMessage());
+            //var_dump($exc->getMessage());
             return false;
         }
     }
