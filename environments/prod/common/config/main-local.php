@@ -5,7 +5,7 @@ return [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=cashback',
             'username' => 'root',
-            'password' => '@by02016Abio#',
+            'password' => '6%)DT3y_dV,(',
             'charset' => 'utf8',
         ],
         'mailer' => [
