@@ -412,16 +412,19 @@ class ApiEmpresaController extends GlobalBaseController {
                             )
                         )
                     ];
-var_dump($param);
+                    
+                    var_dump($param);
                     
                     $retorno = \Yii::$app->Iugu->execute('processTransaction', $param);
+                    
                     var_dump($retorno);
+                    
                     // ['status' => $status, 'retorno' => $retorno, 'dev' => $dev, 'lastResponse'=> $this->lastResponse]
-                    if($retorno['status'] !== true) {
+                    if ($retorno['status'] === true) {
+                        $transaction->commit();
+                    } else {
                         throw new \Exception();
                     }
-
-                    $transaction->commit();
                     
                 } catch (\Exception $exc) {
                     var_dump($exc->getMessage());
