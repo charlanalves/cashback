@@ -358,9 +358,9 @@ class ApiEmpresaController extends GlobalBaseController {
             // verifica status do pedido
             if ($pedido['CB16_STATUS'] == CB16PEDIDO::status_aguardando_pagamento) {
                 
-                $connection = \Yii::$app->db;
-                $transaction = $connection->beginTransaction();
-
+                //$transaction = \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
+                \Yii::$app->Iugu->transaction = \beginTransaction();
+                
                 try {
                     
                     $data = $post['data'];
@@ -382,6 +382,7 @@ class ApiEmpresaController extends GlobalBaseController {
                         'CB16_PERC_ADQ' => $PERC_PAG['CB09_PERC_ADQ'],
                         'CB16_STATUS' => CB16PEDIDO::status_pago,
                         'CB16_DT_APROVACAO' => date('Y-m-d H:i:s'),
+                        'CB16_TRANS_CRIADAS' => 1
                     ]);
                     $modelPedido->save();
                     
@@ -413,32 +414,18 @@ class ApiEmpresaController extends GlobalBaseController {
                         )
                     ];
                     
-                    var_dump($param);
-                    
-                    $retorno = \Yii::$app->Iugu->execute('processTransaction', $param);
-                    
-                    var_dump($retorno);
-                    
-                    // ['status' => $status, 'retorno' => $retorno, 'dev' => $dev, 'lastResponse'=> $this->lastResponse]
-                    if ($retorno['status'] === true) {
-                        $transaction->commit();
-                    } else {
-                        throw new \Exception();
-                    }
+                    \Yii::$app->Iugu->execute('processTransaction', $param);
                     
                 } catch (\Exception $exc) {
-                    var_dump($exc->getMessage());
+                    var_dump('Exception');
                     $transaction->rollBack();
-                    $status = false;
-                    $message = "Não foi possível efetuar o pagamento, tente novamente.";
+                    return json_encode(['status' => false]);
                     
                 }
-                
                 
             }
         }
         
-        return json_encode(['status' => $status, 'message' => $message]);
         
     }
     
