@@ -68,8 +68,8 @@ class CB16PEDIDO extends BaseCB16PEDIDO
         return array_replace_recursive(parent::rules(),
          [
             [['CB16_TRANS_CRIADAS', 'CB16_EMPRESA_ID', 'CB16_ID_COMPRADOR', 'CB16_ID_FORMA_PAG_EMPRESA', 'CB16_STATUS', 'CB16_CARTAO_NUM_PARCELA'], 'integer'],
-            [['CB16_EMPRESA_ID', 'CB16_ID_COMPRADOR', 'CB16_VLR', 'CB16_VLR_CB_TOTAL'], 'required'],
-            [['CB16_VLR', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_VLR_CB_TOTAL', 'CB16_FRETE', 'CB16_CARTAO_VLR_PARCELA'], 'number'],
+            [['CB16_EMPRESA_ID', 'CB16_USER_ID', 'CB16_VALOR', 'CB16_VLR_CB_TOTAL'], 'required'],
+            [['CB16_VALOR', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_VLR_CB_TOTAL', 'CB16_FRETE', 'CB16_CARTAO_VLR_PARCELA'], 'number'],
             [['CB16_DT', 'CB16_DT_APROVACAO'], 'safe'],
             [['CB16_CARTAO_TOKEN'], 'string'],
             [['CB16_FORMA_PAG'], 'string', 'max' => 50],

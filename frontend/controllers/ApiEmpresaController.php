@@ -9,6 +9,8 @@ use common\models\CB03CONTABANC;
 use common\models\CB04EMPRESA;
 use common\models\CB05PRODUTO;
 use common\models\CB06VARIACAO;
+use common\models\CB08FORMAPAGAMENTO;
+use common\models\CB09FORMAPAGTOEMPRESA;
 use common\models\CB10CATEGORIA;
 use common\models\VIEWSEARCH;
 use common\models\SYS01PARAMETROSGLOBAIS;
@@ -39,42 +41,76 @@ class ApiEmpresaController extends GlobalBaseController {
         return parent::beforeAction($action);
     }
     
-    public function actionIugu() 
-    {
-     require_once(\Yii::getAlias('@vendor/iugu/Iugu.php'));
-     
-    $a =  \Iugu::setApiKey("67dfbb35a60a62cb5cee9ca8730737a98");
- $teste = \Iugu_Charge::create(Array(
-    "token" => "E4DE70F8-3574-4A69-A83E-0D507318DA26",
-    "email" => "teste@teste.com",
-    "items" => Array(
-        Array(
-            "description" => "Item Um",
-            "quantity" => "1",
-            "price_cents" => "1000"
-        )
-    ) ,
-    "payer" => Array(
-        "name" => "Item Um",
-        "phone_prefix" => "1",
-        "phone" => "1000",
-        "email" => "teste@teste.com",
-        "address" => Array(
-            "street" => "Rua Tal",
-            "number" => "700",
-            "city" => "São Paulo",
-            "state" => "SP",
-            "country" => "Brasil",
-            "zip_code" => "12122-00"
-        )
-    )
-));
-    var_dump($teste);
-      
-    
-    
+    private function validateUser($data) {
+        
+        try {
+            
+            if(is_array($data)) {
+                $user = $data['auth_key'];
+            } else {
+                $user = $data;
+            }
+
+            if (empty($user)) {
+                throw new \Exception();
+            }
+
+            if (!($idUser = User::getIdByAuthKey($user))) {
+                throw new \Exception();
+            }
+
+            return $idUser;
+
+        } catch (\Exception $exc) {
+            return false;
+        }
+
     }
     
+    
+    /**
+     * Id da conta Iugu
+     */
+    public function actionIuguIdAccount() {
+        if($this->validateUser(\Yii::$app->request->post())) {
+            return json_encode(SYS01PARAMETROSGLOBAIS::getValor('ID_JS'));
+        } else {
+            return false;
+        }        
+    }
+    
+    public function actionIugu() {
+        require_once(\Yii::getAlias('@vendor/iugu/Iugu.php'));
+
+        $a = \Iugu::setApiKey("67dfbb35a60a62cb5cee9ca8730737a98");
+        $teste = \Iugu_Charge::create(Array(
+                    "token" => "E4DE70F8-3574-4A69-A83E-0D507318DA26",
+                    "email" => "teste@teste.com",
+                    "items" => Array(
+                        Array(
+                            "description" => "Item Um",
+                            "quantity" => "1",
+                            "price_cents" => "1000"
+                        )
+                    ),
+                    "payer" => Array(
+                        "name" => "Item Um",
+                        "phone_prefix" => "1",
+                        "phone" => "1000",
+                        "email" => "teste@teste.com",
+                        "address" => Array(
+                            "street" => "Rua Tal",
+                            "number" => "700",
+                            "city" => "São Paulo",
+                            "state" => "SP",
+                            "country" => "Brasil",
+                            "zip_code" => "12122-00"
+                        )
+                    )
+        ));
+        var_dump($teste);
+    }
+
     /**
      * getSaldoAtual
      * @param string/integer $user ID ou AUTHKEY do usuario
@@ -294,12 +330,118 @@ class ApiEmpresaController extends GlobalBaseController {
             // verifica status do pedido
             if ($pedido['CB16_STATUS'] == CB16PEDIDO::status_aguardando_pagamento) {
                 $CB16PEDIDO = $pedido;
+                // formas de pagamento do checkout
+                $CB16PEDIDO['forma_pagamento'] = CB08FORMAPAGAMENTO::find()
+                        ->select(['CB08_ID','CB08_NOME'])
+                        ->where(['CB08_STATUS' => 1])
+                        ->asArray()
+                        ->all();
             }
         }
         
         return json_encode($CB16PEDIDO);
     }
 
+    
+    /**
+     * Checkout - Comprar
+     */
+    public function actionCheckoutPurchase() {
+        $post = \Yii::$app->request->post();
+        
+        $status = false;
+        $message = '';
+        
+        // verifica se o pedido é do usuario logado
+        if(($pedido = CB16PEDIDO::getPedidoByAuthKey($post['auth_key'], "", $post['order']))) {
+            $pedido = $pedido[0];
+            // verifica status do pedido
+            if ($pedido['CB16_STATUS'] == CB16PEDIDO::status_aguardando_pagamento) {
+                
+                $connection = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+
+                try {
+                    
+                    $data = $post['data'];
+                    
+                    // dados do pagamento
+                    $PERC_PAG = CB09FORMAPAGTOEMPRESA::find()
+                            ->select(['CB09_ID', 'CB09_PERC_ADMIN', 'CB09_PERC_ADQ'])
+                            ->where(['CB09_ID_FORMA_PAG' => $data['FORMA-PAGAMENTO'], 'CB09_ID_EMPRESA' => $pedido['CB16_EMPRESA_ID']])
+                            ->asArray()
+                            ->one();
+                    
+                    
+                    // Atualiza dados do pedido
+                    $modelPedido = CB16PEDIDO::findOne($post['order']);
+                    $modelPedido->setAttributes([
+                        'CB16_ID_FORMA_PAG_EMPRESA' => $PERC_PAG['CB09_ID'],
+                        'CB16_FORMA_PAG' => CB08FORMAPAGAMENTO::findOne($data['FORMA-PAGAMENTO'])->CB08_NOME,
+                        'CB16_PERC_ADMIN' => $PERC_PAG['CB09_PERC_ADMIN'],
+                        'CB16_PERC_ADQ' => $PERC_PAG['CB09_PERC_ADQ'],
+                        'CB16_STATUS' => CB16PEDIDO::status_pago,
+                        'CB16_DT_APROVACAO' => date('Y-m-d H:i:s'),
+                    ]);
+                    $modelPedido->save();
+                    
+
+                    // checkout Iugu
+                    $param = [
+                        "token" => $data['token'],
+                        "email" => $data['EMAIL'],
+                        "items" => Array(
+                            Array(
+                                "description" => $pedido['CB17_NOME_PRODUTO'],
+                                "quantity" => $pedido['CB17_QTD'],
+                                "price_cents" => \Yii::$app->u->arredondar($pedido['CB16_VALOR'] * 100)
+                            )
+                        ),
+                        "payer" => Array(
+                            "name" => $data['NOME'],
+                            "phone_prefix" => "",
+                            "phone" => $data['TELEFONE'],
+                            "email" => $data['EMAIL'],
+                            "address" => Array(
+                                "street" => "",
+                                "number" => "",
+                                "city" => "",
+                                "state" => "",
+                                "country" => "",
+                                "zip_code" => ""
+                            )
+                        )
+                    ];
+                    
+                    var_dump($param);
+                    
+                    $retorno = \Yii::$app->Iugu->execute('processTransaction', $param);
+                    
+                    var_dump($retorno);
+                    
+                    // ['status' => $status, 'retorno' => $retorno, 'dev' => $dev, 'lastResponse'=> $this->lastResponse]
+                    if ($retorno['status'] === true) {
+                        $transaction->commit();
+                    } else {
+                        throw new \Exception();
+                    }
+                    
+                } catch (\Exception $exc) {
+                    var_dump($exc->getMessage());
+                    $transaction->rollBack();
+                    $status = false;
+                    $message = "Não foi possível efetuar o pagamento, tente novamente.";
+                    
+                }
+                
+                
+            }
+        }
+        
+        return json_encode(['status' => $status, 'message' => $message]);
+        
+    }
+    
     
     /**
      * Estabelecimento e seus produto
