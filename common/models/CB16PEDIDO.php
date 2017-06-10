@@ -146,7 +146,7 @@ class CB16PEDIDO extends BaseCB16PEDIDO
         
     }
     
-	 public static function getPedidoCompleto($idPedido)
+	public static function getPedidoCompleto()
     {
         
         $sql = "
@@ -158,7 +158,7 @@ class CB16PEDIDO extends BaseCB16PEDIDO
 				JOIN CB02_CLIENTE ON  CB16_PEDIDO.CB16_ID_COMPRADOR = CB02_CLIENTE.CB02_ID
 				JOIN CB09_FORMA_PAGTO_EMPRESA ON  CB16_PEDIDO.CB16_ID_FORMA_PAG_EMPRESA = CB09_FORMA_PAGTO_EMPRESA.CB09_ID
 				JOIN CB08_FORMA_PAGAMENTO ON CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG= CB08_FORMA_PAGAMENTO.CB08_ID
-			WHERE CB16_PEDIDO.CB16_ID = :idPedido
+			WHERE CB16_PEDIDO.CB16_TRANS_CRIADAS = 0
         ";
 
         $connection = \Yii::$app->db;
