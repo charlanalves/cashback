@@ -359,7 +359,7 @@ class ApiEmpresaController extends GlobalBaseController {
             if ($pedido['CB16_STATUS'] == CB16PEDIDO::status_aguardando_pagamento) {
                 
                 //$transaction = \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
-                \Yii::$app->Iugu->transaction = \beginTransaction();
+                $transaction = \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
                 
                 try {
                     
