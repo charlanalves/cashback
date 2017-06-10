@@ -11,7 +11,7 @@ use yii\base\Component;
  * */
 abstract class PaymentBaseComponent extends Component {
     protected $lastResponse;
-    protected $transaction = null;
+    public $transaction = null;
 
 
     abstract protected function initialize();
@@ -80,12 +80,8 @@ abstract class PaymentBaseComponent extends Component {
     
   
     public function criaTransferencias($params) 
-    {
-   	   $params['idPedido'] = 5;
- 
-   	    
-        $pedidos = \common\models\CB16PEDIDO::getPedidoCompleto($params['idPedido']);
-          	   $pedidos[0]['CB16_DT_APROVACAO'] = date('Y-m-d');
+    {   
+        $pedidos = \common\models\CB16PEDIDO::getPedidoCompleto();
         $IuguMaster =  \common\models\SYS01PARAMETROSGLOBAIS::getValor('CT_DEV');
         $IuguSubAdmin =  \common\models\SYS01PARAMETROSGLOBAIS::getValor('SB_PROD');
         
@@ -127,6 +123,10 @@ abstract class PaymentBaseComponent extends Component {
 			$trans->PAG04_DT_PREV = $dtPrevisao;			
 			$trans->PAG04_TIPO = 3;
         	$trans->save();
+        	
+        	$pedido = \common\models\CB16PEDIDO::findOne($pedido['CB16_ID']);
+        	$pedido->CB16_TRANS_CRIADAS = 1;
+        	$pedido->save();
         }
     }
     
