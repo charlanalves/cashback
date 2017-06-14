@@ -532,6 +532,14 @@ class ApiEmpresaController extends GlobalBaseController {
     }
     
     
+    /**
+     * Mensagem apos realizar a compra
+     */
+    public function actionPurchaseMessage() {        
+        return json_encode(['message' => SYS01PARAMETROSGLOBAIS::getValor('MSG_BUY')]);
+    }
+    
+    
     public function actionCompanyBuyProduct() {
         $post = \Yii::$app->request->post();
         
