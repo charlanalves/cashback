@@ -18,6 +18,17 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     const status_aguardando_pagamento = 10;
     const status_baixado = 20;
     const status_pago = 30;
+    
+   // const aguardando_liberacao = 40;
+    const status_liberado = 40;
+    const status_problemas_liberacao = 50;
+    
+    const trans_nao_criadas = 0;
+    const trans_criadas = 1;
+    
+    const SCENARIO_ATUALIZA_PEDIDO_PAGO = 'SCENARIO_ATUALIZA_PEDIDO_PAGO';
+    
+   
 	
  /**
      * @inheritdoc
@@ -25,7 +36,7 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     public function attributeLabels()
     {
         return [
-      'CB16_ID' => 'Cb16  ID',
+     		'CB16_ID' => 'Cb16  ID',
             'CB16_TRANS_CRIADAS' => 'Cb16  Trans  Criadas',
             'CB16_EMPRESA_ID' => 'Cb16  Empresa  ID',
             'CB16_ID_COMPRADOR' => 'Cb16  Id  Comprador',
@@ -64,11 +75,12 @@ class CB16PEDIDO extends BaseCB16PEDIDO
      * @inheritdoc
      */
     public function rules()
-    {
+    {  
         return array_replace_recursive(parent::rules(),
          [
-            [['CB16_TRANS_CRIADAS', 'CB16_EMPRESA_ID', 'CB16_ID_COMPRADOR', 'CB16_ID_FORMA_PAG_EMPRESA', 'CB16_STATUS', 'CB16_CARTAO_NUM_PARCELA'], 'integer'],
+            [['CB16_TRANS_CRIADAS', 'CB16_EMPRESA_ID', 'CB16_ID_FORMA_PAG_EMPRESA', 'CB16_STATUS', 'CB16_CARTAO_NUM_PARCELA'], 'integer'],
             [['CB16_EMPRESA_ID', 'CB16_USER_ID', 'CB16_VALOR', 'CB16_VLR_CB_TOTAL'], 'required'],
+            [['CB16_ID_FORMA_PAG_EMPRESA', 'CB16_FORMA_PAG', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_STATUS', 'CB16_DT_APROVACAO'], 'required' ,'on' => self::SCENARIO_ATUALIZA_PEDIDO_PAGO],
             [['CB16_VALOR', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_VLR_CB_TOTAL', 'CB16_FRETE', 'CB16_CARTAO_VLR_PARCELA'], 'number'],
             [['CB16_DT', 'CB16_DT_APROVACAO'], 'safe'],
             [['CB16_CARTAO_TOKEN'], 'string'],
@@ -150,20 +162,44 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     {
         
         $sql = "
-            SELECT * FROM CB16_PEDIDO
-				JOIN CB18_VARIACAO_PEDIDO ON CB16_PEDIDO.CB16_ID = CB18_VARIACAO_PEDIDO.CB18_ID_PEDIDO
-				JOIN CB06_VARIACAO ON CB06_VARIACAO.CB06_ID = CB18_VARIACAO_PEDIDO.CB18_ID_VARIACAO
+             SELECT * FROM CB16_PEDIDO
+				JOIN CB17_PRODUTO_PEDIDO ON CB17_PRODUTO_PEDIDO.CB17_ID = CB16_PEDIDO.CB16_ID  
+				JOIN CB06_VARIACAO ON CB06_VARIACAO.CB06_ID = CB17_PRODUTO_PEDIDO.CB17_VARIACAO_ID
 				JOIN CB05_PRODUTO ON CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID
 				JOIN CB04_EMPRESA ON  CB04_EMPRESA.CB04_ID = CB16_PEDIDO.CB16_EMPRESA_ID
-				JOIN CB02_CLIENTE ON  CB16_PEDIDO.CB16_ID_COMPRADOR = CB02_CLIENTE.CB02_ID
+				JOIN user ON  CB16_PEDIDO.CB16_USER_ID = user.id
+				JOIN CB02_CLIENTE ON CB02_CLIENTE.CB02_ID = user.id_cliente
 				JOIN CB09_FORMA_PAGTO_EMPRESA ON  CB16_PEDIDO.CB16_ID_FORMA_PAG_EMPRESA = CB09_FORMA_PAGTO_EMPRESA.CB09_ID
 				JOIN CB08_FORMA_PAGAMENTO ON CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG= CB08_FORMA_PAGAMENTO.CB08_ID
-			WHERE CB16_PEDIDO.CB16_TRANS_CRIADAS = 0
+			WHERE CB16_PEDIDO.CB16_TRANS_CRIADAS = :transCriadas
+			AND CB16_PEDIDO.CB16_STATUS = :status
+			AND CB16_PEDIDO.CB16_DT_APROVACAO IS NOT NULL
+			AND CB16_PEDIDO.CB16_COD_TRANSACAO IS NOT NULL
         ";
 
         $connection = \Yii::$app->db;
         $command = $connection->createCommand($sql);
-        $command->bindValue(':idPedido', $idPedido);
+        $command->bindValue(':transCriadas', self::trans_nao_criadas);
+        $command->bindValue(':status', self::status_pago);
+        
+
+        return $command->query()->readAll();
+    }
+    
+	public static function getPedidoByStatus($status)
+    {
+        
+        $sql = "
+            SELECT * 
+            FROM CB16_PEDIDO
+				JOIN PAG04_TRANSFERENCIAS ON PAG04_TRANSFERENCIAS.PAG04_ID_PEDIDO = CB16_PEDIDO.CB16_ID
+			WHERE CB16_PEDIDO.CB16_STATUS = :status
+			GROUP BY CB16_ID
+        ";
+
+        $connection = \Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        $command->bindValue(':status', $status);
 
         return $command->query()->readAll();
     }

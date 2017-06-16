@@ -1,6 +1,4 @@
 <script type="text/javascript" charset="utf-8">
-    
-var Form = function() {};
 var Validation = function() {	
 	var errorMessage = '';
 		
@@ -13,7 +11,6 @@ var Validation = function() {
 	this.getErrorMessage = function(value) {
 		return errorMessage; 
 	}
-
 
 	this.validate = function(actionRules, validator) {
 
@@ -43,7 +40,7 @@ var Validation = function() {
 		error = this.hasError(value, validator);
 		
 		if ( error ) {
-			Form.FirstErrorValidate = {value: SYSTEM[value], error: this.errorMessage };
+			C7.FirstErrorValidate = {value: SYSTEM[value], error: this.errorMessage };
 			return true;
 		}
 		
@@ -56,9 +53,9 @@ var Validation = function() {
 			
     		error = this[validator](SYSTEM[value]);
     		
-		} else if(typeof Form[value] != "undefined" ) {
+		} else if(typeof C7[value] != "undefined" ) {
 			
-			error = this[validator](Form[value]);
+			error = this[validator](C7[value]);
 			
 		} else {
 			
@@ -82,7 +79,7 @@ var Validation = function() {
 
 	
 	this._gridIsEmpty = function(grid) {	
-		return (Form.totalRowsVisibleGrid(grid)) ? false : true;
+		return (C7.totalRowsVisibleGrid(grid)) ? false : true;
 	}
 	
 
@@ -104,125 +101,159 @@ var Validation = function() {
 	
 };
 
+var C7 = function() {};
 SYSTEM = {};
 
-Form.main = {};
-Form.main.modal = {};
-Form.FilterA = {};
-Form.form = {};
-Form.formOpen = true;
-Form.sendForm = true;
-Form.async = true;
-Form.params = {};
+C7.main = {};
+C7.main.modal = {};
+C7.FilterA = {};
+C7.form = {};
+C7.grid = {};
+C7.layout = {};
+C7.formOpen = true;
+C7.sendForm = true;
+C7.async = true;
+C7.params = {};
 
 
-Form.crud = {};
-Form.crud.modal = {};
-Form.FilterA = {};
+C7.crud = {};
+C7.crud.modal = {};
+C7.FilterA = {};
 
 
-Form._init = function(conf) {
-    $.extend(this.settings, conf);
-
-    Form.load('Toolbar', 'Main');	
-    Form.load('Window', 'Main');	
+C7._init = function(conf) {
+	$.extend(this.settings, conf);
+	
+	C7.load('Toolbar', 'Main');	
+	C7.load('Window', 'Main');	
 }
 
-Form.getToolbarMain = function() {
+C7.getToolbarMain = function() {
 	SYSTEM.Toolbar.titulo(this.settings.toolbarTitle);
 	SYSTEM.Toolbar.setIconesAcoes([this.settings.toolbarBtn]);
-	SYSTEM.Toolbar.core.attachEvent("onClick", Form.Toolbar);
+	SYSTEM.Toolbar.core.attachEvent("onClick", C7.Toolbar);
 }	
 
-Form.getWindowMain = function() {
+C7.getWindowMain = function() {
 	
 	SYSTEM.Windows = new dhtmlXWindows();
 	
     SYSTEM.Windows.createWindow("main", 0,0,1500, 1000);
 
-    Form.windowMain = SYSTEM.Windows.window("main");
+    C7.windowMain = SYSTEM.Windows.window("main");
     
-    Form.windowMain.button('minmax1').hide();
-    Form.windowMain.button('park').hide();
-    Form.windowMain.denyResize();
-    Form.windowMain.center();    
-    Form.windowMain.hide();
+    C7.windowMain.button('minmax1').hide();
+    C7.windowMain.button('park').hide();
+    C7.windowMain.denyResize();
+    C7.windowMain.center();    
+    C7.windowMain.hide();
 	
-    Form.windowMain.attachEvent("onClose", function(win){
-    	Form.close();
+    C7.windowMain.attachEvent("onClose", function(win){
+    	C7.close();
     });
 }
 
-Form.afterLoadFormCrud = function(formName) {
+C7.afterLoadFormCrud = function(formName) {
 
 	var selectedRow = SYSTEM.Main.getRowIndex(SYSTEM.Main.getSelectedRowId());
 
-	Form.main.bind(SYSTEM.Main);
+	C7.main.bind(SYSTEM.Main);
 	
 	SYSTEM.Main.clearSelection();
 
 	SYSTEM.Main.selectRow(selectedRow);
 }
 
-Form.load = function(component, nameItem, target, param, autoLoad) {
+C7.load = function(component, nameItem, target, param, autoLoad, btns) {	
 	var componentName = 'get' + component + nameItem,
 		fnLoad = "load" + component,
 		errorMessage = 'Erro: Você tentou chamar a função '+componentName+'() mas ela não existe.';
 		
-	if (typeof Form[fnLoad] === 'function' && !(component === 'Grid' && typeof Form[componentName] === 'function')) {
+	if (typeof C7[fnLoad] === 'function' && !(component === 'Grid' && typeof C7[componentName] === 'function')) {
 	
-		var fnName = (nameItem || Form.currentFormName),
+		var fnName = (nameItem || C7.currentFormName),
 			beforeLoadFnName = 'beforeLoad'+ component + fnName,		
 			afterLoadFnName = 'afterLoad' + component + fnName;
 	
 		// Executa o evento BeforeLoadForm
-		Form.callFunctionDynamically(beforeLoadFnName, '');
+		C7.callFunctionDynamically(beforeLoadFnName, '');
 		
 		// load especifico do componente
-		Form[fnLoad](target, fnName, param, autoLoad);
+		C7[fnLoad](target, fnName, param, autoLoad, btns);
 		
 		// Executa o evento AfterLoadForm
-		Form.callFunctionDynamically(afterLoadFnName, '');
+		C7.callFunctionDynamically(afterLoadFnName, '');
 		
 	} else{
-    	Form.callFunctionDynamically(componentName, errorMessage);
+    	C7.callFunctionDynamically(componentName, errorMessage);
 	}
 }
 
-Form.loadForm = function(target, fnName, param) {
-	formData = Form.getFormData(fnName);
-	target = (target || Form.windowMain);
+C7.loadForm = function(target, fnName, param) {
+	formData = C7.getFormData(fnName);
+	target = (target || C7.windowMain);
 	if (typeof target == 'string') {
-    	Form.main = new dhtmlXForm(target, formData);
+    	C7.main = new dhtmlXForm(target, formData);
 	} else {
-		Form.main = target.attachForm(formData);
-		Form.main.resizeWindowMMS(target);	
+		C7.main = target.attachForm(formData);
+		C7.main.resizeWindowMMS(target);	
 	}
-	Form.currentForm = Form.main;
-	Form.form[fnName] = Form.main;
-	Form.attachEventClick();
-	Form.attachMask();
+	C7.currentForm = C7.main;
+	C7.form[fnName] = C7.main;
+	C7.attachEventClick();
+	C7.attachMask();
 }
 
-Form.loadGrid = function(target, fnName, param, autoLoad) {
+C7.loadGrid = function(target, fnName, param, autoLoad, btns) {
+	
 	autoLoad = (typeof autoLoad == "boolean" ? autoLoad : true);
 	layoutGrid = new dhtmlXLayoutObject(target, "1C");
 	layoutGrid_A = layoutGrid.cells("a");
+	
 	layoutGrid_A.setText(( this.settings["titleGrid" + fnName] || "<?= Yii::t('app','Listagem ')?>"));
+	
 	objGrid =  layoutGrid_A.attachGrid();
 	objGrid.init();
 	objGrid.enableRowsHover(true, 'hover');
 	objGrid.layoutCell = layoutGrid_A;
+	
 	SYSTEM[fnName] = objGrid;
-	Form['actionReloadGrid' + fnName] = function (param) {Form.systemReloadGrid(fnName, param);};
+	C7.grid[fnName] = objGrid;
+	
+	C7['actionReloadGrid' + fnName] = function (param) {C7.systemReloadGrid(fnName, param);};
+	
 	if (autoLoad === true) {
-		Form['actionReloadGrid' + fnName](param);
+		C7['actionReloadGrid' + fnName](param);
 	}
+
+	if ( typeof btns != 'undefined' ) {
+		C7.setGridBtns(objGrid, btns, layoutGrid);
+	}
+	
+	if ( typeof C7[ 'setToolbarGrid' + fnName ] != 'undefined' ) {
+		C7.setGridBtns(objGrid, C7[ 'setToolbarGrid' + fnName ](), layoutGrid);
+	}
+	
+
 }
 
-Form.systemReloadGrid = function(fnName, param) {
+C7.setGridBtns = function(grid, btns, layoutGrid) {
+	for(i in btns){
+		var action = btns[i]['action'],
+			title =  btns[i]['title'],
+			icon =  btns[i]['icon'],
+			fnName = 'C7.action' + action + '()';
+		
+    	btn = U.btnTopCell(fnName, title, icon);
+    	
+    	layoutGrid.addBtnTitleMMS([btn]); 
+	}
+	
+}
+
+C7.systemReloadGrid = function(fnName, param) {
 	param = (typeof param == "object" ? JSON.stringify(param) : param);
-	var callbackLoadGrid = (typeof Form['callbackLoadGrid' + fnName] == "function" ? Form['callbackLoadGrid' + fnName] : function(){});
+	var callbackLoadGrid = (typeof C7['callbackLoadGrid' + fnName] == "function" ? C7['callbackLoadGrid' + fnName] : function(){});
 	SYSTEM[fnName].clearAll();
 	urlLoad = this.settings.urlLoadGridPrefix + fnName + '&json=true&param=' + param;
 	$.blockUI();
@@ -233,20 +264,37 @@ Form.systemReloadGrid = function(fnName, param) {
 }
 
 
-Form.FilterA.init = function() {
+C7.FilterA.init = function() {
 	
-	var formData = Form.getFormData('FilterA');
+	var formData = C7.getFormData('FilterA');
 	 
-	Form.FilterA = SYSTEM.Layout.innerLayout.cells("a").attachForm();
-	Form.FilterA.loadStruct(formData, 'json');
-	Form.FilterA.setFocusOnFirstActive();
+	C7.FilterA = SYSTEM.Layout.innerLayout.cells("a").attachForm();
+	C7.FilterA.loadStruct(formData, 'json');
+	C7.FilterA.setFocusOnFirstActive();
 
-	Form.currentForm = Form.FilterA;
+	C7.currentForm = C7.FilterA;
 	
-	Form.attachEventClick();
-}  	
+	C7.attachEventClick();
+}  
 
-Form.Toolbar = function(itemId) {
+C7.runActionClient = function(action, params, checkPermissions, validate) {	
+	C7.runAction(action, checkPermissions, validate, params, false, 'client');
+}
+
+C7.runActionBackend = function(action, params,  checkPermissions, validate, sendForm) {
+	C7.runAction(action, checkPermissions, validate, params, sendForm, 'backend');
+}
+
+C7.runActionC = function(action, params, callback, checkPermissions, validate) {	
+	C7.runAction(action, checkPermissions, validate, params, false, 'client');
+}
+
+C7.runActionB = function(action, params, callback, sendForm, checkPermissions, validate) {
+	C7.runAction(action, checkPermissions, validate, params, sendForm, 'backend', callback);
+}
+
+
+C7.Toolbar = function(itemId) {
  
 	/* 
 	* Seta a action atual com a action definida ao chamar a função 
@@ -256,81 +304,66 @@ Form.Toolbar = function(itemId) {
 	*
 	* A action atual é usada para fazer um ajax para o backend. Ex:
 	*
-	* Se o Form.action == 'create', ao executar a função Form.executeAction será disparado uma 
+	* Se o C7.action == 'create', ao executar a função C7.executeAction será disparado uma 
 	* requisição para o método create do controller atual.
 	*/	
 	var action = SYSTEM.Layout.icons[0][itemId];
 	
 	
-	Form.runAction(action, true);
+	C7.runAction(action, true);
 }
 
-Form.runActionClient = function(action, params, checkPermissions, validate) {	
-	Form.runAction(action, checkPermissions, validate, params, false, 'client');
-}
 
-Form.runActionBackend = function(action, params,  checkPermissions, validate, sendForm) {
-	Form.runAction(action, checkPermissions, validate, params, sendForm, 'backend');
-}
+C7.runAction = function(action, checkPermissions, validate, params, sendForm, actionType, callback) {
 
-Form.runActionC = function(action, params, callback, checkPermissions, validate) {	
-	Form.runAction(action, checkPermissions, validate, params, false, 'client');
-}
-
-Form.runActionB = function(action, params, callback, sendForm, checkPermissions, validate) {
-	Form.runAction(action, checkPermissions, validate, params, sendForm, 'backend', callback);
-}
-
-Form.runAction = function(action, checkPermissions, validate, params, sendForm, actionType, callback) {
-
-	var action = Form.capitalise(action),
+	var action = C7.capitalise(action),
     	checkPermissions = (checkPermissions || this.settings.checkPermissions),
     	validate = (validate || this.settings.validate),
-    	actionType = (actionType || Form.actionType || this.settings.actionType),	
-    	callback = (callback || Form.sendDatacustomCallback || this.settings.sendDatacustomCallback),
-    	centerRequest = (Form.centerRequest || this.settings.centerRequest),		
+    	actionType = (actionType || C7.actionType || this.settings.actionType),	
+    	callback = (callback || C7.sendDatacustomCallback || this.settings.sendDatacustomCallback),
+    	centerRequest = (C7.centerRequest || this.settings.centerRequest),		
     	methodPrefix = 'action',
 	 	actionFnName =  methodPrefix + action,
 	 	beforeActionFnName = 'beforeAction' + action,
 		afterActionFnName = 'afterAction' + action,
 		errorMessage = 'Você precisa criar uma função nesse padrão action'+action+'() para a ação '+ action + ' funcionar.';
-		params = (params || Form.params || this.settings.params);
-		Form.action = action;	
-		// Form.sendForm = (sendForm === false)  ? false : (Form.sendForm === false)  ?  false : this.settings.sendForm;
-		Form.sendForm = (typeof sendForm == "boolean")  ? sendForm : (typeof Form.sendForm == "boolean")  ? Form.sendForm : this.settings.sendForm;
+		params = (params || C7.params || this.settings.params);
+		C7.action = action;	
+		// C7.sendForm = (sendForm === false)  ? false : (C7.sendForm === false)  ?  false : this.settings.sendForm;
+		C7.sendForm = (typeof sendForm == "boolean")  ? sendForm : (typeof C7.sendForm == "boolean")  ? C7.sendForm : this.settings.sendForm;
 		
 	// Checa se o usuário logado tem permissão para executar a ação 
-	hasPermission = (checkPermissions) ? Form.checkPermissions(action) : true;
+	hasPermission = (checkPermissions) ? C7.checkPermissions(action) : true;
 
 	if (hasPermission) {
 
 		if (validate) { 
-			if (!Form.validate()) {
+			if (!C7.validate()) {
 				return;
 			}
 		}
 		 
     	// Executa o evento BeforeAction
-    	Form.callFunctionDynamically(beforeActionFnName, '');
+    	C7.callFunctionDynamically(beforeActionFnName, '');
     	
     	if (actionType === 'client') {
     		// Executa a Action no cliente
-        	Form.callFunctionDynamically(actionFnName, errorMessage, params);
+        	C7.callFunctionDynamically(actionFnName, errorMessage, params);
 		} else {
 			// executa a Action no backend - obviamente deverá existir 
 			// uma action com o mesmo nome no controller em questão
-			Form.executeAction(centerRequest, callback, params);
+			C7.executeAction(centerRequest, callback, params);
 		}		
     		
     	// Executa o evento AfterAction
-    	Form.callFunctionDynamically(afterActionFnName, '');
+    	C7.callFunctionDynamically(afterActionFnName, '');
     	
-		Form.setDefaultValuesFields();	
+		C7.setDefaultValuesFields();	
 	}
 }
 
-Form.validate = function() {
-	var rules = Form.rules(),
+C7.validate = function() {
+	var rules = C7.rules(),
 		error = true,
 		validator = '',
 		message = '',
@@ -338,7 +371,7 @@ Form.validate = function() {
 		values = [];
 
 		for ( i in rules ) {
-			actionRules = rules[i][Form.action];
+			actionRules = rules[i][C7.action];
 			for (k in actionRules) {	
 								
 				 values = actionRules[0];
@@ -378,14 +411,14 @@ Form.validate = function() {
 
 
 
-Form.rules = function() {
+C7.rules = function() {
  	return [];	
 }
 
-Form.checkPermissions = function(action) {	
+C7.checkPermissions = function(action) {	
 	ret = false;
-	var fs = Form.settings,
-		action = (action || Form.action),
+	var fs = C7.settings,
+		action = (action || C7.action),
 		route = fs.currentModule + '/' + fs.currentController.toLowerCase() + '/' + 'valida-permissao-acao',
 		param = '&rotaController=' + route + action,
 		url = './index.php?r=' + route + param;
@@ -404,59 +437,71 @@ Form.checkPermissions = function(action) {
 	return ret;
 }
 
-Form.close = function() {
-	Form.windowMain.hide();
-	Form.windowMain.setModal(false);
+C7.close = function() {
+	C7.windowMain.hide();
+	C7.windowMain.setModal(false);
 }
 
-Form.show = function() {
-	Form.windowMain.show();
-    Form.windowMain.setModal(true);
+C7.show = function() {
+	C7.windowMain.show();
+    C7.windowMain.setModal(true);
 
-	fnNameAction = this.settings['titleWindow' + Form.action];
+	fnNameAction = this.settings['titleWindow' + C7.action];
 	if(fnNameAction !== 'undefined'){
 		this.windowMain.setText(fnNameAction);
 	}
 	
 }
 
-Form.getGlobalCreateAndUpdateSets = function() {
-	Form.currentForm = Form.main;
-	Form.sendDatacustomCallback = '';	
+C7.getGlobalCreateAndUpdateSets = function() {
+	C7.currentForm = C7.main;
+	C7.sendDatacustomCallback = '';	
 	
-	Form.show();
+	C7.show();
 	
-	Form.load('WindowSets', 'GlobalCreate');
-	Form.load('Form', 'Crud', Form.windowMain);
+	C7.load('WindowSets', 'GlobalCreate');
+	C7.load('Form', 'Crud', C7.windowMain);
 		
-	Form.setDefaultValuesFields(); 	
-	Form.windowMain.setText(this.settings.titleWindowCreate);	
-}
+	C7.setDefaultValuesFields(); 	
 
-Form.actionGlobalCreate = function() {
-	SYSTEM.Grid.clearSelection()
-	Form.getGlobalCreateAndUpdateSets();
-	Form.main.clear();
 }
-
-Form.actionGlobalUpdate = function() {
-	Form.getGlobalCreateAndUpdateSets();	
-}
-
-Form.actionRefresh = function() {
-	Form.reloadGrid();
-}
-
-Form.actionGlobalInactivate = function() {	
-	Form.actionGlobalDelete();
-}
-
-Form.actionGlobalDelete = function() {
-	Form.setDefaultValuesFields();
+C7.getWindowSetsGlobalCreate = function() {
 	
-	var rowId = SYSTEM.Grid.getSelectedId(),
+}
+
+C7.actionGlobalCreate = function() {
+	C7.grid.Main.clearSelection()
+	C7.getGlobalCreateAndUpdateSets();
+	C7.form.Crud.clear();
+	C7.windowMain.setText(this.settings.titleWindowCreate);	
+}
+
+C7.actionGlobalUpdate = function() {
+	C7.getGlobalCreateAndUpdateSets();	
+	C7.windowMain.setText(this.settings.titleWindowUpdate);	
+}
+
+C7.actionRefresh = function() {
+	C7.reloadGrid();
+}
+
+C7.actionGlobalInactivate = function() {	
+	C7.actionGlobalDelete();
+}
+
+C7.actionGlobalDelete = function(grid) {
+	C7.setDefaultValuesFields();
+
+	 if (typeof grid == 'object') {
+    	grid = (Object.keys(grid).length === 0 ) ? "Main": grid;
+	} else {
+		grid = (grid || "Main");
+	}
+
+	var rowId = SYSTEM[grid].getSelectedId(),
 		params = {id: rowId},
-		callback = 'reloadGrid';
+		callback = 'reloadGrid',
+		sendForm = false;
 	
 	dhtmlx.confirm({
 		title: this.settings.titleWindowDelete,
@@ -465,43 +510,43 @@ Form.actionGlobalDelete = function() {
 		text: '<?= Yii::t('app','Excluindo Registro ')?>',
 		callback:function(excluir){
 			if (!excluir) {	
-				Form.runActionB(Form.action, params, callback);
+				C7.runActionB(C7.action, params, callback, sendForm);
 			}
 		}
 	});
 }
 
-Form.actionReloadGrid = function(params) {
-	Form.reloadGrid(params);
+C7.actionReloadGrid = function(params) {
+	C7.reloadGrid(params);
 }
 
-Form.reloadGrid = function(params) {
-	if (typeof Form.settings.gridReload != 'undefined') {
-    	if (typeof Form.settings.callbackReloadGrid == 'function') {
-    		Form.settings.gridReload.load(Form.settings.urlReloadGrid, Form.settings.callbackReloadGrid);
+C7.reloadGrid = function(params) {
+	if (typeof C7.settings.gridReload != 'undefined') {
+    	if (typeof C7.settings.callbackReloadGrid == 'function') {
+    		C7.settings.gridReload.load(C7.settings.urlReloadGrid, C7.settings.callbackReloadGrid);
     	} else {
-    		if ( typeof SYSTEM[Form.settings.gridReload] != 'undefined') {
-				SYSTEM[Form.settings.gridReload].load(Form.settings.urlReloadGrid);
-    		} else if ( typeof Form.settings.gridReload == 'function') {
-    			Form.settings.gridReload.load(Form.settings.urlReloadGrid);
+    		if ( typeof SYSTEM[C7.settings.gridReload] != 'undefined') {
+				SYSTEM[C7.settings.gridReload].load(C7.settings.urlReloadGrid);
+    		} else if ( typeof C7.settings.gridReload == 'function') {
+    			C7.settings.gridReload.load(C7.settings.urlReloadGrid);
     		}
     	}
 	}
 }
 
-Form.actionExportExcel = function() {
+C7.actionExportExcel = function() {
 	var urlSend = '../libs/dhtmlx/excel/generate.php';
 	SYSTEM.Grid.toExcel(urlSend, 'full_color');
 }
 
-Form.globalExportExcel = function(gridName, param) {
-	Form.sendDatacustomCallback = function(a){
+C7.globalExportExcel = function(gridName, param) {
+	C7.sendDatacustomCallback = function(a){
 		if(typeof a.excel !== "undefined") {
 			uri = 'data:application/vnd.ms-excel,' + encodeURIComponent(a.excel);
 			fileName = a.fileName;
 			U.downloadURI(uri, fileName);
 		} else {
-			Form.alertAtencao((typeof a.message !== "undefined" ? a.message : "<?= Yii::t("app", "Não foi possivel gerar o excel")?>"));
+			C7.alertAtencao((typeof a.message !== "undefined" ? a.message : "<?= Yii::t("app", "Não foi possivel gerar o excel")?>"));
 		}
 	}
 	
@@ -509,41 +554,41 @@ Form.globalExportExcel = function(gridName, param) {
 		param = JSON.stringify(param);
 	}
 	
-	Form.runActionBackend("globalExportExcel", {grid: gridName, param: param}, false, false, false); 
+	C7.runActionBackend("globalExportExcel", {grid: gridName, param: param}, false, false, false); 
 }
 
-Form.executeAction = function (centerRequest, callback, params) {	
+C7.executeAction = function (centerRequest, callback, params) {	
 
-	var url = Form.getUrlCurrentAction(centerRequest);
-	params = (params || Form.params);
+	var url = C7.getUrlCurrentAction(centerRequest);
+	params = (params || C7.params);
 	
-	if (Form.sendForm) {
-    	Form.sendFormData(url, callback);	
+	if (C7.sendForm) {
+    	C7.sendFormData(url, callback);	
 	} else {
-		Form.ajax(params, callback, Form.async, centerRequest);
+		C7.ajax(params, callback, C7.async, centerRequest);
 	}
 
-	Form.sendForm = Form.settings.sendForm;
-	Form.async = Form.settings.async;
-	Form.params = Form.settings.params;
-	Form.centerRequest = Form.settings.centerRequest;
-	Form.actionType = Form.settings.actionType;
-	Form.sendDatacustomCallback = Form.settings.sendDatacustomCallback;	
+	C7.sendForm = C7.settings.sendForm;
+	C7.async = C7.settings.async;
+	C7.params = C7.settings.params;
+	C7.centerRequest = C7.settings.centerRequest;
+	C7.actionType = C7.settings.actionType;
+	C7.sendDatacustomCallback = C7.settings.sendDatacustomCallback;	
 }
 
-Form.ajax = function (params, callback, async, centerRequest, url, type) {
+C7.ajax = function (params, callback, async, centerRequest, url, type) {
 	params = (params || '');
 	async = async === false ? false : true;
 	callback =  (callback || 'sendDataCallbackDefault');
 	centerRequest = centerRequest === false ? false : true;
-	url = (url ||Form.getUrlCurrentAction(centerRequest));
+	url = (url ||C7.getUrlCurrentAction(centerRequest));
 
 	
 	if (async) {		
 		if (typeof callback == 'function') {			
 			$.post(url, params, callback)
 		} else {
-			$.post(url, params, Form[callback])
+			$.post(url, params, C7[callback])
 		}
 	} else {
 		return dhtmlxAjax.postSync(url, params);
@@ -551,11 +596,11 @@ Form.ajax = function (params, callback, async, centerRequest, url, type) {
 
 }
 
-Form.ajaxJquery = function (ajaxParams, centerRequest) {
+C7.ajaxJquery = function (ajaxParams, centerRequest) {
 
-	ajaxParams.url = (ajaxParams.url ||Form.getUrlCurrentAction(centerRequest));
+	ajaxParams.url = (ajaxParams.url ||C7.getUrlCurrentAction(centerRequest));
 	
-	ajaxParams.success = (ajaxParams.success || Form['sendDataCallbackDefault']);
+	ajaxParams.success = (ajaxParams.success || C7['sendDataCallbackDefault']);
 	
 	ajaxParams.dataType = (ajaxParams.dataType || 'xml');
 	
@@ -563,32 +608,32 @@ Form.ajaxJquery = function (ajaxParams, centerRequest) {
 }
 
 
-Form.getFormData = function(typeForm) {
+C7.getFormData = function(typeForm) {
 	methodPrefix = 'getFormData';
 	functionName = methodPrefix + typeForm;
 	
-	if (typeof Form[functionName] !== 'function') {
+	if (typeof C7[functionName] !== 'function') {
 		console.warn('Erro: Você deve criar uma função nesse formato '+functionName+'() retornando o json do formulário.')
 		return false;
 	}   	
 
-	return Form[functionName]();
+	return C7[functionName]();
 }
 
-Form.callFunctionDynamically = function(functionName, errorMessage, params) {
+C7.callFunctionDynamically = function(functionName, errorMessage, params) {
 	params = (params || null);
 
-	if (typeof Form[functionName] !== 'function') {	
+	if (typeof C7[functionName] !== 'function') {	
 		if (typeof errorMessage != 'undefined' && errorMessage != '') {			
 			console.warn(errorMessage)
 		}
 		return false;
 	}   	
 
-	return (params === null) ? Form[functionName]() : Form[functionName](params);
+	return (params === null) ? C7[functionName]() : C7[functionName](params);
 }
 
-Form.sendFormData = function(urlSend, callback) {
+C7.sendFormData = function(urlSend, callback) {
 	 if ((callback == '' || typeof callback == 'undefined')) {
 		callback = 'sendDataCallbackDefault';
 	 }
@@ -601,31 +646,31 @@ Form.sendFormData = function(urlSend, callback) {
 
 	var ajaxOptionsDefault = {
 			url: urlSend,
-			success: Form[conf.sendDataCustomCallback],
-			data: Form.params
+			success: C7[conf.sendDataCustomCallback],
+			data: C7.params
 	}
 		
 	
-	if (typeof Form.ajaxOptions != 'undefined' && typeof Form.ajaxOptions != 'undefined') {
-		$.extend(Form.ajaxOptions.data, ajaxOptionsDefault.data);
+	if (typeof C7.ajaxOptions != 'undefined' && typeof C7.ajaxOptions != 'undefined') {
+		$.extend(C7.ajaxOptions.data, ajaxOptionsDefault.data);
 	}
 	
-	$.extend(ajaxOptionsDefault, Form.ajaxOptions);
+	$.extend(ajaxOptionsDefault, C7.ajaxOptions);
 	
-	Form.currentForm.sendMMS(ajaxOptionsDefault);
+	C7.currentForm.sendMMS(ajaxOptionsDefault);
 }
 
-Form.callbackReload = function (loader, response) {	
+C7.callbackReload = function (loader, response) {	
 	
 	SYSTEM.Grid.clearAll(true);
 	SYSTEM.Grid.loadXMLString(response);
 }
 
 
-Form.sendDataCallbackDefault = function(response) {
+C7.sendDataCallbackDefault = function(response) {
 	
 	if (response.status) {	
-		 Form.reloadGrid();
+		 C7.reloadGrid();
 		
 		 if (response.message === 'undefined' || response.message == '') {
 			response.message = "Operação realizada com sucesso!";
@@ -633,8 +678,8 @@ Form.sendDataCallbackDefault = function(response) {
 			
 		 dhtmlx.alert({text: response.message , ok: "ok"});
 
-		 if (Form.formOpen) {
-		 	Form.close();
+		 if (C7.formOpen) {
+		 	C7.close();
 		 }
 	} else {
 		
@@ -651,23 +696,23 @@ Form.sendDataCallbackDefault = function(response) {
 	}
 }
 
-Form.getUrlCurrentAction = function(centerRequest) {
-	ctrlAction = Form.action;
+C7.getUrlCurrentAction = function(centerRequest) {
+	ctrlAction = C7.action;
 	
 	if (centerRequest == false) {
-		var ctrlAction = Form.toIfemCase(Form.action);
+		var ctrlAction = C7.toIfemCase(C7.action);
 	}
 	
 	if ((this.settings.centerRequest && typeof centerRequest == 'undefined' ) || (centerRequest == true) || (centerRequest == "true")) {
-		return './index.php?r='+Form.settings.currentModule+'/'+Form.settings.currentController+'/'+Form.settings.currentCenterMethod+'&action='+ctrlAction;
+		return './index.php?r='+C7.settings.currentModule+'/'+C7.settings.currentController+'/'+C7.settings.currentCenterMethod+'&action='+ctrlAction;
 	} else {
-		return './index.php?r='+Form.settings.currentModule+'/'+Form.settings.currentController+'/'+ctrlAction;
+		return './index.php?r='+C7.settings.currentModule+'/'+C7.settings.currentController+'/'+ctrlAction;
 	}
 }
 
-Form.attachEventClick = function() {
+C7.attachEventClick = function() {
 	
-	Form.currentForm.attachEvent("onButtonClick", function(action) {
+	C7.currentForm.attachEvent("onButtonClick", function(action) {
 	
 		var validate = this.getUserData(action, 'validate');
 		if ( validate !== false  ) {				
@@ -676,48 +721,54 @@ Form.attachEventClick = function() {
 				}
 		}
 		
-		Form.centerRequest = (this.getUserData(action, 'centerRequest') === false ? false: true);
-		Form.actionType = (this.getUserData(action, 'actionType') || 'backend');
-		Form.sendDatacustomCallback = this.getUserData(action, 'callback');
+		C7.centerRequest = (this.getUserData(action, 'centerRequest') === false ? false: true);
+		C7.actionType = (this.getUserData(action, 'actionType') || 'backend');
+		C7.sendDatacustomCallback = this.getUserData(action, 'callback');
 		params = (this.getUserData(action, 'params') || null);
-		Form.currentForm = this;
-		Form.ajaxOptions = this.getUserData(action, 'ajaxOptions');
+		C7.currentForm = this;
+		C7.ajaxOptions = this.getUserData(action, 'ajaxOptions');
 		action = (this.getUserData(action, 'action') || action);
+		var sendForm = (this.getUserData(action, 'sendForm') || true);
 		
 		var checkPermissions = (this.getUserData(action, 'checkPermissions') || 'false');
 		
-		if (typeof action != 'undefined' || typeof Form.action === 'undefined' || Form.action == '') {
-			Form.action = action;
+		if (typeof action != 'undefined' || typeof C7.action === 'undefined' || C7.action == '') {
+			C7.action = action;
 		} else {
-			action = Form.action;
+			action = C7.action;
 		}
-		
-		Form.runAction(Form.action, checkPermissions, validate, params);
+
+		if (C7.actionType == 'client') {
+    		C7.runActionC(C7.action, params, C7.sendDatacustomCallback, checkPermissions, validate );
+		} else {
+			C7.runActionB(C7.action, params, C7.sendDatacustomCallback, sendForm, checkPermissions, validate );
+		}
+				
 		
 	});
 }
 
-Form.attachMask = function(){
-	Form.currentForm.forEachItem(function(name){
+C7.attachMask = function(){
+	C7.currentForm.forEachItem(function(name){
 		// mascara numerica
-		maskNumber = (Form.currentForm.getUserData(name, 'maskNumber') || false);
+		maskNumber = (C7.currentForm.getUserData(name, 'maskNumber') || false);
 		if(maskNumber){
-			Form.currentForm.inputMaskNumberMMS(name,(Number.isInteger(maskNumber[0])?maskNumber[0]:((Number.isInteger(maskNumber)?maskNumber:false))),(maskNumber[1] || false),(maskNumber[2] || false));
+			C7.currentForm.inputMaskNumberMMS(name,(Number.isInteger(maskNumber[0])?maskNumber[0]:((Number.isInteger(maskNumber)?maskNumber:false))),(maskNumber[1] || false),(maskNumber[2] || false));
 		}
 	});
 }
 
-Form.beforeAttachEventSearch = function(){
-	Form.centerRequest = false;
-	Form.sendDatacustomCallback = 'callbackReload';				
+C7.beforeAttachEventSearch = function(){
+	C7.centerRequest = false;
+	C7.sendDatacustomCallback = 'callbackReload';				
 }
 
 
-Form.modalBoxImportFile = function(actionBackend, callbackImportFile, layoutFileName,  layoutBtnName, layoutPath) {
+C7.modalBoxImportFile = function(actionBackend, callbackImportFile, layoutFileName,  layoutBtnName, layoutPath) {
 	
 	if (actionBackend) {
 		var layout = (layout || false),
-			  antigoFormAtivo = Form.currentForm,
+			  antigoFormAtivo = C7.currentForm,
 			  layoutFileName = (layoutFileName || false);
 			  layoutBtnName = (layoutBtnName || "<?=Yii::t("app",'Baixar Layout')?>"), 
 			  layoutPath = (layoutBtnName || "files");
@@ -729,20 +780,20 @@ Form.modalBoxImportFile = function(actionBackend, callbackImportFile, layoutFile
 			botoes.push("<?=Yii::t("app",'Fechar')?>");
 			
 		var boxImportFile = dhtmlx.modalbox({
-			title: Form.settings.titleModalboxImportFile,
+			title: C7.settings.titleModalboxImportFile,
 			text: "<div id='formImportFile'></div>",
 			buttons: botoes,
 		});
 		
 		$('.dhtmlx_popup_button').on('click', function(){
 			a = this.getAttribute('result');
-			Form.actionImportFile(a);
+			C7.actionImportFile(a);
 			return false;
 		});
 		
-		Form.actionImportFile = function(a) {
+		C7.actionImportFile = function(a) {
 			if(a == 0){
-				file = Form.currentForm.getItemValue('file');
+				file = C7.currentForm.getItemValue('file');
 				if(!file){
 					dhtmlx.alert({
 						text:"<?= Yii::t("app", "Selecione um arquivo para importar.") ?>",						
@@ -751,8 +802,8 @@ Form.modalBoxImportFile = function(actionBackend, callbackImportFile, layoutFile
 				} else {
 					
 					$.blockUI();
-					Form.sendDatacustomCallback = callbackImportFile;
-					Form.runActionBackend(actionBackend, false,  false, false, true);
+					C7.sendDatacustomCallback = callbackImportFile;
+					C7.runActionBackend(actionBackend, false,  false, false, true);
 					$.unblockUI();
 					document.querySelectorAll('input[type="file"]')[0].value = '';
 				}
@@ -763,12 +814,12 @@ Form.modalBoxImportFile = function(actionBackend, callbackImportFile, layoutFile
 				return false;
 			}
 			
-			Form.currentForm = antigoFormAtivo;
+			C7.currentForm = antigoFormAtivo;
 			dhtmlx.modalbox.hide(boxImportFile);
 			return false;
 		}
 		
-		Form.getFormDataImportFile = function() {
+		C7.getFormDataImportFile = function() {
 			return [
 				{type: "settings", position: "label-top", labelAlign: "left",  labelWidth: "auto"},
 				{type: "block",  list: [
@@ -778,7 +829,7 @@ Form.modalBoxImportFile = function(actionBackend, callbackImportFile, layoutFile
 		}
 		
 		// form dhtmlx
-		Form.currentForm = new dhtmlXForm( 'formImportFile',  Form.getFormDataImportFile());
+		C7.currentForm = new dhtmlXForm( 'formImportFile',  C7.getFormDataImportFile());
 		
 	}
 }
@@ -786,19 +837,19 @@ Form.modalBoxImportFile = function(actionBackend, callbackImportFile, layoutFile
 /* TODO
  * Mover as funções abaixo para um arquivo útil 
  */
-Form.getCellTextSelected = function(gridObj, colId) {
+C7.getCellTextSelected = function(gridObj, colId) {
 	return gridObj.cells(gridObj.getSelectedRowId() , gridObj.getColIndexById(colId)).getValue();
 }
 
-Form.getCellText = function(gridObj, rowId, colId) {
+C7.getCellText = function(gridObj, rowId, colId) {
 	return gridObj.cells(rowId , gridObj.getColIndexById(colId)).getValue();
 }
 
-Form.setCellVal = function(gridObj, colId, val) {
+C7.setCellVal = function(gridObj, colId, val) {
 	gridObj.cells(gridObj.getSelectedRowId() , gridObj.getColIndexById(colId)).setValue(val);
 }
 
-Form.getHiddenRowsId = function(gridObj) {
+C7.getHiddenRowsId = function(gridObj) {
 	var rowsHidden = [];
 	
 	gridObj.forEachRow(function(id){
@@ -810,16 +861,16 @@ Form.getHiddenRowsId = function(gridObj) {
     return rowsHidden;
 }
 
-Form.totalRowsVisibleGrid = function(grid){
-	var hiddenRows = Form.getHiddenRowsId(grid).length,
+C7.totalRowsVisibleGrid = function(grid){
+	var hiddenRows = C7.getHiddenRowsId(grid).length,
 		totalRows = grid.getRowsNum() - hiddenRows;
 
 	return totalRows;
 }
 
-Form.beforeSendMMS = function() {}
+C7.beforeSendMMS = function() {}
 
-Form.settings = {
+C7.settings = {
 	titleWindowCreate: 'Adicionar Registro',
 	titleWindowUpdate: 'Editar Registro',
 	titleWindowDelete: 'Excluir Registro',
@@ -843,15 +894,15 @@ Form.settings = {
     validate: true
 };
 
-Form.capitalise = function (string) {
+C7.capitalise = function (string) {
    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-Form.toIfemCase = function (s) {
+C7.toIfemCase = function (s) {
 	return s.replace(/\.?([A-Z]+)/g, function (x,y){return "-" + y.toLowerCase()}).replace(/^-/, "");
 }
 
-Form.alertAtencao = function (message){
+C7.alertAtencao = function (message){
 	dhtmlx.alert({
 		title:"<?= Yii::t("app", "Atenção!")?>", 
 		type:"alert-error errorCustom", 

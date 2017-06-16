@@ -3,7 +3,7 @@
 namespace frontend\controllers;
 
 use common\controllers\GlobalBaseController;
-
+use common\models\CB16PEDIDO;
 
 /**
  * API Iugu Controller
@@ -33,6 +33,8 @@ class ApiIuguController extends GlobalBaseController {
        \Yii::$app->Iugu->execute('prepararTransacao', \Yii::$app->request->post('dados'));
        \Yii::$app->Iugu->execute('processarTransacao');
     }
+    
+  
  
     
 }

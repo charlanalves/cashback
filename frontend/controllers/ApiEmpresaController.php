@@ -27,6 +27,7 @@ class ApiEmpresaController extends GlobalBaseController {
 
     public $url;
     public $urlController;
+    public $invoiceId = null;
     
     public function __construct($id, $module, $config = []) {
         $this->url = \Yii::$app->request->hostInfo . '/apiestalecas/frontend/web/';
@@ -342,7 +343,67 @@ class ApiEmpresaController extends GlobalBaseController {
         return json_encode($CB16PEDIDO);
     }
 
+    private function getPercPag($data, $pedido)
+    {	
+       return CB09FORMAPAGTOEMPRESA::find()
+                 ->select(['CB09_ID', 'CB09_PERC_ADMIN', 'CB09_PERC_ADQ'])
+                 ->where(['CB09_ID_FORMA_PAG' => $data['FORMA-PAGAMENTO'], 'CB09_ID_EMPRESA' => $pedido['CB16_EMPRESA_ID']])
+                 ->asArray()
+                 ->one();                    
+    }
+
+    private function atualizaPedidoPago($post, $PERC_PAG, $data)
+    {
+       $modelPedido = CB16PEDIDO::findOne($post['order']);
+       $modelPedido->scenario = CB16PEDIDO::SCENARIO_ATUALIZA_PEDIDO_PAGO;
+       
+       $modelPedido->CB16_ID_FORMA_PAG_EMPRESA = $PERC_PAG['CB09_ID'];
+       $modelPedido->CB16_FORMA_PAG = CB08FORMAPAGAMENTO::findOne($data['FORMA-PAGAMENTO'])->CB08_NOME;
+       $modelPedido->CB16_PERC_ADMIN  = $PERC_PAG['CB09_PERC_ADMIN'];
+       $modelPedido->CB16_PERC_ADQ = $PERC_PAG['CB09_PERC_ADQ'];
+       $modelPedido->CB16_STATUS = CB16PEDIDO::status_pago;
+       $modelPedido->CB16_DT_APROVACAO = date('Y-m-d H:i:s');
+       $modelPedido->CB16_TRANS_CRIADAS = 0;
+                           
+       $modelPedido->save();
+    }
     
+    
+    private function preparaProcessaTransacao($pedido, $data)
+    {
+         $param = [
+                  	"token" => $data['token'],
+                    "email" => $data['EMAIL'],
+                    "items" => Array(
+                            Array(
+                                "description" => $pedido['CB17_NOME_PRODUTO'],
+                                "quantity" => $pedido['CB17_QTD'],
+                                "price_cents" => \Yii::$app->u->arredondar($pedido['CB16_VALOR'] * 100)
+                            )
+                        ),
+                   "payer" => Array(
+                         "name" => $data['NOME'],
+                         "phone_prefix" => "",
+                         "phone" => $data['TELEFONE'],
+                         "email" => $data['EMAIL'],
+                         "address" => Array(
+                             "street" => "",
+                             "number" => "",
+                             "city" => "",
+                             "state" => "",
+                             "country" => "",
+                             "zip_code" => ""
+                            )
+                        )
+                    ];
+                   
+        $retorno = \Yii::$app->Iugu->exec('processTransaction', $param);
+       
+        if (isset($retorno['invoice_id'])) {
+             $this->invoiceId = $retorno['invoice_id'];
+        }            
+    }
+                    
     /**
      * Checkout - Comprar
      */
@@ -358,78 +419,51 @@ class ApiEmpresaController extends GlobalBaseController {
             // verifica status do pedido
             if ($pedido['CB16_STATUS'] == CB16PEDIDO::status_aguardando_pagamento) {
                 
-                //$transaction = \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
-                $transaction = \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
+                $transaction = \Yii::$app->db->beginTransaction();
                 
                 try {
-                    
                     $data = $post['data'];
                     
-                    // dados do pagamento
-                    $PERC_PAG = CB09FORMAPAGTOEMPRESA::find()
-                            ->select(['CB09_ID', 'CB09_PERC_ADMIN', 'CB09_PERC_ADQ'])
-                            ->where(['CB09_ID_FORMA_PAG' => $data['FORMA-PAGAMENTO'], 'CB09_ID_EMPRESA' => $pedido['CB16_EMPRESA_ID']])
-                            ->asArray()
-                            ->one();
+                    // Dados do pagamento
+                	$PERC_PAG = $this->getPercPag($data, $pedido);
+                	
+                	// Atualiza dados do pedido
+                    $this->atualizaPedidoPago($post, $PERC_PAG, $data);
                     
+                    // Prepara e processa Transacao
+                    $this->preparaProcessaTransacao($pedido, $data);
+                	
+                   	$transaction->commit();
                     
-                    // Atualiza dados do pedido
-                    $modelPedido = CB16PEDIDO::findOne($post['order']);
-                    $modelPedido->setAttributes([
-                        'CB16_ID_FORMA_PAG_EMPRESA' => $PERC_PAG['CB09_ID'],
-                        'CB16_FORMA_PAG' => CB08FORMAPAGAMENTO::findOne($data['FORMA-PAGAMENTO'])->CB08_NOME,
-                        'CB16_PERC_ADMIN' => $PERC_PAG['CB09_PERC_ADMIN'],
-                        'CB16_PERC_ADQ' => $PERC_PAG['CB09_PERC_ADQ'],
-                        'CB16_STATUS' => CB16PEDIDO::status_pago,
-                        'CB16_DT_APROVACAO' => date('Y-m-d H:i:s'),
-                        'CB16_TRANS_CRIADAS' => 1
-                    ]);
-                    $modelPedido->save();
+                   	$status = true;
+                   	$retorno = '';
                     
-
-                    // checkout Iugu
-                    $param = [
-                        "token" => $data['token'],
-                        "email" => $data['EMAIL'],
-                        "items" => Array(
-                            Array(
-                                "description" => $pedido['CB17_NOME_PRODUTO'],
-                                "quantity" => $pedido['CB17_QTD'],
-                                "price_cents" => \Yii::$app->u->arredondar($pedido['CB16_VALOR'] * 100)
-                            )
-                        ),
-                        "payer" => Array(
-                            "name" => $data['NOME'],
-                            "phone_prefix" => "",
-                            "phone" => $data['TELEFONE'],
-                            "email" => $data['EMAIL'],
-                            "address" => Array(
-                                "street" => "",
-                                "number" => "",
-                                "city" => "",
-                                "state" => "",
-                                "country" => "",
-                                "zip_code" => ""
-                            )
-                        )
-                    ];
-                    
-                    \Yii::$app->Iugu->execute('processTransaction', $param);
-                    
-                } catch (\Exception $exc) {
-                    var_dump('Exception');
-                    $transaction->rollBack();
-                    return json_encode(['status' => false]);
-                    
+                } catch (\Exception $exc) {                    
+                    $transaction->rollBack();                   
+                    $retorno = $exc->getMessage();
+                }
+                if (!is_null($this->invoiceId)) {
+                	$this->atualizaCodTransacaoPedido($post['order'], $this->invoiceId);
                 }
                 
+                exit(json_encode(['status' => $status, 'retorno' => $retorno]));
             }
         }
-        
-        
     }
     
-    
+   private function atualizaCodTransacaoPedido($idPedido, $codTransacao)
+   { 
+       try {    	  
+             // Atualiza codigo da transação se acontecer um erro continua o fluxo
+          	 $modelPedido = CB16PEDIDO::findOne($idPedido);
+             $modelPedido->CB16_COD_TRANSACAO = $codTransacao;     
+             $modelPedido->save();
+              
+        }catch (\Exception $exc) {                    
+             // Se acontecer um erro continua o fluxo
+        }
+                
+   }
     /**
      * Estabelecimento e seus produto
      */
@@ -562,7 +596,7 @@ class ApiEmpresaController extends GlobalBaseController {
 
                     // salva pedido
                     $pedido = new CB16PEDIDO();
-                    $pedido->CB16_EMPRESA_ID = $dadosP['CB05_EMPRESA_ID'];
+                    $pedido->CB16_EMPRESA_ID = $dadosP['CB05_EMPRESA_ID'];                    
                     $pedido->CB16_USER_ID = $idUser;
                     $pedido->CB16_VALOR = $dadosV['CB06_PRECO_PROMOCIONAL'];
                     $pedido->CB16_VLR_CB_TOTAL = \Yii::$app->u->arredondar(($dadosV['CB06_DINHEIRO_VOLTA'] / $dadosV['CB06_PRECO_PROMOCIONAL']) * 100);

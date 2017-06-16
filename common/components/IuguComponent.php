@@ -12,6 +12,7 @@ class IuguComponent extends PaymentBaseComponent {
     const tbEmpresa = '\common\models\CB04EMPRESA';
     const prefixCliente = '';
     const prefixEmpresa = 'CB04_';
+    const STATUS_PAID = 'paid';
     
     
     protected function initialize()
@@ -22,7 +23,7 @@ class IuguComponent extends PaymentBaseComponent {
        \Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
        
        //producao
-      // \Iugu::setApiKey("19f75e24d08d0dd3d01db446299a4ba6");
+       //\Iugu::setApiKey("19f75e24d08d0dd3d01db446299a4ba6");
     }
     
     protected function prepareCreditCard($data)
@@ -34,8 +35,8 @@ class IuguComponent extends PaymentBaseComponent {
     {
         $this->lastResponse =  \Iugu_Charge::create($data);
         
-        if (isset($this->lastResponse->errors)) {
-          throw new UserException("O cartão não foi autorizado tente novamente.");
+        if (isset($this->lastResponse->error)) {     
+          throw new UserException("O pagamento não foi autorizado tente novamente com outro cartão de crédito.");
         }
     }
     
@@ -66,17 +67,19 @@ class IuguComponent extends PaymentBaseComponent {
         return $user->attributes;
     }
     
-    private function createSaveCompanyAccount($atributos) 
+    public function fetchUpdateDtDepInvoice(array $invoices) 
     {
-      $this->createAccount();
-      
-      $criacaoDadosBanc = \Iugu_Marketplace::UpdateBankData();
-      
-      if ( !$this->lastResponse->success ) {
-          throw new UserException("Erro ao inserir os dados bancários");
-      }
-      
-      
+    	foreach($invoices as $key => $invoice){
+    		
+     		$invoiceRet = \Iugu_Invoice::fetch($invoice['CB16_COD_TRANSACAO']);
+     		
+     		if ($invoiceRet->status == self::STATUS_PAID) {
+     			$pedido = \common\models\CB16PEDIDO::findOne($invoice['CB16_ID']);
+     			$pedido->CB16_DT_DEP = date('Y-m-d H:i:s');
+     			$pedido->CB16_STATUS = \common\models\CB16PEDIDO::status_liberado;
+     			$pedido->save();
+     		}
+    	}
     }
     
     
