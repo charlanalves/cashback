@@ -1,11 +1,19 @@
 <?php
 
 class Iugu_Charge extends APIResource {
+  
+  public $attributes;
+  
   public static function create($attributes=Array()) { 
     $result = self::createAPI($attributes);
     if (!isset($result->success) && !isset($result->errors)) {
       $result->success = false; 
     }
+    
+    if (isset($result->_attributes)) {
+    	$result->attributes = $result->_attributes;
+    }
+    
     return $result; 
   }
 
