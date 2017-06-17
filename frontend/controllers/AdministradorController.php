@@ -102,7 +102,13 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         $pedido = \common\models\CB16PEDIDO::findOne(5);
        \Yii::$app->Iugu->execute('criaTransferencias', ['pedido' => $pedido]);
     }
-    
+	public function actionAtualizadtdep()
+    {
+    	$pedidos = CB16PEDIDO::getPedidoByStatus(CB16PEDIDO::status_pago);
+    	  if (count($pedidos) > 0) {
+       		\Yii::$app->Iugu->execute('fetchUpdateDtDepInvoice', $pedidos);
+    	  }
+    }
     public function actionTransferencias() 
     {	
         

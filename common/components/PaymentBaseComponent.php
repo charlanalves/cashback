@@ -28,7 +28,37 @@ abstract class PaymentBaseComponent extends Component {
         
         parent::__construct($config);
     }
-    
+ 
+    public function exec($metodo, $params)
+    {
+        if (is_null($params)) {
+            $params = Yii::$app->request->post();
+        }
+
+        $status = true;
+        $dev = '';
+        
+        try {
+           $retorno = $this->globalCall($metodo, $params);
+        
+        } catch (\Exception $e) {
+            $status = false;
+            //$this->log();
+            $retorno = 'Ocorreu um erro interno. Tente novamente em alguns minutos.';
+            $dev = $e->getMessage();
+            
+            if ( $e instanceof \yii\base\UserException) {
+                $retorno = $e->getMessage();
+            }             
+        }
+
+        if ($status) {
+        	return $this->lastResponse->attributes;
+        } 
+        
+        throw new \Exception($retorno);
+        
+    }
     public function execute($metodo, $params)
     {
         if (is_null($params)) {
@@ -46,7 +76,7 @@ abstract class PaymentBaseComponent extends Component {
            }
         } catch (\Exception $e) {
             $status = false;
-            $this->log();
+           // $this->log();
             $retorno = 'Ocorreu um erro interno. Tente novamente em alguns minutos.';
             $dev = $e->getMessage();
             
@@ -78,7 +108,7 @@ abstract class PaymentBaseComponent extends Component {
     	return date('Y-m-d', strtotime("+".$prazoRecebimento." days", strtotime($dtAprovacao)));
     }
     
-  
+
     public function criaTransferencias($params) 
     {   
         $pedidos = \common\models\CB16PEDIDO::getPedidoCompleto();
@@ -93,35 +123,35 @@ abstract class PaymentBaseComponent extends Component {
         	$vlrAdmin = floor((($pedido['CB16_PERC_ADMIN']/100) * $pedido['CB16_VALOR']) * 100) / 100;
         	$vlrAdq = floor((($pedido['CB16_PERC_ADQ']/100) * $pedido['CB16_VALOR']) * 100) / 100;
         	
-        	// TRANSFÊNCIA MASTER TO CLIENTE
+        	// TRANSFï¿½NCIA MASTER TO CLIENTE
 			$trans->PAG04_ID_PEDIDO = $pedido['CB16_ID'];		
 			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
 			$trans->PAG04_COD_CONTA_DESTINO = $pedido['CB02_COD_CONTA_VIRTUAL'];
-			$trans->PAG04_VLR = $vlrCliente;
-			$trans->PAG04_DT_PREV = $dtPrevisao;			
+			$trans->PAG04_VLR = $vlrCliente;						
 			$trans->PAG04_TIPO = 1;
+			$trans->PAG04_DT_PREV = $dtPrevisao;
         	$trans->save();
         	
         	 
-        	// TRANSFÊNCIA MASTER TO ADMIN
+        	// TRANSFï¿½NCIA MASTER TO ADMIN
         	$trans = new \common\models\PAG04TRANSFERENCIAS;
         	$trans->PAG04_ID_PEDIDO = $pedido['CB16_ID'];		
 			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
 			$trans->PAG04_COD_CONTA_DESTINO = $IuguSubAdmin;
-			$trans->PAG04_VLR = $vlrAdmin;
-			$trans->PAG04_DT_PREV = $dtPrevisao;			
+			$trans->PAG04_VLR = $vlrAdmin;			
 			$trans->PAG04_TIPO = 2;
+			$trans->PAG04_DT_PREV = $dtPrevisao;
         	$trans->save();
         	
         	
-        	// TRANSFÊNCIA MASTER TO EMPRESA
+        	// TRANSFï¿½NCIA MASTER TO EMPRESA
         	$trans = new \common\models\PAG04TRANSFERENCIAS; 
         	$trans->PAG04_ID_PEDIDO = $pedido['CB16_ID'];		
 			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
-			$trans->PAG04_COD_CONTA_DESTINO =  $pedido['CB04_COD_CONTA_VIRTUAL'];;
+			$trans->PAG04_COD_CONTA_DESTINO =  $IuguSubAdmin;
 			$trans->PAG04_VLR = $pedido['CB16_VALOR'] - $vlrCliente - $vlrAdmin - $vlrAdq;
-			$trans->PAG04_DT_PREV = $dtPrevisao;			
 			$trans->PAG04_TIPO = 3;
+			$trans->PAG04_DT_PREV = $dtPrevisao;
         	$trans->save();
         	
         	$pedido = \common\models\CB16PEDIDO::findOne($pedido['CB16_ID']);
@@ -130,7 +160,17 @@ abstract class PaymentBaseComponent extends Component {
         }
     }
     
-    public function log(){ }
+    public function saveAttempt($idPedido, $status = 0)
+    { 
+    	$attempt = new \common\models\PAG05_TENTATIVAS_COMPRA;
+	
+		$attempt->PAG05_ID_PEDIDO = $idPedido;
+		$attempt->PAG05_STATUS = $status;
+		$attempt->PAG05_DESC_ERRO = $this->error;
+		$attempt->PAG05_ERRO_COMPLETO_JSON = json_encode($this->fullError);
+		$attempt->save();
+    }	
+    
     
 }
 

@@ -33,8 +33,8 @@ class PAG04TRANSFERENCIAS extends \common\models\GlobalModel
     public function rules()
     {
         return [
-        [['PAG04_DATA_CRIACAO', 'PAG04_DT_PREV', 'PAG04_DT_DEP'], 'safe'],
-            [['PAG04_ID_PEDIDO', 'PAG04_VLR', 'PAG04_DT_PREV','PAG04_TIPO'], 'required'],
+        	[['PAG04_DATA_CRIACAO'], 'safe'],
+            [['PAG04_ID_PEDIDO', 'PAG04_VLR','PAG04_TIPO','PAG04_COD_CONTA_ORIGEM','PAG04_COD_CONTA_DESTINO'], 'required'],
             [['PAG04_ID_PEDIDO', 'PAG04_TIPO'], 'integer'],
             [['PAG04_VLR'], 'number'],
             [['PAG04_COD_CONTA_ORIGEM', 'PAG04_COD_CONTA_DESTINO'], 'string', 'max' => 200],
@@ -65,9 +65,7 @@ class PAG04TRANSFERENCIAS extends \common\models\GlobalModel
             'PAG04_ID_PEDIDO' => 'Pag04  Id  Pedido',
             'PAG04_COD_CONTA_ORIGEM' => 'Pag04  Cod  Conta  Origem',
             'PAG04_COD_CONTA_DESTINO' => 'Pag04  Cod  Conta  Destino',
-            'PAG04_VLR' => 'Pag04  Vlr',
-            'PAG04_DT_PREV' => 'Pag04  Dt  Prev',
-            'PAG04_DT_DEP' => 'Pag04  Dt  Dep',
+            'PAG04_VLR' => 'Pag04  Vlr',         
             'PAG04_TIPO' => 'Pag04  Tipo',
         ];
     }
