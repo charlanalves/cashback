@@ -17,7 +17,7 @@ use Yii;
  * @property string $VALOR
  * @property integer $USER
  */
-class VIEW_EXTRATOModel extends \common\models\GlobalModel
+class VIEWEXTRATO extends \common\models\GlobalModel
 {
 
 
