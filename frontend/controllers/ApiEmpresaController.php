@@ -120,6 +120,26 @@ class ApiEmpresaController extends GlobalBaseController {
     private function getSaldoAtual($user) {
         return VIEWEXTRATOCLIENTE::saldoAtualByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : '0,00';
     }
+
+    
+    /**
+     * getSaldoPendente
+     * @param string/integer $user ID ou AUTHKEY do usuario
+     * @return string saldo pendente do usuario
+     */
+    private function getSaldoPendente($user) {
+        return VIEWEXTRATOCLIENTE::saldoPendenteByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : '0,00';
+    }
+    
+    
+    /**
+     * getSaldo
+     * @param string/integer $user ID ou AUTHKEY do usuario
+     * @return string saldo atual liberado e pendente do usuario ['SALDO_LIBERADO','SALDO_PENDENTE']
+     */
+    private function getSaldo($user) {
+        return VIEWEXTRATOCLIENTE::saldoAtualePendenteByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : ['SALDO_LIBERADO' => '0,00','SALDO_PENDENTE' => '0,00'];
+    }
     
     
     /**
@@ -171,9 +191,11 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionPromocao() {
         $filter = \Yii::$app->request->post();
-        $saldoAtual = $this->getSaldoAtual(\Yii::$app->request->post('user_auth_key'));
+        $saldo = $this->getSaldo(\Yii::$app->request->post('user_auth_key'));
+        $saldoAtual = $saldo['SALDO_LIBERADO'];
+        $saldoPendente = $saldo['SALDO_PENDENTE'];
         $CB06VARIACAO = CB06VARIACAO::getPromocao($this->url, $filter);
-        return json_encode(['saldoAtual' =>  $saldoAtual, 'estabelecimentos' => $CB06VARIACAO]);
+        return json_encode(['saldoLiberado' =>  $saldoAtual, 'saldoPendente' => $saldoPendente, 'estabelecimentos' => $CB06VARIACAO]);
     }
 
     

@@ -1,6 +1,5 @@
 /nbproject/*
-/frontend/runtime/debug/*
-/frontend/runtime/logs/*
+/frontend/runtime/*
 /backend/*
 *.data
 *.bin
