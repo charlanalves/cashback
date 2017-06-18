@@ -13,7 +13,7 @@ class PAG04TRANSFERENCIAS extends BasePAG04TRANSFERENCIAS
     const M2E = 'M2E';
     const E2ADQ = 'E2ADQ';
     const E2C = 'E2C';
-    const E2ADM = 'E2ADM' ;
+    const E2ADM = 'E2ADM';
     const V2B = 'V2B';
     const B2V = 'B2V';
     /**
