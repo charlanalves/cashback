@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\;
+namespace common\models;
 
 use Yii;
 use common\models\base\VIEWEXTRATO as BaseVIEWEXTRATO;
@@ -24,4 +24,38 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
         ]);
     }
 	
+    public static function saldoAtualByCliente($cliente) 
+    {
+        $sql = "SELECT SUM(VALOR) AS SALDO FROM VIEW_EXTRATO WHERE USER = :cliente AND (DT_DEPOSITO IS NOT NULL OR TIPO = 'V2B')";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':cliente', $cliente);
+        return $command->queryOne()['SALDO'];
+    }
+    
+    public static function saldoPendenteByCliente($cliente) 
+    {
+        $sql = "SELECT SUM(VALOR) AS SALDO FROM VIEW_EXTRATO WHERE USER = :cliente AND (DT_DEPOSITO IS NULL AND TIPO <> 'V2B')";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':cliente', $cliente);
+        return $command->queryOne()['SALDO'];
+    }
+    
+    public static function saldoAtualePendenteByCliente($cliente) 
+    {
+        $sql = "SELECT 
+                SUM(CASE WHEN DT_DEPOSITO IS NOT NULL OR TIPO = 'V2B' THEN VALOR ELSE 0 END) AS SALDO_LIBERADO,
+                SUM(CASE WHEN DT_DEPOSITO IS NULL AND TIPO <> 'V2B' THEN VALOR ELSE 0 END) AS SALDO_PENDENTE
+                FROM VIEW_EXTRATO 
+                WHERE USER = :cliente
+                GROUP BY USER";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':cliente', $cliente);
+        return $command->queryOne();
+    }
+
+    public static function saldoAtualByAuthKey($AuthKey)
+    {
+        return self::saldoAtualByCliente(User::getIdByAuthKey($AuthKey));
+    }
+    
 }
