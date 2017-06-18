@@ -46,13 +46,7 @@ class PAG04TRANSFERENCIAS extends \common\models\GlobalModel
    
 
 
-	
-    /const M2E = 1;
-    const E2ADQ = 2;
-    const E2C = 3;
-    const E2ADM = 4;
-    const V2B = 5;
-    const B2V = 6;**
+     /*
      * @inheritdoc
      */
     public static function tableName()
