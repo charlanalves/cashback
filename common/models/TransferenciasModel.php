@@ -10,8 +10,7 @@ use common\models\base\TransferenciasModel as BaseTransferenciasModel;
  */
 class TransferenciasModel extends BaseTransferenciasModel
 {	
-    
-        
+
     /**
      * @inheritdoc
      */
