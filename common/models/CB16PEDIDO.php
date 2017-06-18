@@ -18,11 +18,10 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     const status_aguardando_pagamento = 10;
     const status_baixado = 20;
     const status_pago = 30;
-    
-   // const aguardando_liberacao = 40;
-    const status_liberado = 40;
-    const status_problemas_liberacao = 50;
-    
+    const status_pago_trans_agendadas = 40;
+    const status_pago_trans_liberadas = 50;
+    const status_pago_trans_realizadas = 60;
+   
     const trans_nao_criadas = 0;
     const trans_criadas = 1;
     
@@ -162,12 +161,13 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     {
         
         $sql = "
-             SELECT * FROM CB16_PEDIDO
-				JOIN CB17_PRODUTO_PEDIDO ON CB17_PRODUTO_PEDIDO.CB17_ID = CB16_PEDIDO.CB16_ID  
+             SELECT *,USER_EMPRESA.id AS ID_USER_EMPRESA, user.id AS ID_USER_CLIENTE FROM CB16_PEDIDO
+				JOIN CB17_PRODUTO_PEDIDO ON CB17_PRODUTO_PEDIDO.CB17_PEDIDO_ID = CB16_PEDIDO.CB16_ID  
 				JOIN CB06_VARIACAO ON CB06_VARIACAO.CB06_ID = CB17_PRODUTO_PEDIDO.CB17_VARIACAO_ID
 				JOIN CB05_PRODUTO ON CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID
 				JOIN CB04_EMPRESA ON  CB04_EMPRESA.CB04_ID = CB16_PEDIDO.CB16_EMPRESA_ID
 				JOIN user ON  CB16_PEDIDO.CB16_USER_ID = user.id
+				JOIN user AS USER_EMPRESA ON USER_EMPRESA.id = CB16_PEDIDO.CB16_EMPRESA_ID
 				JOIN CB02_CLIENTE ON CB02_CLIENTE.CB02_ID = user.id_cliente
 				JOIN CB09_FORMA_PAGTO_EMPRESA ON  CB16_PEDIDO.CB16_ID_FORMA_PAG_EMPRESA = CB09_FORMA_PAGTO_EMPRESA.CB09_ID
 				JOIN CB08_FORMA_PAGAMENTO ON CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG= CB08_FORMA_PAGAMENTO.CB08_ID

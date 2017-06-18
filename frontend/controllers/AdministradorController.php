@@ -104,7 +104,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     }
 	public function actionAtualizadtdep()
     {
-    	$pedidos = CB16PEDIDO::getPedidoByStatus(CB16PEDIDO::status_pago);
+    	$pedidos = CB16PEDIDO::getPedidoByStatus(CB16PEDIDO::status_pago_trans_agendadas);
     	  if (count($pedidos) > 0) {
        		\Yii::$app->Iugu->execute('fetchUpdateDtDepInvoice', $pedidos);
     	  }

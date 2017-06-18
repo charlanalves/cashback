@@ -48,7 +48,7 @@
       C7.layout = SYSTEM.Layout = {};
         
        var conf = {
-                titleWindowDelete:"<?= Yii::t("app", 'Remover Registro') ?>",
+            titleWindowDelete:"<?= Yii::t("app", 'Remover Registro') ?>",
     		currentCenterMethod: "global-crud",
     		currentModule: "admin",
     		currentController: 'transferencias',
@@ -60,7 +60,10 @@
             titleWindowCreate: "<?= Yii::t("app", "Adicionar Registro") ?>",
     		titleWindowUpdate: "<?= Yii::t("app", "Editar Registro") ?>",
     		titleWindowDelete: "<?= Yii::t("app", "Excluir Registro") ?>",
-    		titleGridAgendadas: "<?= Yii::t("app", "Transferências Agendadas") ?>",
+    		titleGridAgendadas: "<?= Yii::t("app", "Transferências Agendadas por Empresa") ?>",
+    		titleGridVencerHoje: "<?= Yii::t("app", "Transferências a Vencer HOJE") ?>",
+    		titleGridVencer: "<?= Yii::t("app", "Transferências a Vencer") ?>",
+    		titleGridVencidas: "<?= Yii::t("app", "Transferências Vencidas") ?>",
     		subtitleWindow: '',
     	}; 
 

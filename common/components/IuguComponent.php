@@ -73,11 +73,13 @@ class IuguComponent extends PaymentBaseComponent {
     		
      		$invoiceRet = \Iugu_Invoice::fetch($invoice['CB16_COD_TRANSACAO']);
      		
-     		if ($invoiceRet->status == self::STATUS_PAID) {
-     			$pedido = \common\models\CB16PEDIDO::findOne($invoice['CB16_ID']);
-     			$pedido->CB16_DT_DEP = date('Y-m-d H:i:s');
-     			$pedido->CB16_STATUS = \common\models\CB16PEDIDO::status_liberado;
-     			$pedido->save();
+     		if (isset($invoiceRet->financial_return_dates)) {
+     			if (isset($invoiceRet->financial_return_dates[0]->status)) {
+	     			$pedido = \common\models\CB16PEDIDO::findOne($invoice['CB16_ID']);
+	     			$pedido->CB16_DT_DEP = date('Y-m-d H:i:s');
+	     			$pedido->CB16_STATUS = \common\models\CB16PEDIDO::status_pago_trans_liberadas;
+	     			$pedido->save();
+     			}
      		}
     	}
     }

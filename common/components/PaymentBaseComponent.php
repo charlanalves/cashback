@@ -12,8 +12,8 @@ use yii\base\Component;
 abstract class PaymentBaseComponent extends Component {
     protected $lastResponse;
     public $transaction = null;
-
-
+    
+    
     abstract protected function initialize();
     
     abstract protected function prepareCreditCard($data);
@@ -112,7 +112,10 @@ abstract class PaymentBaseComponent extends Component {
     public function criaTransferencias($params) 
     {   
         $pedidos = \common\models\CB16PEDIDO::getPedidoCompleto();
-        $IuguMaster =  \common\models\SYS01PARAMETROSGLOBAIS::getValor('CT_DEV');
+        $idUserMaster =  \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CT_MA');
+        $idUserAdmin =  \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CT_SA');
+        $idUserAdq =  \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CTADQ');
+
         $IuguSubAdmin =  \common\models\SYS01PARAMETROSGLOBAIS::getValor('SB_PROD');
         
         $this->transaction  = \Yii::$app->db->beginTransaction();
@@ -123,39 +126,52 @@ abstract class PaymentBaseComponent extends Component {
         	$vlrAdmin = floor((($pedido['CB16_PERC_ADMIN']/100) * $pedido['CB16_VALOR']) * 100) / 100;
         	$vlrAdq = floor((($pedido['CB16_PERC_ADQ']/100) * $pedido['CB16_VALOR']) * 100) / 100;
         	
-        	// TRANSF�NCIA MASTER TO CLIENTE
+        	
+        	// TRANSFÊNCIA MASTER TO EMPRESA
+        	$trans = new \common\models\PAG04TRANSFERENCIAS; 
+        	$trans->PAG04_ID_PEDIDO = $pedido['CB16_ID'];		
+			$trans->PAG04_ID_USER_CONTA_ORIGEM = $idUserMaster;
+			$trans->PAG04_ID_USER_CONTA_DESTINO = $pedido['ID_USER_EMPRESA'];
+			$trans->PAG04_VLR = $pedido['CB16_VALOR'];
+			$trans->PAG04_TIPO = \common\models\PAG04TRANSFERENCIAS::M2E;
+			$trans->PAG04_DT_PREV = $dtPrevisao;
+        	$trans->save();
+        	
+        	
+        	// TRANSFÊNCIA EMPRESA TO CLIENTE
+        	$trans = new \common\models\PAG04TRANSFERENCIAS; 
 			$trans->PAG04_ID_PEDIDO = $pedido['CB16_ID'];		
-			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
-			$trans->PAG04_COD_CONTA_DESTINO = $pedido['CB02_COD_CONTA_VIRTUAL'];
+			$trans->PAG04_ID_USER_CONTA_ORIGEM = $pedido['ID_USER_EMPRESA'];
+			$trans->PAG04_ID_USER_CONTA_DESTINO = $pedido['ID_USER_CLIENTE'];
 			$trans->PAG04_VLR = $vlrCliente;						
-			$trans->PAG04_TIPO = 1;
+			$trans->PAG04_TIPO = \common\models\PAG04TRANSFERENCIAS::E2C;
 			$trans->PAG04_DT_PREV = $dtPrevisao;
         	$trans->save();
         	
         	 
-        	// TRANSF�NCIA MASTER TO ADMIN
+        	// TRANSFÊNCIA EMPRESA TO ADMIN
         	$trans = new \common\models\PAG04TRANSFERENCIAS;
         	$trans->PAG04_ID_PEDIDO = $pedido['CB16_ID'];		
-			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
-			$trans->PAG04_COD_CONTA_DESTINO = $IuguSubAdmin;
+			$trans->PAG04_ID_USER_CONTA_ORIGEM = $pedido['ID_USER_EMPRESA'];
+			$trans->PAG04_ID_USER_CONTA_DESTINO = $idUserAdmin;
 			$trans->PAG04_VLR = $vlrAdmin;			
-			$trans->PAG04_TIPO = 2;
+			$trans->PAG04_TIPO = \common\models\PAG04TRANSFERENCIAS::E2ADM;
 			$trans->PAG04_DT_PREV = $dtPrevisao;
         	$trans->save();
         	
-        	
-        	// TRANSF�NCIA MASTER TO EMPRESA
-        	$trans = new \common\models\PAG04TRANSFERENCIAS; 
+        	// TRANSFÊNCIA EMPRESA TO ADQ
+        	$trans = new \common\models\PAG04TRANSFERENCIAS;
         	$trans->PAG04_ID_PEDIDO = $pedido['CB16_ID'];		
-			$trans->PAG04_COD_CONTA_ORIGEM = $IuguMaster;
-			$trans->PAG04_COD_CONTA_DESTINO =  $IuguSubAdmin;
-			$trans->PAG04_VLR = $pedido['CB16_VALOR'] - $vlrCliente - $vlrAdmin - $vlrAdq;
-			$trans->PAG04_TIPO = 3;
+			$trans->PAG04_ID_USER_CONTA_ORIGEM = $pedido['ID_USER_EMPRESA'];
+			$trans->PAG04_ID_USER_CONTA_DESTINO = $idUserAdq;
+			$trans->PAG04_VLR = $vlrAdq;			
+			$trans->PAG04_TIPO = \common\models\PAG04TRANSFERENCIAS::E2ADQ;
 			$trans->PAG04_DT_PREV = $dtPrevisao;
         	$trans->save();
         	
         	$pedido = \common\models\CB16PEDIDO::findOne($pedido['CB16_ID']);
         	$pedido->CB16_TRANS_CRIADAS = 1;
+        	$pedido->CB16_STATUS = \common\models\CB16PEDIDO::status_pago_trans_agendadas;
         	$pedido->save();
         }
     }
