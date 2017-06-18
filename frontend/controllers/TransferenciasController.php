@@ -58,4 +58,11 @@ class TransferenciasController extends BaseController
 
        return call_user_func_array([$class, $action], [$data]);
    }
+   
+  public function fazerTodasTrans()
+  { 
+  	   $pedido = \common\models\CB16PEDIDO::getTransLiberadas();
+       \Yii::$app->Iugu->execute('criaTransferencias', ['pedido' => $pedido]);
+  	
+  }
 }

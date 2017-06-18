@@ -156,6 +156,7 @@ abstract class PaymentBaseComponent extends Component {
         	
         	$pedido = \common\models\CB16PEDIDO::findOne($pedido['CB16_ID']);
         	$pedido->CB16_TRANS_CRIADAS = 1;
+        	$pedido->CB16_STATUS = \common\models\CB16PEDIDO::status_pago_trans_agendadas;
         	$pedido->save();
         }
     }

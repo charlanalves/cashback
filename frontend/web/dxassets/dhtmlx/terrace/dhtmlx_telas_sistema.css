@@ -21,7 +21,7 @@ div.dhtmlxcalendar_skin_cont {
     width: 100%;
     height: 100%;
     top: 0px;
-    left: 0px
+    left: 0px;
 }
 
 .dhtmlxcalendar_container ul.dhtmlxcalendar_line {
@@ -6351,7 +6351,7 @@ table.dhtmlxLayoutPolyContainer_dhx_terrace div.dhxcont_content_blocker {
 */
 
 table.dhtmlxLayoutPolyContainer_dhx_terrace td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBar div.dhtmlxInfoBarButtonsFake {
-    position: absolute;
+   
     width: 28px;
     height: 36px;
     margin: 0px;
@@ -8917,6 +8917,7 @@ div.gridbox .objbox {
     background-color: white;
     position: relative;
     -webkit-overflow-scrolling: touch;
+    height: 100% !important;
 }
 
 
@@ -9240,6 +9241,10 @@ table.dhtmlxLayoutPolyContainer_dhx_terrace td.dhtmlxLayoutSinglePoly div.dhtmlx
 .gridbox_dhx_terrace .dhx_sub_row {
     background-color: transparent;
     border: 1px #A9A9A9 solid;
+    height: 100% !important;
+    margin-top: 12px !important;
+    margin-left: -123px !important;
+    width: 100% !important;
 }
 
 /*Customiza cabeçalho da celula*/
@@ -9538,4 +9543,14 @@ input[type=text]::-ms-clear {
     border: 1px solid #DFCA89;
     padding-left: 60px;
     margin: 10px;
+}
+
+
+button.button-flat.button-cell-icon.icon-atualizar {
+    background-image: url(dxassets/dhtmlx/terrace/imgs/atualizar.png);
+    background-size: 20px;
+}
+button.button-flat.button-cell-icon.icon-transfer {
+    background-image: url('./imgs/transfer.png');
+    background-size: 20px;
 }

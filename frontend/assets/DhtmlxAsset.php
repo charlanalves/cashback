@@ -16,7 +16,7 @@ class DhtmlxAsset extends AssetBundle
 	
     public $css = [
 //		'js/dhtmlx/terrace/dhtmlx.css',
-		'js/dhtmlx/terrace/dhtmlx_telas_sistema.css',
+		'js/dhtmlx/terrace/dhtmlx_telas_sistema.css?a=aasdasd',
     ];
     
     public $js = [

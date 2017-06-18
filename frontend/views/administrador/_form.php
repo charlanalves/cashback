@@ -14,12 +14,39 @@ C7.init = function(conf){
     
    //---------------------Tab Conta Virtual-------------------------
     C7.load('Tab', 'TransBancaria');
-    C7.load('Grid', 'Agendadas', layoutBancario.cells("a"));
- //   C7.load('Grid', 'vencer',  layoutBancario.cells("b"));
- //   C7.load('Grid', 'vencidas', layoutBancario.cells("c"));
+    C7.load('Grid', 'Agendadas', layoutVirtual.cells("a"));
+    
+    C7.grid.Agendadas.attachEvent("onSubGridCreated", function(subgrid, rId){
+ 
+    	 subgrid.setStyle("background-color:#3a3633;color:white; font-weight:bold;", "","color:red;", "");
+          var url  = './index.php?r=transferencias/global-read&gridName=TAPedidosEmp&param='+ rId;
+    	  subgrid.load(url, function(){
+    	           subgrid.callEvent("onGridReconstructed",[]);
+    	  });
+   	});
+
+    C7.grid.Agendadas.attachEvent("onSubGridLoaded", function(subgrid){
+    	 subgrid.enableAutoHeight(true,100,true);
+    	});
+
+    C7.load('Grid', 'VencerHoje',  layoutBancario.cells("a"));
+    C7.load('Grid', 'Vencer',  layoutBancario.cells("b"));
+    C7.load('Grid', 'Vencidas', layoutBancario.cells("c"));
+
+    
   
 }
-        
+
+C7.setToolbarGridVencerHoje = function(){
+	return [
+	        {action:'FazerTodasTrans', title: 'Fazer Transferências',icon:'transfer'}
+    ];
+}
+
+C7.actionFazerTodasTrans = function(){
+	C7.runActionB('FazerTodasTrans');
+}
+
 C7.getTabPrincipal = function(){
     tabPrincipal = new dhtmlXTabBar({parent: "tabbarObj"});
     tabPrincipal.addTab('principal','Transferencias');
@@ -40,7 +67,7 @@ C7.getToolbarMain = function() {
 
 C7.getTabTransVirtual = function(){
     tabsInternas = tabPrincipal.cells('principal').attachTabbar();
-    tabsInternas.addTab('virtual','Transferencias Conta Virtual Master',"300px");
+    tabsInternas.addTab('virtual','Agendadas',"300px");
     tabsInternas.setTabActive('virtual');
     
     layoutVirtual = tabsInternas.cells('virtual').attachLayout('1C');
@@ -49,7 +76,7 @@ C7.getTabTransVirtual = function(){
 }
 
 C7.getTabTransBancaria = function(){
-    tabsInternas.addTab('bancaria','Transferencias Cliente/Empresa',"300px");
+    tabsInternas.addTab('bancaria','Pendentes',"300px");
     layoutBancario = tabsInternas.cells('bancaria').attachLayout('3E');
     layoutBancario.cells("a").setText("Transações a Vencer Hoje");
     layoutBancario.cells("b").setText("Transações a vencer");
