@@ -59,16 +59,16 @@ class CB03CONTABANC extends \common\models\GlobalModel
     public function attributeLabels()
     {
         return [
-            'CB03_ID' => 'Cb03  ID',
-            'CB03_COD_BANCO' => 'Cb03  Cod  Banco',
-            'CB03_TP_CONTA' => 'Cb03  Tp  Conta',
-            'CB03_NUM_CONTA' => 'Cb03  Num  Conta',
-            'CB03_AGENCIA' => 'Cb03  Agencia',
-            'CB03_STATUS' => 'Cb03  Status',
-            'CB03_CLIENTE_ID' => 'Cb03  Cliente  ID',
-            'CB03_VALOR' => 'Cb03  Valor',
-            'CB03_SAQUE_MIN' => 'Cb03  Saque  Min',
-            'CB03_SAQUE_MAX' => 'Cb03  Saque  Max',
+            'CB03_ID' => Yii::t('app', 'ID'),
+            'CB03_COD_BANCO' => Yii::t('app', 'Banco'),
+            'CB03_TP_CONTA' => Yii::t('app', 'Tipo da conta'),
+            'CB03_NUM_CONTA' => Yii::t('app', 'Numero da conta'),
+            'CB03_AGENCIA' => Yii::t('app', 'Agência'),
+            'CB03_STATUS' => Yii::t('app', 'Status'),
+            'CB03_CLIENTE_ID' => Yii::t('app', 'Cliente'),
+            'CB03_VALOR' => Yii::t('app', 'Valor'),
+            'CB03_SAQUE_MIN' => Yii::t('app', 'Saque mínimo'),
+            'CB03_SAQUE_MAX' => Yii::t('app', 'Saque máximo'),
         ];
     }
     

@@ -18,7 +18,9 @@ use common\models\CB14FOTOPRODUTO;
 use common\models\CB16PEDIDO;
 use common\models\CB17PRODUTOPEDIDO;
 use common\models\CB18VARIACAOPEDIDO;
+use common\models\VIEWEXTRATO;
 use common\models\VIEWEXTRATOCLIENTE;
+use common\models\PAG04TRANSFERENCIAS;
 
 /**
  * API Empresa controller
@@ -118,7 +120,7 @@ class ApiEmpresaController extends GlobalBaseController {
      * @return string saldo atual do usuario
      */
     private function getSaldoAtual($user) {
-        return VIEWEXTRATOCLIENTE::saldoAtualByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : '0,00';
+        return VIEWEXTRATO::saldoAtualByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : '0,00';
     }
 
     
@@ -128,7 +130,7 @@ class ApiEmpresaController extends GlobalBaseController {
      * @return string saldo pendente do usuario
      */
     private function getSaldoPendente($user) {
-        return VIEWEXTRATOCLIENTE::saldoPendenteByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : '0,00';
+        return VIEWEXTRATO::saldoPendenteByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : '0,00';
     }
     
     
@@ -138,7 +140,7 @@ class ApiEmpresaController extends GlobalBaseController {
      * @return string saldo atual liberado e pendente do usuario ['SALDO_LIBERADO','SALDO_PENDENTE']
      */
     private function getSaldo($user) {
-        return VIEWEXTRATOCLIENTE::saldoAtualePendenteByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : ['SALDO_LIBERADO' => '0,00','SALDO_PENDENTE' => '0,00'];
+        return VIEWEXTRATO::saldoAtualePendenteByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : ['SALDO_LIBERADO' => '0,00','SALDO_PENDENTE' => '0,00'];
     }
     
     
@@ -238,7 +240,8 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionCashOut() {
         
-        $return = '';
+        $return = '';        
+        $saque_realizado = false;
         $formData = \Yii::$app->request->post();
         
         if (($user = $formData['user_auth_key'])) {
@@ -255,15 +258,42 @@ class ApiEmpresaController extends GlobalBaseController {
                 $dadosSaque->setAttribute('CB03_VALOR', '');
 
                 $dadosSaque->scenario = CB03CONTABANC::SCENARIO_SAQUE;
+                
+                if (!$formData) {
+                    $dadosSaque->setAttribute('CB03_CLIENTE_ID', $idUser);
+                    $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
+                    $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
 
-                if ($formData) {
+                } else {
                     $dadosSaque->setAttributes($formData);
                     $dadosSaque->setAttribute('CB03_CLIENTE_ID', $idUser);
                     $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
                     $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
 
                     if ($dadosSaque->validate()) {
-                        $dadosSaque->save(false);
+                    
+                        $transaction = \Yii::$app->db->beginTransaction();
+
+                        try {
+
+                            $dadosSaque->save(false);
+
+                            $PAG04TRANSFERENCIAS = new PAG04TRANSFERENCIAS();
+                            $PAG04TRANSFERENCIAS->setAttributes([
+                                'PAG04_ID_USER_CONTA_ORIGEM' => $idUser,
+                                'PAG04_ID_USER_CONTA_DESTINO' => $idUser,
+                                'PAG04_DT_PREV' => date('Y-m-d', strtotime("+" . SYS01PARAMETROSGLOBAIS::getValor('PO_SQ') ." days", strtotime(date('Y-m-d')))),
+                                'PAG04_VLR' => $dadosSaque->CB03_VALOR,
+                                'PAG04_TIPO' => 'V2B',
+                            ]);
+                            $PAG04TRANSFERENCIAS->save();
+
+                            $transaction->commit();
+                            $saque_realizado = true;
+
+                        } catch (\Exception $exc) {
+                            $transaction->rollBack();
+                        }
 
                     } else {
                         // formata valor moeda REAL
@@ -274,6 +304,7 @@ class ApiEmpresaController extends GlobalBaseController {
         }
         
         return json_encode([
+            'saque_realizado' => $saque_realizado,
             'utl_action' => $this->urlController . 'cash-out',
             'bancos' => \Yii::$app->u->getBancos(),
             'tp_conta' => \Yii::$app->u->getTipoContaBancaria(),
