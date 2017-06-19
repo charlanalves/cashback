@@ -29,7 +29,7 @@ C7.init = function(conf){
     	 subgrid.enableAutoHeight(true,100,true);
     	});
 
-    C7.load('Grid', 'VencerHoje',  layoutBancario.cells("a"));
+    C7.load('Grid', 'SolSaquesClientes',  layoutBancario.cells("a"));
     C7.load('Grid', 'Vencer',  layoutBancario.cells("b"));
     C7.load('Grid', 'Vencidas', layoutBancario.cells("c"));
 
@@ -67,7 +67,7 @@ C7.getToolbarMain = function() {
 
 C7.getTabTransVirtual = function(){
     tabsInternas = tabPrincipal.cells('principal').attachTabbar();
-    tabsInternas.addTab('virtual','Agendadas',"300px");
+    tabsInternas.addTab('virtual','Pendentes',"300px");
     tabsInternas.setTabActive('virtual');
     
     layoutVirtual = tabsInternas.cells('virtual').attachLayout('1C');
@@ -76,7 +76,7 @@ C7.getTabTransVirtual = function(){
 }
 
 C7.getTabTransBancaria = function(){
-    tabsInternas.addTab('bancaria','Pendentes',"300px");
+    tabsInternas.addTab('bancaria','Solicitações de Saque',"300px");
     layoutBancario = tabsInternas.cells('bancaria').attachLayout('3E');
     layoutBancario.cells("a").setText("Transações a Vencer Hoje");
     layoutBancario.cells("b").setText("Transações a vencer");

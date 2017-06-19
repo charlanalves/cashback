@@ -32,5 +32,9 @@ class PAG04TRANSFERENCIAS extends BasePAG04TRANSFERENCIAS
             
         ]);
     }
+
+    
+    
+ 
 	
 }

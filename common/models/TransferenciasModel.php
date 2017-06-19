@@ -62,7 +62,14 @@ class TransferenciasModel extends BaseTransferenciasModel
         	'TIPO' => \Yii::t('app','Tipo'),
         	'PAG04_VLR' => \Yii::t('app','Valor'),
        		'NOME' => \Yii::t('app','Nome'),
+       		'CB02_NOME' => \Yii::t('app','Cliente'),
+        'PAG04_DATA_CRIACAO' => \Yii::t('app','Criado'),
+        'PAG04_ID_PEDIDO' => \Yii::t('app','Cod Pedido'),
         
+        
+        
+        
+    
         
         
         
@@ -541,6 +548,44 @@ class TransferenciasModel extends BaseTransferenciasModel
             ['sets' => ['title' => $al['PAG04_DT_PREV'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_DT_PREV' ], 'filter' => ['title'=>'#text_filter']],            				
         ];
     }
+    
+  /**
+    * @inheritdoc
+    */
+    public function gridQuerySolSaquesClientes()
+    {
+	    $query =  "
+                     SELECT *
+					FROM PAG04_TRANSFERENCIAS 
+					JOIN user ON user.id = PAG04_TRANSFERENCIAS.PAG04_ID_USER_CONTA_ORIGEM 
+					JOIN CB02_CLIENTE ON CB02_CLIENTE.CB02_ID = user.id_cliente
+					
+					WHERE PAG04_DT_DEP IS NULL AND PAG04_TIPO = 'C2B'
+            ";
+		
+            $connection = \Yii::$app->db;
+            $command = $connection->createCommand($query);
+            $reader = $command->query();
+		
+            return $reader->readAll();
+    }
+    
+        /**
+     * @inheritdoc
+     */
+    public function gridSettingsSolSaquesClientes()
+    {
+    	$al = $this->attributeLabels();
+          return [
+            ['sets' => ['title' => $al['PAG04_DATA_CRIACAO'], 'width'=>'200', 'type'=>'ro' , 'PAG04_DATA_CRIACAO'  => 'CB16_COD_TRANSACAO' ], 'filter' => ['title'=>'#text_filter']], 
+            ['sets' => ['title' => $al['PAG04_DT_PREV'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_DT_PREV' ], 'filter' => ['title'=>'#text_filter']], 
+            ['sets' => ['title' => $al['PAG04_ID_PEDIDO'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_ID_PEDIDO' ], 'filter' => ['title'=>'#text_filter']], 
+            ['sets' => ['title' => $al['CB02_NOME'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'CB02_NOME' ], 'filter' => ['title'=>'#text_filter']], 
+           				
+        ];
+    }
+    
+    
 
 
 }

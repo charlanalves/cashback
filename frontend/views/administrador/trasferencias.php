@@ -64,6 +64,8 @@
     		titleGridVencerHoje: "<?= Yii::t("app", "Transferências a Vencer HOJE") ?>",
     		titleGridVencer: "<?= Yii::t("app", "Transferências a Vencer") ?>",
     		titleGridVencidas: "<?= Yii::t("app", "Transferências Vencidas") ?>",
+    		titleGridSolSaquesClientes: "<?= Yii::t("app", "Solicitações de Saque Clientes") ?>",
+    		
     		subtitleWindow: '',
     	}; 
 
