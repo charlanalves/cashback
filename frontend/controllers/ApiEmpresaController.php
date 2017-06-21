@@ -178,7 +178,7 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionLoginCreate()
     {
-       \Yii::$app->Iugu->execute('createSaveClienteAccount', \Yii::$app->request->post());
+      \Yii::$app->Iugu->execute('createSaveClienteAccount', \Yii::$app->request->post());
       
     }
     
@@ -257,7 +257,7 @@ class ApiEmpresaController extends GlobalBaseController {
                 $dadosSaque = ($contaBancariaCliente) ? : new CB03CONTABANC();
                 $dadosSaque->setAttribute('CB03_VALOR', '');
 
-                $dadosSaque->scenario = CB03CONTABANC::SCENARIO_SAQUE;
+                $dadosSaque->scenario = 'saque';
                 
                 if (!$formData) {
                     $dadosSaque->setAttribute('CB03_CLIENTE_ID', $idUser);
@@ -284,7 +284,7 @@ class ApiEmpresaController extends GlobalBaseController {
                                 'PAG04_ID_USER_CONTA_DESTINO' => $idUser,
                                 'PAG04_DT_PREV' => date('Y-m-d', strtotime("+" . SYS01PARAMETROSGLOBAIS::getValor('PO_SQ') ." days", strtotime(date('Y-m-d')))),
                                 'PAG04_VLR' => $dadosSaque->CB03_VALOR,
-                                'PAG04_TIPO' => 'V2B',
+                                'PAG04_TIPO' => 'M2SC',
                             ]);
                             $PAG04TRANSFERENCIAS->save();
 

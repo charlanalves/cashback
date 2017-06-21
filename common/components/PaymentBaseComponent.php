@@ -3,6 +3,7 @@
 namespace common\components;
 
 use yii\base\Component;
+use \common\models\PAG04TRANSFERENCIAS;
 
 
 /**
@@ -175,6 +176,8 @@ abstract class PaymentBaseComponent extends Component {
         	$pedido->save();
         }
     }
+    
+
     
     public function saveAttempt($idPedido, $status = 0)
     { 

@@ -20,10 +20,10 @@ class IuguComponent extends PaymentBaseComponent {
        require_once(\Yii::getAlias('@vendor/iugu/Iugu.php'));
        
        //teste
-       \Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
+       //\Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
        
        //producao
-       //\Iugu::setApiKey("19f75e24d08d0dd3d01db446299a4ba6");
+       \Iugu::setApiKey("19f75e24d08d0dd3d01db446299a4ba6");
     }
     
     protected function prepareCreditCard($data)
@@ -40,31 +40,121 @@ class IuguComponent extends PaymentBaseComponent {
         }
     }
     
-    public function createAccount() 
+ 
+    
+    
+   public function createAccount($data) 
     {   
-        $this->lastResponse = \Iugu_Marketplace::createAccount(['name'=>'SubMaster']);      
+         $this->lastResponse = \Iugu_Marketplace::createAccount(['name'=> $data['nomeConta']]); 
+            
+	      if (isset($data['CPF_CNPJ']) && strlen($data['CPF_CNPJ']) == '14') {
+	          $dataApi = [
+		         "price_range" => "Mais que R$ 500,00",
+		         "physical_products" => false,
+			     "business_type" => "Serviços e produtos diversos", 
+			     "automatic_transfer" => true, 
+			     "name" => $data['NOME'], 
+			     "address" => $data['LOGRADOURO'], 
+			     "cep"=> $data['CEP'], 
+			     "city" => $data['CIDADE'], 
+			     "state" => $data['ESTADO'], 
+			     "telephone" => $data['TEL_DDD'] . $data['TEL_NUMERO'], 
+			     "bank" => $data['NOME_BANCO'], 
+			     "bank_ag" => $data['AGENCIA'], 
+			     "account_type" => ($data['TP_CONTA']) ? 'corrente': 'poupança', 
+			     "bank_cc" => $data['NUM_CONTA']
+		     ];
+		
+		     if (strlen($data['CB02_CPF_CNPJ']) == '14') {
+	  			  $dataApi['person_type'] = 'Pessoa Jurídica';
+	  			  $dataApi['cnpj'] = $data['CB02_CPF_CNPJ']; 
+	  			  
+	  		} else {
+	  			  $dataApi['person_type'] = 'Pessoa Física';
+	  			  $dataApi['cpf'] = $data['CB02_CPF_CNPJ']; 
+	  		}
+	  		
+	  		  \Iugu::setApiKey($this->lastResponse->user_token);
+        
+        	  \Iugu_Account::requestVerification($dataApi);  
+	      }
         
         if (isset($this->lastResponse->errors)) {
           throw new UserException("Erro ao criar conta.");
         }
     }
     
+    
+    
+    
+    public function doTranfer($trans) 
+    {   
+    	
+    	foreach ($trans as $t){
+    	 	$transaction  = \Yii::$app->db->beginTransaction();
+    	 	
+    		$transfer = \common\models\PAG04TRANSFERENCIAS::findOne($t['PAG04_ID']);
+       		$transfer->PAG04_DT_DEP = date('Y-m-d');
+       		
+        	if ($transfer->save()){
+        		 $this->lastResponse = \Iugu_Transfer::create($t);
+        		 if (isset($this->lastResponse->errors)){
+        		 	$transaction->commit();
+        		 }else {
+        		 	$transaction->rollback();
+        		 }
+        	}
+    	}     
+        
+        if (isset($this->lastResponse->errors)) {
+          throw new UserException("Erro ao criar conta.");
+        }
+    }
+ 
+    
+    public function fetchAccount() 
+    {   
+        $this->lastResponse = \Iugu_Account::fetch('6C65DFAABC5648B58D0E9D854EB52E04');      
+        
+        if (isset($this->lastResponse->errors)) {
+          throw new UserException("Erro ao criar conta.");
+        }
+    }
+    
+	 public function AccountConfig() 
+    {   
+        $this->lastResponse = \Iugu_Account::configuration(['auto_withdraw' => true]);      
+        
+        if (isset($this->lastResponse->errors)) {
+          throw new UserException("Erro ao criar conta.");
+        }
+    }
+     
+    
     protected function createSaveClienteAccount($atributos) 
     {
         $this->transaction = \Yii::$app->db->beginTransaction();
+        
+    	$cliente = new \common\models\CB02CLIENTE;
+    	$cliente->setAttributes($atributos);
+    	$cliente->save();
+    	
+        $atributos['id_cliente'] = $cliente->CB02_ID;
+        $atributos['name'] = $cliente->CB02_NOME;
+        $atributos['cpf_cnpj'] = $cliente->CB02_CPF_CNPJ;
+        $atributos['email'] = $cliente->CB02_EMAIL;
+        
         
         $model = new \frontend\models\SignupForm();
         $model->setAttributes($atributos);
         $user = $model->signup();
         
-        $this->createAccount();
+        $this->createAccount(['nomeConta' => $cliente->CB02_CPF_CNPJ]);
+         
+        $cliente->CB02_DADOS_API_TOKEN = json_encode($this->lastResponse);
+        $cliente->CB02_COD_CONTA_VIRTUAL = $this->lastResponse->account_id;
         
-        $user->DADOS_API_TOKEN = json_encode($this->lastResponse);
-        $user->ID_CONTA_IUGU = $this->lastResponse->account_id;
-        
-        $user->save();
-        
-        return $user->attributes;
+        $cliente->save();
     }
     
     public function fetchUpdateDtDepInvoice(array $invoices) 

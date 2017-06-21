@@ -102,6 +102,20 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         $pedido = \common\models\CB16PEDIDO::findOne(5);
        \Yii::$app->Iugu->execute('criaTransferencias', ['pedido' => $pedido]);
     }
+    
+	public function actionTrans2() 
+    {	
+    	 \Yii::$app->Iugu->execute('createAccount',['a'=>1]);
+       //\Yii::$app->Iugu->execute('criaTransferencias2',['aa'=>1]);
+    }
+    
+    public function actionSaque() 
+    {   
+         $trans = \common\models\PAG04TRANSFERENCIAS::getTransSaques();
+        
+         \Yii::$app->Iugu->execute('doTranfer', $trans);
+    }
+    
 	public function actionAtualizadtdep()
     {
     	$pedidos = CB16PEDIDO::getPedidoByStatus(CB16PEDIDO::status_pago_trans_agendadas);
@@ -118,6 +132,12 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         return $this->render('trasferencias', ['tituloTela' => 'Empresa']);
     }
 
+	public function actionFetchAccount()
+    {
+      
+    
+    }
+    
     public function actionEmpresaForm() {
         $this->layout = 'empty';
 

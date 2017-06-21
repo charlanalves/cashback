@@ -16,6 +16,7 @@ class PAG04TRANSFERENCIAS extends BasePAG04TRANSFERENCIAS
     const E2ADM = 'E2ADM';
     const V2B = 'V2B';
     const B2V = 'B2V';
+    const M2SC = 'M2SC';
     /**
      * @inheritdoc
      */
@@ -35,6 +36,31 @@ class PAG04TRANSFERENCIAS extends BasePAG04TRANSFERENCIAS
 
     
     
+	public static function getTransSaques()
+    {
+        
+        $sql = "
+			SELECT PAG04_TRANSFERENCIAS.PAG04_ID, CB02_CLIENTE.CB02_COD_CONTA_VIRTUAL AS receiver_id, PAG04_TRANSFERENCIAS.PAG04_VLR * 100 AS amount_cents
+			FROM PAG04_TRANSFERENCIAS
+			JOIN user ON user.id = PAG04_TRANSFERENCIAS.PAG04_ID_USER_CONTA_ORIGEM
+			JOIN CB02_CLIENTE  ON CB02_CLIENTE.CB02_ID = user.id_cliente
+			WHERE PAG04_TRANSFERENCIAS.PAG04_DT_DEP IS NULL AND PAG04_TRANSFERENCIAS.PAG04_TIPO = 'C2B'
+			
+			UNION
+			
+			SELECT PAG04_TRANSFERENCIAS.PAG04_ID, CB04_EMPRESA.CB04_COD_CONTA_VIRTUAL AS receiver_id, PAG04_TRANSFERENCIAS.PAG04_VLR * 100 AS amount_cents
+			FROM PAG04_TRANSFERENCIAS
+			JOIN user ON user.id = PAG04_TRANSFERENCIAS.PAG04_ID_USER_CONTA_ORIGEM
+			JOIN CB04_EMPRESA  ON CB04_EMPRESA.CB04_ID = user.id_company
+			WHERE PAG04_TRANSFERENCIAS.PAG04_DT_DEP IS NULL AND PAG04_TRANSFERENCIAS.PAG04_TIPO = 'E2B'
+        
+        ";
+
+        $connection = \Yii::$app->db;
+        $command = $connection->createCommand($sql);      
+
+        return $command->query()->readAll();
+    }
  
 	
 }
