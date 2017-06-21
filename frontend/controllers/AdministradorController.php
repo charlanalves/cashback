@@ -190,13 +190,51 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     public function actionEmpresaAtivar($empresa, $status) {
         $CB04EMPRESA = CB04EMPRESA::findOne($empresa);
         $CB04EMPRESA->setAttribute('CB04_STATUS', $status);
+        
         return ($CB04EMPRESA->save()) ? '' : 'error';
+    }
+    
+    private function prepareAccountData($param)
+    {	 
+	    return [
+	    
+	  			 "CPF_CNPJ" => $param['CB04_CNPJ'],
+	      		 "name" => $data['CB04_NOME'], 
+			     "address" => $data['CB04_END_LOGRADOURO'], 
+			     "cep"=> $data['CB04_END_CEP'], 
+			     "city" => $data['CB04_END_CIDADE'], 
+			     "state" => $data['CB04_END_UF'], 
+			     "telephone" => $data['CB04_TEL_NUMERO'], 
+			     "bank" => $data['CB03_NOME_BANCO'], 
+			     "bank_ag" => $data['CB03_AGENCIA'], 
+			     "account_type" => ($data['CB03_TP_CONTA']) ? 'corrente': 'poupança', 
+			     "bank_cc" => $data['CB03_NUM_CONTA']
+	    ];
     }
     
     public function saveEmpresa($param) {
         unset($param['CB04_URL_LOGOMARCA']);
+        
         $model = (!$param['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($param['CB04_ID']);
-        $id = $model->saveEstabelecimento($param);
+        
+        $transaction = \Yii::$app->db->beginTransaction();
+        
+    	try {
+            $id = $model->saveEstabelecimento($param);
+            
+            $this->saveContaBancaria($param);
+            
+            $data = $this->prepareAccountData($param);
+            
+            \Yii::$app->Iugu->execute('createAccount', $data);
+            
+            $transaction->commit();
+            
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+     
         
         if (!empty($_FILES['CB04_URL_LOGOMARCA']['name'])) {
             

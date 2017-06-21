@@ -67,11 +67,11 @@ class IuguComponent extends PaymentBaseComponent {
 		
 		     if (strlen($data['CB02_CPF_CNPJ']) == '14') {
 	  			  $dataApi['person_type'] = 'Pessoa Jurídica';
-	  			  $dataApi['cnpj'] = $data['CB02_CPF_CNPJ']; 
+	  			  $dataApi['cnpj'] = $data['CPF_CNPJ']; 
 	  			  
 	  		} else {
 	  			  $dataApi['person_type'] = 'Pessoa Física';
-	  			  $dataApi['cpf'] = $data['CB02_CPF_CNPJ']; 
+	  			  $dataApi['cpf'] = $data['CPF_CNPJ']; 
 	  		}
 	  		
 	  		  \Iugu::setApiKey($this->lastResponse->user_token);

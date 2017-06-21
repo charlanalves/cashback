@@ -17,7 +17,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
     {
         return array_replace_recursive(parent::rules(),
 	    [
-            [['CB04_DADOS_API_TOKEN', 'CB04_NOME', 'CB04_CATEGORIA_ID', 'CB04_FUNCIONAMENTO', 'CB04_OBSERVACAO', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_UF', 'CB04_END_NUMERO', 'CB04_END_COMPLEMENTO', 'CB04_END_CEP'], 'required'],
+            [['CB04_DADOS_API_TOKEN', 'CB04_NOME', 'CB04_CATEGORIA_ID', 'CB04_FUNCIONAMENTO','CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_UF', 'CB04_END_NUMERO', 'CB04_END_COMPLEMENTO', 'CB04_END_CEP'], 'required'],
             [['CB04_DADOS_API_TOKEN', 'CB04_FUNCIONAMENTO', 'CB04_OBSERVACAO'], 'string'],
             [['CB04_CATEGORIA_ID', 'CB04_STATUS', 'CB04_QTD_FAVORITO', 'CB04_QTD_COMPARTILHADO'], 'integer'],
             [['CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_COMPLEMENTO'], 'string', 'max' => 50],
@@ -139,13 +139,13 @@ class CB04EMPRESA extends BaseCB04EMPRESA
                         ->orderBy('CB07_DIA_SEMANA')
                         ->all();
 
-                // variações
+                // variaï¿½ï¿½es
                 $retornoProduto['VARIACAO'] = CB06VARIACAO::find()
                         ->where(['CB06_PRODUTO_ID' => $p['CB05_ID']])
                         ->orderBy('CB06_DESCRICAO')
                         ->all();
 
-                // cashback por da variação
+                // cashback por da variaï¿½ï¿½o
                 
                     $retornoProduto['CASHBACK_VARIACAO'] =  
                         \Yii::$app->db->createCommand('
@@ -180,9 +180,6 @@ class CB04EMPRESA extends BaseCB04EMPRESA
     }
 
     public function saveEstabelecimento($data) {
-        $connection = \Yii::$app->db;
-        $transaction = $connection->beginTransaction();
-        try {
             // dados do estabelecimento
             $this->setAttributes($data);
             $this->save();
@@ -195,12 +192,9 @@ class CB04EMPRESA extends BaseCB04EMPRESA
                     $CB09FORMAPAGEMPRESA->save();
                 }
             }
-            $transaction->commit();
+        
             return $this->CB04_ID;
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            throw $e;
-        }
+        
     }
 	
 }

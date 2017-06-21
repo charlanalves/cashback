@@ -24,6 +24,16 @@
                                     <input type="text" name="CB04_NOME" placeholder="">
                                 </label>
                             </section>
+                            <section class="col col-6"><?= $al['CB04_CNPJ'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
+                                    <input type="text" name="CB04_CNPJ" placeholder="">
+                                </label>
+                            </section>
+                             <section class="col col-6"><?= $al['CB04_TEL_NUMERO'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
+                                    <input type="text" name="CB04_CNPJ" placeholder="">
+                                </label>
+                            </section>
                             <section class="col col-6"><?= $al['CB04_CATEGORIA_ID'] ?>
                                 <label class="select">
                                     <select name="CB04_CATEGORIA_ID">
