@@ -33,9 +33,11 @@ var Form = function (formId) {
                 var newAjaxParams = Util.getInputFilesData(inputFiles, ajaxParams);
                 $.extend(ajaxParams, newAjaxParams);
             }
-
+            
+            $.blockUI();
             var ajax = $.ajax(ajaxParams);
             ajax.always(function (data) {
+                $.unblockUI();
                 if (typeof callback == 'function')
                     callback(data);
             });

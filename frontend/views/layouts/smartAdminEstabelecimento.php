@@ -121,6 +121,14 @@ $this->title = 'Estabelecimento';
                     document.location.href = 'index.php?r=estabelecimento/baixar-compra';
                     return false;
                 });
+                $("a#menu-extrato").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/extrato';
+                    return false;
+                });
+                $("a#menu-saque").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/saque';
+                    return false;
+                });
                 
                 // SAIR ----------------------------------------------------                
                 $("#menu_sair").click(function (e) {
@@ -166,6 +174,12 @@ $this->title = 'Estabelecimento';
                     </li>
                     <li class="">
                         <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
+                    </li>
+                    <li class="">
+                        <a href="#" title="Extrato" id="menu-extrato"><i class="fa fa-lg fa-fw fa-list-ul"></i> <span class="menu-item-parent">Extrato</span></a>
+                    </li>
+                    <li class="">
+                        <a href="#" title="Saque" id="menu-saque"><i class="fa fa-lg fa-fw fa-money"></i> <span class="menu-item-parent">Saque</span></a>
                     </li>
                     <li class="">
                         <a href="#" title="Empresa" id="menu-empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>

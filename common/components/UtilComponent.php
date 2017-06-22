@@ -15,6 +15,10 @@ use yii\base\Component;
  * */
 class UtilComponent extends Component {
 
+    public function dateBR($date) {
+        return (!$date) ? ' - ' : ((strlen($date) > 10) ? date('d/m/Y H:i:s', strtotime($date)) : date('d/m/Y', strtotime($date)));
+    }
+
     public function arredondar($vlr) {
         return floor($vlr * 100) / 100;
     }

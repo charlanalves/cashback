@@ -17,6 +17,9 @@ use common\models\CB13FOTOEMPRESA;
 use common\models\CB14FOTOPRODUTO;
 use common\models\SYS01PARAMETROSGLOBAIS;
 use common\models\CB16PEDIDO;
+use common\models\VIEWEXTRATO;
+use common\models\CB03CONTABANC;
+use common\models\PAG04TRANSFERENCIAS;
 
 /**
  * Estabelecimento controller
@@ -434,5 +437,109 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         }
     }
 
+    
+    public function actionExtrato() {
+        $this->layout = 'smartAdminEstabelecimento';
+        
+        $model = new VIEWEXTRATO();
+        $al = $model->attributeLabels();
+        $saldoAtual = $model->saldoAtualByCliente($this->user->id);
+
+        return $this->render('extrato', [
+                    'tituloTela' => 'Extrato',
+                    'usuario' => $this->user->attributes,
+                    'al' => $al,
+                    'saldoAtual' => Yii::$app->u->moedaReal($saldoAtual)
+        ]);
+    }
+    
+    public function actionExtratoGrid() {
+            
+        $model = new VIEWEXTRATO();
+        $extrato = $model->find()->where(['USER' => $this->user->id])->asArray()->all();
+
+        if ($extrato) {
+            $param = ['extrato' => $extrato, 'tipo' => $model->tipos_para_estabelecimento];
+        } else {
+            $param = ['error' => 'Nenhuma transação foi realizada.'];
+        }
+
+        return $this->renderPartial('extratoGrid', $param);
+    }
+    
+    public function actionSaque() {
+        $this->layout = 'smartAdminEstabelecimento';
+            
+        $saque_realizado = false;
+        $formData = \Yii::$app->request->post();
+        $idUser = $this->user->id;
+        
+        $VIEWEXTRATO = new VIEWEXTRATO();
+        $saldoAtual = $VIEWEXTRATO->saldoAtualByCliente($idUser);
+
+        $saqueMax = (float) $saldoAtual;
+        $saqueMin = (float) 1;
+
+        if(!($dadosSaque = CB03CONTABANC::findOne(['CB03_CLIENTE_ID' => $idUser]))) {        
+            return $this->render('saque', ['sem_conta' => "Conta bancária não cadastrada, entre em contato com o suporte para cadastra-la."]);
+            
+        } else {
+        
+            $dadosSaque->setAttribute('CB03_VALOR', '');
+
+            $dadosSaque->scenario = 'saque';
+
+            if (!$formData) {
+                $dadosSaque->setAttribute('CB03_CLIENTE_ID', $idUser);
+                $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
+                $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
+
+            } else {
+                $dadosSaque->setAttributes($formData);
+                $dadosSaque->setAttribute('CB03_CLIENTE_ID', $idUser);
+                $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
+                $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
+
+                if ($dadosSaque->validate()) {
+
+                    $transaction = \Yii::$app->db->beginTransaction();
+
+                    try {
+
+                        $dadosSaque->save(false);
+                        
+                        $PAG04TRANSFERENCIAS = new PAG04TRANSFERENCIAS();
+                        $PAG04TRANSFERENCIAS->setAttributes([
+                            'PAG04_ID_USER_CONTA_ORIGEM' => $idUser,
+                            'PAG04_ID_USER_CONTA_DESTINO' => $idUser,
+                            'PAG04_DT_PREV' => date('Y-m-d', strtotime("+" . SYS01PARAMETROSGLOBAIS::getValor('PO_SQ') ." days", strtotime(date('Y-m-d')))),
+                            'PAG04_VLR' => $dadosSaque->CB03_VALOR,
+                            'PAG04_TIPO' => 'V2B',
+                        ]);
+                        $PAG04TRANSFERENCIAS->save();
+
+                        $transaction->commit();
+                        return json_encode(['saque_realizado' => true]);
+
+                    } catch (\Exception $exc) {
+                        $transaction->rollBack();
+                    }
+
+                }
+                
+                exit(json_encode(['error' => $dadosSaque->getErrors()]));
+                
+            }
+        }
+        
+        // formata valores para moeda REAL
+        $dadosSaque->setAttribute('CB03_VALOR', (string) \Yii::$app->u->moedaReal($dadosSaque->attributes['CB03_VALOR']));
+        $dadosSaque->setAttribute('CB03_SAQUE_MAX', (string) \Yii::$app->u->moedaReal($dadosSaque->attributes['CB03_SAQUE_MAX']));
+
+        return $this->render('saque', [
+            'saque_realizado' => $saque_realizado,
+            'dados_saque' => $dadosSaque->getAttributes(),
+        ]);
+    }
 
 }
