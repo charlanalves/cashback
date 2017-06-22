@@ -27,7 +27,7 @@ class CB14FOTOPRODUTO extends \common\models\GlobalModel
     public function rules()
     {
         return [
-            [['CB14_PRODUTO_ID', 'CB14_CAPA', 'CB14_URL'], 'required'],
+            [['CB14_PRODUTO_ID', 'CB14_URL'], 'required'],
             [['CB14_PRODUTO_ID', 'CB14_CAPA'], 'integer'],
             [['CB14_URL'], 'string', 'max' => 50],
             

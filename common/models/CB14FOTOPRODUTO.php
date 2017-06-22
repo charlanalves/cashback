@@ -17,7 +17,7 @@ class CB14FOTOPRODUTO extends BaseCB14FOTOPRODUTO
     {
         return array_replace_recursive(parent::rules(),
 	    [
-            [['CB14_PRODUTO_ID', 'CB14_CAPA', 'CB14_URL'], 'required'],
+            [['CB14_PRODUTO_ID', 'CB14_URL'], 'required'],
             [['CB14_PRODUTO_ID', 'CB14_CAPA'], 'integer'],
             [['CB14_URL'], 'string', 'max' => 50],
             
