@@ -262,8 +262,8 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'itemProduto' => $dataItemProduto,
                     'limitFotos' => $limitFotos,
                     'al' => $al,
-                    //'maxProduto' => $maxProduto,
-        			'maxProduto' => 100,
+                   // 'maxProduto' => $maxProduto,
+        		   	'maxProduto' => 0,
         ]);
     }
 
