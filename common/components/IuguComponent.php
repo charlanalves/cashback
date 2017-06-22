@@ -20,10 +20,10 @@ class IuguComponent extends PaymentBaseComponent {
        require_once(\Yii::getAlias('@vendor/iugu/Iugu.php'));
        
        //teste
-       //\Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
+       \Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
        
        //producao
-       \Iugu::setApiKey("19f75e24d08d0dd3d01db446299a4ba6");
+      // \Iugu::setApiKey("19f75e24d08d0dd3d01db446299a4ba6");
     }
     
     protected function prepareCreditCard($data)
@@ -43,41 +43,27 @@ class IuguComponent extends PaymentBaseComponent {
  
     
     
-   public function createAccount($data) 
+   public function createAccount($dataApi) 
     {   
-         $this->lastResponse = \Iugu_Marketplace::createAccount(['name'=> $data['nomeConta']]); 
+         $this->lastResponse = \Iugu_Marketplace::createAccount(['name'=> $dataApi['nomeConta']]); 
             
-	      if (isset($data['CPF_CNPJ']) && strlen($data['CPF_CNPJ']) == '14') {
-	          $dataApi = [
-		         "price_range" => "Mais que R$ 500,00",
-		         "physical_products" => false,
-			     "business_type" => "Serviços e produtos diversos", 
-			     "automatic_transfer" => true, 
-			     "name" => $data['NOME'], 
-			     "address" => $data['LOGRADOURO'], 
-			     "cep"=> $data['CEP'], 
-			     "city" => $data['CIDADE'], 
-			     "state" => $data['ESTADO'], 
-			     "telephone" => $data['TEL_DDD'] . $data['TEL_NUMERO'], 
-			     "bank" => $data['NOME_BANCO'], 
-			     "bank_ag" => $data['AGENCIA'], 
-			     "account_type" => ($data['TP_CONTA']) ? 'corrente': 'poupança', 
-			     "bank_cc" => $data['NUM_CONTA']
-		     ];
-		
-		     if (strlen($data['CB02_CPF_CNPJ']) == '14') {
-	  			  $dataApi['person_type'] = 'Pessoa Jurídica';
-	  			  $dataApi['cnpj'] = $data['CPF_CNPJ']; 
+	      if (isset($dataApi['CPF_CNPJ']) && strlen($dataApi['CPF_CNPJ']) == '14') {
+		      	$dataApi['price_range'] = "Mais que R$ 500,00";
+			    $dataApi['physical_products'] = false;
+			    $dataApi['business_type'] = "Serviços e produtos diversos";
+			    $dataApi['automatic_transfer'] = true;
+		  		$dataApi['person_type'] = 'Pessoa Jurídica';
+		  		$dataApi['cnpj'] = $dataApi['CPF_CNPJ']; 
 	  			  
 	  		} else {
 	  			  $dataApi['person_type'] = 'Pessoa Física';
-	  			  $dataApi['cpf'] = $data['CPF_CNPJ']; 
+	  			  $dataApi['cpf'] = $dataApi['CPF_CNPJ']; 
 	  		}
 	  		
 	  		  \Iugu::setApiKey($this->lastResponse->user_token);
         
         	  \Iugu_Account::requestVerification($dataApi);  
-	      }
+	      
         
         if (isset($this->lastResponse->errors)) {
           throw new UserException("Erro ao criar conta.");

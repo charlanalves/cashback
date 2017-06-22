@@ -10,6 +10,7 @@ use common\models\base\CB12ITEMCATEGEMPRESA as BaseCB12ITEMCATEGEMPRESA;
  */
 class CB12ITEMCATEGEMPRESA extends BaseCB12ITEMCATEGEMPRESA
 {
+	public $ITEM;
     /**
      * @inheritdoc
      */

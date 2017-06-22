@@ -129,8 +129,25 @@ var Form = function (formId) {
             checkbox += '<label class="checkbox"><input type="checkbox" name="' + checkboxName + '[]" value="' + key + '"><i></i>' + value + '</label>' + "\n";
         });
         destiny.append($("<div></div>").attr("class", "inline-group").html(checkbox));
+    }, this.addCheckboxInLineFormPgto = function (destinyId, checkboxName, data)
+    {
+        var destiny = this.form.find('#' + destinyId), checkbox = '';
+        $.each(data, function (key, value) {
+            if (typeof value == "object") {
+                key = value.ID;
+                value = value.TEXTO;
+            }
+            checkbox += '<label class="checkbox"><input type="checkbox"  name="' + checkboxName + '[\''+value+'\'][]" value="' + key + '"><i></i>' + value + '</label>' + "\n";
+            
+            checkbox += '<section class="col col-2">Perc Adquirente<label class="input"> <i class="icon-prepend fa fa-suitcase"></i>';
+            checkbox += '<input required type="text" name="' + checkboxName + '[\''+value+'\'][][\'CB09_PERC_ADQ\']"  placeholder=""> </label>';
+            	
+            checkbox += 'Perc Admin<label class="input"> <i class="icon-prepend fa fa-suitcase"></i>';
+            checkbox += '<input required type="text" name="' + checkboxName + '[\''+value+'\'][][\'CB09_PERC_Admin\']" placeholder=""> </label></section>';
+        });
+        destiny.append($("<div></div>").attr("class", "inline-group").html(checkbox));
     };
-    
+
     var $inputs = this.form.find(':input'), data = this;
     $inputs.each(function (k, v) {
         if (v.name) {

@@ -1,3 +1,14 @@
+<style>
+.smart-form .inline-group .checkbox, .smart-form .inline-group .radio { 
+    position: relative;
+    top: 38px;
+    margin-left: 31px;
+}
+.smart-form .inline-group .checkbox, .smart-form .inline-group .radio:first-child {
+    margin-left: 0px;
+}
+
+</style>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
 
@@ -26,12 +37,12 @@
                             </section>
                             <section class="col col-6"><?= $al['CB04_CNPJ'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
-                                    <input type="text" name="CB04_CNPJ" placeholder="">
+                                    <input type="number" name="CB04_CNPJ" placeholder="">
                                 </label>
                             </section>
                              <section class="col col-6"><?= $al['CB04_TEL_NUMERO'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
-                                    <input type="text" name="CB04_CNPJ" placeholder="">
+                                    <input type="number" name="CB04_TEL_NUMERO" placeholder="">
                                 </label>
                             </section>
                             <section class="col col-6"><?= $al['CB04_CATEGORIA_ID'] ?>
@@ -55,11 +66,58 @@
                             </section>
                         </div>
                     </fieldset>
-
-                    <fieldset>
+ 					<fieldset>
                         <h3>Formas de pagamento</h3>
                         <section id="forma-pagamento" class="padding-top-15"></section>
+                     
                     </fieldset>
+                    
+                    <fieldset>                        
+                        <h3>Dados Bancários (para transfências)</h3>                        
+                    </fieldset>
+                    
+                    <div class="row">
+                            <section class="col col-6"><?= $al['CB03_NOME_BANCO'] ?>
+                                <label class="select">
+                                    <select name="CB03_NOME_BANCO">
+                                        <option value="Banco do Brasil" selected="">Banco do Brasil</option>
+                                        <option value="Santander" selected="">Santander</option>
+                                        <option value="Caixa Econômica" selected="">Caixa Econômica</option>
+                                        <option value="Bradesco" selected="">Bradesco</option>
+                                        <option value="Itaú" selected="">Itaú</option>                                        
+                                    </select> <i></i> 
+                                </label>
+                            </section>
+                            <section class="col col-6"><?= $al['CB03_TP_CONTA'] ?>
+                                <label class="select">
+                                    <select name="CB03_TP_CONTA">
+                                        <option value="1" selected="">Corrente</option>
+                                        <option value="0" selected="">Poupança</option>
+                                    </select> <i></i> 
+                                </label>
+                            </section>
+                            <section class="col col-6"><?= $al['CB03_AGENCIA'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
+                                    <input required type="text" name="CB03_AGENCIA" placeholder="">
+                                </label>
+                            </section>
+                             <section class="col col-6"><?= $al['CB03_NUM_CONTA'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
+                                    <input required type="text" name="CB03_NUM_CONTA" placeholder="">
+                                </label>
+                            </section>
+                              <section class="col col-6"><?= $al['CB03_SAQUE_MIN'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
+                                    <input required type="text" name="CB03_SAQUE_MIN" placeholder="" pattern="([0-9]{1,3}\.)?[0-9]{1,3},[0-9]{2}$">
+                                </label>
+                            </section>
+                              <section class="col col-6"><?= $al['CB03_SAQUE_MAX'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
+                                    <input required type="text" name="CB03_SAQUE_MAX" placeholder="" pattern="([0-9]{1,3}\.)?[0-9]{1,3},[0-9]{2}$">
+                                </label>
+                            </section>
+                         
+                        </div>
 
                     <fieldset>
                         <h3>Endereço</h3>
@@ -237,7 +295,7 @@
     FormEmpresa.addOptionsSelect('CB04_CATEGORIA_ID', categorias);
 
     // cria checkbox com as formas de pagamento
-    FormEmpresa.addCheckboxInLine("forma-pagamento", "FORMA-PAGAMENTO", formaPagamento);
+    FormEmpresa.addCheckboxInLineFormPgto("forma-pagamento", "FORMA-PAGAMENTO", formaPagamento);
 
     
     if (typeof estabelecimento.CB04_ID != 'undefined') {
