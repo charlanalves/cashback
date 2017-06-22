@@ -1,11 +1,18 @@
 <?php
 return [
     'components' => [
-        'db' => [
+        /*'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=34.206.36.55;dbname=cashback',
             'username' => 'root',
             'password' => '6%)DT3y_dV,(',
+            'charset' => 'utf8',
+        ],*/
+		 'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=estalecasdev',
+            'username' => 'root',
+            'password' => '@by02016Abio#',
             'charset' => 'utf8',
         ],
         'mailer' => [

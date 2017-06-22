@@ -7,6 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\CB04EMPRESA;
+use common\models\CB03CONTABANC;
 use common\models\CB09FORMAPAGEMPRESA;
 use common\models\CB05PRODUTO;
 use common\models\CB11ITEMCATEGORIA;
@@ -197,19 +198,25 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     private function prepareAccountData($param)
     {	 
 	    return [
-	    
 	  			 "CPF_CNPJ" => $param['CB04_CNPJ'],
-	      		 "name" => $data['CB04_NOME'], 
-			     "address" => $data['CB04_END_LOGRADOURO'], 
-			     "cep"=> $data['CB04_END_CEP'], 
-			     "city" => $data['CB04_END_CIDADE'], 
-			     "state" => $data['CB04_END_UF'], 
-			     "telephone" => $data['CB04_TEL_NUMERO'], 
-			     "bank" => $data['CB03_NOME_BANCO'], 
-			     "bank_ag" => $data['CB03_AGENCIA'], 
-			     "account_type" => ($data['CB03_TP_CONTA']) ? 'corrente': 'poupança', 
-			     "bank_cc" => $data['CB03_NUM_CONTA']
+	      		 "name" => $param['CB04_NOME'], 
+			     "address" => $param['CB04_END_LOGRADOURO'], 
+			     "cep"=> $param['CB04_END_CEP'], 
+			     "city" => $param['CB04_END_CIDADE'], 
+			     "state" => $param['CB04_END_UF'], 
+			     "telephone" => $param['CB04_TEL_NUMERO'], 
+			     "bank" => $param['CB03_NOME_BANCO'], 
+			     "bank_ag" => $param['CB03_AGENCIA'], 
+			     "account_type" => ($param['CB03_TP_CONTA']) ? 'corrente': 'poupança', 
+			     "bank_cc" => $param['CB03_NUM_CONTA']
 	    ];
+    }
+    
+ 	private function saveContaBancaria($param)
+    {	 
+	   $conta = new CB03CONTABANC;
+	   $conta->setAttributes($param);
+	   $conta->save();
     }
     
     public function saveEmpresa($param) {

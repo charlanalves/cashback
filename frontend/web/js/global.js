@@ -65,7 +65,7 @@ var Form = function (formId) {
                         data[v.name].push(v.value);
                     }
                 } else {
-                    // teste se é valor monetario
+                    // teste se ï¿½ valor monetario
                     if (form.getMoney.indexOf(v.name) !== -1) {
                         data[v.name] = $(form[v.name]).maskMoney('unmasked')[0];
                     } else {
@@ -127,8 +127,25 @@ var Form = function (formId) {
             checkbox += '<label class="checkbox"><input type="checkbox" name="' + checkboxName + '[]" value="' + key + '"><i></i>' + value + '</label>' + "\n";
         });
         destiny.append($("<div></div>").attr("class", "inline-group").html(checkbox));
+    }, this.addCheckboxInLineFormPgto = function (destinyId, checkboxName, data)
+    {
+        var destiny = this.form.find('#' + destinyId), checkbox = '';
+        $.each(data, function (key, value) {
+            if (typeof value == "object") {
+                key = value.ID;
+                value = value.TEXTO;
+            }
+            checkbox += '<label class="checkbox"><input type="checkbox"  name="' + checkboxName + '[\''+value+'\'][]" value="' + key + '"><i></i>' + value + '</label>' + "\n";
+            
+            checkbox += '<section class="col col-2">Perc Adquirente<label class="input"> <i class="icon-prepend fa fa-suitcase"></i>';
+            checkbox += '<input required type="text" name="' + checkboxName + '[\''+value+'\'][][\'CB09_PERC_ADQ\']"  placeholder=""> </label>';
+            	
+            checkbox += 'Perc Admin<label class="input"> <i class="icon-prepend fa fa-suitcase"></i>';
+            checkbox += '<input required type="text" name="' + checkboxName + '[\''+value+'\'][][\'CB09_PERC_Admin\']" placeholder=""> </label></section>';
+        });
+        destiny.append($("<div></div>").attr("class", "inline-group").html(checkbox));
     };
-    
+
     var $inputs = this.form.find(':input'), data = this;
     $inputs.each(function (k, v) {
         if (v.name) {
@@ -237,7 +254,7 @@ var Util = {
                             callback(file);
                         // error
                         } else {
-                            msg = (retorno.message || "Não foi possível enviar o arquivo: " + file.name);
+                            msg = (retorno.message || "Nï¿½o foi possï¿½vel enviar o arquivo: " + file.name);
                             Util.smallBox("Ocorreu um erro...", msg, 'danger', 'close', 5000);
                         }
                         this.removeFile(file);
@@ -276,7 +293,7 @@ var Util = {
                                     if(data.status){
                                         _this.removeFile(file);
                                     } else {
-                                        Util.smallBox((data.message || 'O arquivo não foi excluido'), '', 'danger');
+                                        Util.smallBox((data.message || 'O arquivo nï¿½o foi excluido'), '', 'danger');
                                     }
                                 });
                             });
@@ -331,7 +348,7 @@ var Util = {
         var formData = new FormData(),
         extraData = ajaxParams.data;
 
-        // Seta parametros necessários para a request funcionar com input file
+        // Seta parametros necessï¿½rios para a request funcionar com input file
         ajaxParams.cache = false;
         ajaxParams.contentType = false;
         ajaxParams.processData = false;
@@ -351,11 +368,11 @@ var Util = {
                 // tipo de valor
                 var vType = Object.prototype.toString.call(v);
 
-                // verifica se o valor é um ARRAY
+                // verifica se o valor ï¿½ um ARRAY
                 if (vType == '[object Array]') {
                         for (var i in v) { formData.append(k, v[i]); }
 
-                // verifica se o valor é um OBJECT
+                // verifica se o valor ï¿½ um OBJECT
                         } else if (vType == '[object Object]') {
                         for (var i in v) { formData.append(k + '[' + i + ']', v[i]); }
 
