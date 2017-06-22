@@ -10,6 +10,16 @@ use common\models\base\VIEWEXTRATO as BaseVIEWEXTRATO;
  */
 class VIEWEXTRATO extends BaseVIEWEXTRATO
 {
+    
+    public $tipos_para_estabelecimento = [
+        "M2E" => "MASTER TO EMPRESA", 
+        "E2ADQ" => "EMPRESA TO ADQ", 
+        "E2C" => "EMPRESA TO CLIENTE", 
+        "E2ADM" => "EMPRESA TO ADMIN", 
+        "V2B" => "VIRTUAL TO BANCARIA", 
+        "B2V" => "BANCARIA TO VIRTUAL"
+    ];
+    
     /**
      * @inheritdoc
      */
