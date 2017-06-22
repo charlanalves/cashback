@@ -385,12 +385,15 @@ class ApiEmpresaController extends GlobalBaseController {
             if ($pedido['CB16_STATUS'] == CB16PEDIDO::status_aguardando_pagamento) {
                 $CB16PEDIDO = $pedido;
                 // formas de pagamento do checkout
-                $CB16PEDIDO['forma_pagamento'] = CB08FORMAPAGAMENTO::find()
+                $CB16PEDIDO['forma_pagamento'] = CB04EMPRESA::find()
                         ->select(['CB08_ID','CB08_NOME'])
+                        ->join('JOIN','CB09_FORMA_PAGTO_EMPRESA','CB09_FORMA_PAGTO_EMPRESA.CB09_ID_EMPRESA = CB04_EMPRESA.CB04_ID')
+                        ->join('JOIN','CB08_FORMA_PAGAMENTO','CB08_FORMA_PAGAMENTO.CB08_ID = CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG')
                         ->where(['CB08_STATUS' => 1])
+                        ->andWhere(['CB04_EMPRESA.CB04_ID' => $CB16PEDIDO['CB16_EMPRESA_ID']])
                         ->asArray()
                         ->all();
-            }
+            }   
         }
         
         return json_encode($CB16PEDIDO);
