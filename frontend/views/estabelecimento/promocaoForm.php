@@ -106,17 +106,17 @@ $this->title = '';
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" />
                     <input type="hidden" name="CB06_PRODUTO_ID" value="" />
                     <fieldset>
-                        <?= $al['CB06_DESCRICAO'] ?>
+                        Descrição
                         <label class="input"> <i class="icon-prepend fa fa-tags"></i>
                             <input type="text" name="CB06_DESCRICAO" placeholder="">
                         </label>
                         <div class="row padding-top-15">
-                            <section class="col col-4"><?= $al['CB06_PRECO'] ?>
+                            <section class="col col-4">Preço Original
                                 <label class="input"> <i class="icon-prepend fa fa-usd"></i>
                                     <input type="text" name="CB06_PRECO" placeholder="" maxlength="8">
                                 </label>
                             </section>
-                            <section class="col col-4"><?= $al['CB06_PRECO_PROMOCIONAL'] ?>
+                            <section class="col col-4">Preço Promocional
                                 <label class="input"> <i class="icon-prepend fa fa-usd"></i>
                                     <input type="text" name="CB06_PRECO_PROMOCIONAL" placeholder="">
                                 </label>

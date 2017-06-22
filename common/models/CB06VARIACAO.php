@@ -33,9 +33,9 @@ class CB06VARIACAO extends BaseCB06VARIACAO
         return [
             'CB06_ID' => Yii::t('app', 'ID'),
             'CB06_PRODUTO_ID' => Yii::t('app', 'Produto'),
-            'CB06_DESCRICAO' => Yii::t('app', 'Descrição'),
-            'CB06_PRECO' => Yii::t('app', 'Preço original'),
-            'CB06_PRECO_PROMOCIONAL' => Yii::t('app', 'Preço promocional'),
+            'CB06_DESCRICAO' => Yii::t('app', 'Descriï¿½ï¿½o'),
+            'CB06_PRECO' => Yii::t('app', 'Preï¿½o original'),
+            'CB06_PRECO_PROMOCIONAL' => Yii::t('app', 'Preï¿½o promocional'),
             'CB06_DINHEIRO_VOLTA' => Yii::t('app', 'Dinheiro de volta'),
         ];
     }
