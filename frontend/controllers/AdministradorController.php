@@ -198,6 +198,11 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     private function prepareAccountData($param)
     {	 
 	    return [
+	    		 "price_range" => "Mais que R$ 500,00",
+			     "physical_products" => false,
+			     "business_type" => "Serviços e produtos diversos",
+			     "automatic_transfer" => true,
+		  		 "person_type" => 'Pessoa Jurídica',
 	  			 "CPF_CNPJ" => $param['CB04_CNPJ'],
 	      		 "name" => $param['CB04_NOME'], 
 			     "address" => $param['CB04_END_LOGRADOURO'], 

@@ -41,33 +41,61 @@ class IuguComponent extends PaymentBaseComponent {
     }
     
  
-    
-    
-   public function createAccount($dataApi) 
+    public function createAccount($dataApi) 
     {   
-         $this->lastResponse = \Iugu_Marketplace::createAccount(['name'=> $dataApi['nomeConta']]); 
-            
-	      if (isset($dataApi['CPF_CNPJ']) && strlen($dataApi['CPF_CNPJ']) == '14') {
-		      	$dataApi['price_range'] = "Mais que R$ 500,00";
-			    $dataApi['physical_products'] = false;
-			    $dataApi['business_type'] = "Serviços e produtos diversos";
-			    $dataApi['automatic_transfer'] = true;
-		  		$dataApi['person_type'] = 'Pessoa Jurídica';
-		  		$dataApi['cnpj'] = $dataApi['CPF_CNPJ']; 
+    	$this->_createAccount($dataApi);
+    	
+    	 if (strlen($dataApi['CPF_CNPJ']) == '14') {
+    		$this->verifyAccount($dataApi);
+    	 }
+    }
+    
+    
+ 	public function _createAccount($dataApi) 
+    {   
+    	 if (isset($dataApi['CPF_CNPJ']) {
+	          throw new UserException("Erro ao criar conta. CNPJ ou CPF não informado.");
+    	 }
+    	
+          $this->lastResponse = \Iugu_Marketplace::createAccount(['name'=> $dataApi['CPF_CNPJ']]); 
+    }
+    
+   public function verifyAccount($dataApi) 
+   {     
+          $defaultData = [
+		      		 "price_range" => "Mais que R$ 500,00",
+				     "physical_products" => false,
+				     "automatic_transfer" => true,
+	       	];
+	       	
+	       if (strlen($dataApi['CPF_CNPJ']) == '14') {
+	      		$dataPJ = [
+			  		 "person_type" => 'Pessoa Jurídica',
+	      		 	 "business_type" => "Serviços e produtos diversos",
+		       	];
+		       	
+		       	$dataApi = array_merge($dataPJ,$defaultData); 
 	  			  
 	  		} else {
-	  			  $dataApi['person_type'] = 'Pessoa Física';
-	  			  $dataApi['cpf'] = $dataApi['CPF_CNPJ']; 
+	  			$defaultPF = [
+				     "business_type" => "Usuário com cashback",
+			  		 "person_type" => "Pessoa Física",
+	  				 "cpf" => $dataApi['CPF_CNPJ'],
+		       	];
+		       	
+	       	  	$dataApi = array_merge($defaultPF, $defaultData); 
 	  		}
-	  		
-	  		  \Iugu::setApiKey($this->lastResponse->user_token);
-        
-        	  \Iugu_Account::requestVerification($dataApi);  
+	  		   
+		       
+		  	\Iugu::setApiKey($this->lastResponse->user_token);
+		  	  
+        	\Iugu_Account::requestVerification($dataApi);  
 	      
         
         if (isset($this->lastResponse->errors)) {
           throw new UserException("Erro ao criar conta.");
         }
+    	
     }
     
     
