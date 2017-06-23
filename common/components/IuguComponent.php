@@ -53,7 +53,7 @@ class IuguComponent extends PaymentBaseComponent {
     
  	public function _createAccount($dataApi) 
     {   
-    	 if (isset($dataApi['CPF_CNPJ']) {
+    	 if (isset($dataApi['CPF_CNPJ'])) {
 	          throw new UserException("Erro ao criar conta. CNPJ ou CPF não informado.");
     	 }
     	
