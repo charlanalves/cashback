@@ -132,18 +132,21 @@ var Form = function (formId) {
     }, this.addCheckboxInLineFormPgto = function (destinyId, checkboxName, data)
     {
         var destiny = this.form.find('#' + destinyId), checkbox = '';
+        var count = 0;
         $.each(data, function (key, value) {
             if (typeof value == "object") {
                 key = value.ID;
                 value = value.TEXTO;
             }
-            checkbox += '<label class="checkbox"><input type="checkbox"  name="' + checkboxName + '[\''+value+'\'][]" value="' + key + '"><i></i>' + value + '</label>' + "\n";
+            checkbox += '<label class="checkbox"><input type="checkbox"  name="FORMA-PAGTO['+count+'][CB09_ID_FORMA_PAG]" value="' + key + '"><i></i>' + value + '</label>' + "\n";
             
             checkbox += '<section class="col col-2">Perc Adquirente<label class="input"> <i class="icon-prepend fa fa-suitcase"></i>';
-            checkbox += '<input required type="text" name="' + checkboxName + '[\''+value+'\'][][\'CB09_PERC_ADQ\']"  placeholder=""> </label>';
+            checkbox += '<input required type="text" name="FORMA-PAGTO['+count+'][CB09_PERC_ADQ]"  placeholder=""> </label>';
             	
             checkbox += 'Perc Admin<label class="input"> <i class="icon-prepend fa fa-suitcase"></i>';
-            checkbox += '<input required type="text" name="' + checkboxName + '[\''+value+'\'][][\'CB09_PERC_Admin\']" placeholder=""> </label></section>';
+            checkbox += '<input required type="text" name="FORMA-PAGTO['+count+'][CB09_PERC_ADMIN]"  placeholder=""> </label></section>';
+            
+            count++;
         });
         destiny.append($("<div></div>").attr("class", "inline-group").html(checkbox));
     };

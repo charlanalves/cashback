@@ -48,14 +48,13 @@ class CB04EMPRESA extends \common\models\GlobalModel
     public function rules()
     {
         return [
-            [['CB04_CNPJ','CB04_TEL_NUMERO', 'CB04_NOME', 'CB04_CATEGORIA_ID', 'CB04_FUNCIONAMENTO','CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_UF', 'CB04_END_NUMERO', 'CB04_END_COMPLEMENTO', 'CB04_END_CEP'], 'required'],
+            [['CB04_CNPJ','CB04_TEL_NUMERO', 'CB04_NOME', 'CB04_CATEGORIA_ID', 'CB04_FUNCIONAMENTO','CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_UF', 'CB04_END_NUMERO',  'CB04_END_CEP'], 'required'],
             [['CB04_DADOS_API_TOKEN', 'CB04_FUNCIONAMENTO', 'CB04_OBSERVACAO'], 'string'],
             [['CB04_CATEGORIA_ID', 'CB04_STATUS', 'CB04_QTD_FAVORITO', 'CB04_QTD_COMPARTILHADO'], 'integer'],
             [['CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_COMPLEMENTO'], 'string', 'max' => 50],
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
             [['CB04_END_UF'], 'string', 'max' => 2],
             [['CB04_END_NUMERO'], 'string', 'max' => 5],
-            [['CB04_END_CEP'], 'string', 'max' => 8],
             [['CB04_CNPJ'], 'string', 'max' => 14],
             
             

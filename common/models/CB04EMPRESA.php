@@ -17,15 +17,18 @@ class CB04EMPRESA extends BaseCB04EMPRESA
     {
         return array_replace_recursive(parent::rules(),
 	    [
-            [['CB04_CNPJ','CB04_TEL_NUMERO', 'CB04_NOME', 'CB04_CATEGORIA_ID', 'CB04_FUNCIONAMENTO','CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_UF', 'CB04_END_NUMERO', 'CB04_END_COMPLEMENTO', 'CB04_END_CEP'], 'required'],
+            [['CB04_CNPJ','CB04_TEL_NUMERO', 'CB04_NOME', 'CB04_CATEGORIA_ID', 'CB04_FUNCIONAMENTO','CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_UF', 'CB04_END_NUMERO',  'CB04_END_CEP'], 'required'],
             [['CB04_DADOS_API_TOKEN', 'CB04_FUNCIONAMENTO', 'CB04_OBSERVACAO'], 'string'],
             [['CB04_CATEGORIA_ID', 'CB04_STATUS', 'CB04_QTD_FAVORITO', 'CB04_QTD_COMPARTILHADO'], 'integer'],
             [['CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_COMPLEMENTO'], 'string', 'max' => 50],
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
             [['CB04_END_UF'], 'string', 'max' => 2],
             [['CB04_END_NUMERO'], 'string', 'max' => 5],
-            [['CB04_END_CEP'], 'string', 'max' => 8],
             [['CB04_CNPJ'], 'string', 'max' => 14],
+           	['CB04_END_CEP', 'filter', 'filter' => function ($value) {
+        		return preg_replace("/[^0-9]/", "", $value);
+		    }],
+	     	[['CB04_END_CEP'], 'string', 'max' => 8],
             
             
         ]);
@@ -185,13 +188,19 @@ class CB04EMPRESA extends BaseCB04EMPRESA
             $this->setAttributes($data);
             $this->save();
             // dados da forma de pagamento (exclui e cadastra)
-            CB09FORMAPAGEMPRESA::deleteAll(['CB09_EMPRESA_ID' => $this->CB04_ID]);
-            if (!empty($data['FORMA-PAGAMENTO'])) {
-                foreach ($data['FORMA-PAGAMENTO'] as $fp) {
-                    $CB09FORMAPAGEMPRESA = new CB09FORMAPAGEMPRESA();
-                    $CB09FORMAPAGEMPRESA->setAttributes(['CB09_EMPRESA_ID' => $this->CB04_ID, 'CB09_FORMA_PAG_ID' => $fp]);
-                    $CB09FORMAPAGEMPRESA->save();
+            CB09FORMAPAGTOEMPRESA::deleteAll(['CB09_ID_EMPRESA' => $this->CB04_ID]);
+            if (!empty($data['FORMA-PAGTO'])) {
+                foreach ($data['FORMA-PAGTO'] as $fp) {
+                	
+                    $CB09FORMAPAGTOEMPRESA = new CB09FORMAPAGTOEMPRESA();
+                    $CB09FORMAPAGTOEMPRESA->CB09_ID_EMPRESA = $this->CB04_ID;
+                    $CB09FORMAPAGTOEMPRESA->CB09_ID_FORMA_PAG = $fp['CB09_ID_FORMA_PAG'];
+                    $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADQ = $fp['CB09_PERC_ADQ'];
+                    $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADMIN = $fp['CB09_PERC_ADMIN'];
+                    
+                    $CB09FORMAPAGTOEMPRESA->save();
                 }
+                
             }
         
             return $this->CB04_ID;
