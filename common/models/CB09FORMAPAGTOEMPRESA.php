@@ -16,7 +16,7 @@ class CB09FORMAPAGTOEMPRESA extends BaseCB09FORMAPAGTOEMPRESA
     public function rules()
     {
         return array_replace_recursive(parent::rules(),
-	    [
+	    [								  	    
             [['CB09_ID_EMPRESA', 'CB09_ID_FORMA_PAG', 'CB09_PERC_ADQ', 'CB09_PERC_ADMIN'], 'required'],
             [['CB09_ID_EMPRESA', 'CB09_ID_FORMA_PAG'], 'integer'],
             [['CB09_PERC_ADQ', 'CB09_PERC_ADMIN'], 'number'],

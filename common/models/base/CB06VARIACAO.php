@@ -32,7 +32,7 @@ class CB06VARIACAO extends \common\models\GlobalModel
     public function rules()
     {
         return [
-            [['CB06_PRODUTO_ID', 'CB06_TITULO', 'CB06_DESCRICAO', 'CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'required'],
+            [['CB06_PRODUTO_ID', 'CB06_DESCRICAO', 'CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'required'],
             [['CB06_PRODUTO_ID'], 'integer'],
             [['CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'number'],
             [['CB06_TITULO'], 'string', 'max' => 500],

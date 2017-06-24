@@ -262,7 +262,8 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'itemProduto' => $dataItemProduto,
                     'limitFotos' => $limitFotos,
                     'al' => $al,
-                    'maxProduto' => $maxProduto,
+                   // 'maxProduto' => $maxProduto,
+        		   	'maxProduto' => 0,
         ]);
     }
 
@@ -277,9 +278,9 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                 // testa quantidade de fotos
                 $limitFotos = SYS01PARAMETROSGLOBAIS::getValor(6); // limit de fotos do produto
                 $qtdFotos = CB14FOTOPRODUTO::find()->where(['CB14_PRODUTO_ID' => $produto])->count();
-                if($limitFotos <= $qtdFotos) {
+               /* if($limitFotos <= $qtdFotos) {
                     throw new \Exception('Limite de fotos atingido para o produto!');
-                }
+                }*/
 
                 $infoFile = \Yii::$app->u->infoFile($_FILES['file']);
                 $infoFile['path'] = 'img/fotos/produto/';
