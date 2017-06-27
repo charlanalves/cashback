@@ -485,7 +485,8 @@ class ApiEmpresaController extends GlobalBaseController {
             $pedido = $pedido[0];
             // verifica status do pedido
             if ($pedido['CB16_STATUS'] == CB16PEDIDO::status_aguardando_pagamento) {
-                
+                var_dump($pedido);
+                exit();
                 $transaction = \Yii::$app->db->beginTransaction();
                 
                 try {
@@ -499,6 +500,17 @@ class ApiEmpresaController extends GlobalBaseController {
                     
                     // pagar com saldo
                     if($data['FORMA-PAGAMENTO'] == 1) {
+                        $now = date('Y-m-d');
+                        $PAG04TRANSFERENCIAS = new PAG04TRANSFERENCIAS();
+                        $PAG04TRANSFERENCIAS->setAttributes([
+                            'PAG04_DT_PREV' => $now,
+                            'PAG04_DT_DEP' => $now,
+                            'PAG04_ID_PEDIDO' => $pedido['CB17_PEDIDO_ID'],
+                            'PAG04_ID_USER_CONTA_ORIGEM' => $pedido['CB16_USER_ID'],
+                            'PAG04_ID_USER_CONTA_DESTINO' => User::getCompanyUserMainId($pedido['CB16_EMPRESA_ID']),
+                            'PAG04_VLR' => $pedido['CB16_VALOR'],
+                            'PAG04_TIPO' => $PAG04TRANSFERENCIAS->C2E // cliente to empresa (pag. CB)
+                        ]);
                         $this->invoiceId = null;
                         
                         
