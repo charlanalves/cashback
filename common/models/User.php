@@ -33,19 +33,19 @@ class User extends BaseUser implements IdentityInterface
             ['cpf_cnpj', 'filter', 'filter' => function($value) {
                 return preg_replace('/[^0-9]/', '', $value);
             }],
-            ['cpf_cnpj', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este CPF/CNPJ já foi usado.'],
+            ['cpf_cnpj', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este CPF/CNPJ jï¿½ foi usado.'],
             ['cpf_cnpj', 'string', 'min' => 11, 'max' => 14],
             
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este Email já foi usado.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este Email jï¿½ foi usado.'],
             
            
             
             ['id_indicacao', 'integer'],
-            ['id_indicacao', 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => 'id', 'message' => 'A indicação não é valida.'],
+            ['id_indicacao', 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => 'id', 'message' => 'A indicaï¿½ï¿½o nï¿½o ï¿½ valida.'],
         ];
     }
     
@@ -205,6 +205,11 @@ class User extends BaseUser implements IdentityInterface
     public static function getHashPasswordByAuthKey($authKey)
     {
         return (($user = self::findOne(['auth_key' => $authKey]))) ? $user->password_hash : false;
+    }
+    
+    public static function getCompanyUserMainId($company)
+    {
+        return (($user = self::findOne(['id_company' => $company, 'user_principal' => 1]))) ? $user->id : false;
     }
 
 }

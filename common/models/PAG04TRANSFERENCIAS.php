@@ -17,6 +17,7 @@ class PAG04TRANSFERENCIAS extends BasePAG04TRANSFERENCIAS
     const V2B = 'V2B';
     const B2V = 'B2V';
     const M2SC = 'M2SC';
+    const C2E = 'C2E';
     /**
      * @inheritdoc
      */

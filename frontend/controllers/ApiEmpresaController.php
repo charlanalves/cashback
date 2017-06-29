@@ -194,9 +194,11 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionPromocao() {
         $filter = \Yii::$app->request->post();
-        $saldo = $this->getSaldo(\Yii::$app->request->post('user_auth_key'));
-        $saldoAtual = $saldo['SALDO_LIBERADO'];
-        $saldoPendente = $saldo['SALDO_PENDENTE'];
+//        $saldo = $this->getSaldo(\Yii::$app->request->post('user_auth_key'));
+//        $saldoAtual = $saldo['SALDO_LIBERADO'];
+//        $saldoPendente = $saldo['SALDO_PENDENTE'];
+        $saldoAtual = $this->getSaldoAtual(\Yii::$app->request->post('user_auth_key'));
+        $saldoPendente = 0;
         $CB06VARIACAO = CB06VARIACAO::getPromocao($this->url, $filter);
         return json_encode(['saldoLiberado' =>  $saldoAtual, 'saldoPendente' => $saldoPendente, 'estabelecimentos' => $CB06VARIACAO]);
     }
@@ -392,8 +394,19 @@ class ApiEmpresaController extends GlobalBaseController {
                         ->join('JOIN','CB08_FORMA_PAGAMENTO','CB08_FORMA_PAGAMENTO.CB08_ID = CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG')
                         ->where(['CB08_STATUS' => 1])
                         ->andWhere(['CB04_EMPRESA.CB04_ID' => $CB16PEDIDO['CB16_EMPRESA_ID']])
+                        ->orderBy('CB08_ID')
                         ->asArray()
                         ->all();
+                
+                // saldo estaleca sempre tem que ser o primeiro 
+                // o saldo deve ser maior que o valor da compra
+                $saldoAtual = $this->getSaldoAtual($post['user_auth_key']);
+                if($CB16PEDIDO['CB16_VALOR'] <= $saldoAtual) {
+                    $CB16PEDIDO['forma_pagamento'][0]['CB08_NOME'] = $CB16PEDIDO['forma_pagamento'][0]['CB08_NOME'] .' (R$ '. $saldoAtual . ')';
+                } else {
+                    unset($CB16PEDIDO['forma_pagamento'][0]);
+                }
+                
             }   
         }
         
@@ -482,22 +495,32 @@ class ApiEmpresaController extends GlobalBaseController {
                     $data = $post['data'];
                     
                     // Dados do pagamento
-                	$PERC_PAG = $this->getPercPag($data, $pedido);
+                    $PERC_PAG = $this->getPercPag($data, $pedido);
                 	
-                	// Atualiza dados do pedido
+                    // Atualiza dados do pedido
                     $this->atualizaPedidoPago($post, $PERC_PAG, $data);
                     
-                    // Prepara e processa Transacao
-                    $this->preparaProcessaTransacao($pedido, $data);
-                	
-                   	$transaction->commit();
+                    // Transferencia - pagar com saldo
+                    if($data['FORMA-PAGAMENTO'] == 1) {
+                        \Yii::$app->Iugu->criaTransferenciaPagSaldo($pedido['CB17_PEDIDO_ID']);
+                        $this->invoiceId = null;
+                        
+                        
+                    } else {
+                        // Prepara e processa Transacao iugu
+                        $this->preparaProcessaTransacao($pedido, $data);
+                        
+                    }
                     
-                   	$status = true;
-                   	$retorno = '';
+                    $transaction->commit();
+                    $status = true;
+                    $retorno = '';
                     
-                } catch (\Exception $exc) {                    
-                    $transaction->rollBack();                   
+                } catch (\Exception $exc) {
+                    $transaction->rollBack();
                     $retorno = $exc->getMessage();
+                    var_dump($retorno);
+                    exit();
                 }
                 if (!is_null($this->invoiceId)) {
                 	$this->atualizaCodTransacaoPedido($post['order'], $this->invoiceId);
@@ -664,7 +687,7 @@ class ApiEmpresaController extends GlobalBaseController {
                     $pedido->CB16_EMPRESA_ID = $dadosP['CB05_EMPRESA_ID'];                    
                     $pedido->CB16_USER_ID = $idUser;
                     $pedido->CB16_VALOR = $dadosV['CB06_PRECO_PROMOCIONAL'];
-                    $pedido->CB16_VLR_CB_TOTAL = \Yii::$app->u->arredondar(($dadosV['CB06_DINHEIRO_VOLTA'] / $dadosV['CB06_PRECO_PROMOCIONAL']) * 100);
+                    $pedido->CB16_VLR_CB_TOTAL = \Yii::$app->u->arredondar($dadosV['CB06_PRECO_PROMOCIONAL'] * ($dadosV['CB06_DINHEIRO_VOLTA'] / 100));
                     $pedido->save();
                     $idPedido = $pedido->CB16_ID;
 
