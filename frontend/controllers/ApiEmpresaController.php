@@ -193,9 +193,11 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionPromocao() {
         $filter = \Yii::$app->request->post();
-        $saldo = $this->getSaldo(\Yii::$app->request->post('user_auth_key'));
-        $saldoAtual = $saldo['SALDO_LIBERADO'];
-        $saldoPendente = $saldo['SALDO_PENDENTE'];
+//        $saldo = $this->getSaldo(\Yii::$app->request->post('user_auth_key'));
+//        $saldoAtual = $saldo['SALDO_LIBERADO'];
+//        $saldoPendente = $saldo['SALDO_PENDENTE'];
+        $saldoAtual = $this->getSaldoAtual(\Yii::$app->request->post('user_auth_key'));
+        $saldoPendente = 0;
         $CB06VARIACAO = CB06VARIACAO::getPromocao($this->url, $filter);
         return json_encode(['saldoLiberado' =>  $saldoAtual, 'saldoPendente' => $saldoPendente, 'estabelecimentos' => $CB06VARIACAO]);
     }
