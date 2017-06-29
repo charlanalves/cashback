@@ -20,10 +20,10 @@ class IuguComponent extends PaymentBaseComponent {
        require_once(\Yii::getAlias('@vendor/iugu/Iugu.php'));
        
        //teste
-       \Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
+     //  \Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
        
        //producao
-      // \Iugu::setApiKey("19f75e24d08d0dd3d01db446299a4ba6");
+      \Iugu::setApiKey("19f75e24d08d0dd3d01db446299a4ba6");
     }
     
     protected function prepareCreditCard($data)
@@ -41,59 +41,62 @@ class IuguComponent extends PaymentBaseComponent {
     }
     
  
-    public function createAccount($dataApi) 
+    public function createAccount($accountName) 
     {   
-    	$this->_createAccount($dataApi);
+    	$this->_createAccount($accountName);
     	
-    	 if (strlen($dataApi['CPF_CNPJ']) == '14') {
-    		$this->verifyAccount($dataApi);
+    	 if (strlen($accountName) == '18') {
+    		$this->verifyAccount($accountName);
     	 }
     }
     
     
- 	public function _createAccount($dataApi) 
+    public function _createAccount($accountName) 
     {   
-    	 if (isset($dataApi['CPF_CNPJ'])) {
+    	 if (empty($accountName)) {
 	          throw new UserException("Erro ao criar conta. CNPJ ou CPF não informado.");
     	 }
     	
-          $this->lastResponse = \Iugu_Marketplace::createAccount(['name'=> $dataApi['CPF_CNPJ']]); 
+         $this->lastResponse = \Iugu_Marketplace::createAccount(['name'=> $accountName]); 
+          
+        if (isset($this->lastResponse->errors)) {
+          throw new UserException("Erro ao criar conta.");
+        }
     }
     
    public function verifyAccount($dataApi) 
    {     
-          $defaultData = [
-		      		 "price_range" => "Mais que R$ 500,00",
-				     "physical_products" => false,
-				     "automatic_transfer" => true,
-	       	];
+        $defaultData = [
+            "price_range" => "Mais que R$ 500,00",
+            "physical_products" => false,
+            "automatic_transfer" => true,
+         ];
 	       	
-	       if (strlen($dataApi['CPF_CNPJ']) == '14') {
-	      		$dataPJ = [
-			  		 "person_type" => 'Pessoa Jurídica',
-	      		 	 "business_type" => "Serviços e produtos diversos",
-		       	];
-		       	
-		       	$dataApi = array_merge($dataPJ,$defaultData); 
-	  			  
-	  		} else {
-	  			$defaultPF = [
-				     "business_type" => "Usuário com cashback",
-			  		 "person_type" => "Pessoa Física",
-	  				 "cpf" => $dataApi['CPF_CNPJ'],
-		       	];
-		       	
-	       	  	$dataApi = array_merge($defaultPF, $defaultData); 
-	  		}
-	  		   
-		       
-		  	\Iugu::setApiKey($this->lastResponse->user_token);
-		  	  
-        	\Iugu_Account::requestVerification($dataApi);  
+        if (strlen($dataApi['CPF_CNPJ']) == '14') {
+                 $defaultPJ = [
+                    "person_type" => 'Pessoa Jurídica',
+                    "business_type" => "Serviços e produtos diversos",
+                 ];
+
+            $dataApi = array_merge(array_merge($defaultPJ, $defaultData), $dataApi);
+
+        } else {
+            $defaultPF = [
+                "business_type" => "Usuário com cashback",
+                "person_type" => "Pessoa Física",
+                "cpf" => $dataApi['CPF_CNPJ'],
+             ];
+
+             $dataApi = array_merge(array_merge($defaultPF, $defaultData), $dataApi);
+        }
+
+        \Iugu::setApiKey($this->lastResponse->user_token);
+
+       $this->lastResponse->errors = \Iugu_Account::requestVerification($dataApi, $this->lastResponse->account_id);  
 	      
         
         if (isset($this->lastResponse->errors)) {
-          throw new UserException("Erro ao criar conta.");
+            throw new UserException("Erro ao Verificar conta");
         }
     	
     }
@@ -163,12 +166,20 @@ class IuguComponent extends PaymentBaseComponent {
         $model->setAttributes($atributos);
         $user = $model->signup();
         
-        $this->createAccount(['nomeConta' => $cliente->CB02_CPF_CNPJ]);
+        $this->createAccount($cliente->CB02_CPF_CNPJ);
          
         $cliente->CB02_DADOS_API_TOKEN = json_encode($this->lastResponse);
         $cliente->CB02_COD_CONTA_VIRTUAL = $this->lastResponse->account_id;
         
         $cliente->save();
+        
+        $model = new \common\models\LoginForm();
+        $model->cpf_cnpj = $cliente->CB02_CPF_CNPJ;
+        $model->password = $atributos['password'];
+        $model->loginCpfCnpj(); 
+        
+        return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
+        
     }
     
     public function fetchUpdateDtDepInvoice(array $invoices) 
