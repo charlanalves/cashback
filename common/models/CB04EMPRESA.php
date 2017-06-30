@@ -25,9 +25,12 @@ class CB04EMPRESA extends BaseCB04EMPRESA
             [['CB04_END_UF'], 'string', 'max' => 2],
             [['CB04_END_NUMERO'], 'string', 'max' => 5],
             [['CB04_CNPJ'], 'string', 'max' => 14],
-           	['CB04_END_CEP', 'filter', 'filter' => function ($value) {
-        		return preg_replace("/[^0-9]/", "", $value);
-		    }],
+            ['CB04_END_CEP', 'filter', 'filter' => function ($value) {
+                    return preg_replace("/[^0-9]/", "", $value);
+                }],
+            ['CB04_CNPJ', 'filter', 'filter' => function ($value) {
+                    return preg_replace("/[^0-9]/", "", $value);
+            }],
 	     	[['CB04_END_CEP'], 'string', 'max' => 8],
             
             
@@ -186,6 +189,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
     public function saveEstabelecimento($data) {
             // dados do estabelecimento
             $this->setAttributes($data);
+            $this->CB04_CNPJ = preg_replace("/[^0-9]/", "", $this->CB04_CNPJ);
             $this->save();
             // dados da forma de pagamento (exclui e cadastra)
             CB09FORMAPAGTOEMPRESA::deleteAll(['CB09_ID_EMPRESA' => $this->CB04_ID]);

@@ -90,7 +90,7 @@ abstract class PaymentBaseComponent extends Component {
             } 
         }
         
-        exit(json_encode(['status' => $status, 'retorno' => $retorno, 'dev' => $dev, 'lastResponse'=> $this->lastResponse]));
+        exit(json_encode(['status' => $status, 'retorno' => utf8_encode($retorno), 'dev' => utf8_encode($dev), 'lastResponse'=> $this->lastResponse]));
     }
     
     public function globalCall($action, $data) 
@@ -101,7 +101,7 @@ abstract class PaymentBaseComponent extends Component {
             throw new \Exception("O método $action não existe");
         }
         
-        call_user_func_array([$this, $action], [$data]);
+        return call_user_func_array([$this, $action], [$data]);
     }
     
     public function getDtPrevisao($prazoRecebimento, $dtAprovacao)

@@ -23,12 +23,12 @@ public static function configuration($attributes=Array())
     return $response;
   }
   
-public static function requestVerification($attributes=Array()) 
+public static function requestVerification($attributes=Array(), $idAccount) 
 {
     $response = 
       self::API()->request(
         "POST",
-        static::url($attributes).'/request_verification',
+        static::url($attributes).'/'.$idAccount.'/request_verification',
         $attributes
     );
 
