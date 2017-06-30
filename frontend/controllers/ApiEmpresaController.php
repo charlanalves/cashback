@@ -518,8 +518,6 @@ class ApiEmpresaController extends GlobalBaseController {
                 } catch (\Exception $exc) {
                     $transaction->rollBack();
                     $retorno = $exc->getMessage();
-                    var_dump($retorno);
-                    exit();
                 }
                 if (!is_null($this->invoiceId)) {
                 	$this->atualizaCodTransacaoPedido($post['order'], $this->invoiceId);
