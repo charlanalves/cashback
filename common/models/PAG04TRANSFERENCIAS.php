@@ -18,6 +18,9 @@ class PAG04TRANSFERENCIAS extends BasePAG04TRANSFERENCIAS
     const B2V = 'B2V';
     const M2SC = 'M2SC';
     const C2E = 'C2E';
+    const M2C = 'M2C';
+    const E2M = 'E2M';
+     
     /**
      * @inheritdoc
      */
@@ -37,7 +40,7 @@ class PAG04TRANSFERENCIAS extends BasePAG04TRANSFERENCIAS
 
     
     
-	public static function getTransSaques()
+    public static function getTransSaques()
     {
         
         $sql = "
@@ -63,5 +66,68 @@ class PAG04TRANSFERENCIAS extends BasePAG04TRANSFERENCIAS
         return $command->query()->readAll();
     }
  
-	
+    
+    private function createTransacao($type, $origem, $destino, $valor, $dtPrevisao, $pedido, $dtDeposito = null)
+    {   
+        $trans = new self();
+        $trans->PAG04_TIPO = $type;
+        $trans->PAG04_ID_USER_CONTA_ORIGEM = $origem;
+        $trans->PAG04_ID_USER_CONTA_DESTINO = $destino;
+        $trans->PAG04_VLR = $valor;
+        $trans->PAG04_DT_PREV = $dtPrevisao;
+        $trans->PAG04_ID_PEDIDO = $pedido;
+        $trans->PAG04_DT_DEP = $dtDeposito;
+        $trans->save();
+    }
+ 
+    /*
+     * Master to Empresa
+     */
+    public function createM2E($empresa, $valor, $dtPrevisao, $pedido = null)
+    {
+        return $this->createTransacao(self::M2E, \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CT_MA'), $empresa, $valor, $dtPrevisao, $pedido);
+    }
+ 
+    /*
+     * Master to Cliente
+     */
+    public function createM2C($cliente, $valor, $pedido = null)
+    {
+        $now = date('Y-m-d H:i:s');
+        return $this->createTransacao(self::M2C, \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CT_MA'), $cliente, $valor, $now, $pedido, $now);
+    }
+ 
+    /*
+     * Empresa to Master
+     */
+    public function createE2M($empresa, $valor, $dtPrevisao, $pedido = null)
+    {
+        return $this->createTransacao(self::E2M, $empresa, \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CT_MA'), $valor, $dtPrevisao, $pedido);
+    }
+    
+    /*
+     * Empresa to Admin
+     */
+    public function createE2ADM($empresa, $valor, $dtPrevisao, $pedido = null)
+    {
+        return $this->createTransacao(self::E2ADM, $empresa, \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CT_SA'), $valor, $dtPrevisao, $pedido);
+    }
+    
+    /*
+     * Empresa to Adquirente
+     */
+    public function createE2ADQ($empresa, $valor, $dtPrevisao, $pedido = null)
+    {
+        return $this->createTransacao(self::E2ADQ, $empresa, \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CTADQ'), $valor, $dtPrevisao, $pedido);
+    }
+    
+    /*
+     * Cliente to Empresa
+     */
+    public function createC2E($cliente, $empresa, $valor, $pedido = null)
+    {
+        $now = date('Y-m-d H:i:s');
+        return $this->createTransacao(self::C2E, $cliente, $empresa, $valor, $now, $pedido, $now);
+    }
+    
 }
