@@ -198,22 +198,22 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     private function prepareAccountData($param)
     {	 
 	    return [
-	    		 "price_range" => "Mais que R$ 500,00",
-			     "physical_products" => false,
-			     "business_type" => "Serviços e produtos diversos",
-			     "automatic_transfer" => true,
-		  		 "person_type" => 'Pessoa Jurídica',
-	  			 "CPF_CNPJ" => $param['CB04_CNPJ'],
-	      		 "name" => $param['CB04_NOME'], 
-			     "address" => $param['CB04_END_LOGRADOURO'], 
-			     "cep"=> $param['CB04_END_CEP'], 
-			     "city" => $param['CB04_END_CIDADE'], 
-			     "state" => $param['CB04_END_UF'], 
-			     "telephone" => $param['CB04_TEL_NUMERO'], 
-			     "bank" => $param['CB03_NOME_BANCO'], 
-			     "bank_ag" => $param['CB03_AGENCIA'], 
-			     "account_type" => ($param['CB03_TP_CONTA']) ? 'corrente': 'poupança', 
-			     "bank_cc" => $param['CB03_NUM_CONTA']
+                "price_range" => "Mais que R$ 500,00",
+                "physical_products" => false,
+                "business_type" => "Serviços e produtos diversos",
+                "automatic_transfer" => true,
+                "person_type" => 'Pessoa Jurídica',
+                "cnpj" => $param['CB04_CNPJ'],
+                "company_name" => $param['CB04_NOME'], 
+                "address" => $param['CB04_END_LOGRADOURO'], 
+                "cep"=> $param['CB04_END_CEP'], 
+                "city" => $param['CB04_END_CIDADE'], 
+                "state" => $param['CB04_END_UF'], 
+                "telephone" => $param['CB04_TEL_NUMERO'], 
+                "bank" => $param['CB03_NOME_BANCO'], 
+                "bank_ag" => $param['CB03_AGENCIA'], 
+                "account_type" => ($param['CB03_TP_CONTA']) ? 'Corrente': 'Poupança', 
+                "bank_cc" => $param['CB03_NUM_CONTA']
 	    ];
     }
     
@@ -230,46 +230,17 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         
         $model = (!$param['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($param['CB04_ID']);
         
-        $transaction = \Yii::$app->db->beginTransaction();
-        
-    	try {
+        \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
+      
             $id = $model->saveEstabelecimento($param);
             
             $this->saveContaBancaria($param);
             
             $data = $this->prepareAccountData($param);
             
-            \Yii::$app->Iugu->execute('createAccount', $data);
-            
-            $transaction->commit();
-            
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            throw $e;
-        }
-     
+            \Yii::$app->Iugu->execute('createCompanyAccount',[ 'data'=> $data,'model'=> $model, 'id'=> $id] );
         
-        if (!empty($_FILES['CB04_URL_LOGOMARCA']['name'])) {
-            
-            $infoFile = \Yii::$app->u->infoFile($_FILES['CB04_URL_LOGOMARCA']);
-            if($infoFile['family'] == 'image') {
-                $infoFile['path'] = 'img/fotos/estabelecimento/';
-                $infoFile['newName'] = uniqid("logo_" . $id . "_") . '.' . $infoFile['ex'];
-
-                $file = \yii\web\UploadedFile::getInstanceByName('CB04_URL_LOGOMARCA');
-                $pathCompleto = $infoFile['path'] . $infoFile['newName'];
-
-                if ($file->saveAs($pathCompleto)) {
-                    if(!empty($model->CB04_URL_LOGOMARCA)) {
-                        @unlink($model->CB04_URL_LOGOMARCA);
-                    }
-                    $model->setAttribute('CB04_URL_LOGOMARCA', $pathCompleto);
-                    $model->save();
-                }
-            }
-        }
-        
-        exit(json_encode(['message' => $id, 'status' => true]));
+       
     }
     
     

@@ -40,16 +40,44 @@ class IuguComponent extends PaymentBaseComponent {
         }
     }
     
- 
+   public function createCompanyAccount($dataApi) 
+   {
+       $data = $dataApi['data'];
+       $model = $dataApi['model'];
+       $id = $dataApi['id'];
+       
+       $this->_createAccount($data['cnpj']);
+       $this->verifyAccount($data);
+       
+        $model->CB04_DADOS_API_TOKEN = json_encode($this->lastResponse);
+        $model->CB04_COD_CONTA_VIRTUAL = $this->lastResponse->account_id;
+        $model->save();
+        
+       if (!empty($_FILES['CB04_URL_LOGOMARCA']['name'])) {
+            
+            $infoFile = \Yii::$app->u->infoFile($_FILES['CB04_URL_LOGOMARCA']);
+            if($infoFile['family'] == 'image') {
+                $infoFile['path'] = 'img/fotos/estabelecimento/';
+                $infoFile['newName'] = uniqid("logo_" . $id . "_") . '.' . $infoFile['ex'];
+
+                $file = \yii\web\UploadedFile::getInstanceByName('CB04_URL_LOGOMARCA');
+                $pathCompleto = $infoFile['path'] . $infoFile['newName'];
+
+                if ($file->saveAs($pathCompleto)) {
+                    if(!empty($model->CB04_URL_LOGOMARCA)) {
+                        @unlink($model->CB04_URL_LOGOMARCA);
+                    }
+                    $model->setAttribute('CB04_URL_LOGOMARCA', $pathCompleto);
+                    $model->save();
+                }
+            }
+        }
+       
+   }
     public function createAccount($accountName) 
     {   
     	$this->_createAccount($accountName);
-    	
-    	 if (strlen($accountName) == '18') {
-    		$this->verifyAccount($accountName);
-    	 }
     }
-    
     
     public function _createAccount($accountName) 
     {   
@@ -72,11 +100,11 @@ class IuguComponent extends PaymentBaseComponent {
             "automatic_transfer" => true,
          ];
 	       	
-        if (strlen($dataApi['CPF_CNPJ']) == '14') {
-                 $defaultPJ = [
-                    "person_type" => 'Pessoa Jurídica',
-                    "business_type" => "Serviços e produtos diversos",
-                 ];
+        if (isset($dataApi['cnpj'])) {
+            $defaultPJ = [
+               "person_type" => 'Pessoa Jurídica',
+               "business_type" => "Serviços e produtos diversos",
+            ];
 
             $dataApi = array_merge(array_merge($defaultPJ, $defaultData), $dataApi);
 
@@ -91,10 +119,10 @@ class IuguComponent extends PaymentBaseComponent {
         }
 
         \Iugu::setApiKey($this->lastResponse->user_token);
-
-       $this->lastResponse->errors = \Iugu_Account::requestVerification($dataApi, $this->lastResponse->account_id);  
+        $data['data'] = $dataApi;
+       $this->lastResponse = \Iugu_Account::requestVerification($data, $this->lastResponse->account_id);  
 	      
-        
+    
         if (isset($this->lastResponse->errors)) {
             throw new UserException("Erro ao Verificar conta");
         }

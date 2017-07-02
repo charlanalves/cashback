@@ -173,15 +173,15 @@ class CB04EMPRESA extends BaseCB04EMPRESA
 
     /**
      * @inheritdoc
-     * @return CB09FORMAPAGEMPRESAQuery the active query used by this AR class.
+     * @return CB09FORMAPAGTOEMPRESAQuery the active query used by this AR class.
      */
     public static function getFormaPagamento($id) {
         
-        $FP = CB09FORMAPAGEMPRESA::findBySql(
-                        "SELECT GROUP_CONCAT(CB09_FORMA_PAG_ID) AS FORMAPAGAMENTO
-                        FROM CB09_FORMA_PAG_EMPRESA
-                        WHERE CB09_EMPRESA_ID = " . $id . "
-                        GROUP BY CB09_EMPRESA_ID")->one();
+        $FP = CB09FORMAPAGTOEMPRESA::findBySql(
+                        "SELECT GROUP_CONCAT(CB09_ID_FORMA_PAG) AS FORMAPAGAMENTO
+                        FROM CB09_FORMA_PAGTO_EMPRESA
+                        WHERE CB09_ID_EMPRESA = " . $id . "
+                        GROUP BY CB09_ID_EMPRESA")->one();
         
         return (!empty($FP->FORMAPAGAMENTO)) ? explode(',', $FP->FORMAPAGAMENTO) : [];
     }
@@ -190,6 +190,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
             // dados do estabelecimento
             $this->setAttributes($data);
             $this->CB04_CNPJ = preg_replace("/[^0-9]/", "", $this->CB04_CNPJ);
+            $this->CB04_CONTA_VERIFICADA = 1;
             $this->save();
             // dados da forma de pagamento (exclui e cadastra)
             CB09FORMAPAGTOEMPRESA::deleteAll(['CB09_ID_EMPRESA' => $this->CB04_ID]);
