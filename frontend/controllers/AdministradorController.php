@@ -159,8 +159,8 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
 
         $dataCategoria = CB04EMPRESA::findCombo('CB10_CATEGORIA', 'CB10_ID', 'CB10_NOME', 'CB10_STATUS=1');
         $dataFormaPagamento = CB04EMPRESA::findCombo('CB08_FORMA_PAGAMENTO', 'CB08_ID', 'CB08_NOME', 'CB08_STATUS=1');
-        $limitFotos = SYS01PARAMETROSGLOBAIS::getValor(5); // limit de fotos da empresa
-        //  
+        $limitFotos = SYS01PARAMETROSGLOBAIS::getValor(5); // limit de fotos da empresa   
+        unset($dataEstabelecimento['CB04_DADOS_API_TOKEN']);
         return $this->render('empresaForm', [
                     'tituloTela' => 'Empresa',
                     'usuario' => $this->user->attributes,

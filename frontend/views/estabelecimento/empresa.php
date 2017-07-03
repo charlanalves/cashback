@@ -86,7 +86,7 @@ $this->title = '';
         FormEmpresa.addOptionsSelect('CB04_CATEGORIA_ID', categorias);
 
         // cria checkbox com as formas de pagamento
-        FormEmpresa.addCheckboxInLine("forma-pagamento", "FORMA-PAGAMENTO", formaPagamento);
+        //FormEmpresa.addCheckboxInLine("forma-pagamento", "FORMA-PAGAMENTO", formaPagamento);
 
         // Preenche o form com os dados da empresa
         FormEmpresa.setFormData(estabelecimento);
@@ -244,10 +244,10 @@ $this->title = '';
                         </div>
                     </fieldset>
 
-                    <fieldset>
+<!--                    <fieldset>
                         <h3>Formas de pagamento</h3>
                         <section id="forma-pagamento" class="padding-top-15"></section>
-                    </fieldset>
+                    </fieldset>-->
 
                     <fieldset>
                         <h3>Endereço</h3>
