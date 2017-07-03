@@ -209,16 +209,21 @@ class IuguComponent extends PaymentBaseComponent {
     	$cliente = new \common\models\CB02CLIENTE;
     	$cliente->setAttributes($atributos);
     	$cliente->save();
-    	
-        $atributos['id_cliente'] = $cliente->CB02_ID;
-        $atributos['name'] = $cliente->CB02_NOME;
-        $atributos['cpf_cnpj'] = $cliente->CB02_CPF_CNPJ;
-        $atributos['email'] = $cliente->CB02_EMAIL;
         
-        
-        $model = new \frontend\models\SignupForm();
-        $model->setAttributes($atributos);
-        $user = $model->signup();
+        $user = new \common\models\User;
+        $user->cpf_cnpj = $cliente->CB02_CPF_CNPJ;
+        $user->name = $cliente->CB02_NOME;       
+        $user->id_cliente = $cliente->CB02_ID;
+        $user->email = $cliente->CB02_EMAIL;
+        $user->username = $cliente->CB02_CPF_CNPJ;
+        $user->setPassword($atributos['password']);
+        $user->generateAuthKey();
+        $user->save();
+
+        $assignment = new \common\models\AuthAssignment;
+        $assignment->item_name = 'cliente';
+        $assignment->user_id = (string) $user->id;
+        $assignment->save();
         
         $this->createAccount($cliente->CB02_CPF_CNPJ);
          
