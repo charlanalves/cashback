@@ -33,6 +33,30 @@ public static function requestVerification($attributes=Array(), $idAccount)
     );
 
     return $response;
+}
+  
+public static function request_withdraw($attributes=Array(), $idAccount) 
+{
+    $response = 
+      self::API()->request(
+        "POST",
+        static::url($attributes).'/'.$idAccount.'/request_withdraw',
+        $attributes
+    );
+
+    return $response;
+  }
+  
+  public static function bank_verification($attributes) 
+{
+    $response = 
+      self::API()->request(
+        "POST",
+         'https://api.iugu.com/v1/bank_verification',
+        $attributes
+    );
+
+    return $response;
   }
 
 }

@@ -157,7 +157,25 @@ class CB16PEDIDO extends BaseCB16PEDIDO
         
     }
     
-	public static function getPedidoCompleto()
+    public static function getSaquesPendentes()
+    {
+        $sql = "
+            SELECT * FROM PAG04_TRANSFERENCIAS
+            JOIN user on user.id = PAG04_TRANSFERENCIAS.PAG04_ID_USER_CONTA_ORIGEM
+            JOIN CB03_CONTA_BANC ON CB03_CONTA_BANC.CB03_USER_ID = user.id
+            JOIN CB02_CLIENTE ON CB02_CLIENTE.CB02_ID = user.id_cliente
+            WHERE 
+            PAG04_TRANSFERENCIAS.PAG04_TIPO = 'V2B' AND
+            PAG04_TRANSFERENCIAS.PAG04_DT_DEP IS NULL AND
+            PAG04_TRANSFERENCIAS.PAG04_ID_PEDIDO IS NULL
+        ";
+        
+        $connection = \Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        return $command->query()->readAll();
+    }
+    
+    public static function getPedidoCompleto()
     {
         
         $sql = "

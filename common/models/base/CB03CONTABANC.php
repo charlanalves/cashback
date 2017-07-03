@@ -33,12 +33,12 @@ class CB03CONTABANC extends \common\models\GlobalModel
     public function rules()
     {
         return [
-           	[['CB03_NOME_BANCO', 'CB03_TP_CONTA', 'CB03_NUM_CONTA', 'CB03_AGENCIA', 'CB03_USER_ID', 'CB03_SAQUE_MIN', 'CB03_SAQUE_MAX'], 'required'],
+           [['CB03_NOME_BANCO', 'CB03_TP_CONTA', 'CB03_NUM_CONTA', 'CB03_AGENCIA', 'CB03_USER_ID', 'CB03_SAQUE_MIN', 'CB03_SAQUE_MAX'], 'required'],
             [['CB03_TP_CONTA', 'CB03_STATUS', 'CB03_USER_ID'], 'integer'],
             [['CB03_VALOR', 'CB03_SAQUE_MIN', 'CB03_SAQUE_MAX'], 'number'],
             [['CB03_COD_BANCO'], 'string', 'max' => 10],
             [['CB03_NOME_BANCO'], 'string', 'max' => 50],
-            [['CB03_AGENCIA'], 'string', 'max' => 5],
+            
             
             
         ];
