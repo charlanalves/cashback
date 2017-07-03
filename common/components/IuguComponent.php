@@ -40,20 +40,16 @@ class IuguComponent extends PaymentBaseComponent {
         }
     }
     
-   public function createCompanyAccount($dataApi) 
-   {
-       $data = $dataApi['data'];
-       $model = $dataApi['model'];
-       $id = $dataApi['id'];
-       
-       $this->_createAccount($data['cnpj']);
-       $this->verifyAccount($data);
-       
+    private function saveApiCod($model) 
+    {
         $model->CB04_DADOS_API_TOKEN = json_encode($this->lastResponse);
         $model->CB04_COD_CONTA_VIRTUAL = $this->lastResponse->account_id;
         $model->save();
-        
-       if (!empty($_FILES['CB04_URL_LOGOMARCA']['name'])) {
+    }
+    
+    private function saveCompanyLogo($model, $id)
+    {
+         if (!empty($_FILES['CB04_URL_LOGOMARCA']['name'])) {
             
             $infoFile = \Yii::$app->u->infoFile($_FILES['CB04_URL_LOGOMARCA']);
             if($infoFile['family'] == 'image') {
@@ -72,7 +68,37 @@ class IuguComponent extends PaymentBaseComponent {
                 }
             }
         }
+    }
+    private function createCompanyUser($empresa)
+    {        
+        $user = new \common\models\User;
+        $user->cpf_cnpj = $empresa->CB04_CNPJ;
+        $user->name = $empresa->CB04_NOME;
+        $user->user_principal = 1;
+        $user->id_company = $empresa->CB04_ID;
+        $user->email = $empresa->CB04_EMAIL;
+        $user->username = $empresa->CB04_CNPJ;
+        $user->setPassword(123456);
+        $user->generateAuthKey();
+        $user->save();
+
+        $assignment = new \common\models\AuthAssignment;
+        $assignment->item_name = 'estabelecimento';
+        $assignment->user_id = (string) $user->id;
+        $assignment->save();
+    }
+    
+   public function createCompanyAccount($dataApi) 
+   {
+       $data = $dataApi['data'];
+       $model = $dataApi['model'];
+       $id = $dataApi['id'];
        
+       $this->_createAccount($data['cnpj']);
+       $this->verifyAccount($data);
+       $this->saveApiCod($model);
+       $this->saveCompanyLogo($model, $id);
+       $this->createCompanyUser($model);
    }
     public function createAccount($accountName) 
     {   
@@ -210,6 +236,8 @@ class IuguComponent extends PaymentBaseComponent {
         
     }
     
+    
+   
     public function fetchUpdateDtDepInvoice(array $invoices) 
     {
     	foreach($invoices as $key => $invoice){

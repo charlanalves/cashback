@@ -40,6 +40,11 @@
                                     <input type="number" name="CB04_CNPJ" placeholder="">
                                 </label>
                             </section>
+                             <section class="col col-6"><?= $al['CB04_EMAIL'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
+                                    <input type="email" name="CB04_EMAIL" placeholder="">
+                                </label>
+                            </section>
                              <section class="col col-6"><?= $al['CB04_TEL_NUMERO'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
                                     <input type="number" name="CB04_TEL_NUMERO" placeholder="">
