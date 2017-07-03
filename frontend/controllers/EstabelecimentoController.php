@@ -139,7 +139,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         
         $dataEstabelecimento['CB04_FUNCIONAMENTO'] = str_replace("\r\n", '\r\n', $dataEstabelecimento['CB04_FUNCIONAMENTO']);
         $dataEstabelecimento['CB04_OBSERVACAO'] = str_replace("\r\n", '\r\n', $dataEstabelecimento['CB04_OBSERVACAO']);
-
+        unset($dataEstabelecimento['CB04_DADOS_API_TOKEN']);
         return $this->render('empresa', [
                     'tituloTela' => 'Empresa',
                     'usuario' => $this->user->attributes,

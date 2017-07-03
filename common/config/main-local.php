@@ -7,8 +7,8 @@ return [
             'username' => 'root',
             'password' => '6%)DT3y_dV,(',
             'charset' => 'utf8',
-        ],/*
-        'db' => [
+        ],
+		 /*'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=52.67.208.141;dbname=estalecasdev',
             'username' => 'root',

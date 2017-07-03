@@ -40,16 +40,70 @@ class IuguComponent extends PaymentBaseComponent {
         }
     }
     
- 
+    private function saveApiCod($model) 
+    {
+        $model->CB04_DADOS_API_TOKEN = json_encode($this->lastResponse);
+        $model->CB04_COD_CONTA_VIRTUAL = $this->lastResponse->account_id;
+        $model->save();
+    }
+    
+    private function saveCompanyLogo($model, $id)
+    {
+         if (!empty($_FILES['CB04_URL_LOGOMARCA']['name'])) {
+            
+            $infoFile = \Yii::$app->u->infoFile($_FILES['CB04_URL_LOGOMARCA']);
+            if($infoFile['family'] == 'image') {
+                $infoFile['path'] = 'img/fotos/estabelecimento/';
+                $infoFile['newName'] = uniqid("logo_" . $id . "_") . '.' . $infoFile['ex'];
+
+                $file = \yii\web\UploadedFile::getInstanceByName('CB04_URL_LOGOMARCA');
+                $pathCompleto = $infoFile['path'] . $infoFile['newName'];
+
+                if ($file->saveAs($pathCompleto)) {
+                    if(!empty($model->CB04_URL_LOGOMARCA)) {
+                        @unlink($model->CB04_URL_LOGOMARCA);
+                    }
+                    $model->setAttribute('CB04_URL_LOGOMARCA', $pathCompleto);
+                    $model->save();
+                }
+            }
+        }
+    }
+    private function createCompanyUser($empresa)
+    {        
+        $user = new \common\models\User;
+        $user->cpf_cnpj = $empresa->CB04_CNPJ;
+        $user->name = $empresa->CB04_NOME;
+        $user->user_principal = 1;
+        $user->id_company = $empresa->CB04_ID;
+        $user->email = $empresa->CB04_EMAIL;
+        $user->username = $empresa->CB04_CNPJ;
+        $user->setPassword(123456);
+        $user->generateAuthKey();
+        $user->save();
+
+        $assignment = new \common\models\AuthAssignment;
+        $assignment->item_name = 'estabelecimento';
+        $assignment->user_id = (string) $user->id;
+        $assignment->save();
+    }
+    
+   public function createCompanyAccount($dataApi) 
+   {
+       $data = $dataApi['data'];
+       $model = $dataApi['model'];
+       $id = $dataApi['id'];
+       
+       $this->_createAccount($data['cnpj']);
+       $this->verifyAccount($data);
+       $this->saveApiCod($model);
+       $this->saveCompanyLogo($model, $id);
+       $this->createCompanyUser($model);
+   }
     public function createAccount($accountName) 
     {   
     	$this->_createAccount($accountName);
-    	
-    	 if (strlen($accountName) == '18') {
-    		$this->verifyAccount($accountName);
-    	 }
     }
-    
     
     public function _createAccount($accountName) 
     {   
@@ -72,11 +126,11 @@ class IuguComponent extends PaymentBaseComponent {
             "automatic_transfer" => true,
          ];
 	       	
-        if (strlen($dataApi['CPF_CNPJ']) == '14') {
-                 $defaultPJ = [
-                    "person_type" => 'Pessoa Jurídica',
-                    "business_type" => "Serviços e produtos diversos",
-                 ];
+        if (isset($dataApi['cnpj'])) {
+            $defaultPJ = [
+               "person_type" => 'Pessoa Jurídica',
+               "business_type" => "Serviços e produtos diversos",
+            ];
 
             $dataApi = array_merge(array_merge($defaultPJ, $defaultData), $dataApi);
 
@@ -91,10 +145,10 @@ class IuguComponent extends PaymentBaseComponent {
         }
 
         \Iugu::setApiKey($this->lastResponse->user_token);
-
-       $this->lastResponse->errors = \Iugu_Account::requestVerification($dataApi, $this->lastResponse->account_id);  
+        $data['data'] = $dataApi;
+       $this->lastResponse = \Iugu_Account::requestVerification($data, $this->lastResponse->account_id);  
 	      
-        
+    
         if (isset($this->lastResponse->errors)) {
             throw new UserException("Erro ao Verificar conta");
         }
@@ -155,16 +209,21 @@ class IuguComponent extends PaymentBaseComponent {
     	$cliente = new \common\models\CB02CLIENTE;
     	$cliente->setAttributes($atributos);
     	$cliente->save();
-    	
-        $atributos['id_cliente'] = $cliente->CB02_ID;
-        $atributos['name'] = $cliente->CB02_NOME;
-        $atributos['cpf_cnpj'] = $cliente->CB02_CPF_CNPJ;
-        $atributos['email'] = $cliente->CB02_EMAIL;
         
-        
-        $model = new \frontend\models\SignupForm();
-        $model->setAttributes($atributos);
-        $user = $model->signup();
+        $user = new \common\models\User;
+        $user->cpf_cnpj = $cliente->CB02_CPF_CNPJ;
+        $user->name = $cliente->CB02_NOME;       
+        $user->id_cliente = $cliente->CB02_ID;
+        $user->email = $cliente->CB02_EMAIL;
+        $user->username = $cliente->CB02_CPF_CNPJ;
+        $user->setPassword($atributos['password']);
+        $user->generateAuthKey();
+        $user->save();
+
+        $assignment = new \common\models\AuthAssignment;
+        $assignment->item_name = 'cliente';
+        $assignment->user_id = (string) $user->id;
+        $assignment->save();
         
         $this->createAccount($cliente->CB02_CPF_CNPJ);
          
@@ -182,6 +241,8 @@ class IuguComponent extends PaymentBaseComponent {
         
     }
     
+    
+   
     public function fetchUpdateDtDepInvoice(array $invoices) 
     {
     	foreach($invoices as $key => $invoice){

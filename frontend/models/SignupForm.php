@@ -19,6 +19,7 @@ class SignupForm extends \common\models\GlobalModel {
     public $email;
     public $password;
     public $id_indicacao = null;
+    public $id_company;
     
     public $item_name = 'cliente';
 
@@ -27,7 +28,7 @@ class SignupForm extends \common\models\GlobalModel {
      */
     public function rules() {
         return [
-            ['cpf_or_cnpj', 'safe'],
+            ['cpf_or_cnpj','id_company', 'safe'],
             
             ['name', 'trim'],
             ['name', 'required'],
@@ -64,6 +65,9 @@ class SignupForm extends \common\models\GlobalModel {
         $user = new User();
         $user->cpf_cnpj = $this->cpf_cnpj;
         $user->name = $this->name;
+        if(!empty($this->id_company)){
+            $user->id_company = $this->id_company;
+        }  
         $user->email = $this->email;
         $user->username = $this->cpf_cnpj;
         $user->id_indicacao = $this->id_indicacao;

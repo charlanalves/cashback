@@ -277,20 +277,20 @@ class ApiEmpresaController extends GlobalBaseController {
                 $saqueMax = (float) $saldoAtual;
                 $saqueMin = (float) SYS01PARAMETROSGLOBAIS::getValor('2');
 
-                $contaBancariaCliente = CB03CONTABANC::findOne(['CB03_CLIENTE_ID' => $idUser]);
+                $contaBancariaCliente = CB03CONTABANC::findOne(['CB03_USER_ID' => $idUser]);
                 $dadosSaque = ($contaBancariaCliente) ? : new CB03CONTABANC();
                 $dadosSaque->setAttribute('CB03_VALOR', '');
 
                 $dadosSaque->scenario = 'saque';
                 
                 if (!$formData) {
-                    $dadosSaque->setAttribute('CB03_CLIENTE_ID', $idUser);
+                    $dadosSaque->setAttribute('CB03_USER_ID', $idUser);
                     $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
                     $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
 
                 } else {
                     $dadosSaque->setAttributes($formData);
-                    $dadosSaque->setAttribute('CB03_CLIENTE_ID', $idUser);
+                    $dadosSaque->setAttribute('CB03_USER_ID', $idUser);
                     $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
                     $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
 
