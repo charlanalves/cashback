@@ -27,11 +27,11 @@ class VIEWSEARCH extends \common\models\GlobalModel
     {
         return [
             [['EMPRESA_ID'], 'integer'],
+            [['CATEGORIA_ID'], 'integer'],
+            [['CATEGORIA_NOME'], 'string'],
             [['EMPRESA_NOME', 'BUSCA_TEXTO'], 'string', 'max' => 50],
             [['TIPO'], 'string', 'max' => 7],
             [['IMG'], 'string', 'max' => 100],
-            
-            
         ];
     }
     
@@ -50,9 +50,11 @@ class VIEWSEARCH extends \common\models\GlobalModel
     public function attributeLabels()
     {
         return [
-            'EMPRESA_ID' => 'Empresa  ID',
-            'EMPRESA_NOME' => 'Empresa  Nome',
-            'BUSCA_TEXTO' => 'Busca  Texto',
+            'EMPRESA_ID' => 'Empresa ID',
+            'CATEGORIA_ID' => 'Categoria ID',
+            'CATEGORIA_NOME' => 'Categoria Nome',
+            'EMPRESA_NOME' => 'Empresa Nome',
+            'BUSCA_TEXTO' => 'Busca Texto',
             'TIPO' => 'Tipo',
             'IMG' => 'Img',
         ];

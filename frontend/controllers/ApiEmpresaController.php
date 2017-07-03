@@ -218,11 +218,32 @@ class ApiEmpresaController extends GlobalBaseController {
     
     
     /**
+     * Lista promocoes por categoria
+     */
+    public function actionPromotionsByCategory() {
+        if ( ($param = \Yii::$app->request->post('param')) ) {
+            return json_encode(['category' => CB10CATEGORIA::findOne($param)->CB10_NOME, 'result' => VIEWSEARCH::getPromotionsByCategory($param)]);
+        } else {
+            return "{}";
+        }
+    }
+    
+    
+    /**
      * Categorias do filtro
      */
     public function actionFilterCategory() {
-        $CB10CATEGORIA = CB10CATEGORIA::find()->asArray()->all();
+        $CB10CATEGORIA = CB10CATEGORIA::find()->where(['CB10_STATUS' => 1])->asArray()->all();
         return json_encode($CB10CATEGORIA);
+    }
+    
+    
+    /**
+     * Categorias
+     */
+    public function actionCategory() {
+        $CB10CATEGORIA = CB10CATEGORIA::getMaxCachback();
+        return json_encode(['categoria' => $CB10CATEGORIA, 'saldo' => $this->getSaldoAtual(\Yii::$app->request->post('user_auth_key'))]);
     }
     
     
