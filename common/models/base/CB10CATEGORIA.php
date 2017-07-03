@@ -29,8 +29,8 @@ class CB10CATEGORIA extends \common\models\GlobalModel
         return [
             [['CB10_NOME'], 'required'],
             [['CB10_STATUS'], 'integer'],
-            [['CB10_NOME'], 'string', 'max' => 30],
-            
+            [['CB10_NOME'], 'string', 'max' => 30],            
+            [['CB10_ICO'], 'string', 'max' => 200],
             
         ];
     }
@@ -54,6 +54,7 @@ class CB10CATEGORIA extends \common\models\GlobalModel
             'CB10_ID' => 'Cb10  ID',
             'CB10_NOME' => 'Cb10  Nome',
             'CB10_STATUS' => 'Cb10  Status',
+            'CB10_ICO' => 'Icone',
         ];
     }
     

@@ -10,7 +10,7 @@ return [
         ],
 		 /*'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=estalecasdev',
+            'dsn' => 'mysql:host=52.67.208.141;dbname=estalecasdev',
             'username' => 'root',
             'password' => '@by02016Abio#',
             'charset' => 'utf8',
