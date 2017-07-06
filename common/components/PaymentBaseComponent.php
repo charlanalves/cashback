@@ -110,6 +110,7 @@ abstract class PaymentBaseComponent extends Component {
     }
     
 
+   
     public function criaTransferencias($params) 
     {   
         if (($pedidos = \common\models\CB16PEDIDO::getPedidoCompleto())) {
@@ -151,53 +152,9 @@ abstract class PaymentBaseComponent extends Component {
                 
             }
         }
-        
     }
     
-    public function criaTransferenciaPagSaldo($pedido) 
-    {   
-
-        if (($pedidos = \common\models\CB16PEDIDO::getPedidoCompletoByPedido($pedido))) {
-
-            $this->transaction = \Yii::$app->db->beginTransaction();
-            
-            foreach ($pedidos as $pedido) {
-
-                $idCliente = $pedido['ID_USER_CLIENTE'];
-                $idEmpresa = $pedido['ID_USER_EMPRESA'];
-                $idPedido = $pedido['CB16_ID'];
-                $vlrPedido = $pedido['CB16_VALOR'];
-                $vlrCliente = floor($pedido['CB16_VLR_CB_TOTAL'] * 100) / 100;
-                $vlrAdmin = floor((($pedido['CB16_PERC_ADMIN']/100) * $pedido['CB16_VALOR']) * 100) / 100;
-                $vlrAdq = floor((($pedido['CB16_PERC_ADQ']/100) * $pedido['CB16_VALOR']) * 100) / 100;
-                $dtPrevisao = $this->getDtPrevisao($pedido['CB08_PRAZO_DIAS_RECEBIMENTO'], $pedido['CB16_DT_APROVACAO']);
-
-                $trans = new \common\models\PAG04TRANSFERENCIAS; 
-
-                // TRANSFÊNCIA CLIENTE TO EMPRESA
-                $trans->createC2E($idCliente, $idEmpresa, $vlrPedido, $idPedido);
-
-                // TRANSFÊNCIA MASTER TO CLIENTE
-                $trans->createM2C($idCliente, $vlrCliente, $idPedido);
-
-                // TRANSFÊNCIA EMPRESA TO MASTER
-                $trans->createE2M($idEmpresa, $vlrCliente, $dtPrevisao, $idPedido);
-
-                // TRANSFÊNCIA EMPRESA TO ADMIN
-                $trans->createE2ADM($idEmpresa, $vlrAdmin, $dtPrevisao, $idPedido);
-
-                // TRANSFÊNCIA EMPRESA TO ADQ
-                $trans->createE2ADQ($idEmpresa, $vlrAdq, $dtPrevisao, $idPedido);
-
-                $pedido = \common\models\CB16PEDIDO::findOne($idPedido);
-                $pedido->CB16_TRANS_CRIADAS = 1;
-                $pedido->CB16_STATUS = \common\models\CB16PEDIDO::status_pago;
-                $pedido->save();
-
-            }
-        }
-    
-    }
+   
     
     public function saveAttempt($idPedido, $status = 0)
     { 

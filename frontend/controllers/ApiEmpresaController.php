@@ -289,9 +289,14 @@ class ApiEmpresaController extends GlobalBaseController {
                     $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
 
                 } else {
+                    $formData['CB03_NOME_BANCO'] = 'Itaú';
+                    $formData['CB03_AGENCIA'] = '0925';
+                    $formData['CB03_NUM_CONTA'] = '02159-4';
+                    $formData['CB03_TP_CONTA'] = 0;
+                    $formData['CB03_VALOR'] = 10 ;
                     $dadosSaque->setAttributes($formData);
                     $dadosSaque->setAttribute('CB03_USER_ID', $idUser);
-                    $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
+                    $dadosSaque->setAttribute('CB03_SAQUE_MIN', 5);
                     $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
 
                     if ($dadosSaque->validate()) {
@@ -305,10 +310,9 @@ class ApiEmpresaController extends GlobalBaseController {
                             $PAG04TRANSFERENCIAS = new PAG04TRANSFERENCIAS();
                             $PAG04TRANSFERENCIAS->setAttributes([
                                 'PAG04_ID_USER_CONTA_ORIGEM' => $idUser,
-                                'PAG04_ID_USER_CONTA_DESTINO' => $idUser,
                                 'PAG04_DT_PREV' => date('Y-m-d', strtotime("+" . SYS01PARAMETROSGLOBAIS::getValor('PO_SQ') ." days", strtotime(date('Y-m-d')))),
                                 'PAG04_VLR' => $dadosSaque->CB03_VALOR,
-                                'PAG04_TIPO' => 'M2SC',
+                                'PAG04_TIPO' => 'V2B',
                             ]);
                             $PAG04TRANSFERENCIAS->save();
 
