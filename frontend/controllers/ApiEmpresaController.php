@@ -612,7 +612,10 @@ class ApiEmpresaController extends GlobalBaseController {
             ->asArray()
             ->all();
         
-        return json_encode(['IMG' => $imagens, 'PRODUTO' => $post['product']]);
+        // produtos da empresa
+        $CB05_TITULO = CB05PRODUTO::findOne($post['product'])->CB05_TITULO;
+        
+        return json_encode(['IMG' => $imagens, 'PRODUTO' => $post['product'], 'TITULO' => $CB05_TITULO]);
     }
     
     
