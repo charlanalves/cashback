@@ -208,6 +208,13 @@ class ApiEmpresaController extends GlobalBaseController {
      * Pesquisa
      */
     public function actionSearch() {
+        if ( ($param = \Yii::$app->request->post('param')) ) {
+            return json_encode(VIEWSEARCH::getBuscaProduto($param));
+        } else {
+            return "{}";
+        }
+
+        
         $retorno = "{}";
         if ( ($param = \Yii::$app->request->post('param')) ) {
             $VIEWSEARCH = VIEWSEARCH::find()->where(['like', 'BUSCA_TEXTO', $param])->asArray()->all();
@@ -617,9 +624,9 @@ class ApiEmpresaController extends GlobalBaseController {
             ->all();
         
         // produtos da empresa
-        $CB05_TITULO = CB05PRODUTO::findOne($post['product'])->CB05_TITULO;
+        $PRODUTO_DATA = CB05PRODUTO::getProduto($post['product']);
         
-        return json_encode(['IMG' => $imagens, 'PRODUTO' => $post['product'], 'TITULO' => $CB05_TITULO]);
+        return json_encode(['IMG' => $imagens, 'PRODUTO' => $post['product'], 'PRODUTO_DATA' => $PRODUTO_DATA]);
     }
     
     
