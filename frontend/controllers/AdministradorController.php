@@ -221,7 +221,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
 	    ];
     }
     
- 	private function saveContaBancaria($param)
+    private function saveContaBancaria($param)
     {	 
 	   $conta = new CB03CONTABANC;
 	   $param['CB03_USER_ID'] = \Yii::$app->user->identity->id;

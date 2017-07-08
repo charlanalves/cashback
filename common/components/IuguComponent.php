@@ -15,7 +15,7 @@ class IuguComponent extends PaymentBaseComponent {
     const STATUS_PAID = 'paid';
     const apiTokenProd = '19f75e24d08d0dd3d01db446299a4ba6';
     const apiTokenTest = '67dfbb3560a62cb5cee9ca8730737a98';
-    
+    const status_request_accepted = 'accepted';
     
     protected function initialize()
     {
@@ -159,7 +159,9 @@ class IuguComponent extends PaymentBaseComponent {
     
     public function verifyClientAccount($param)
     {
-       $data = [
+        try {
+            
+        $data = [
                 "data" =>
                 [
                     "price_range" => "Mais que R$ 500,00",
@@ -167,49 +169,47 @@ class IuguComponent extends PaymentBaseComponent {
                     "business_type" => "Cliente CashBack",
                     "automatic_transfer" => true,
                     "person_type" => 'Pessoa Física',
-                    "cpf" => '09480912660',
+                    "cpf" => $param['CB02_CPF_CNPJ'],
                     "name" => $param['CB02_NOME'], 
                     "address" => 'Rua inexisteste', 
                     "cep"=> '31650-000',  
                     "city" => 'BH', 
                     "state" => 'MG', 
                     "telephone" => '31999999999', 
-                    "bank" => 'Itaú', 
+                    "bank" => $param['CB03_NOME_BANCO'], 
                     "bank_ag" => $param['CB03_AGENCIA'], 
                     "account_type" => ($param['CB03_TP_CONTA']) ? 'Poupança': 'Corrente', 
                     "bank_cc" => $param['CB03_NUM_CONTA']
                ]
 	    ];  
-       $data2 = [
-                  
-                    "bank" => 'Itaú', 
-                    "bank_ag" => '0925', 
-                    "bank_cc" => '02159-4',
-                    "account_type" => ($param['CB03_TP_CONTA']) ? 'cp': 'cc', 
-                    "automatic_validation" => true
-	    ];  
+
        
          $token = json_decode($param['CB02_DADOS_API_TOKEN']);
          \Iugu::setApiKey($token->user_token);
-         $this->lastResponse = \Iugu_Account::bank_verification($data2);  
+         $this->lastResponse = \Iugu_Account::fetch($token->account_id);  
          
          if (isset($this->lastResponse->last_verification_request_status)){
-            if ($this->lastResponse->last_verification_request_status != 'pending') {
-                 $this->lastResponse = \Iugu_Account::requestVerification($data, $token->account_id);  
-                  
-                   if (isset($this->lastResponse->errors)) {
-                        throw new UserException("Erro ao Verificar a conta.");
-                   }
-                   
-                   $trans = \common\models\PAG04TRANSFERENCIAS::findOne($param['PAG04_ID']);
-                   $trans->PAG04_DT_DEP = date('Y-m-d H:i:s');
-                   $trans->save();
-            }
              
+            if ($this->lastResponse->last_verification_request_status == self::status_request_accepted) {
+             
+                $this->doTranfer($param['PAG04_VLR'] , $token->account_id);
+                   
+                $trans = \common\models\PAG04TRANSFERENCIAS::findOne($param['PAG04_ID']);
+                $trans->PAG04_DT_DEP = date('Y-m-d H:i:s');
+                $trans->save();
+                
+            } else {
+                $this->lastResponse = \Iugu_Account::requestVerification($data, $token->account_id);  
+                   
+                if (isset($this->lastResponse->errors)) {
+                     throw new UserException("Erro ao Verificar a conta.");
+                }
+            }
          }
-         
-        
-        
+         } catch (\Exception $ex) {
+            
+        }
+
     }
     
     
@@ -318,7 +318,6 @@ class IuguComponent extends PaymentBaseComponent {
 
                 $token = json_decode($sp['CB02_DADOS_API_TOKEN']);
                 $this->verifyClientAccount($sp);
-                $this->doTranfer($sp['PAG04_VLR'], $token->account_id);
             }
         }
     
