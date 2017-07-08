@@ -213,14 +213,6 @@ class ApiEmpresaController extends GlobalBaseController {
         } else {
             return "{}";
         }
-
-        
-        $retorno = "{}";
-        if ( ($param = \Yii::$app->request->post('param')) ) {
-            $VIEWSEARCH = VIEWSEARCH::find()->where(['like', 'BUSCA_TEXTO', $param])->asArray()->all();
-            return json_encode($VIEWSEARCH);
-        }
-        return $retorno;
     }
     
     
