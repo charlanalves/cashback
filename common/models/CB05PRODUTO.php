@@ -29,6 +29,16 @@ class CB05PRODUTO extends BaseCB05PRODUTO
         ]);
     }
     
+  public static function getProduto($id) {
+        $sql = "SELECT *
+                FROM CB05_PRODUTO
+                INNER JOIN CB04_EMPRESA ON (CB04_ID = CB05_EMPRESA_ID)
+                WHERE CB05_ID = :id";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':id', $id);
+        return $command->queryOne();        
+    }
+    
   public static function getItem($id) {
         return explode(',', (($item = CB12ITEMCATEGEMPRESA::findBySql(
                         "SELECT GROUP_CONCAT(CB12_ITEM_ID) AS ITEM
