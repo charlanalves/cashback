@@ -43,7 +43,7 @@ class VIEWSEARCH extends BaseVIEWSEARCH
     public static function getBuscaProduto($param)
     {
         $texto = $param['texto'];
-        $limite = $param['limite'];
+        $limite = (!empty($param['limite'])) ? $param['limite'] : '0';
         $sql = "SELECT 
                     MIN(MIN_PRECO.CB06_PRECO_PROMOCIONAL) AS MIN_PRECO, 
                     MAX(MAX_CB.CB06_DINHEIRO_VOLTA) AS MAX_CB, 
