@@ -635,7 +635,7 @@ $idUser = 1;
             ->asArray()
             ->all();
         
-        return json_encode(['PROMOCOES' => $promocoes, 'PRODUTO' => $post['product']]);
+        return json_encode(['PROMOCOES' => $promocoes, 'PRODUTO' => $post['product'], 'PROMOCAO_SELECIONADA' => (!empty($post['promotion'])) ? $post['promotion']: false]);
     }
     
     
