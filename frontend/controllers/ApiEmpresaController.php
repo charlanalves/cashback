@@ -537,6 +537,7 @@ $idUser = 1;
                     }
                     
                     $transaction->commit();
+                    \Yii::$app->Iugu->execute('criaTransferencias', ['pedido' => '']);
                     $status = true;
                     $retorno = '';
                     
