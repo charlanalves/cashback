@@ -1,20 +1,20 @@
 <?php
 return [
     'components' => [
-        'db' => [
+     /*   'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=34.206.36.55;dbname=estalecasdev',
             'username' => 'root',
             'password' => '6%)DT3y_dV,(',
             'charset' => 'utf8',
-        ],
-		 /*'db' => [
+        ],*/
+        'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=52.67.208.141;dbname=estalecasdev',
+            'dsn' => 'mysql:host=localhost;dbname=estalecasdev',
             'username' => 'root',
             'password' => '@by02016Abio#',
             'charset' => 'utf8',
-        ],*/
+        ],
         'mail' => [
          'class' => 'yii\swiftmailer\Mailer',
          'transport' => [
