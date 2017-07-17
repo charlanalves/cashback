@@ -1,27 +1,30 @@
 <?php
 return [
     'components' => [
-        'db' => [
+     /*   'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=34.206.36.55;dbname=estalecasdev',
             'username' => 'root',
             'password' => '6%)DT3y_dV,(',
             'charset' => 'utf8',
-        ],
-		 /*'db' => [
+        ],*/
+        'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=52.67.208.141;dbname=estalecasdev',
+            'dsn' => 'mysql:host=localhost;dbname=estalecasdev',
             'username' => 'root',
             'password' => '@by02016Abio#',
             'charset' => 'utf8',
-        ],*/
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@common/mail',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
+        ],
+        'mail' => [
+         'class' => 'yii\swiftmailer\Mailer',
+         'transport' => [
+            'class' => 'Swift_SmtpTransport',
+             'host' => 'smtp.sendgrid.net',  // e.g. smtp.mandrillapp.com or smtp.gmail.com
+             'username' => 'apikey',
+             'password' => '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',
+             'port' => '587', // Port 25 is a very common port too
+             'encryption' => 'tls', // It is often used, check your provider or mail server specs
+         ],
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
