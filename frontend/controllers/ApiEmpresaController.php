@@ -267,13 +267,13 @@ class ApiEmpresaController extends GlobalBaseController {
         $saque_realizado = false;
         $formData = \Yii::$app->request->post();
         
-        if (($user = $formData['user_auth_key'])|| 1==1) {
+        if (($user = $formData['user_auth_key'])) {
             
             unset($formData['user_auth_key']);
-            if ( 1==1) {
-$idUser = 1;
+            if (($idUser = User::getIdByAuthKey($user))) {
+
                 $saldoAtual = $this->getSaldoAtual($idUser);
-                $saqueMax = (float) 5000;
+                $saqueMax = (float) $saldoAtual;
                 $saqueMin = (float) SYS01PARAMETROSGLOBAIS::getValor('2');
                 $regras = SYS01PARAMETROSGLOBAIS::getValor('SQ_REGR');
 
@@ -285,8 +285,8 @@ $idUser = 1;
                 
                 if (!$formData) {
                     $dadosSaque->setAttribute('CB03_USER_ID', $idUser);
-                    $dadosSaque->setAttribute('CB03_SAQUE_MIN', 5);
-                    $dadosSaque->setAttribute('CB03_SAQUE_MAX', 5);
+                    $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
+                    $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
 
                 } else {
                     $dadosSaque->setAttributes($formData);
