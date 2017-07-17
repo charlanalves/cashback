@@ -20,7 +20,7 @@ class CB03CONTABANC extends BaseCB03CONTABANC
     public function rules()
     {
         return [
-            [['CB03_NOME_BANCO', 'CB03_TP_CONTA', 'CB03_NUM_CONTA', 'CB03_AGENCIA', 'CB03_USER_ID', 'CB03_SAQUE_MIN', 'CB03_SAQUE_MAX'], 'required'],
+            [['CB03_NOME_BANCO', 'CB03_TP_CONTA', 'CB03_NUM_CONTA', 'CB03_AGENCIA', 'CB03_USER_ID', 'CB03_SAQUE_MIN', 'CB03_SAQUE_MAX', 'CB03_COD_BANCO'], 'required'],
             [['CB03_TP_CONTA', 'CB03_STATUS', 'CB03_USER_ID'], 'integer'],
             [['CB03_VALOR', 'CB03_SAQUE_MIN', 'CB03_SAQUE_MAX'], 'number'],
             [['CB03_COD_BANCO'], 'string', 'max' => 10],
@@ -34,7 +34,7 @@ class CB03CONTABANC extends BaseCB03CONTABANC
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_SAQUE] = ['CB03_USER_ID', 'CB03_AGENCIA', 'CB03_TP_CONTA', 'CB03_NUM_CONTA', 'CB03_VALOR'];
+        $scenarios[self::SCENARIO_SAQUE] = ['CB03_USER_ID', 'CB03_NOME_BANCO', 'CB03_COD_BANCO', 'CB03_AGENCIA', 'CB03_TP_CONTA', 'CB03_NUM_CONTA', 'CB03_VALOR'];
         return $scenarios;        
     }
 

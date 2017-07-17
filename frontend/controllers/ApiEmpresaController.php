@@ -275,11 +275,12 @@ class ApiEmpresaController extends GlobalBaseController {
                 $saldoAtual = $this->getSaldoAtual($idUser);
                 $saqueMax = (float) $saldoAtual;
                 $saqueMin = (float) SYS01PARAMETROSGLOBAIS::getValor('2');
+                $regras = SYS01PARAMETROSGLOBAIS::getValor('SQ_REGR');
 
                 $contaBancariaCliente = CB03CONTABANC::findOne(['CB03_USER_ID' => $idUser]);
                 $dadosSaque = ($contaBancariaCliente) ? : new CB03CONTABANC();
                 $dadosSaque->setAttribute('CB03_VALOR', '');
-
+                
                 $dadosSaque->scenario = 'saque';
                 
                 if (!$formData) {
@@ -288,16 +289,11 @@ class ApiEmpresaController extends GlobalBaseController {
                     $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
 
                 } else {
-                    $formData['CB03_NOME_BANCO'] = 'Itaú';
-                    $formData['CB03_AGENCIA'] = '0925';
-                    $formData['CB03_NUM_CONTA'] = '02159-4';
-                    $formData['CB03_TP_CONTA'] = 0;
-                    $formData['CB03_VALOR'] = 10 ;
                     $dadosSaque->setAttributes($formData);
                     $dadosSaque->setAttribute('CB03_USER_ID', $idUser);
-                    $dadosSaque->setAttribute('CB03_SAQUE_MIN', 5);
+                    $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
                     $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
-
+                            
                     if ($dadosSaque->validate()) {
                     
                         $transaction = \Yii::$app->db->beginTransaction();
@@ -315,8 +311,8 @@ class ApiEmpresaController extends GlobalBaseController {
                             ]);
                             $PAG04TRANSFERENCIAS->save();
 
-                            $transaction->commit();
                             $saque_realizado = true;
+                            $transaction->commit();
 
                         } catch (\Exception $exc) {
                             $transaction->rollBack();
@@ -336,10 +332,35 @@ class ApiEmpresaController extends GlobalBaseController {
             'bancos' => \Yii::$app->u->getBancos(),
             'tp_conta' => \Yii::$app->u->getTipoContaBancaria(),
             'conta_bancaria' => $dadosSaque->getAttributes(),
-            'error' => ($dadosSaque->getErrors() ? : false)
+            'error' => ($dadosSaque->getErrors() ? : false),
+            'regras' => $regras,
         ]);
     }
     
+    
+    /**
+     * Mensagem de saque
+     */
+    public function actionCashOutMessage() {
+        $saldoAtual = $prazoSaque = '';
+        $post = \Yii::$app->request->post();
+        if (($user = $post['user_auth_key'])) {
+            if (($idUser = User::getIdByAuthKey($user))) {
+                $saldoAtual = $this->getSaldoAtual($idUser);
+                $prazoSaque = SYS01PARAMETROSGLOBAIS::getValor('PB_SQ');
+            }
+        }
+        return json_encode(['saldoAtual' => $saldoAtual, 'prazo' => $prazoSaque]);
+    }
+    
+    
+    /**
+     * Politica de privacidade + Termos de uso
+     */
+    public function actionPoliticaPrivacidadeTermosUso() {
+        return json_encode(['PP' => SYS01PARAMETROSGLOBAIS::getValor('TXT_PP'), 'TU' => SYS01PARAMETROSGLOBAIS::getValor('TXT_TU')]);
+    }
+
     
     /**
      * Compras realizadas
