@@ -21,10 +21,10 @@ $this->title = '';
                     message = 'Dados salvos com sucesso.';
                     type = 'success';
                     ico = 'check-circle';
-                    $('#remoteModalProduto').modal('hide');
                     reloadPage();
+                    $('#remoteModalProduto').modal('hide');
                 } else {
-                    message = 'Os dados não foram atualizados, tente novamente.';
+                    message = data.message;
                     type = 'danger';
                     ico = 'frown-o';
                 }
