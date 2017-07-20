@@ -57,6 +57,7 @@ return [
             'administrador/logout',
 		    'administrador/*',
     		'transferencias/*',
+            'indicacao/index',
 
 
             'api-empresa/*',

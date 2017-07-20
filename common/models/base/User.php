@@ -79,9 +79,6 @@ class User extends \common\models\GlobalModel
      * return string name of field are used to stored optimistic lock 
      * 
      */
-    public function optimisticLock() {
-        return 'lock';
-    }
 
     /**
      * @inheritdoc
