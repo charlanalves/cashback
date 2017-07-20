@@ -211,8 +211,14 @@
                     loadDropzoneAndGaleria(data.message);
                     $("div#dropzone").focus();
                     loadGrid();
+                    $('#remoteModalEmpresa').modal('hide')
                 } else {
-                    message = 'Os dados da empresa não foram salvos, tente novamente.';
+                    console.log(data)
+                    if (typeof data.retorno != 'undefined'){
+                        message = data.retorno;                        
+                    } else {
+                        message = data.message;
+                    }
                     type = 'danger';
                     ico = 'frown-o';
                 }

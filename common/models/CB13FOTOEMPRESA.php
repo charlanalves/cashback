@@ -17,7 +17,7 @@ class CB13FOTOEMPRESA extends BaseCB13FOTOEMPRESA
     {
         return array_replace_recursive(parent::rules(),
 	    [
-            [['CB13_EMPRESA_ID', 'CB13_CAMPA', 'CB13_URL'], 'required'],
+            [['CB13_EMPRESA_ID','CB13_URL'], 'required'],
             [['CB13_EMPRESA_ID', 'CB13_CAMPA'], 'integer'],
             [['CB13_URL'], 'string', 'max' => 50],
             
