@@ -445,12 +445,14 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $model = new VIEWEXTRATO();
         $al = $model->attributeLabels();
         $saldoAtual = $model->saldoAtualByCliente($this->user->id);
+        $saldoReceber = $model->saldoReceberByCliente($this->user->id);
 
         return $this->render('extrato', [
                     'tituloTela' => 'Extrato',
                     'usuario' => $this->user->attributes,
                     'al' => $al,
-                    'saldoAtual' => Yii::$app->u->moedaReal($saldoAtual)
+                    'saldoAtual' => Yii::$app->u->moedaReal($saldoAtual),
+                    'saldoReceber' => Yii::$app->u->moedaReal($saldoReceber)
         ]);
     }
     

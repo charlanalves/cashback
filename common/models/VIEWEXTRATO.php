@@ -12,12 +12,13 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
 {
     
     public $tipos_para_estabelecimento = [
-        "M2E" => "MASTER TO EMPRESA", 
-        "E2ADQ" => "EMPRESA TO ADQ", 
+        "M2E" => "VENDA", 
+        "E2ADQ" => "TARIFA ADQ", 
         "E2C" => "EMPRESA TO CLIENTE", 
-        "E2ADM" => "EMPRESA TO ADMIN", 
+        "E2ADM" => "TARIFA ESTALECAS", 
         "V2B" => "VIRTUAL TO BANCARIA", 
-        "B2V" => "BANCARIA TO VIRTUAL"
+        "B2V" => "BANCARIA TO VIRTUAL",
+        "E2M" => "CASHBACK"
     ];
     
     /**
@@ -37,6 +38,13 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
     public static function saldoAtualByCliente($cliente) 
     {
         $sql = "SELECT SUM(VALOR) AS SALDO FROM VIEW_EXTRATO WHERE USER = :cliente AND (DT_DEPOSITO IS NOT NULL OR TIPO = 'V2B')";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':cliente', $cliente);
+        return $command->queryOne()['SALDO'];
+    }
+    public static function saldoReceberByCliente($cliente) 
+    {
+        $sql = "SELECT SUM(VALOR) AS SALDO FROM VIEW_EXTRATO WHERE USER = :cliente AND (DT_DEPOSITO IS NULL OR TIPO = 'V2B')";
         $command = \Yii::$app->db->createCommand($sql);
         $command->bindValue(':cliente', $cliente);
         return $command->queryOne()['SALDO'];
