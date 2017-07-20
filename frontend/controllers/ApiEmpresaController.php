@@ -162,8 +162,58 @@ class ApiEmpresaController extends GlobalBaseController {
         $model->loginCpfCnpj(); 
         return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
     }
-
     
+    
+    /**
+     * Reenviar email: validacao de email
+     */
+    public function actionReenviarEmailValidacao() {
+        $post = \Yii::$app->request->post();
+        $link = $this->urlController . 'valid-mail&c='. $post['auth_key'];
+        $texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
+        
+        \Yii::$app->mail->compose('@frontend/mail-templates/email01')
+        ->setFrom('from@domain.com')
+        ->setTo($post['email'])
+        ->setSubject('E$TALECA - Confirmação de E-mail')
+        ->send();
+
+    }
+    
+    
+    /**
+     * Validacao de email
+     */
+    public function actionValidMail() {
+        $cod = \Yii::$app->request->get('c');
+    }
+    
+    
+    /**
+     * Verifica se o email foi validado
+     */
+    public function actionVerificaEmail() {
+        return ($user = User::findByCpfCnpj(\Yii::$app->request->post('cpf_cnpj'))) ? (int) $user->email_valid : 0;
+    }
+    
+    
+    /**
+     * Alterar o email do usuário
+     */
+    public function actionAlterarEmailUsuario() {
+        $post = \Yii::$app->request->post();
+        $user = User::findOne($post['param']['id']);
+        if ($user) {
+            $user->email = $post['new_email'];
+            if(!$user->validate()){
+                return $user->errors['email'][0];
+            } else {
+                return $user->save(false);
+            }
+        }
+    }
+    
+
     /**
      * Login Active
      */

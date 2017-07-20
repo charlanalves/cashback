@@ -263,6 +263,9 @@ class IuguComponent extends PaymentBaseComponent {
         $user->id_cliente = $cliente->CB02_ID;
         $user->email = $cliente->CB02_EMAIL;
         $user->username = $cliente->CB02_CPF_CNPJ;
+        if(!empty($atributos['cod_indicacao'])){
+            $user->id_indicacao = (\common\models\User::getIdByAuthKey($atributos['cod_indicacao'])) ? : null;
+        }
         $user->setPassword($atributos['password']);
         $user->generateAuthKey();
         $user->save();

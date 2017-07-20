@@ -27,6 +27,7 @@ class LoginForm extends Model
     
     const SCENARIOADMINISTRADOR = 'SCENARIOADMINISTRADOR';
     const SCENARIOESTABELECIMENTO = 'SCENARIOESTABELECIMENTO';
+    const SCENARIOVALIDAREMAIL = 'SCENARIOVALIDAREMAIL';
     
     public function scenarios()
     {
@@ -34,6 +35,7 @@ class LoginForm extends Model
         $scenarios[self::SCENARIOADMINISTRADOR] = ['username', 'password', 'rememberMe', 'id'];
         $scenarios[self::SCENARIOESTABELECIMENTO] = ['cpf_cnpj', 'password', 'rememberMe', 'id'];
         $scenarios[self::SCENARIO_COMPANY_LOGIN] = ['cpf_cnpj', 'password', 'rememberMe', 'id'];
+        $scenarios[self::SCENARIOVALIDAREMAIL] = ['email_valid'];
         return $scenarios;
     }
     
@@ -49,6 +51,8 @@ class LoginForm extends Model
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            
+            ['email_valid', 'safe'],
 
             // validar estabelecimento
             ['cpf_cnpj', 'string', 'length' => 14, 'message' => 'Informe um CNPJ válido.', 'on' => self::SCENARIOESTABELECIMENTO],
