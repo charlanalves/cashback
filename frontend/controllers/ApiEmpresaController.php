@@ -186,6 +186,14 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionValidMail() {
         $cod = \Yii::$app->request->get('c');
+        if($cod) {
+            $user = User::findOne(['auth_key' => $cod]);
+            if($user) {
+                $user->setAttribute('email_valid', 1);
+                return $user->save();
+            }
+        }
+        return false;
     }
     
     

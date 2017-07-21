@@ -4,3 +4,6 @@
 *.data
 *.bin
 *.log
+/frontend/views/indicacao/www/PhpProject1/nbproject/private/
+/frontend/views/indicacao/www/nbproject/private/
+/frontend/views/indicacao/www/bower_components/
