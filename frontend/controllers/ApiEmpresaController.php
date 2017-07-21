@@ -173,7 +173,7 @@ class ApiEmpresaController extends GlobalBaseController {
         $texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
         
         \Yii::$app->mail->compose('teste')
-        ->setFrom('charlan.job@gmail.com')
+        ->setFrom('nao-responda@estalecas.com.br')
         ->setTo($post['email'])
         ->setSubject('E$TALECA - Confirmação de E-mail')
         ->send();
