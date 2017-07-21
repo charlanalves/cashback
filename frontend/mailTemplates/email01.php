@@ -1,8 +1,10 @@
 <?php
+use yii\helpers\Html;
+use yii\helpers\Url;
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/* @var $this \yii\web\View view component instance */
+/* @var $message \yii\mail\BaseMessage instance of newly created mail message */
 
+?>
+<h2>This message allows you to visit our site home page by one click</h2>
+<?= Html::a('Go to home page', Url::home('http')) ?>
