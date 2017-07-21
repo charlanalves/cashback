@@ -52,9 +52,13 @@
         <h1 class="page-title txt-color-blueDark">
             <i class="fa-fw fa fa-list-ul"></i> 
             Extrato <span></span>
-            <div style="float: right; text-align: right">
-                <span class="">saldo atual</span>
+            <div style="float: right; text-align: right;font-weight: bold;color: #36ac3b;">
+                <span class="">Saldo Disponível</span>
                 <div>R$ <?= $saldoAtual ?></div>
+            </div>
+            <div style="float: right; text-align: right;   margin-right: 77px;color: #0f4e9e;font-weight: bold;">
+                <span class="">Saldo a Receber</span>
+                <div>R$ <?= $saldoReceber ?></div>
             </div>
         </h1>
     </div>
