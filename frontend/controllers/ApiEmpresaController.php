@@ -312,7 +312,7 @@ class ApiEmpresaController extends GlobalBaseController {
         if ( ($user = \Yii::$app->request->post('user_auth_key')) ) {
             $SYS01PARAMETROSGLOBAIS = SYS01PARAMETROSGLOBAIS::getValor('1') . $user;
         }
-        return json_encode($SYS01PARAMETROSGLOBAIS);
+        return json_encode(['texto' => $SYS01PARAMETROSGLOBAIS, 'regras' => SYS01PARAMETROSGLOBAIS::getValor('CON_REG')]);
     }
     
     

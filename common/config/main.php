@@ -58,6 +58,7 @@ return [
 		    'administrador/*',
     		'transferencias/*',
             'indicacao/index',
+            'confirma-email/index',
 
 
             'api-empresa/*',

@@ -22,7 +22,7 @@ class User extends BaseUser implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-            ['cpf_or_cnpj', 'email_valid', 'safe'],
+            [['cpf_or_cnpj', 'email_valid'], 'safe'],
             
             ['name', 'trim'],
             ['name', 'required'],
