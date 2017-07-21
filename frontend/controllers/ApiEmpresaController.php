@@ -172,7 +172,7 @@ class ApiEmpresaController extends GlobalBaseController {
         $link = $this->urlController . 'valid-mail&c='. $post['auth_key'];
         $texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
         
-        \Yii::$app->mail->compose('teste')
+        \Yii::$app->mail->compose('confirmacaoemail')
         ->setFrom('nao-responda@estalecas.com.br')
         ->setTo($post['email'])
         ->setSubject('E$TALECA - Confirmação de E-mail')
