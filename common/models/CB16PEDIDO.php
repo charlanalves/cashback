@@ -12,7 +12,7 @@ class CB16PEDIDO extends BaseCB16PEDIDO
 {
 	
 	 // status do pagamento
-    public $status_pedido = [1 => 'CANCELADO', 10 => 'AGUARDANDO PAGAMENTO', 20 => 'BAIXADO', 30 => 'PAGO'];
+    public $status_pedido = [1 => 'CANCELADO', 10 => 'AGUARDANDO PAGAMENTO', 20 => 'BAIXADO', 30 => 'PAGO', 40 => 'PAGO', 50 => 'PAGO', 60 => 'PAGO'];
     
     const status_cancelado = 1;
     const status_aguardando_pagamento = 10;
@@ -136,11 +136,14 @@ class CB16PEDIDO extends BaseCB16PEDIDO
                     WHEN " . self::status_aguardando_pagamento . " THEN 'Aguardando pagamento'
                     WHEN " . self::status_baixado . " THEN 'Utilizado'
                     WHEN " . self::status_pago . " THEN 'Pago'
-                    ELSE '' END AS STATUS
+                    WHEN " . self::status_pago_trans_agendadas . " THEN 'Pago'
+                    WHEN " . self::status_pago_trans_liberadas . " THEN 'Pago'
+                    WHEN " . self::status_pago_trans_realizadas . " THEN 'Pago'
+                    ELSE CB16_STATUS END AS STATUS
                 FROM CB16_PEDIDO 
                 INNER JOIN CB17_PRODUTO_PEDIDO ON(CB16_PEDIDO.CB16_ID = CB17_PRODUTO_PEDIDO.CB17_PEDIDO_ID)
                 INNER JOIN user ON(user.id = CB16_USER_ID)
-                LEFT JOIN CB14_FOTO_PRODUTO ON(CB14_PRODUTO_ID = CB17_PRODUTO_ID AND CB14_CAPA = '1')
+                LEFT JOIN (SELECT MAX(CB14_ID), CB14_PRODUTO_ID, CB14_URL FROM CB14_FOTO_PRODUTO GROUP BY CB14_PRODUTO_ID) CB14_FOTO_PRODUTO ON(CB14_PRODUTO_ID = CB17_PRODUTO_ID)
                 WHERE auth_key = :usuario " . (!$empresa ? "" : " AND CB16_EMPRESA_ID = :empresa") . (!$pedido ? "" : " AND CB16_ID = :pedido") . "
                 ORDER BY CB16_STATUS DESC, CB16_DT DESC";
 

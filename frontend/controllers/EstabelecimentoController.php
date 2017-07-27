@@ -33,7 +33,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     {
         if (($identity = \Yii::$app->user->identity)) {
             $this->user = $identity;
-            $this->estabelecimento = \common\models\GlobalModel::findTable('CB04_EMPRESA', 'CB04_ID = ' . $this->user->id_company)[0];
+            $this->estabelecimento = ($this->user->id_company) ? \common\models\GlobalModel::findTable('CB04_EMPRESA', 'CB04_ID = ' . $this->user->id_company)[0] : null;
         }
         parent::__construct($id, $module, $config);
     }
