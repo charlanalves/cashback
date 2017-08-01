@@ -431,6 +431,76 @@ class ApiEmpresaController extends GlobalBaseController {
     
     
     /**
+     * Extrato
+     */
+    public function actionExtract() {
+        $saldoAtual = '';
+        $post = \Yii::$app->request->post();
+        if (($user = $post['user_auth_key'])) {
+            if (($idUser = User::getIdByAuthKey($user))) {
+                $saldoAtual = $this->getSaldoAtual($idUser);
+            }
+        }
+        
+        function ultimosMeses ($qtdMeses = 12) {
+            $voltaAno = 0; 
+            $objMeses = [];
+            $meses = array(
+                1 => 'Janeiro',
+                'Fevereiro',
+                'Março',
+                'Abril',
+                'Maio',
+                'Junho',
+                'Julho',
+                'Agosto',
+                'Setembro',
+                'Outubro',
+                'Novembro',
+                'Dezembro'
+            );
+            
+            for($m=1;$m<=$qtdMeses;$m++){
+
+                $numMes = date('n')-$m;
+                $ano = date('Y');
+
+                if(!empty($voltaAno)) {
+                    $numMes = $numMes+($voltaAno*12);
+                }
+                
+                if($numMes==0){
+                    $numMes = 12; $voltaAno++;
+                }
+                
+                if(!empty($voltaAno)) { 
+                    $ano = $ano - $voltaAno;  
+                }
+                
+                $objMeses[$ano . '-' . $numMes] = $meses[$numMes] . "/" . $ano;
+
+            }
+            return $objMeses;
+        }
+                
+        return json_encode(['saldo' => $saldoAtual, 'ultimosMeses' => ultimosMeses()]);
+    }
+    
+    
+    /**
+     * Extrato - LISTA
+     */
+    public function actionExtractList() {
+        $extrato = '';
+        $post = \Yii::$app->request->post();
+        if (($idUser = User::getIdByAuthKey($post['user_auth_key'])) && ($periodo = $post['periodo'])) {
+            $extrato = VIEWEXTRATO::extractUser($idUser,$periodo);         
+        }
+        return json_encode($extrato);
+    }
+    
+    
+    /**
      * Estabelecimentos
      */
     public function actionEstablishment() {
