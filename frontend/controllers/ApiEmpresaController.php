@@ -191,7 +191,7 @@ class ApiEmpresaController extends GlobalBaseController {
     
     public function actionValidarUsuario()
     {        
-        die('adad');
+        die('aasdasdasdasddad');
     }
     
     /**
