@@ -169,8 +169,9 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionReenviarEmailValidacao() 
     {
-        $post = \Yii::$app->request->post();
-       \Yii::$app->sendMail->enviarEmailCadastro($post['email']);
+       $post = \Yii::$app->request->post();
+       $user = \common\models\User::findOne(['id' => $post['id']]);
+       \Yii::$app->sendMail->enviarEmailCadastro($user->email);
     }
     
     private function enviarEmailCadastro($email)
