@@ -62,6 +62,7 @@ return [
     		'transferencias/*',
             'indicacao/index',
             'confirma-email/index',
+            'api-empresa/validar-usuario',
 
 
             'api-empresa/*',
