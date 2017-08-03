@@ -191,7 +191,7 @@ class ApiEmpresaController extends GlobalBaseController {
     
     public function actionValidarUsuario()
     {        
-        $authKey = Yii::$app->request->get('auth_key');
+        $authKey = \Yii::$app->request->get('auth_key');
         if (!empty($authKey)) {
             $user = User::findOne(['auth_key' => $authKey]);
             $user->email_valid = 1;
