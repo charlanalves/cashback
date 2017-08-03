@@ -23,6 +23,9 @@ return [
         'Iugu' => [
             'class' => 'common\components\IuguComponent',
         ],
+         'sendMail' => [
+            'class' => 'common\components\SendMailComponent',
+        ],
       
     ],
     

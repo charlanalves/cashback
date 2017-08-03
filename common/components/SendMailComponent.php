@@ -4,6 +4,7 @@ namespace app\components;
 
 use Yii;
 use yii\base\Component;
+use common\models\SYS01PARAMETROSGLOBAIS;
 
 class SendMailComponent extends Component {
 
@@ -60,5 +61,17 @@ class SendMailComponent extends Component {
         //CVarDumper::dump(array($this->para,$this->assunto,$this->msg,$this->headers));
         //exit();
         return mail($this->para,$this->assunto,$msg,$headers);
+    }
+    
+    public function enviarEmailCadastro($email)
+    {
+        //$link = $this->urlController . 'valid-mail&c='. $post['auth_key'];
+        //$texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
+        
+        \Yii::$app->mail->compose('confirmacaoemail')
+        ->setFrom('nao-responda@estalecas.com.br')
+        ->setTo($email)
+        ->setSubject('E$TALECA - Confirmação de E-mail')
+        ->send();
     }
 }

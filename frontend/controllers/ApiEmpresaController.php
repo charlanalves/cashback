@@ -167,17 +167,22 @@ class ApiEmpresaController extends GlobalBaseController {
     /**
      * Reenviar email: validacao de email
      */
-    public function actionReenviarEmailValidacao() {
+    public function actionReenviarEmailValidacao() 
+    {
         $post = \Yii::$app->request->post();
+       \Yii::$app->sendMail->enviarEmailCadastro($post['email']);
+    }
+    
+    private function enviarEmailCadastro($email)
+    {
         $link = $this->urlController . 'valid-mail&c='. $post['auth_key'];
         $texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
         
         \Yii::$app->mail->compose('confirmacaoemail')
         ->setFrom('nao-responda@estalecas.com.br')
-        ->setTo($post['email'])
+        ->setTo($email)
         ->setSubject('E$TALECA - Confirmação de E-mail')
         ->send();
-
     }
     
     
