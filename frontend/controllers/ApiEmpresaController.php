@@ -171,21 +171,8 @@ class ApiEmpresaController extends GlobalBaseController {
     {
        $post = \Yii::$app->request->post();
        $user = \common\models\User::findOne(['id' => $post['id']]);
-       \Yii::$app->sendMail->enviarEmailCadastro($user->email);
+       \Yii::$app->sendMail->enviarEmailCadastro($user->email, $user->auth_key);
     }
-    
-    private function enviarEmailCadastro($email)
-    {
-        $link = $this->urlController . 'valid-mail&c='. $post['auth_key'];
-        $texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
-        
-        \Yii::$app->mail->compose('confirmacaoemail')
-        ->setFrom('nao-responda@estalecas.com.br')
-        ->setTo($email)
-        ->setSubject('E$TALECA - Confirmação de E-mail')
-        ->send();
-    }
-    
     
     /**
      * Validacao de email
@@ -202,6 +189,17 @@ class ApiEmpresaController extends GlobalBaseController {
         return false;
     }
     
+    public function validarUsuario()
+    {
+        $authKey = Yii::$app->request->get('auth_key');
+        if (!empty($authKey)) {
+            $user = User::findOne(['auth_key' => $authKey]);
+            $user->email_valid = 1;
+            if ($user->save(false)){
+                echo '<h1>Conta validada com sucesso! Abra o aplicativo e comece a ganhar dinheiro de volta.</h1>';
+            }
+        }
+    }
     
     /**
      * Verifica se o email foi validado
@@ -222,7 +220,7 @@ class ApiEmpresaController extends GlobalBaseController {
             if(!$user->validate()){
                 return $user->errors['email'][0];
             } else {
-                \Yii::$app->sendMail->enviarEmailCadastro($post['new_email']);
+                \Yii::$app->sendMail->enviarEmailCadastro($post['new_email'], $user->auth_key);
                 return $user->save(false);
             }
         }

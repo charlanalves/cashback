@@ -6,5 +6,7 @@ use yii\helpers\Url;
 /* @var $message \yii\mail\BaseMessage instance of newly created mail message */
 
 ?>
-<h2>This message allows you to visit our site home page by one click</h2>
-<?= Html::a('Go to home page', Url::home('http')) ?>
+<h2>Olá, Seja Bem Vindo ao aplicativo E$TALECAS.</h2>
+<br>
+<h3>Clique no botão abaixo para validar sua conta:</h3>
+<?= Html::a('VALIDAR CONTA', ['api-empresa/validar-usuario', 'authKey' => $authKey], ['class' => 'btn btn-primary']) ?>
