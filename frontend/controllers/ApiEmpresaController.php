@@ -191,11 +191,9 @@ class ApiEmpresaController extends GlobalBaseController {
     
     public function actionValidarUsuario()
     {        
-        $authKey = \Yii::$app->request->get('authKey');
-        print'<pre>';var_dump($authKey);
+        $authKey = \Yii::$app->request->get('authKey');        
         if (!empty($authKey)) {
-            $user = User::findOne(['auth_key' => $authKey]);
-            print'<pre>';print_r($user);
+            $user = User::findOne(['auth_key' => $authKey]);            
             $user->email_valid = 1;
             if ($user->save(false)){
                 echo '<h1>Conta validada com sucesso! Abra o aplicativo e comece a ganhar dinheiro de volta.</h1>';
