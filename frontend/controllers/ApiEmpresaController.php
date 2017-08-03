@@ -189,7 +189,7 @@ class ApiEmpresaController extends GlobalBaseController {
         return false;
     }
     
-    public function validarUsuario()
+    public function actionValidarUsuario()
     {        
         $authKey = Yii::$app->request->get('auth_key');
         if (!empty($authKey)) {
