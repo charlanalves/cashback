@@ -222,6 +222,7 @@ class ApiEmpresaController extends GlobalBaseController {
             if(!$user->validate()){
                 return $user->errors['email'][0];
             } else {
+                \Yii::$app->sendMail->enviarEmailCadastro($post['new_email']);
                 return $user->save(false);
             }
         }
