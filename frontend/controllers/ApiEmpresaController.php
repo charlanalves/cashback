@@ -167,19 +167,12 @@ class ApiEmpresaController extends GlobalBaseController {
     /**
      * Reenviar email: validacao de email
      */
-    public function actionReenviarEmailValidacao() {
-        $post = \Yii::$app->request->post();
-        $link = $this->urlController . 'valid-mail&c='. $post['auth_key'];
-        $texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
-        
-        \Yii::$app->mail->compose('confirmacaoemail')
-        ->setFrom('nao-responda@estalecas.com.br')
-        ->setTo($post['email'])
-        ->setSubject('E$TALECA - Confirmação de E-mail')
-        ->send();
-
+    public function actionReenviarEmailValidacao() 
+    {
+       $post = \Yii::$app->request->post();
+       $user = \common\models\User::findOne(['id' => $post['id']]);
+       \Yii::$app->sendMail->enviarEmailCadastro($user->email, $user->auth_key);
     }
-    
     
     /**
      * Validacao de email
@@ -196,6 +189,17 @@ class ApiEmpresaController extends GlobalBaseController {
         return false;
     }
     
+    public function actionValidarUsuario()
+    {        
+        $authKey = \Yii::$app->request->get('authKey');        
+        if (!empty($authKey)) {
+            $user = User::findOne(['auth_key' => $authKey]);            
+            $user->email_valid = 1;
+            if ($user->save(false)){
+                echo '<h1>Conta validada com sucesso! Abra o aplicativo e comece a ganhar dinheiro de volta.</h1>';
+            }
+        }
+    }
     
     /**
      * Verifica se o email foi validado
@@ -216,6 +220,7 @@ class ApiEmpresaController extends GlobalBaseController {
             if(!$user->validate()){
                 return $user->errors['email'][0];
             } else {
+                \Yii::$app->sendMail->enviarEmailCadastro($post['new_email'], $user->auth_key);
                 return $user->save(false);
             }
         }

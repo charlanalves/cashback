@@ -287,6 +287,8 @@ class IuguComponent extends PaymentBaseComponent {
         $model->password = $atributos['password'];
         $model->loginCpfCnpj(); 
         
+         \Yii::$app->sendMail->enviarEmailCadastro($atributos['CB02_EMAIL'], $user->auth_key);
+        
         return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
         
     }

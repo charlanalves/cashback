@@ -23,6 +23,9 @@ return [
         'Iugu' => [
             'class' => 'common\components\IuguComponent',
         ],
+         'sendMail' => [
+            'class' => 'common\components\SendMailComponent',
+        ],
       
     ],
     
@@ -59,6 +62,7 @@ return [
     		'transferencias/*',
             'indicacao/index',
             'confirma-email/index',
+            'api-empresa/validar-usuario',
 
 
             'api-empresa/*',
