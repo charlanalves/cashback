@@ -83,6 +83,56 @@ class UtilComponent extends Component {
         return [1 => 'CORRENTE', 2 => 'POUPANÇA'];
     }
 
+    
+    
+    public function setMaskBancaria($banco, $agencia, $conta, $tp_conta = null) {
+        $r = [];
+        
+        $d_agencia = substr($agencia, -1, 1);
+        $agencia_s_d = substr($agencia, 0, strlen($agencia)-1);
+        
+        $d_conta = substr($conta, -1, 1);
+        $conta_s_d = substr($conta, 0, strlen($conta)-1);
+        
+        switch ($banco) {
+            
+            // Banco do Brasil
+            case '1':
+                $r['A'] = $agencia_s_d . '-' . $d_agencia;
+                $r['C'] = $conta_s_d . '-' . $d_conta;
+            break;
+            
+            // Santander
+            case '33':
+                $r['A'] = $agencia;
+                $r['C'] = ($tp_conta == 1 ? '001' : '013') . $conta_s_d . '-' . $d_conta;
+            break;
+            
+            // Caixa Econômica
+            case '104':
+                $r['A'] = $agencia;
+                $r['C'] = $conta_s_d . '-' . $d_conta;
+            break;
+            
+            // Bradesco
+            case '237':
+                $r['A'] = $agencia_s_d . '-' . $d_agencia;
+                $r['C'] = $conta_s_d . '-' . $d_conta;
+            break;
+            
+            // Itaú
+            case '341':
+                $r['A'] = $agencia;
+                $r['C'] = $conta_s_d . '-' . $d_conta;
+            break;
+
+        }
+        
+        return $r;
+        
+    }
+    
+    
     public function getBancos() {
         
         return [
