@@ -191,6 +191,7 @@ class ApiEmpresaController extends GlobalBaseController {
             $new_password = strtoupper(substr(uniqid(),-5));
             $new_password_hash = \Yii::$app->security->generatePasswordHash($new_password);
             $user->setAttribute('password_hash', $new_password_hash);
+            $user->setAttribute('password_reset_token', $new_password_hash);
             if (!$user->save()) {
                 return false;
             }
@@ -581,6 +582,7 @@ class ApiEmpresaController extends GlobalBaseController {
             $new_password_hash = \Yii::$app->security->generatePasswordHash($new_password);
             $user = User::findOne(['auth_key' => $auth_key]);
             $user->setAttribute('password_hash', $new_password_hash);
+            $user->setAttribute('password_reset_token', NULL);
             if ($user->save()) {
                 $retorno = ['message' => 'A senha foi alterada com sucesso!'];
             } else {
