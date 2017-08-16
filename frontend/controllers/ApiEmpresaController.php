@@ -165,6 +165,44 @@ class ApiEmpresaController extends GlobalBaseController {
     
     
     /**
+     * Esqueceu a senha
+     */
+    public function actionNovaSenha() {
+        header('Access-Control-Allow-Origin: *');
+        $model = new LoginForm();
+        $model->setAttributes(\Yii::$app->request->post());
+        $user = $model->getUserByCpfCnpj();
+        
+        $email = '';
+        if(!empty($user['email'])) {
+            $email = $user['email'];
+
+            /* @var $user User */
+            $user = User::findOne([
+                'status' => User::STATUS_ACTIVE,
+                'email' => $email,
+            ]);
+
+            if (!$user) {
+                return false;
+            }
+
+            // nova senha 
+            $new_password = strtoupper(substr(uniqid(),-5));
+            $new_password_hash = \Yii::$app->security->generatePasswordHash($new_password);
+            $user->setAttribute('password_hash', $new_password_hash);
+            if (!$user->save()) {
+                return false;
+            }
+            
+            \Yii::$app->sendMail->enviarEmailNovaSenha($email, $new_password);
+        }
+        
+        return json_encode(['status' => $user == null ? null : !!$user, 'email' => $email]);
+    }
+    
+    
+    /**
      * Reenviar email: validacao de email
      */
     public function actionReenviarEmailValidacao() 

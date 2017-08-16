@@ -19,4 +19,16 @@ class SendMailComponent extends Component {
         ->setSubject('E$TALECA - Confirmação de E-mail')
         ->send();
     }
+    
+    public function enviarEmailNovaSenha($email, $senha)
+    {
+        //$link = $this->urlController . 'valid-mail&c='. $post['auth_key'];
+        //$texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
+        
+        \Yii::$app->mail->compose('novasenha',['senha' => $senha])
+        ->setFrom('nao-responda@estalecas.com.br')
+        ->setTo($email)
+        ->setSubject('E$TALECA - Esqueceu a senha?')
+        ->send();
+    }
 }
