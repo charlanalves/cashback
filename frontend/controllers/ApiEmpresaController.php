@@ -392,11 +392,6 @@ class ApiEmpresaController extends GlobalBaseController {
 
                 } else {
                     
-                    // formata dados da conta e agencia
-                    $dMask = \Yii::$app->u->setMaskBancaria($formData['CB03_COD_BANCO'], $formData['CB03_AGENCIA'], $formData['CB03_NUM_CONTA'], $formData['CB03_TP_CONTA']);
-                    $formData['CB03_AGENCIA'] = $dMask['A'];
-                    $formData['CB03_NUM_CONTA'] = $dMask['C'];
-                    
                     $dadosSaque->setAttributes($formData);
                     $dadosSaque->setAttribute('CB03_USER_ID', $idUser);
                     $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);

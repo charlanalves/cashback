@@ -62,9 +62,9 @@ class CB03CONTABANC extends \common\models\GlobalModel
         return [
             'CB03_ID' => Yii::t('app', 'ID'),
             'CB03_COD_BANCO' => Yii::t('app', 'Código Banco'),
-        	'CB03_NOME_BANCO' => Yii::t('app', 'Banco'),
+            'CB03_NOME_BANCO' => Yii::t('app', 'Banco'),
             'CB03_TP_CONTA' => Yii::t('app', 'Tipo da conta'),
-            'CB03_NUM_CONTA' => Yii::t('app', 'Numero da conta'),
+            'CB03_NUM_CONTA' => Yii::t('app', 'Número da conta'),
             'CB03_AGENCIA' => Yii::t('app', 'Agência'),
             'CB03_STATUS' => Yii::t('app', 'Status'),
             'CB03_USER_ID' => Yii::t('app', 'Cliente'),
