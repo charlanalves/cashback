@@ -50,7 +50,7 @@ class User extends \common\models\GlobalModel
     {
         return [
             [['id_company', 'id_cliente', 'status', 'created_at', 'updated_at', 'id_indicacao'], 'integer'],
-            [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at', 'cpf_cnpj'], 'required'],
+            [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at', 'cpf_cnpj'], 'required', 'message' => 'O campo <b>{attribute}</b> é obrigatório'],
             [['name'], 'string', 'max' => 200],
             [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
@@ -96,7 +96,7 @@ class User extends \common\models\GlobalModel
             'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
             'status' => 'Status',
-            'cpf_cnpj' => 'Cpf Cnpj',
+            'cpf_cnpj' => 'CPF/CNPJ',
             'id_indicacao' => 'Id Indicacao',
         ];
     }
