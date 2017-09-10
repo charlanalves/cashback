@@ -30,7 +30,7 @@ class User extends BaseUser implements IdentityInterface
             ['name', 'string', 'min' => 5, 'max' => 255],
 
             ['cpf_cnpj', 'trim'],
-            ['cpf_cnpj', 'required'],
+            ['cpf_cnpj', 'required', 'message' => 'O campo <b>{attribute}</b> é obrigatório'],
             ['cpf_cnpj', 'filter', 'filter' => function($value) {
                 return preg_replace('/[^0-9]/', '', $value);
             }],

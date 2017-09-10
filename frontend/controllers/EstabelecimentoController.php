@@ -516,7 +516,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $saqueMax = (float) $saldoAtual;
         $saqueMin = (float) 1;
 
-        if(!($dadosSaque = CB03CONTABANC::findOne(['CB03_CLIENTE_ID' => $idUser]))) {        
+        if(!($dadosSaque = CB03CONTABANC::findOne(['CB03_USER_ID' => $idUser]))) {        
             return $this->render('saque', ['sem_conta' => "Conta bancária não cadastrada, entre em contato com o suporte para cadastra-la."]);
             
         } else {
@@ -526,13 +526,13 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
             $dadosSaque->scenario = 'saque';
 
             if (!$formData) {
-                $dadosSaque->setAttribute('CB03_CLIENTE_ID', $idUser);
+                $dadosSaque->setAttribute('CB03_USER_ID', $idUser);
                 $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
                 $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
 
             } else {
                 $dadosSaque->setAttributes($formData);
-                $dadosSaque->setAttribute('CB03_CLIENTE_ID', $idUser);
+                $dadosSaque->setAttribute('CB03_USER_ID', $idUser);
                 $dadosSaque->setAttribute('CB03_SAQUE_MIN', $saqueMin);
                 $dadosSaque->setAttribute('CB03_SAQUE_MAX', $saqueMax);
 
