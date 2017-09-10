@@ -10,6 +10,9 @@ use common\models\base\CB06VARIACAO as BaseCB06VARIACAO;
  */
 class CB06VARIACAO extends BaseCB06VARIACAO
 {
+    
+    const SCENARIODELIVERY = 'SCENARIODELIVERY';
+    
     /**
      * @inheritdoc
      */
@@ -18,10 +21,12 @@ class CB06VARIACAO extends BaseCB06VARIACAO
         return array_replace_recursive(parent::rules(),
 	    [
             [['CB06_PRODUTO_ID', 'CB06_DESCRICAO', 'CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'required'],
-            [['CB06_PRODUTO_ID'], 'integer'],
+            [['CB06_PRODUTO_ID', 'CB06_TEMPO_MIN', 'CB06_TEMPO_MAX'], 'integer'],
+            [['CB06_DISTRIBUICAO'], 'integer', 'min' => 0, 'max' => 1],
             [['CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'number'],
             [['CB06_TITULO'], 'string', 'max' => 500],
             [['CB06_DESCRICAO'], 'string', 'max' => 30],
+            [['CB06_DISTRIBUICAO'], 'required', 'on' => self::SCENARIODELIVERY],
         ]);
     }
 
@@ -31,12 +36,16 @@ class CB06VARIACAO extends BaseCB06VARIACAO
     public function attributeLabels()
     {
         return [
-            'CB06_ID' => Yii::t('app', 'ID'),
-            'CB06_PRODUTO_ID' => Yii::t('app', 'Produto'),
-            'CB06_DESCRICAO' => Yii::t('app', 'Descri��o'),
-            'CB06_PRECO' => Yii::t('app', 'Pre�o original'),
-            'CB06_PRECO_PROMOCIONAL' => Yii::t('app', 'Pre�o promocional'),
-            'CB06_DINHEIRO_VOLTA' => Yii::t('app', 'Dinheiro de volta'),
+            'CB06_ID' => 'Cb06  ID',
+            'CB06_PRODUTO_ID' => 'Cb06  Produto  ID',
+            'CB06_TITULO' => 'Cb06  Titulo',
+            'CB06_DESCRICAO' => 'Cb06  Descricao',
+            'CB06_PRECO' => 'Cb06  Preco',
+            'CB06_PRECO_PROMOCIONAL' => 'Cb06  Preco  Promocional',
+            'CB06_DINHEIRO_VOLTA' => 'Dinheiro de volta',
+            'CB06_TEMPO_MIN' => 'Tempo mínimo',
+            'CB06_TEMPO_MAX' => 'Tempo máximo',
+            'CB06_DISTRIBUICAO' => 'Distribuição',
         ];
     }
 
@@ -91,18 +100,38 @@ class CB06VARIACAO extends BaseCB06VARIACAO
         
       $sql = " 
       
-       		SELECT   MAX(CB06_VARIACAO.CB06_DINHEIRO_VOLTA) AS CB06_DINHEIRO_VOLTA, CB04_EMPRESA.CB04_ID, CB04_EMPRESA.CB04_NOME, CB04_EMPRESA.CB04_END_COMPLEMENTO, - - CONCAT(  '" . $url . "', CB04_EMPRESA.CB04_URL_LOGOMARCA ) AS CB04_URL_LOGOMARCA, - - CONCAT(  '" . $url . "', CB14_FOTO_PRODUTO.CB14_URL ) AS CB14_URL, CB04_EMPRESA.CB04_URL_LOGOMARCA AS CB04_URL_LOGOMARCA, CB14_FOTO_PRODUTO.CB14_URL AS CB14_URL, CB05_PRODUTO.CB05_ID, CB05_PRODUTO.CB05_TITULO, CB06_VARIACAO.CB06_DESCRICAO
+       		SELECT  MAX(CB06_VARIACAO.CB06_DINHEIRO_VOLTA) AS CB06_DINHEIRO_VOLTA, CB04_EMPRESA.CB04_ID, CB04_EMPRESA.CB04_NOME, CB04_EMPRESA.CB04_END_COMPLEMENTO, - - CONCAT(  '" . $url . "', CB04_EMPRESA.CB04_URL_LOGOMARCA ) AS CB04_URL_LOGOMARCA, - - CONCAT(  '" . $url . "', CB14_FOTO_PRODUTO.CB14_URL ) AS CB14_URL, CB04_EMPRESA.CB04_URL_LOGOMARCA AS CB04_URL_LOGOMARCA, CB14_FOTO_PRODUTO.CB14_URL AS CB14_URL, CB05_PRODUTO.CB05_ID, CB05_PRODUTO.CB05_TITULO, CB06_VARIACAO.CB06_DESCRICAO,
+                        CB04_END_LATITUDE,CB04_END_LONGITUDE
 			FROM CB06_VARIACAO
 			INNER JOIN CB05_PRODUTO ON ( CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID ) 
 			INNER JOIN CB14_FOTO_PRODUTO ON ( CB14_FOTO_PRODUTO.CB14_PRODUTO_ID = CB05_PRODUTO.CB05_ID ) 
 			INNER JOIN CB04_EMPRESA ON ( CB04_EMPRESA.CB04_ID = CB05_PRODUTO.CB05_EMPRESA_ID ) 
 			GROUP BY CB06_DESCRICAO";
+      
         $command = \Yii::$app->db->createCommand($sql);
         if ($filterBind) {
             $command->bindValue(':categoria', $filter['cat']);
             $command->bindValue(':ordem', \Yii::$app->u->filterOrder($filter['ord']));
         }
-        return $command->queryAll();
+        $result = $command->queryAll();
+            
+        // ordena por proximidade
+        if(!empty($filter['latitude']) && !empty($filter['longitude']) && !empty($filter['ord']) && $filter['ord'] == 'mais-proximos') {
+            $proximos = $outros = [];
+            foreach ($result as $r) {
+                if($r['CB04_END_LATITUDE'] && $r['CB04_END_LONGITUDE']) {
+                    $r['DISTANCIA'] = \Yii::$app->u->arredondar(\Yii::$app->u->distanciaGeografica($filter['latitude'], $r['CB04_END_LATITUDE'], $filter['longitude'], $r['CB04_END_LONGITUDE']));
+                    $proximos[] = $r;
+                } else {
+                    $outros[] = $r;
+                }
+            }
+            // ordena os estabelecimentos com a geoposicao  , 
+            $proximos = \Yii::$app->u->orderArrayMult($proximos, 'DISTANCIA');
+            // merge com os outros que nao tem geoposicao
+            $result = array_merge($proximos, $outros);
+        }
+        return $result; 
     }
 	
 }

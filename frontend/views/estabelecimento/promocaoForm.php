@@ -65,6 +65,12 @@ $this->title = '';
                 CB06_DINHEIRO_VOLTA: {
                     required: true
                 },
+                CB06_TEMPO_MIN: {
+                    digits: true
+                },
+                CB06_TEMPO_MAX: {
+                    digits: true
+                },
             },
             messages: {
                 CB06_DESCRICAO: {
@@ -78,6 +84,12 @@ $this->title = '';
                 },
                 CB06_DINHEIRO_VOLTA: {
                     required: 'Campo obrigatório'
+                },
+                CB06_TEMPO_MIN: {
+                    digits: 'Digite apenas numeros'
+                },
+                CB06_TEMPO_MAX: {
+                    digits: 'Digite apenas numeros'
                 },
             },
             errorPlacement: function (error, element) {
@@ -126,6 +138,31 @@ $this->title = '';
                                     <input type="text" name="CB06_DINHEIRO_VOLTA" placeholder="" maxlength="8">
                                 </label>
                             </section>
+                        </div>
+                        <div class="row padding-top-15">
+                            <section class="col col-4"><?= $al['CB06_TEMPO_MIN'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-clock-o"></i>
+                                    <input type="number" name="CB06_TEMPO_MIN" placeholder="">
+                                    <small>Informe os minutos.</small>
+                                </label>
+                            </section>
+                            <section class="col col-4"><?= $al['CB06_TEMPO_MAX'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-clock-o"></i>
+                                    <input type="number" name="CB06_TEMPO_MAX" placeholder="">
+                                    <small>Informe os minutos.</small>
+                                </label>
+                            </section>
+                            <?php if ($estabelecimento['CB04_FLG_DELIVERY']) { ?>
+                            <section class="col col-4"><?= $al['CB06_DISTRIBUICAO'] ?>
+                                <label class="select">
+                                    <select name="CB06_DISTRIBUICAO">
+                                        <option value="">Selecione</option>
+                                        <option value="0">Consumir no local</option>
+                                        <option value="1">Delivery</option>
+                                    </select> <i></i> 
+                                </label>
+                            </section>
+                            <?php } ?>
                         </div>
                     </fieldset>
                     <footer style="padding: 10px;">

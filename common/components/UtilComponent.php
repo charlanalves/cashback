@@ -15,12 +15,48 @@ use yii\base\Component;
  * */
 class UtilComponent extends Component {
 
+    private $aux;
+
+    public function addMinutesToDateTime($date, $minutes, $format = 'd/m/Y H:i') {
+        $time = new \DateTime($date);
+        $time->add(new \DateInterval('PT' . $minutes . 'M'));
+        return $time->format($format);
+    }
+
     public function dateBR($date) {
         return (!$date) ? ' - ' : ((strlen($date) > 10) ? date('d/m/Y H:i:s', strtotime($date)) : date('d/m/Y', strtotime($date)));
     }
 
+    public function distanciaGeografica($lat_inicial, $lat_final, $long_inicial, $long_final) {
+        $d2r = 0.017453292519943295769236;
+
+        $dlong = ($long_final - $long_inicial) * $d2r;
+        $dlat = ($lat_final - $lat_inicial) * $d2r;
+
+        $temp_sin = sin($dlat/2.0);
+        $temp_cos = cos($lat_inicial * $d2r);
+        $temp_sin2 = sin($dlong/2.0);
+
+        $a = ($temp_sin * $temp_sin) + ($temp_cos * $temp_cos) * ($temp_sin2 * $temp_sin2);
+        $c = 2.0 * atan2(sqrt($a), sqrt(1.0 - $a));
+
+        return 6368.1 * $c;
+    }
+
     public function arredondar($vlr) {
         return floor($vlr * 100) / 100;
+    }
+    
+    public function arrayCres($a, $b) {
+        return $a[$this->aux] > $b[$this->aux];
+    }
+    public function arrayDesc($a, $b) {
+        return $a[$this->aux] < $b[$this->aux];
+    }
+    public function orderArrayMult($array, $key, $ordem = 'arrayCres') {
+        $this->aux = $key;
+        usort($array, array($this, $ordem));
+        return $array;
     }
 
     public function filterOrder($param) {

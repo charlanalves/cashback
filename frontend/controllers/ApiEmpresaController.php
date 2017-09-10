@@ -299,7 +299,7 @@ class ApiEmpresaController extends GlobalBaseController {
 //        $saldo = $this->getSaldo(\Yii::$app->request->post('user_auth_key'));
 //        $saldoAtual = $saldo['SALDO_LIBERADO'];
 //        $saldoPendente = $saldo['SALDO_PENDENTE'];
-        $saldoAtual = $this->getSaldoAtual(\Yii::$app->request->post('user_auth_key'));
+        $saldoAtual = $this->getSaldoAtual($filter['auth_key']);
         $saldoPendente = 0;
         $CB06VARIACAO = CB06VARIACAO::getPromocao($this->url, $filter);
         return json_encode(['saldoLiberado' =>  $saldoAtual, 'saldoPendente' => $saldoPendente, 'estabelecimentos' => $CB06VARIACAO]);
@@ -594,11 +594,48 @@ class ApiEmpresaController extends GlobalBaseController {
     
     
     /**
+     * Endereco entrega (delivery)
+     */
+    public function actionDeliveryAddress() {
+        $post = \Yii::$app->request->post();
+        $pedido = '';
+        $retorno = ['status' => true];
+        
+        try {
+            if(!empty($post['address']) && !empty($post['order']) && ($idUser = User::getIdByAuthKey($post['auth_key']))) {
+                // verifica se o pedido do usuario
+                $CB16PEDIDO = new CB16PEDIDO();
+                if(($pedido = $CB16PEDIDO->find()->where('CB16_USER_ID = '. $idUser .' AND CB16_ID = ' . $post['order'])->one())) {
+
+                    $pedido->scenario = 'SCENARIO_DELIVERY_ADDRESS';
+                    $pedido->setAttributes($post['address']);
+                    $pedido->save();
+
+                }
+            } else {
+                $pedidoData = CB16PEDIDO::find()->where('CB16_ID = ' . $post['order'])->one();
+                $retorno = ($pedidoData ? $pedidoData->attributes : '');
+            }
+        } catch (\Exception $exc) {
+            $retorno = ['status' => false, 'retorno' => $exc->getMessage()];
+        }
+        
+        return json_encode($retorno);
+    }
+    
+    
+    
+    /**
      * Checkout
      */
     public function actionCheckout() {
         $post = \Yii::$app->request->post();
         $CB16PEDIDO = false;
+        
+        // verifica se ja foi preenchido o endereco de entrega se a pariacao for delivery
+        if (!CB16PEDIDO::verificaPendenciaDeliveryAddress($post['order'])) {
+            return json_encode(['delivery' => true]);
+        }
         
         // verifica se o pedido é do usuario logado
         if(($pedido = CB16PEDIDO::getPedidoByAuthKey($post['user_auth_key'], "", $post['order']))) {
@@ -641,7 +678,7 @@ class ApiEmpresaController extends GlobalBaseController {
                  ->one();                    
     }
 
-    private function atualizaPedidoPago($post, $PERC_PAG, $data)
+    private function atualizaPedidoPago($post, $PERC_PAG, $data, $delivery = false)
     {
        $modelPedido = CB16PEDIDO::findOne($post['order']);
        $modelPedido->scenario = CB16PEDIDO::SCENARIO_ATUALIZA_PEDIDO_PAGO;
@@ -653,6 +690,7 @@ class ApiEmpresaController extends GlobalBaseController {
        $modelPedido->CB16_STATUS = CB16PEDIDO::status_pago;
        $modelPedido->CB16_DT_APROVACAO = date('Y-m-d H:i:s');
        $modelPedido->CB16_TRANS_CRIADAS = 0;
+       $modelPedido->CB16_STATUS_DELIVERY = $delivery ? 1 : null;
                            
        $modelPedido->save();
     }
@@ -712,12 +750,13 @@ class ApiEmpresaController extends GlobalBaseController {
                 
                 try {
                     $data = $post['data'];
+                    $delivery = (bool) $pedido['CB06_DISTRIBUICAO'];
                     
                     // Dados do pagamento
                     $PERC_PAG = $this->getPercPag($data, $pedido);
                 	
                     // Atualiza dados do pedido
-                    $this->atualizaPedidoPago($post, $PERC_PAG, $data);
+                    $this->atualizaPedidoPago($post, $PERC_PAG, $data, $delivery);
                     
                     // Transferencia - pagar com saldo
                     if($data['FORMA-PAGAMENTO'] == 1) {
@@ -734,7 +773,7 @@ class ApiEmpresaController extends GlobalBaseController {
                     $transaction->commit();
                     \Yii::$app->Iugu->execute('criaTransferencias', ['pedido' => '']);
                     $status = true;
-                    $retorno = '';
+                    $retorno = ['delivery' => $delivery];
                     
                 } catch (\Exception $exc) {
                     $transaction->rollBack();
@@ -872,6 +911,31 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionPurchaseMessage() {        
         return json_encode(['message' => SYS01PARAMETROSGLOBAIS::getValor('MSG_BUY')]);
+    }
+    
+    
+    /**
+     * Mensagem delivery
+     */
+    public function actionDeliveryMessage() {
+        $post = \Yii::$app->request->post();
+        $retorno = (empty($post['order']) || empty($post['id']) || !$pedido = CB16PEDIDO::getPedido($post['order'], $post['id'])) ? false :
+        [
+            'empresa_nome' => $pedido['CB04_NOME'],
+            'empresa_telefone' => ($pedido['CB04_TEL_NUMERO'] ? : ''),
+            'entrega_inicial' => ($pedido['CB16_DT_APROVACAO'] && $pedido['CB06_TEMPO_MIN']) ? \Yii::$app->u->addMinutesToDateTime($pedido['CB16_DT_APROVACAO'], $pedido['CB06_TEMPO_MIN']) : '',
+            'entrega_termino' => ($pedido['CB16_DT_APROVACAO'] && $pedido['CB06_TEMPO_MAX']) ? \Yii::$app->u->addMinutesToDateTime($pedido['CB16_DT_APROVACAO'], $pedido['CB06_TEMPO_MAX']) : '',
+            'nome_user' => $post['name'],
+            'vlr_cashback' => $pedido['CB16_VLR_CB_TOTAL'],
+            'produto_descricao' => $pedido['CB17_NOME_PRODUTO'],
+            'produto_valor' => $pedido['CB16_VALOR'],
+            'subtotal' => $pedido['CB16_VALOR'],
+            'taxa_entrega' => '',
+            'total' => $pedido['CB16_VALOR'],
+            'endereco_entrega' => $pedido['CB16_COMPRADOR_END_LOGRADOURO'] . ', ' . $pedido['CB16_COMPRADOR_END_NUMERO'] . ' - ' . $pedido['CB16_COMPRADOR_END_BAIRRO'] . ', ' . $pedido['CB16_COMPRADOR_END_CIDADE'] . '/' . $pedido['CB16_COMPRADOR_END_UF'] . ' (' . $pedido['CB16_COMPRADOR_END_CEP'] . ')' . ($pedido['CB16_COMPRADOR_END_COMPLEMENTO'] ? "<br />Complemento: " . $pedido['CB16_COMPRADOR_END_COMPLEMENTO'] : ''),
+            'pagamento' => $pedido['CB16_FORMA_PAG'],
+        ];
+        return json_encode($retorno);
     }
     
     
