@@ -23,7 +23,9 @@ class CB04EMPRESA extends BaseCB04EMPRESA
             [['CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_COMPLEMENTO'], 'string', 'max' => 50],
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
             [['CB04_END_UF'], 'string', 'max' => 2],
+            [['CB04_FLG_DELIVERY'], 'integer', 'min' => 2, 'max' => 1],
             [['CB04_END_NUMERO'], 'string', 'max' => 5],
+            [['CB04_END_LONGITUDE', 'CB04_END_LATITUDE'], 'string', 'max' => 20],
             [['CB04_CNPJ'], 'string', 'max' => 14],
             ['CB04_END_CEP', 'filter', 'filter' => function ($value) {
                     return preg_replace("/[^0-9]/", "", $value);
@@ -61,6 +63,8 @@ class CB04EMPRESA extends BaseCB04EMPRESA
             CB04_END_UF,
             CB04_END_NUMERO,
             CB04_NOME,
+            CB04_END_LONGITUDE,
+            CB04_END_LATITUDE,
             CASE CB04_URL_LOGOMARCA 
                 WHEN CB04_URL_LOGOMARCA IS NULL 
                 THEN CB04_URL_LOGOMARCA 

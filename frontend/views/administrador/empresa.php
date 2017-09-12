@@ -23,10 +23,14 @@
                 urlGet = "&empresa=" + id;
             }
 
+            $.blockUI();
             $('#remoteModalEmpresaLabel').text(titulo);
             $('#remoteModalEmpresa').modal('show')
-                    .find('.modal-body')
-                    .load('index.php?r=administrador/empresa-form' + urlGet);
+                                    .find('.modal-body')
+                                    .html('')
+                                    .load('index.php?r=administrador/empresa-form' + urlGet, function() {
+                                        $.unblockUI();
+                                    });
         };
 
 

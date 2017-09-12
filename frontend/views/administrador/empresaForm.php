@@ -57,6 +57,15 @@
                                     </select> <i></i> 
                                 </label>
                             </section>
+                            <section class="col col-6"><?= $al['CB04_FLG_DELIVERY'] ?>
+                                <label class="select">
+                                    <select name="CB04_FLG_DELIVERY">
+                                        <option value="" selected="">Selecione...</option>
+                                        <option value="1" selected="">SIM</option>
+                                        <option value="0" selected="">NÃO</option>
+                                    </select> <i></i> 
+                                </label>
+                            </section>
                         </div>
                         <div class="row">
                             <section class="col col-6"><?= $al['CB04_FUNCIONAMENTO'] ?>
@@ -160,11 +169,24 @@
                                 </label>
                             </section>
                         </div>
-                        <section><?= $al['CB04_END_COMPLEMENTO'] ?>
-                            <label class="input">
-                                <input type="text" name="CB04_END_COMPLEMENTO" placeholder="">
-                            </label>
-                        </section>
+
+                        <div class="row">
+                            <section class="col col-4"><?= $al['CB04_END_COMPLEMENTO'] ?>
+                                <label class="input">
+                                    <input type="text" name="CB04_END_COMPLEMENTO" placeholder="">
+                                </label>
+                            </section>
+                            <section class="col col-4"><?= $al['CB04_END_LATITUDE'] ?>
+                                <label class="input">
+                                    <input type="text" name="CB04_END_LATITUDE" placeholder="">
+                                </label>
+                            </section>
+                            <section class="col col-4"><?= $al['CB04_END_LONGITUDE'] ?>
+                                <label class="input">
+                                    <input type="text" name="CB04_END_LONGITUDE" placeholder="">
+                                </label>
+                            </section>
+                        </div>
                     </fieldset>
                     
                     <footer>
@@ -232,6 +254,7 @@
             Util.getEnderecoByCEP(v, preencheEndereco);
         }
     }
+
     
     function preencheEndereco(data) {
         if (data.erro) {

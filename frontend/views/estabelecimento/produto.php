@@ -22,6 +22,7 @@ $this->title = '';
         $('#remoteModalProdutoLabel').text(titulo);
         $('#remoteModalProduto').modal('show')
                 .find('.modal-body')
+                .html('')
                 .load('index.php?r=estabelecimento/produto-form' + urlGet);
     }
 
@@ -29,6 +30,7 @@ $this->title = '';
         $('#remoteModalPromocaoLabel').text('Nova promoção');
         $('#remoteModalPromocao').modal('show')
                 .find('.modal-body')
+                .html('')
                 .load('index.php?r=estabelecimento/promocao-form&produto=' + id);
     }
 
@@ -36,6 +38,7 @@ $this->title = '';
         $('#remoteModalCashbackLabel').text('CASHBACK');
         $('#remoteModalCashback').modal('show')
                 .find('.modal-body')
+                .html('')
                 .load('index.php?r=estabelecimento/cashback-form&produto=' + id);
     }
     

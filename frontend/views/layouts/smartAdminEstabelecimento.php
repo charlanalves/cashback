@@ -113,6 +113,10 @@ $this->title = 'Estabelecimento';
                     document.location.href = 'index.php?r=estabelecimento/empresa';
                     return false;
                 });
+                $("a#menu-delivery").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/delivery';
+                    return false;
+                });
                 $("a#menu-produto").click(function (e) {
                     document.location.href = 'index.php?r=estabelecimento/produto';
                     return false;
@@ -171,6 +175,9 @@ $this->title = 'Estabelecimento';
                     </li>-->
                     <li class="">
                         <a href="#" title="Baixar Compra" id="menu-baixar-compra"><i class="fa fa-lg fa-fw  fa-arrow-circle-down"></i> <span class="menu-item-parent">Baixar Compra</span></a>
+                    </li>
+                    <li class="">
+                        <a href="#" title="Delivery" id="menu-delivery"><i class="fa fa-lg fa-fw fa-truck"></i> <span class="menu-item-parent">Delivery</span></a>
                     </li>
                     <li class="">
                         <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>

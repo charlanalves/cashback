@@ -212,6 +212,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'usuario' => $this->user->attributes,
                     'produto' => $dataProduto,
                     'al' => $al,
+                    'estabelecimento' => $this->estabelecimento,
                     'salvo' => $salvo
         ]);
     }
@@ -343,12 +344,16 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'usuario' => $this->user->attributes,
                     'produto' => ['CB06_PRODUTO_ID' => $produto],
                     'al' => $al,
+                    'estabelecimento' => $this->estabelecimento,
                     'maxPromocao' => $maxPromocao,
         ]);
     }
 
     public function savePromocao($param) {
         $CB06VARIACAO = new CB06VARIACAO();
+        if ($this->estabelecimento['CB04_FLG_DELIVERY']) {
+            $CB06VARIACAO->scenario = CB06VARIACAO::SCENARIODELIVERY;
+        }
         $CB06VARIACAO->setAttributes($param);
         $CB06VARIACAO->save();
     }
@@ -395,6 +400,34 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     public function deleteCashback($param) {
         $CB07CASHBACK = new CB07CASHBACK();
         $CB07CASHBACK->deleteCashback($param);
+    }
+    
+    public function actionDelivery() {
+        $this->layout = 'smartAdminEstabelecimento';
+        return $this->render('delivery', [
+                    'tituloTela' => 'Delivery',
+                    'usuario' => $this->user->attributes,
+        ]);
+    }
+    
+    public function actionDeliveryGrid() {
+        $model = new CB16PEDIDO();
+        $pedidos = $model->getPedidoDelivery($this->user->id_company);
+        if ($pedidos) {
+            $param = ['pedidos' => $pedidos, 'status' => $model->status_delivery];
+        } else {
+            $param = ['error' => 'Nenhum registro encontrado.'];
+        }
+        return $this->renderPartial('deliveryGrid', $param);
+    }
+    
+    // altera status da entrega
+    public function setStatusDelivery($param) {
+        $CB16PEDIDO = CB16PEDIDO::findOne(['CB16_ID' => $param['pedido'], 'CB16_STATUS' => 30]);
+        if ($CB16PEDIDO) {
+            $CB16PEDIDO->setAttribute('CB16_STATUS_DELIVERY', $param['new_status']);
+            $CB16PEDIDO->save();     
+        }
     }
     
     public function actionBaixarCompra() {

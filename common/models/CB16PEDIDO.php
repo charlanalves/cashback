@@ -11,9 +11,8 @@ use common\models\base\CB16PEDIDO as BaseCB16PEDIDO;
 class CB16PEDIDO extends BaseCB16PEDIDO
 {
 	
-	 // status do pagamento
+    // status do pagamento
     public $status_pedido = [1 => 'CANCELADO', 10 => 'AGUARDANDO PAGAMENTO', 20 => 'BAIXADO', 30 => 'PAGO', 40 => 'PAGO', 50 => 'PAGO', 60 => 'PAGO'];
-    
     const status_cancelado = 1;
     const status_aguardando_pagamento = 10;
     const status_baixado = 20;
@@ -22,10 +21,18 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     const status_pago_trans_liberadas = 50;
     const status_pago_trans_realizadas = 60;
    
+    // status da entrega
+    public $status_delivery = [0 => 'Entrega cancelada', 1 => 'Aguardando entrega', 2 => 'Saiu para entrega', 3 => 'Entregue'];    
+    const status_delivery_cancelado = 0;
+    const status_delivery_aguardando = 1;
+    const status_delivery_saiu_entrega = 2;
+    const status_delivery_entregue = 3;
+    
     const trans_nao_criadas = 0;
     const trans_criadas = 1;
-    
+
     const SCENARIO_ATUALIZA_PEDIDO_PAGO = 'SCENARIO_ATUALIZA_PEDIDO_PAGO';
+    const SCENARIO_DELIVERY_ADDRESS = 'SCENARIO_DELIVERY_ADDRESS';
     
    
 	
@@ -58,14 +65,15 @@ class CB16PEDIDO extends BaseCB16PEDIDO
             'CB16_COMPRADOR_CPF' => 'Cb16  Comprador  Cpf',
             'CB16_COMPRADOR_TEL_DDD' => 'Cb16  Comprador  Tel  Ddd',
             'CB16_COMPRADOR_TEL_NUMERO' => 'Cb16  Comprador  Tel  Numero',
-            'CB16_COMPRADOR_END_LOGRADOURO' => 'Cb16  Comprador  End  Logradouro',
-            'CB16_COMPRADOR_END_NUMERO' => 'Cb16  Comprador  End  Numero',
-            'CB16_COMPRADOR_END_BAIRRO' => 'Cb16  Comprador  End  Bairro',
-            'CB16_COMPRADOR_END_CEP' => 'Cb16  Comprador  End  Cep',
-            'CB16_COMPRADOR_END_CIDADE' => 'Cb16  Comprador  End  Cidade',
-            'CB16_COMPRADOR_END_UF' => 'Cb16  Comprador  End  Uf',
-            'CB16_COMPRADOR_END_PAIS' => 'Cb16  Comprador  End  Pais',
-            'CB16_COMPRADOR_END_COMPLEMENTO' => 'Cb16  Comprador  End  Complemento',
+            'CB16_COMPRADOR_END_LOGRADOURO' => 'Logradouro',
+            'CB16_COMPRADOR_END_NUMERO' => 'Numero',
+            'CB16_COMPRADOR_END_BAIRRO' => 'Bairro',
+            'CB16_COMPRADOR_END_CEP' => 'CEP',
+            'CB16_COMPRADOR_END_CIDADE' => 'Cidade',
+            'CB16_COMPRADOR_END_UF' => 'UF',
+            'CB16_COMPRADOR_END_PAIS' => 'Pais',
+            'CB16_COMPRADOR_END_COMPLEMENTO' => 'Complemento',
+            'CB16_STATUS_DELIVERY' => 'Status da entrega',
         ];
     }
     
@@ -77,25 +85,27 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     {  
         return array_replace_recursive(parent::rules(),
          [
-            [['CB16_TRANS_CRIADAS', 'CB16_EMPRESA_ID', 'CB16_ID_FORMA_PAG_EMPRESA', 'CB16_STATUS', 'CB16_CARTAO_NUM_PARCELA'], 'integer'],
+            [['CB16_TRANS_CRIADAS', 'CB16_EMPRESA_ID', 'CB16_ID_FORMA_PAG_EMPRESA', 'CB16_STATUS', 'CB16_CARTAO_NUM_PARCELA', 'CB16_STATUS_DELIVERY'], 'integer'],
             [['CB16_EMPRESA_ID', 'CB16_USER_ID', 'CB16_VALOR', 'CB16_VLR_CB_TOTAL'], 'required'],
             [['CB16_ID_FORMA_PAG_EMPRESA', 'CB16_FORMA_PAG', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_STATUS', 'CB16_DT_APROVACAO'], 'required' ,'on' => self::SCENARIO_ATUALIZA_PEDIDO_PAGO , 'message'=>'O {attribute} é obrigatório'],
             [['CB16_VALOR', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_VLR_CB_TOTAL', 'CB16_FRETE', 'CB16_CARTAO_VLR_PARCELA'], 'number'],
-            [['CB16_DT', 'CB16_DT_APROVACAO'], 'safe'],
+            [['CB16_DT', 'CB16_DT_APROVACAO', 'CB16_STATUS_DELIVERY'], 'safe'],
             [['CB16_CARTAO_TOKEN'], 'string'],
             [['CB16_FORMA_PAG'], 'string', 'max' => 50],
             [['CB16_COMPRADOR_NOME', 'CB16_COMPRADOR_EMAIL', 'CB16_COMPRADOR_CPF', 'CB16_COMPRADOR_TEL_DDD', 'CB16_COMPRADOR_TEL_NUMERO', 'CB16_COMPRADOR_END_LOGRADOURO', 'CB16_COMPRADOR_END_NUMERO', 'CB16_COMPRADOR_END_BAIRRO', 'CB16_COMPRADOR_END_CEP', 'CB16_COMPRADOR_END_CIDADE', 'CB16_COMPRADOR_END_UF'], 'string', 'max' => 100],
             [['CB16_COMPRADOR_END_PAIS'], 'string', 'max' => 2],
-            [['CB16_COMPRADOR_END_COMPLEMENTO'], 'string', 'max' => 500],     
+            [['CB16_COMPRADOR_END_COMPLEMENTO'], 'string', 'max' => 500],             
+            [['CB16_COMPRADOR_END_CEP', 'CB16_COMPRADOR_END_LOGRADOURO', 'CB16_COMPRADOR_END_NUMERO', 'CB16_COMPRADOR_END_BAIRRO', 'CB16_COMPRADOR_END_CIDADE', 'CB16_COMPRADOR_END_UF'], 'required' ,'on' => self::SCENARIO_DELIVERY_ADDRESS , 'message'=>'O {attribute} é obrigatório'],
         ]);
     }
     
      public static function getPedido($pedido, $usuario)
     {
         
-        $sql = "SELECT CB16_PEDIDO.*, CB17_PRODUTO_PEDIDO.*, CB04_EMPRESA.*, CB14_FOTO_PRODUTO.CB14_URL 
+        $sql = "SELECT CB16_PEDIDO.*, CB06_VARIACAO.*, CB17_PRODUTO_PEDIDO.*, CB04_EMPRESA.*, CB14_FOTO_PRODUTO.CB14_URL 
                 FROM CB16_PEDIDO 
                 INNER JOIN CB17_PRODUTO_PEDIDO ON(CB16_PEDIDO.CB16_ID = CB17_PRODUTO_PEDIDO.CB17_PEDIDO_ID)
+                INNER JOIN CB06_VARIACAO ON(CB06_ID = CB17_VARIACAO_ID)
                 INNER JOIN CB04_EMPRESA ON(CB16_PEDIDO.CB16_EMPRESA_ID = CB04_EMPRESA.CB04_ID)
                 LEFT JOIN CB14_FOTO_PRODUTO ON(CB17_PRODUTO_PEDIDO.CB17_PRODUTO_ID =  CB14_FOTO_PRODUTO.CB14_PRODUTO_ID AND CB14_FOTO_PRODUTO.CB14_CAPA = 1)
                 WHERE CB16_ID = :pedido AND CB16_USER_ID = :usuario";
@@ -130,8 +140,8 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     public static function getPedidoByAuthKey($key, $empresa = "", $pedido = "")
     {
         
-        $sql = "SELECT CB16_PEDIDO.*, CB17_PRODUTO_PEDIDO.*, user.*, DATE_FORMAT(CB16_DT,'%d/%m/%Y') as CB16_DT, CB14_URL AS IMG, 
-                    CASE CB16_STATUS 
+        $sql = "SELECT CB16_PEDIDO.*, CB17_PRODUTO_PEDIDO.*, user.*, DATE_FORMAT(CB16_DT,'%d/%m/%Y') as CB16_DT, CB14_URL AS IMG,CB06_DISTRIBUICAO, 
+                CASE CB16_STATUS 
                     WHEN " . self::status_cancelado . " THEN 'Cancelado'
                     WHEN " . self::status_aguardando_pagamento . " THEN 'Aguardando pagamento'
                     WHEN " . self::status_baixado . " THEN 'Utilizado'
@@ -139,17 +149,27 @@ class CB16PEDIDO extends BaseCB16PEDIDO
                     WHEN " . self::status_pago_trans_agendadas . " THEN 'Pago'
                     WHEN " . self::status_pago_trans_liberadas . " THEN 'Pago'
                     WHEN " . self::status_pago_trans_realizadas . " THEN 'Pago'
-                    ELSE CB16_STATUS END AS STATUS
+                    ELSE CB16_STATUS END AS STATUS,
+                CASE CB16_STATUS_DELIVERY 
+                    WHEN " . self::status_delivery_cancelado . " THEN 'Entrega cancelada'
+                    WHEN " . self::status_delivery_aguardando . " THEN 'Aguardando entrega'
+                    WHEN " . self::status_delivery_saiu_entrega . " THEN 'Saiu para entrega'
+                    WHEN " . self::status_delivery_entregue . " THEN 'Entregue'
+                    ELSE '' END AS STATUS_DELIVERY
+
                 FROM CB16_PEDIDO 
                 INNER JOIN CB17_PRODUTO_PEDIDO ON(CB16_PEDIDO.CB16_ID = CB17_PRODUTO_PEDIDO.CB17_PEDIDO_ID)
+                INNER JOIN CB06_VARIACAO ON(CB06_ID = CB17_VARIACAO_ID)
                 INNER JOIN user ON(user.id = CB16_USER_ID)
                 LEFT JOIN (SELECT MAX(CB14_ID), CB14_PRODUTO_ID, CB14_URL FROM CB14_FOTO_PRODUTO GROUP BY CB14_PRODUTO_ID) CB14_FOTO_PRODUTO ON(CB14_PRODUTO_ID = CB17_PRODUTO_ID)
-                WHERE auth_key = :usuario " . (!$empresa ? "" : " AND CB16_EMPRESA_ID = :empresa") . (!$pedido ? "" : " AND CB16_ID = :pedido") . "
+                WHERE 1 = 1 " . (!$key ? "" : " AND auth_key = :usuario") . (!$empresa ? "" : " AND CB16_EMPRESA_ID = :empresa") . (!$pedido ? "" : " AND CB16_ID = :pedido") . "
                 ORDER BY CB16_STATUS DESC, CB16_DT DESC";
 
         $connection = \Yii::$app->db;
         $command = $connection->createCommand($sql);
-        $command->bindValue(':usuario', $key);
+        if ($key) {
+            $command->bindValue(':usuario', $key);
+        }
         if ($empresa) {
             $command->bindValue(':empresa', $empresa);
         }
@@ -235,7 +255,7 @@ class CB16PEDIDO extends BaseCB16PEDIDO
         return $command->query()->readAll();
     }
     
-	public static function getPedidoByStatus($status)
+    public static function getPedidoByStatus($status)
     {
         
         $sql = "
@@ -253,8 +273,61 @@ class CB16PEDIDO extends BaseCB16PEDIDO
         return $command->query()->readAll();
     }
     
+    public static function verificaPendenciaDeliveryAddress($pedido)
+    {
+        $sql = "
+            SELECT CB16_PEDIDO.* 
+            FROM CB16_PEDIDO 
+            INNER JOIN CB17_PRODUTO_PEDIDO ON(CB16_ID = CB17_PEDIDO_ID)
+            INNER JOIN CB06_VARIACAO ON(CB06_ID = CB17_VARIACAO_ID)
+            WHERE CB16_ID = :pedido AND CB06_DISTRIBUICAO = 1";
 
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':pedido', $pedido);
+        $r = $command->queryOne();
+        return $r ? !empty($r['CB16_COMPRADOR_END_LOGRADOURO']) : true;
+    }
     
+    
+    public static function getPedidoDelivery($empresa = "", $pedido = "")
+    {
+        
+        $sql = "SELECT CB16_PEDIDO.*, CB17_PRODUTO_PEDIDO.*, user.*, DATE_FORMAT(CB16_DT,'%d/%m/%Y') as CB16_DT,
+                DATE_FORMAT(CB16_DT_APROVACAO,'%d/%m/%Y %H:%i') as CB16_DT_APROVACAO, 
+                CASE CB16_STATUS 
+                    WHEN " . self::status_cancelado . " THEN 'Cancelado'
+                    WHEN " . self::status_aguardando_pagamento . " THEN 'Aguardando pagamento'
+                    WHEN " . self::status_baixado . " THEN 'Utilizado'
+                    WHEN " . self::status_pago . " THEN 'Pago'
+                    WHEN " . self::status_pago_trans_agendadas . " THEN 'Pago'
+                    WHEN " . self::status_pago_trans_liberadas . " THEN 'Pago'
+                    WHEN " . self::status_pago_trans_realizadas . " THEN 'Pago'
+                    ELSE CB16_STATUS END AS STATUS,
+                CASE CB16_STATUS_DELIVERY 
+                    WHEN " . self::status_delivery_cancelado . " THEN 'Entrega cancelada'
+                    WHEN " . self::status_delivery_aguardando . " THEN 'Aguardando entrega'
+                    WHEN " . self::status_delivery_saiu_entrega . " THEN 'Saiu para entrega'
+                    WHEN " . self::status_delivery_entregue . " THEN 'Entregue'
+                    ELSE '' END AS STATUS_DELIVERY
+
+                FROM CB16_PEDIDO 
+                INNER JOIN CB17_PRODUTO_PEDIDO ON(CB16_PEDIDO.CB16_ID = CB17_PRODUTO_PEDIDO.CB17_PEDIDO_ID)
+                INNER JOIN CB06_VARIACAO ON(CB06_ID = CB17_VARIACAO_ID)
+                INNER JOIN user ON(user.id = CB16_USER_ID)
+                WHERE CB16_STATUS = " . self::status_pago . " AND CB06_DISTRIBUICAO = 1 AND CB16_STATUS_DELIVERY <> 0  " . (!$empresa ? "" : " AND CB16_EMPRESA_ID = :empresa") . (!$pedido ? "" : " AND CB16_ID = :pedido") . "
+                ORDER BY CB16_STATUS DESC, CB16_DT DESC";
+
+        $connection = \Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        if ($empresa) {
+            $command->bindValue(':empresa', $empresa);
+        }
+        if ($pedido) {
+            $command->bindValue(':pedido', $pedido);
+        }
+        return $command->query()->readAll();
+        
+    }
     
 	
 }

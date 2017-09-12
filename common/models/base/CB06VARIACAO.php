@@ -17,6 +17,8 @@ use Yii;
  * @property string $CB06_PRECO
  * @property string $CB06_PRECO_PROMOCIONAL
  * @property string $CB06_DINHEIRO_VOLTA
+ * @property string $CB06_TEMPO_MIN
+ * @property string $CB06_TEMPO_MAX
  *
  * @property common\models\CB05PRODUTO $cB06PRODUTO
  * @property common\models\CB07CASHBACK[] $cB07CASHBACKs
@@ -33,7 +35,8 @@ class CB06VARIACAO extends \common\models\GlobalModel
     {
         return [
             [['CB06_PRODUTO_ID', 'CB06_DESCRICAO', 'CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'required'],
-            [['CB06_PRODUTO_ID'], 'integer'],
+            [['CB06_PRODUTO_ID', 'CB06_TEMPO_MIN', 'CB06_TEMPO_MAX'], 'integer'],
+            [['CB06_DISTRIBUICAO'], 'integer', 'min' => 0, 'max' => 1],
             [['CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'number'],
             [['CB06_TITULO'], 'string', 'max' => 500],
             [['CB06_DESCRICAO'], 'string', 'max' => 30],
@@ -64,7 +67,10 @@ class CB06VARIACAO extends \common\models\GlobalModel
             'CB06_DESCRICAO' => 'Cb06  Descricao',
             'CB06_PRECO' => 'Cb06  Preco',
             'CB06_PRECO_PROMOCIONAL' => 'Cb06  Preco  Promocional',
-            'CB06_DINHEIRO_VOLTA' => 'Cb06  Dinheiro  Volta',
+            'CB06_DINHEIRO_VOLTA' => 'Dinheiro de volta',
+            'CB06_TEMPO_MIN' => 'Tempo mínimo',
+            'CB06_TEMPO_MAX' => 'Tempo máximo',
+            'CB06_DISTRIBUICAO' => 'Distribuição',
         ];
     }
     

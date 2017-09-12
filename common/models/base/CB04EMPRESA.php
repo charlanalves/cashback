@@ -27,6 +27,8 @@ use Yii;
  * @property string $CB04_END_NUMERO
  * @property string $CB04_END_COMPLEMENTO
  * @property string $CB04_END_CEP
+ * @property string $CB04_END_LATITUDE
+ * @property string $CB04_END_LONGITUDE
  *
  * @property common\models\CB01TRANSACAO[] $cB01TRANSACAOs
  * @property common\models\CB10CATEGORIA $cB04CATEGORIA
@@ -54,7 +56,9 @@ class CB04EMPRESA extends \common\models\GlobalModel
             [['CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_COMPLEMENTO'], 'string', 'max' => 50],
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
             [['CB04_END_UF'], 'string', 'max' => 2],
+            [['CB04_FLG_DELIVERY'], 'integer', 'min' => 0, 'max' => 1],
             [['CB04_END_NUMERO'], 'string', 'max' => 5],
+            [['CB04_END_LONGITUDE', 'CB04_END_LATITUDE'], 'string', 'max' => 20],
             [['CB04_CNPJ'], 'string', 'max' => 14],
             
             
@@ -102,7 +106,9 @@ class CB04EMPRESA extends \common\models\GlobalModel
             'CB03_SAQUE_MIN' => 'Saque Mínimo',
             'CB03_SAQUE_MAX' => 'Saque Máximo',
             'CB04_EMAIL' => 'Email',
-        
+            'CB04_END_LONGITUDE' => 'Longitude',
+            'CB04_END_LATITUDE' => 'Latitude',
+            'CB04_FLG_DELIVERY' => 'Delivery',
         ];
     }
     
