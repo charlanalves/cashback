@@ -23,7 +23,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
             [['CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_COMPLEMENTO'], 'string', 'max' => 50],
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
             [['CB04_END_UF'], 'string', 'max' => 2],
-            [['CB04_FLG_DELIVERY'], 'integer', 'min' => 2, 'max' => 1],
+            [['CB04_FLG_DELIVERY'], 'integer'],
             [['CB04_END_NUMERO'], 'string', 'max' => 5],
             [['CB04_END_LONGITUDE', 'CB04_END_LATITUDE'], 'string', 'max' => 20],
             [['CB04_CNPJ'], 'string', 'max' => 14],
