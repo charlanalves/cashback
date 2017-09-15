@@ -750,7 +750,6 @@ class ApiEmpresaController extends GlobalBaseController {
                 
                 try {
                     $data = $post['data'];
-                    $delivery = (bool) $pedido['CB06_DISTRIBUICAO'];
                     
                     // Dados do pagamento
                     $PERC_PAG = $this->getPercPag($data, $pedido);
@@ -773,7 +772,6 @@ class ApiEmpresaController extends GlobalBaseController {
                     $transaction->commit();
                     \Yii::$app->Iugu->execute('criaTransferencias', ['pedido' => '']);
                     $status = true;
-                    $retorno = ['delivery' => $delivery];
                     
                 } catch (\Exception $exc) {
                     $transaction->rollBack();
@@ -923,8 +921,8 @@ class ApiEmpresaController extends GlobalBaseController {
         [
             'empresa_nome' => $pedido['CB04_NOME'],
             'empresa_telefone' => ($pedido['CB04_TEL_NUMERO'] ? : ''),
-            'entrega_inicial' => ($pedido['CB16_DT_APROVACAO'] && $pedido['CB06_TEMPO_MIN']) ? \Yii::$app->u->addMinutesToDateTime($pedido['CB16_DT_APROVACAO'], $pedido['CB06_TEMPO_MIN']) : '',
-            'entrega_termino' => ($pedido['CB16_DT_APROVACAO'] && $pedido['CB06_TEMPO_MAX']) ? \Yii::$app->u->addMinutesToDateTime($pedido['CB16_DT_APROVACAO'], $pedido['CB06_TEMPO_MAX']) : '',
+            'entrega_inicial' => ($pedido['CB16_DT_APROVACAO'] && $pedido['CB06_TEMPO_MIN']) ? \Yii::$app->u->addMinutesToDateTime($pedido['CB16_DT_APROVACAO'], $pedido['CB06_TEMPO_MIN'], 'H:i') : '',
+            'entrega_termino' => ($pedido['CB16_DT_APROVACAO'] && $pedido['CB06_TEMPO_MAX']) ? \Yii::$app->u->addMinutesToDateTime($pedido['CB16_DT_APROVACAO'], $pedido['CB06_TEMPO_MAX'], 'H:i') : '',
             'nome_user' => $post['name'],
             'vlr_cashback' => $pedido['CB16_VLR_CB_TOTAL'],
             'produto_descricao' => $pedido['CB17_NOME_PRODUTO'],

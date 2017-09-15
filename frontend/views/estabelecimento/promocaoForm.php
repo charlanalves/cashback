@@ -42,8 +42,19 @@ $this->title = '';
     // Preenche o form com os dados da produto se for edicao
     FormPromocao.setFormData(produto);
     
+    FormPromocao.form.find("select[name=CB06_DISTRIBUICAO]").change(function (e) {
+        // se for delivery preenche o campos de tempo min e max
+        if(this.value == 1) {
+            FormPromocao.form.find("#CB06_TEMPO_MIN").show();
+            FormPromocao.form.find("#CB06_TEMPO_MAX").show();
+        } else {
+            FormPromocao.form.find("#CB06_TEMPO_MIN").hide();
+            FormPromocao.form.find("#CB06_TEMPO_MAX").hide();
+        }
+        
+    });
 
-    $("#btn-salvar").click(function (e) {
+    FormPromocao.form.find("#btn-salvar").click(function (e) {
         FormPromocao.form.submit();
     });
 
@@ -65,12 +76,12 @@ $this->title = '';
                 CB06_DINHEIRO_VOLTA: {
                     required: true
                 },
-                CB06_TEMPO_MIN: {
-                    digits: true
-                },
-                CB06_TEMPO_MAX: {
-                    digits: true
-                },
+//                CB06_TEMPO_MIN: {
+//                    digits: true
+//                },
+//                CB06_TEMPO_MAX: {
+//                    digits: true
+//                },
             },
             messages: {
                 CB06_DESCRICAO: {
@@ -85,12 +96,12 @@ $this->title = '';
                 CB06_DINHEIRO_VOLTA: {
                     required: 'Campo obrigatório'
                 },
-                CB06_TEMPO_MIN: {
-                    digits: 'Digite apenas numeros'
-                },
-                CB06_TEMPO_MAX: {
-                    digits: 'Digite apenas numeros'
-                },
+//                CB06_TEMPO_MIN: {
+//                    digits: 'Digite apenas numeros'
+//                },
+//                CB06_TEMPO_MAX: {
+//                    digits: 'Digite apenas numeros'
+//                },
             },
             errorPlacement: function (error, element) {
                 error.insertAfter(element.parent());
@@ -139,20 +150,8 @@ $this->title = '';
                                 </label>
                             </section>
                         </div>
+                        <?php if ($estabelecimento['CB04_FLG_DELIVERY']) { ?>
                         <div class="row padding-top-15">
-                            <section class="col col-4"><?= $al['CB06_TEMPO_MIN'] ?>
-                                <label class="input"> <i class="icon-prepend fa fa-clock-o"></i>
-                                    <input type="number" name="CB06_TEMPO_MIN" placeholder="">
-                                    <small>Informe os minutos.</small>
-                                </label>
-                            </section>
-                            <section class="col col-4"><?= $al['CB06_TEMPO_MAX'] ?>
-                                <label class="input"> <i class="icon-prepend fa fa-clock-o"></i>
-                                    <input type="number" name="CB06_TEMPO_MAX" placeholder="">
-                                    <small>Informe os minutos.</small>
-                                </label>
-                            </section>
-                            <?php if ($estabelecimento['CB04_FLG_DELIVERY']) { ?>
                             <section class="col col-4"><?= $al['CB06_DISTRIBUICAO'] ?>
                                 <label class="select">
                                     <select name="CB06_DISTRIBUICAO">
@@ -162,8 +161,20 @@ $this->title = '';
                                     </select> <i></i> 
                                 </label>
                             </section>
-                            <?php } ?>
+                            <section id="CB06_TEMPO_MIN" style="display: none" class="col col-4"><?= $al['CB06_TEMPO_MIN'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-clock-o"></i>
+                                    <input type="number" name="CB06_TEMPO_MIN" placeholder="">
+                                    <small>Informe os minutos.</small>
+                                </label>
+                            </section>
+                            <section id="CB06_TEMPO_MAX" style="display: none" class="col col-4"><?= $al['CB06_TEMPO_MAX'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-clock-o"></i>
+                                    <input type="number" name="CB06_TEMPO_MAX" placeholder="">
+                                    <small>Informe os minutos.</small>
+                                </label>
+                            </section>
                         </div>
+                        <?php } ?>
                     </fieldset>
                     <footer style="padding: 10px;">
                         <button id="btn-salvar" type="button" class="btn btn-success" style="margin:0px 4px">
