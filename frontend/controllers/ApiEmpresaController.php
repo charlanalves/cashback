@@ -920,8 +920,8 @@ class ApiEmpresaController extends GlobalBaseController {
         [
             'empresa_nome' => $pedido['CB04_NOME'],
             'empresa_telefone' => ($pedido['CB04_TEL_NUMERO'] ? : ''),
-            'entrega_inicial' => ($pedido['CB16_DT_APROVACAO'] && $pedido['CB06_TEMPO_MIN']) ? \Yii::$app->u->addMinutesToDateTime($pedido['CB16_DT_APROVACAO'], $pedido['CB06_TEMPO_MIN'], 'H:i') : '',
-            'entrega_termino' => ($pedido['CB16_DT_APROVACAO'] && $pedido['CB06_TEMPO_MAX']) ? \Yii::$app->u->addMinutesToDateTime($pedido['CB16_DT_APROVACAO'], $pedido['CB06_TEMPO_MAX'], 'H:i') : '',
+            'entrega_inicial' => ($pedido['CB16_DT_APROVACAO'] && $pedido['CB06_TEMPO_MIN']) ? explode(" ",\Yii::$app->u->addMinutesToDateTime($pedido['CB16_DT_APROVACAO'], $pedido['CB06_TEMPO_MIN'], 'H:i'))[1] : '',
+            'entrega_termino' => ($pedido['CB16_DT_APROVACAO'] && $pedido['CB06_TEMPO_MAX']) ? explode(" ",\Yii::$app->u->addMinutesToDateTime($pedido['CB16_DT_APROVACAO'], $pedido['CB06_TEMPO_MAX'], 'H:i'))[1] : '',
             'nome_user' => $post['name'],
             'vlr_cashback' => $pedido['CB16_VLR_CB_TOTAL'],
             'produto_descricao' => $pedido['CB17_NOME_PRODUTO'],
