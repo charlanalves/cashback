@@ -749,6 +749,7 @@ class ApiEmpresaController extends GlobalBaseController {
                 
                 try {
                     $data = $post['data'];
++                    $delivery = (bool) $pedido['CB06_DISTRIBUICAO'];
                     
                     // Dados do pagamento
                     $PERC_PAG = $this->getPercPag($data, $pedido);
