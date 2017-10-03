@@ -40,7 +40,7 @@ if (!empty($error)) {
 
         $pedido = $value['CB16_ID'];
         $dt = $value['CB16_DT_APROVACAO'];
-        $cliente = $value['name'];
+        $cliente = $value['name'] . ' ' . $value['CB16_COMPRADOR_TEL_DDD'] . $value['CB16_COMPRADOR_TEL_NUMERO'];
         //$telefone = $value['telefone'];
         $endereco = $value['CB16_COMPRADOR_END_LOGRADOURO'] . ', ' . $value['CB16_COMPRADOR_END_NUMERO'] . ' - ' . $value['CB16_COMPRADOR_END_BAIRRO'] . ' - ' . $value['CB16_COMPRADOR_END_CIDADE'] . '/' . $value['CB16_COMPRADOR_END_UF'] . '<br />' . $value['CB16_COMPRADOR_END_COMPLEMENTO'];
         $produto = $value['CB17_NOME_PRODUTO'];
