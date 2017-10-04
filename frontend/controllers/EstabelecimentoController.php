@@ -428,7 +428,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     
     // altera status da entrega
     public function setStatusDelivery($param) {
-        $CB16PEDIDO = CB16PEDIDO::findOne()->where("CB16_ID = ".$param['pedido']." and CB16_STATUS >= 30")->all()[0];
+        $CB16PEDIDO = CB16PEDIDO::find()->where("CB16_ID = ".$param['pedido']." and CB16_STATUS >= 30")->all()[0];
      
         if ($CB16PEDIDO) {
             $CB16PEDIDO->setAttribute('CB16_STATUS_DELIVERY', $param['new_status']);
