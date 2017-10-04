@@ -36,9 +36,29 @@ class IuguComponent extends PaymentBaseComponent {
     protected function processTransaction($data)
     {
         $this->lastResponse =  \Iugu_Charge::create($data);
-        
-        if (isset($this->lastResponse->error)) {     
-          throw new UserException("O pagamento não foi autorizado tente novamente com outro cartão de crédito.");
+        $msg = '';
+        if (isset($this->lastResponse->errors)) { 
+            if (is_array($this->lastResponse->errors)) {
+                foreach($this->lastResponse->errors as $k => $e){
+                    if (is_array($this->lastResponse->errors[$k])) {
+                        foreach($this->lastResponse->errors[$k] as $a){
+                            $msg .= $a.' ';
+                        }
+                    }else {
+                        $msg .= $this->lastResponse->errors[$k].' ';
+                    }
+                }
+            }else {
+                $msg = $this->lastResponse->errors;
+            }
+            
+            if (empty($msg)){
+                $msg = "O pagamento não foi autorizado tente novamente com outro cartão de crédito.";
+            }
+          throw new UserException($msg);
+        } else if(!$this->lastResponse->success){
+            $msg = $this->lastResponse->message .' Vefique os dados do cartão ou tente novamente com outro cartão de crédito.';
+            throw new UserException($this->lastResponse->message);
         }
     }
     
