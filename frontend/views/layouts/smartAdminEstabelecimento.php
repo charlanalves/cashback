@@ -133,6 +133,10 @@ $this->title = 'Estabelecimento';
                     document.location.href = 'index.php?r=estabelecimento/saque';
                     return false;
                 });
+                $("a#menu-avaliacao").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/avaliacao';
+                    return false;
+                });
                 
                 // SAIR ----------------------------------------------------                
                 $("#menu_sair").click(function (e) {
@@ -187,6 +191,9 @@ $this->title = 'Estabelecimento';
                     </li>
                     <li class="">
                         <a href="#" title="Saque" id="menu-saque"><i class="fa fa-lg fa-fw fa-money"></i> <span class="menu-item-parent">Saque</span></a>
+                    </li>
+                    <li class="">
+                        <a href="#" title="Avaliaão" id="menu-avaliacao"><i class="fa fa-lg fa-fw fa-list-alt"></i> <span class="menu-item-parent">Avaliação</span></a>
                     </li>
                     <li class="">
                         <a href="#" title="Empresa" id="menu-empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>

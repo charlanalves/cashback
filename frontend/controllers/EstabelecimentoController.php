@@ -17,6 +17,11 @@ use common\models\CB13FOTOEMPRESA;
 use common\models\CB14FOTOPRODUTO;
 use common\models\SYS01PARAMETROSGLOBAIS;
 use common\models\CB16PEDIDO;
+use common\models\CB19AVALIACAO;
+use common\models\CB20ITEMAVALIACAO;
+use common\models\CB21RESPOSTAAVALIACAO;
+use common\models\CB22COMENTARIOAVALIACAO;
+use common\models\CB23TIPOAVALIACAO;
 use common\models\VIEWEXTRATO;
 use common\models\CB03CONTABANC;
 use common\models\PAG04TRANSFERENCIAS;
@@ -578,4 +583,150 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         ]);
     }
 
+    
+    public function actionAvaliacao() {
+        $this->layout = 'smartAdminEstabelecimento';
+        
+        $model = new CB19AVALIACAO();
+        $al = $model->attributeLabels();
+        
+        // avaliacoes da empresa
+        $avaliacoes = $model->avaliacaoEmpresa($this->user->id_company);
+        
+        // itens avaliados
+        $itensAvaliados = CB21RESPOSTAAVALIACAO::getNotaPercentualItemByEmpresa($this->user->id_company);
+        
+        // Comentarios
+        $comentarios = CB22COMENTARIOAVALIACAO::getComentariosByEmpresa($this->user->id_company);
+        
+        return $this->render('avaliacao', [
+                    'tituloTela' => 'Avaliação',
+                    'usuario' => $this->user->attributes,
+                    'al' => $al,
+                    'avaliacoes' => $avaliacoes,
+                    'itensAvaliados' => $itensAvaliados,
+                    'comentarios' => $comentarios
+        ]);
+    }
+    
+
+    public function actionAvaliacaoForm() {
+        \Yii::$app->view->title = '';
+        $this->layout = 'empty';
+
+        $model = new CB19AVALIACAO();
+        $alAvaliacao = $model->attributeLabels();
+        
+        // itens pela categoria do estabelecimento
+        $itens = CB23TIPOAVALIACAO::findCombo('CB23_TIPO_AVALIACAO', 'CB23_ID', 'CB23_DESCRICAO', 'CB23_STATUS = 1 AND CB23_CATEGORIA_ID = ' . $this->estabelecimento['CB04_CATEGORIA_ID']);
+
+        // edicao da avaliacao
+        if($avaliacao = Yii::$app->request->get('avaliacao')) {
+            
+            // dados da avaliacao
+            $dataAvaliacao = CB19AVALIACAO::findOne($avaliacao)->getAttributes();
+            
+            // itens da selecionados na avaliacao ativos
+            if($selecionados = CB20ITEMAVALIACAO::find()->select('CB20_TIPO_AVALICAO_ID')->where('CB20_STATUS = 1 AND CB20_AVALIACAO_ID=' . $avaliacao)->asArray()->all()){
+                $itensSelecionados = [];
+                foreach ($selecionados as $value) {
+                    $itensSelecionados[] = $value['CB20_TIPO_AVALICAO_ID'];
+                }
+            }
+        // nova avaliacao
+        } else {
+            $dataAvaliacao = false;
+            $itensSelecionados = false;
+            
+        }
+        
+        return $this->render('avaliacaoForm', [
+                    'alAvaliacao' => $alAvaliacao,
+                    'itens' => $itens,
+                    'dataAvaliacao' => $dataAvaliacao,
+                    'itensSelecionados' => $itensSelecionados
+        ]);
+    }
+
+    // permite baixar apenas os pedidos pagos
+    public function saveAvaliacao($param) {
+        
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        try {
+
+            // CADASTRO --------------------------------------------------------
+            if(!($CB19_ID = $param['CB19_ID'])) {
+                
+                // salva a avaliacao
+                $CB19AVALIACAO = new CB19AVALIACAO();
+                $CB19AVALIACAO->setAttribute('CB19_EMPRESA_ID', $this->user->id_company);
+                $CB19AVALIACAO->setAttribute('CB19_NOME', $param['CB19_NOME']);
+                $CB19AVALIACAO->setAttribute('CB19_STATUS', 1);
+                $CB19AVALIACAO->save();
+                $CB19_ID = $CB19AVALIACAO->CB19_ID;
+
+                // salva os itens da avaliação - pode nao ter itens, só exibe um campo de texto para avaliar
+                if ($param['AVALIACAO-ITENS']) {
+                    foreach ($param['AVALIACAO-ITENS'] as $item) {
+
+                        $CB20ITEMAVALIACAO = new CB20ITEMAVALIACAO();
+                        $CB20ITEMAVALIACAO->setAttribute('CB20_AVALIACAO_ID', $CB19_ID);
+                        $CB20ITEMAVALIACAO->setAttribute('CB20_TIPO_AVALICAO_ID', $item);
+                        $CB20ITEMAVALIACAO->setAttribute('CB20_STATUS', 1);
+                        $CB20ITEMAVALIACAO->save();
+
+                    }
+                }
+
+            // EDICAO ----------------------------------------------------------
+            } else {
+                
+                // salva a avaliacao
+                $CB19AVALIACAO = CB19AVALIACAO::findOne($CB19_ID);
+                $CB19AVALIACAO->setAttribute('CB19_EMPRESA_ID', $this->user->id_company);
+                $CB19AVALIACAO->setAttribute('CB19_NOME', $param['CB19_NOME']);
+                $CB19AVALIACAO->setAttribute('CB19_STATUS', 1);
+                $CB19AVALIACAO->save();
+                
+                // desativa todos os itens antes de add/ativar
+                CB20ITEMAVALIACAO::updateAll(['CB20_STATUS' => 0], 'CB20_AVALIACAO_ID = ' . $CB19_ID);
+
+                // salva os itens da avaliação - pode nao ter itens, só exibe um campo de texto para avaliar
+                if ($param['AVALIACAO-ITENS']) {
+                    foreach ($param['AVALIACAO-ITENS'] as $item) {
+
+                        // verifica se o item existe desativado e ativa / se nao cria
+                        if(!$CB20ITEMAVALIACAO = CB20ITEMAVALIACAO::find()->where("CB20_AVALIACAO_ID = $CB19_ID AND CB20_TIPO_AVALICAO_ID = $item")->one()) {
+                            $CB20ITEMAVALIACAO = new CB20ITEMAVALIACAO();
+                            $CB20ITEMAVALIACAO->setAttribute('CB20_AVALIACAO_ID', $CB19_ID);
+                            $CB20ITEMAVALIACAO->setAttribute('CB20_TIPO_AVALICAO_ID', $item);
+                        }
+                        
+                        $CB20ITEMAVALIACAO->setAttribute('CB20_STATUS', 1);
+                        $CB20ITEMAVALIACAO->save();
+
+                    }
+                }
+                
+            }
+
+            $transaction->commit();
+            return json_encode(['status' => true]);
+
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            return json_encode(['status' => false]);
+        }
+        
+    }
+    
+    // ativar/desativar avaliação
+    public function actionAvaliacaoAtivar($avaliacao, $status) {
+        $CB19AVALIACAO = CB19AVALIACAO::findOne($avaliacao);
+        $CB19AVALIACAO->setAttribute('CB19_STATUS', $status);
+        return ($CB19AVALIACAO->save()) ? '' : 'error';
+    }
+    
+    
 }
