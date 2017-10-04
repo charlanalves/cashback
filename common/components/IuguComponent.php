@@ -25,7 +25,8 @@ class IuguComponent extends PaymentBaseComponent {
     //  \Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
        
        //producao
-      \Iugu::setApiKey(self::apiTokenTest);
+      //\Iugu::setApiKey(self::apiTokenTest);
+      \Iugu::setApiKey(self::apiTokenProd);
     }
     
     protected function prepareCreditCard($data)
