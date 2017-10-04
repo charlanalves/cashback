@@ -315,7 +315,7 @@ class CB16PEDIDO extends BaseCB16PEDIDO
                 INNER JOIN CB06_VARIACAO ON(CB06_ID = CB17_VARIACAO_ID)
                 INNER JOIN user ON(user.id = CB16_USER_ID)
                 WHERE CB16_STATUS >= " . self::status_pago . " AND CB06_DISTRIBUICAO = 1 AND CB16_STATUS_DELIVERY <> 0  " . (!$empresa ? "" : " AND CB16_EMPRESA_ID = :empresa") . (!$pedido ? "" : " AND CB16_ID = :pedido") . "
-                ORDER BY CB16_STATUS DESC, CB16_DT DESC";
+                ORDER BY CB16_DT DESC, CB16_STATUS DESC";
 
         $connection = \Yii::$app->db;
         $command = $connection->createCommand($sql);
