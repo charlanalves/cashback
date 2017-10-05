@@ -250,7 +250,7 @@ $this->title = '';
                                                     ?>
                                                     <tr>
                                                         <td style="width: 100%;">
-                                                            <strong>&bull; <?= $variacao['CB06_DESCRICAO'] ?></strong> <br /> 
+                                                            <strong>&bull; <?= $variacao['CB06_DESCRICAO'] ?></strong> <?= ($variacao['CB06_AVALIACAO_ID'] ? '(Avaliando)' : '') ?> <br /> 
                                                             Valor original: <strong>R$ <?= \Yii::$app->u->moedaReal($variacao['CB06_PRECO']) ?></strong> | Valor promocional: <strong>R$ <?= \Yii::$app->u->moedaReal($variacao['CB06_PRECO_PROMOCIONAL']) ?></strong> | Dinheiro de volta: <strong><?= \Yii::$app->u->moedaReal($variacao['CB06_DINHEIRO_VOLTA']) ?>%</strong>
                                                         </td>
                                                         <td align="center"><button class="btn btn-danger btn-xs margin-top-5" onclick="excluirVariacao(<?= $variacao['CB06_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>

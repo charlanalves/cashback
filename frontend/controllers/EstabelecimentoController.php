@@ -343,11 +343,15 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $qtdMaxPromocao = (int) SYS01PARAMETROSGLOBAIS::getValor('4');
         $qtdPromocao = CB06VARIACAO::find()->where(['CB06_PRODUTO_ID' => $produto])->count();
         $maxPromocao = ($qtdMaxPromocao <= $qtdPromocao) ? "Você atingiu o limite de promoções por produto." : "";
+        
+        // Avaliacoes ativas cadastradas pela empresa
+        $avaliacoes = CB06VARIACAO::findCombo('CB19_AVALIACAO', 'CB19_ID', 'CB19_NOME', 'CB19_STATUS=1 AND CB19_EMPRESA_ID=' . $this->user->id_company);
 
         return $this->render('promocaoForm', [
                     'tituloTela' => 'Promoção',
                     'usuario' => $this->user->attributes,
                     'produto' => ['CB06_PRODUTO_ID' => $produto],
+                    'avaliacoes' => $avaliacoes,
                     'al' => $al,
                     'estabelecimento' => $this->estabelecimento,
                     'maxPromocao' => $maxPromocao,

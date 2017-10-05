@@ -14,6 +14,7 @@ $this->title = '';
     var ultimoCEP = '',
             FormPromocao = {},
             produto = JSON.parse('<?= json_encode($produto) ?>'),
+            avaliacoes = JSON.parse('<?= json_encode($avaliacoes) ?>'),
             callbackSavePromocao = function (data) {
                 if (data.status == true) {
                     message = 'Promoção cadastrada.';
@@ -41,7 +42,11 @@ $this->title = '';
 
     // Preenche o form com os dados da produto se for edicao
     FormPromocao.setFormData(produto);
+
+    // Opcoes com as Avaliações cadastradas
+    FormPromocao.addOptionsSelect('CB06_AVALIACAO_ID', avaliacoes);
     
+    // ao alterar a opcao de distribuicao
     FormPromocao.form.find("select[name=CB06_DISTRIBUICAO]").change(function (e) {
         // se for delivery preenche o campos de tempo min e max
         if(this.value == 1) {
@@ -129,11 +134,14 @@ $this->title = '';
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" />
                     <input type="hidden" name="CB06_PRODUTO_ID" value="" />
                     <fieldset>
-                        Descrição
-                        <label class="input"> <i class="icon-prepend fa fa-tags"></i>
-                            <input type="text" name="CB06_DESCRICAO" placeholder="">
-                        </label>
-                        <div class="row padding-top-15">
+                        <div class="row">
+                            <section class="">Descrição
+                                <label class="input"> <i class="icon-prepend fa fa-tags"></i>
+                                    <input type="text" name="CB06_DESCRICAO" placeholder="">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row">
                             <section class="col col-4">Preço Original
                                 <label class="input"> <i class="icon-prepend fa fa-usd"></i>
                                     <input type="text" name="CB06_PRECO" placeholder="" maxlength="8">
@@ -151,7 +159,7 @@ $this->title = '';
                             </section>
                         </div>
                         <?php if ($estabelecimento['CB04_FLG_DELIVERY']) { ?>
-                        <div class="row padding-top-15">
+                        <div class="row">
                             <section class="col col-4"><?= $al['CB06_DISTRIBUICAO'] ?>
                                 <label class="select">
                                     <select name="CB06_DISTRIBUICAO">
@@ -175,6 +183,19 @@ $this->title = '';
                             </section>
                         </div>
                         <?php } ?>
+
+                        <?php if ($avaliacoes) { ?>
+                        <div class="row">
+                            <section class="col col-6"><?= $al['CB06_AVALIACAO_ID'] ?>
+                                <label class="select">
+                                    <select name="CB06_AVALIACAO_ID">
+                                        <option value="">Não avaliar</option>
+                                    </select> <i></i> 
+                                </label>
+                            </section>
+                        </div>
+                        <?php } ?>
+
                     </fieldset>
                     <footer style="padding: 10px;">
                         <button id="btn-salvar" type="button" class="btn btn-success" style="margin:0px 4px">

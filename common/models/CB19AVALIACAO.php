@@ -37,4 +37,22 @@ class CB19AVALIACAO extends BaseCB19AVALIACAO {
         return $command->query()->readAll();
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getAvaliacao($id) {
+
+        $sql = "SELECT CB20_ID, CB23_DESCRICAO,CB23_ICONE
+                FROM CB19_AVALIACAO
+                INNER JOIN CB20_ITEM_AVALIACAO ON( CB20_AVALIACAO_ID = CB19_ID)
+                INNER JOIN CB23_TIPO_AVALIACAO ON( CB20_TIPO_AVALICAO_ID = CB23_ID)
+                WHERE CB19_ID = :id AND CB20_STATUS = 1
+                ORDER BY CB23_DESCRICAO";
+
+        $connection = \Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        $command->bindValue(':id', $id);
+        return $command->query()->readAll();
+    }
+
 }

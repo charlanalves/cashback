@@ -18,6 +18,7 @@ use common\models\CB14FOTOPRODUTO;
 use common\models\CB16PEDIDO;
 use common\models\CB17PRODUTOPEDIDO;
 use common\models\CB18VARIACAOPEDIDO;
+use common\models\CB19AVALIACAO;
 use common\models\VIEWEXTRATO;
 use common\models\VIEWEXTRATOCLIENTE;
 use common\models\PAG04TRANSFERENCIAS;
@@ -954,7 +955,6 @@ class ApiEmpresaController extends GlobalBaseController {
 
         try {
 
-
             if(($produto = $post['produto']) && ($variacao = $post['promocao'])) {
 
                 $dadosP = CB05PRODUTO::findOne(['CB05_ID' => $produto]);
@@ -992,9 +992,30 @@ class ApiEmpresaController extends GlobalBaseController {
 
         } catch (\Exception $exc) {
             $transaction->rollBack();
-            //var_dump($exc->getMessage());
             return false;
         }
+    }
+    
+    public function actionGetAvaliacao() {
+        
+        $post = \Yii::$app->request->post();
+        
+        if (!($user = $post['auth_key'])) {
+            return false;
+        }
+        
+        unset($post['auth_key']);
+        if (!($idUser = User::getIdByAuthKey($user))) {
+            return false;
+        }
+    
+        $retorno = [
+            ['pedido' => ['id' => 1, 'empresa' => 'XXX', 'produto'=> 'YYY'], 'avaliacao' => CB19AVALIACAO::getAvaliacao(4)],
+            ['pedido' => ['id' => 2, 'empresa' => 'XXX', 'produto'=> 'YYY'], 'avaliacao' => CB19AVALIACAO::getAvaliacao(5)],
+        ];
+        
+        return json_encode($retorno);
+        
     }
     
 }

@@ -35,7 +35,7 @@ class CB06VARIACAO extends \common\models\GlobalModel
     {
         return [
             [['CB06_PRODUTO_ID', 'CB06_DESCRICAO', 'CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'required'],
-            [['CB06_PRODUTO_ID', 'CB06_TEMPO_MIN', 'CB06_TEMPO_MAX'], 'integer'],
+            [['CB06_PRODUTO_ID', 'CB06_TEMPO_MIN', 'CB06_TEMPO_MAX', 'CB06_AVALIACAO_ID'], 'integer'],
             [['CB06_DISTRIBUICAO'], 'integer', 'min' => 0, 'max' => 1],
             [['CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA'], 'number'],
             [['CB06_TITULO'], 'string', 'max' => 500],
@@ -71,6 +71,7 @@ class CB06VARIACAO extends \common\models\GlobalModel
             'CB06_TEMPO_MIN' => 'Tempo mínimo',
             'CB06_TEMPO_MAX' => 'Tempo máximo',
             'CB06_DISTRIBUICAO' => 'Distribuição',
+            'CB06_AVALIACAO_ID' => 'Avaliação'
         ];
     }
     
