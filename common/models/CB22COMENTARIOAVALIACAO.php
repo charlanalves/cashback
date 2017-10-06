@@ -2,27 +2,24 @@
 
 namespace common\models;
 
-use Yii;
 use common\models\base\CB22COMENTARIOAVALIACAO as BaseCB22COMENTARIOAVALIACAO;
 
 /**
  * This is the model class for table "CB22_COMENTARIO_AVALIACAO".
  */
-class CB22COMENTARIOAVALIACAO extends BaseCB22COMENTARIOAVALIACAO
-{
+class CB22COMENTARIOAVALIACAO extends BaseCB22COMENTARIOAVALIACAO {
+
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
-        return array_replace_recursive(parent::rules(),
-	    [
+    public function rules() {
+        return array_replace_recursive(parent::rules(), [
             [['CB22_AVALIACAO_ID', 'CB22_PRODUTO_PEDIDO_ID', 'CB22_COMENTARIO'], 'required'],
             [['CB22_AVALIACAO_ID', 'CB22_PRODUTO_PEDIDO_ID'], 'integer'],
             [['CB22_COMENTARIO'], 'string', 'max' => 250]
         ]);
     }
-    
+
     /**
      * getComentariosByEmpresa
      * Obtem percentual de aprovação do item da avaliacao de uma empresa
@@ -42,4 +39,5 @@ class CB22COMENTARIOAVALIACAO extends BaseCB22COMENTARIOAVALIACAO
         $command->bindValue(':empresa', $empresa);
         return $command->query()->readAll();
     }
+
 }

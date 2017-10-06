@@ -19,6 +19,8 @@ use common\models\CB16PEDIDO;
 use common\models\CB17PRODUTOPEDIDO;
 use common\models\CB18VARIACAOPEDIDO;
 use common\models\CB19AVALIACAO;
+use common\models\CB21RESPOSTAAVALIACAO;
+use common\models\CB22COMENTARIOAVALIACAO;
 use common\models\VIEWEXTRATO;
 use common\models\VIEWEXTRATOCLIENTE;
 use common\models\PAG04TRANSFERENCIAS;
@@ -1008,13 +1010,51 @@ class ApiEmpresaController extends GlobalBaseController {
         if (!($idUser = User::getIdByAuthKey($user))) {
             return false;
         }
-    
-        $retorno = [
-            ['pedido' => ['id' => 1, 'empresa' => 'XXX', 'produto'=> 'YYY'], 'avaliacao' => CB19AVALIACAO::getAvaliacao(4)],
-            ['pedido' => ['id' => 2, 'empresa' => 'XXX', 'produto'=> 'YYY'], 'avaliacao' => CB19AVALIACAO::getAvaliacao(5)],
-        ];
+        
+        // get pedidos da promocao com avaliacao
+        $retorno = [];
+        if ($pedidoAvaliacao = CB19AVALIACAO::getPedidoAvaliacao($idUser)) {
+            foreach ($pedidoAvaliacao as $value) {
+                $retorno[] = ['pedido' => ['id' => $value['CB16_ID'], 'produto_pedido' =>$value['CB17_ID'], 'empresa' => $value['CB04_NOME'], 'produto'=> $value['CB17_NOME_PRODUTO'], 'avaliacao_id' => $value['CB06_AVALIACAO_ID']], 'avaliacao' => CB19AVALIACAO::getAvaliacao($value['CB06_AVALIACAO_ID'])];
+            }
+        }
         
         return json_encode($retorno);
+        
+    }
+    
+    public function actionSaveAvaliacao() {
+        
+        $post = \Yii::$app->request->post();
+        
+        if (!($user = $post['auth_key'])) {
+            return false;
+        }
+        
+        if (!($idUser = User::getIdByAuthKey($user))) {
+            return false;
+        }
+        
+        // salva itens na avaliacao
+        if (!empty($post['avaliacao'])) {
+            foreach ($post['avaliacao'] as $value) {
+                $CB21RESPOSTAAVALIACAO = new CB21RESPOSTAAVALIACAO();
+                $CB21RESPOSTAAVALIACAO->setAttributes($value);
+                $CB21RESPOSTAAVALIACAO->save();
+            }
+        }
+
+        // salva comentario se existir
+        if ($post['comentario']['CB22_COMENTARIO']) {
+            $CB22COMENTARIOAVALIACAO = new CB22COMENTARIOAVALIACAO();
+            $CB22COMENTARIOAVALIACAO->setAttributes($post['comentario']);
+            $CB22COMENTARIOAVALIACAO->save();
+        }
+        
+        // marca o produto do pedido como avaliado
+        $CB17PRODUTOPEDIDO = CB17PRODUTOPEDIDO::findOne($post['produto_pedido']);
+        $CB17PRODUTOPEDIDO->setAttribute('CB17_AVALIADO', 1);
+        $CB17PRODUTOPEDIDO->save();
         
     }
     

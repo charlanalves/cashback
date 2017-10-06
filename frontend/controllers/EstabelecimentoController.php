@@ -619,6 +619,9 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         \Yii::$app->view->title = '';
         $this->layout = 'empty';
 
+        $dataAvaliacao = false;
+        $itensSelecionados = false;
+        
         $model = new CB19AVALIACAO();
         $alAvaliacao = $model->attributeLabels();
         
@@ -638,11 +641,6 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     $itensSelecionados[] = $value['CB20_TIPO_AVALICAO_ID'];
                 }
             }
-        // nova avaliacao
-        } else {
-            $dataAvaliacao = false;
-            $itensSelecionados = false;
-            
         }
         
         return $this->render('avaliacaoForm', [
@@ -657,7 +655,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     public function saveAvaliacao($param) {
         
         $transaction = \Yii::$app->db->beginTransaction();
-
+        
         try {
 
             // CADASTRO --------------------------------------------------------
@@ -672,7 +670,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                 $CB19_ID = $CB19AVALIACAO->CB19_ID;
 
                 // salva os itens da avaliação - pode nao ter itens, só exibe um campo de texto para avaliar
-                if ($param['AVALIACAO-ITENS']) {
+                if (!empty($param['AVALIACAO-ITENS'])) {
                     foreach ($param['AVALIACAO-ITENS'] as $item) {
 
                         $CB20ITEMAVALIACAO = new CB20ITEMAVALIACAO();
@@ -698,7 +696,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                 CB20ITEMAVALIACAO::updateAll(['CB20_STATUS' => 0], 'CB20_AVALIACAO_ID = ' . $CB19_ID);
 
                 // salva os itens da avaliação - pode nao ter itens, só exibe um campo de texto para avaliar
-                if ($param['AVALIACAO-ITENS']) {
+                if (!empty($param['AVALIACAO-ITENS'])) {
                     foreach ($param['AVALIACAO-ITENS'] as $item) {
 
                         // verifica se o item existe desativado e ativa / se nao cria

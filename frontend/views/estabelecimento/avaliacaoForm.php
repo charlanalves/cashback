@@ -21,7 +21,7 @@ $this->title = '';
                     $('#remoteModalAvaliacao').modal('hide');
                     // reload page - se cadastrar nova avaliacao
                     if(typeof dataAvaliacao.CB19_ID == 'undefined') {
-                        window.location.reload(false);
+                        //window.location.reload(false);
                     }
                 } else {
                     message = 'A avaliação não foi salva.';
@@ -32,6 +32,12 @@ $this->title = '';
                 }
                 Util.smallBox(message, messageBody, type, ico, time);
             };
+
+    // verifica se existem itens cadastdos para a categoria do estabelecimento
+    if(!itens){
+        Util.smallBox('Opss', 'Não existem itens de avaliação cadastrados, entre em contato com o suporte técnico.', 'danger', 'frown-o', 8000);
+        $('#remoteModalAvaliacao').modal('hide');
+    }
 
     // obj form
     Formavaliacao = new Form('avaliacao-form');
