@@ -33,7 +33,7 @@ class CB17PRODUTOPEDIDO extends \common\models\GlobalModel
     {
         return [
             [['CB17_PRODUTO_ID', 'CB17_PEDIDO_ID', 'CB17_NOME_PRODUTO', 'CB17_QTD', 'CB17_VLR_UNID'], 'required'],
-            [['CB17_PRODUTO_ID', 'CB17_PEDIDO_ID', 'CB17_QTD', 'CB17_VARIACAO_ID'], 'integer'],
+            [['CB17_PRODUTO_ID', 'CB17_PEDIDO_ID', 'CB17_QTD', 'CB17_VARIACAO_ID', 'CB17_AVALIADO'], 'integer'],
             [['CB17_VLR_UNID'], 'number'],
             [['CB17_NOME_PRODUTO'], 'string', 'max' => 100],
             
@@ -63,6 +63,7 @@ class CB17PRODUTOPEDIDO extends \common\models\GlobalModel
             'CB17_QTD' => 'Cb17  Qtd',
             'CB17_VLR_UNID' => 'Cb17  Vlr  Unid',
             'CB17_VARIACAO_ID' => 'Cb17  Variacao  ID',
+            'CB17_AVALIADO' => 'Avaliado',
         ];
     }
     

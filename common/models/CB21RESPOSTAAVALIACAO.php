@@ -2,26 +2,23 @@
 
 namespace common\models;
 
-use Yii;
 use common\models\base\CB21RESPOSTAAVALIACAO as BaseCB21RESPOSTAAVALIACAO;
 
 /**
  * This is the model class for table "CB21_RESPOSTA_AVALIACAO".
  */
-class CB21RESPOSTAAVALIACAO extends BaseCB21RESPOSTAAVALIACAO
-{
+class CB21RESPOSTAAVALIACAO extends BaseCB21RESPOSTAAVALIACAO {
+
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
-        return array_replace_recursive(parent::rules(),
-	    [
+    public function rules() {
+        return array_replace_recursive(parent::rules(), [
             [['CB21_ITEM_AVALIACAO_ID', 'CB21_PRODUTO_PEDIDO_ID', 'CB21_NOTA'], 'required'],
             [['CB21_ITEM_AVALIACAO_ID', 'CB21_PRODUTO_PEDIDO_ID', 'CB21_NOTA'], 'integer']
         ]);
     }
-    
+
     /**
      * getNotaPercentualItemByEmpresa
      * Obtem percentual de aprovação do item da avaliacao de uma empresa
