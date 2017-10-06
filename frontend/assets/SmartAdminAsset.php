@@ -52,6 +52,7 @@ class SmartAdminAsset extends AssetBundle
         'js/smart-chat-ui/smart.chat.manager.min.js',
         'js/plugin/jquery-validate/jquery.validate.min.js',
         'js/global.js',
+      
     ];
     
     public $jsOptions = ['position' => \yii\web\View::POS_END];

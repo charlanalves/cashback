@@ -1,10 +1,15 @@
+
 <?php
-/* @var $this yii\web\View */
+
+
+    
 
 if ($maxProduto) {
     echo '<script type="text/javascript"> $("#remoteModalProduto").modal("hide"); Util.smallBox("' . $maxProduto . '", "", "danger", "frown-o", 8000);</script>';
     exit();
 }
+
+
 
 $this->title = '';
 ?>
@@ -140,26 +145,30 @@ $this->title = '';
                     <fieldset>
                         <h3>Sobre o produto</h3>
                         <div class="row padding-top-15">
-                            <section class="col col-6">
+                            <section class="col col-6" style="display:none;">
                                 <label class="input"> <i class="icon-prepend fa fa-tags"></i>
                                     <input type="text" name="CB05_NOME_CURTO" placeholder="<?= $al['CB05_NOME_CURTO'] ?>">
                                 </label>
                             </section>
                             <section class="col col-6">
+                                <label class="textarea"> Título</label>
                                 <label class="input"> <i class="icon-prepend fa fa-product-hunt"></i>
-                                    <input type="text" name="CB05_TITULO" placeholder="<?= $al['CB05_TITULO'] ?>">
+                                    <input type="text" name="CB05_TITULO">
                                 </label>
                             </section>
                         </div>
                         <div class="row">
                             <section class="col col-6">
+                                <a href="https://lh3.googleusercontent.com/-xPPNMmx1EzQ/WdbZDCiS_hI/AAAAAAAAS98/Z79FQrGOH1g2Sx2DxRZ5pK7bzZ_SVExmQCL0BGAYYCw/h768/2017-10-05.png" class="imgpreview">
+                                <label class="textarea showTip L3"> Descrição<span id="aws" style='font-size: 11px; margin-left: 8px;'>(Será exibido abaixo da imagem do produto no APP.)</span></label></a>
                                 <label class="textarea"> <i class="icon-prepend fa fa-suitcase"></i>
-                                    <textarea rows="5" name="CB05_DESCRICAO" placeholder="<?= $al['CB05_DESCRICAO'] ?>"></textarea> 
+                                    <textarea rows="5" name="CB05_DESCRICAO"></textarea> 
                                 </label>
                             </section>
                             <section class="col col-6">
+                                <label class="textarea"> Regras da Promoção <span style='font-size: 11px; margin-left: 8px;'>(Será exibido na aba regras no APP.)</span></label>
                                 <label class="textarea"> <i class="icon-prepend fa fa-info-circle"></i>
-                                    <textarea rows="5" name="CB05_IMPORTANTE" placeholder="<?= $al['CB05_IMPORTANTE'] ?>"></textarea> 
+                                    <textarea rows="5" name="CB05_IMPORTANTE" ></textarea> 
                                 </label>
                             </section>
                         </div>
@@ -198,3 +207,10 @@ $this->title = '';
 
     </article>
 </div>
+<?php
+    echo '<script type="text/javascript">   
+        $(".imgpreview").anarchytip({
+  xOffset:800, // default position
+  yOffset:200 // default position
+})</script>';
+    exit();

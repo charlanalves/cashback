@@ -316,6 +316,7 @@ $this->title = 'Estabelecimento';
         <script src="js/smart-chat-ui/smart.chat.ui.min.js"></script>
         <script src="js/smart-chat-ui/smart.chat.manager.min.js"></script>
         <script src="js/global.js"></script>
+        <script src="js/imagepreview.min.js"></script>
 
         <?php $this->endBody() ?>
     </body>
