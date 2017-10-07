@@ -1,15 +1,9 @@
-
 <?php
-
-
-    
 
 if ($maxProduto) {
     echo '<script type="text/javascript"> $("#remoteModalProduto").modal("hide"); Util.smallBox("' . $maxProduto . '", "", "danger", "frown-o", 8000);</script>';
     exit();
 }
-
-
 
 $this->title = '';
 ?>
@@ -133,6 +127,7 @@ $this->title = '';
 
 
 <div class="row">
+
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
 
         <div role="content">
@@ -151,22 +146,41 @@ $this->title = '';
                                 </label>
                             </section>
                             <section class="col col-6">
-                                <label class="textarea"> Título</label>
+                                <div class="tooltip_templates" style="display:none">
+                                        <span id="tooltip_content_descricao">
+                                            <img src="img/tooltips/descricao_produto.png" />
+                                        </span>
+                                    </div>   
+                                    <div class="tooltip_templates" style="display:none">
+                                        <span id="tooltip_content_regras">
+                                            <img src="img/tooltips/regras.png" />
+                                        </span>
+                                    </div>   
+                                    <div class="tooltip_templates" style="display:none">
+                                        <span id="tooltip_content_titulo">
+                                            <img src="img/tooltips/titulo.png" />
+                                        </span>
+                                    </div>   
+                                    <div class="tooltip_templates" style="display:none">
+                                        <span id="tooltip_content_itens">
+                                            <img src="img/tooltips/itens.png" />
+                                        </span>
+                                    </div>   
+                                <label class="textarea"> Título<span id="aws" style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_titulo" class="tooltipestalecas">(Será exibido abaixo do nome da empresa.)</span></label>
                                 <label class="input"> <i class="icon-prepend fa fa-product-hunt"></i>
                                     <input type="text" name="CB05_TITULO">
                                 </label>
                             </section>
                         </div>
-                        <div class="row">
+                        <div class="row">                           
                             <section class="col col-6">
-                                <a href="https://lh3.googleusercontent.com/-xPPNMmx1EzQ/WdbZDCiS_hI/AAAAAAAAS98/Z79FQrGOH1g2Sx2DxRZ5pK7bzZ_SVExmQCL0BGAYYCw/h768/2017-10-05.png" class="imgpreview">
-                                <label class="textarea showTip L3"> Descrição<span id="aws" style='font-size: 11px; margin-left: 8px;'>(Será exibido abaixo da imagem do produto no APP.)</span></label></a>
-                                <label class="textarea"> <i class="icon-prepend fa fa-suitcase"></i>
-                                    <textarea rows="5" name="CB05_DESCRICAO"></textarea> 
+                                <label class="textarea"> Descrição <span style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_descricao" class="tooltipestalecas">(Será exibido abaixo da imagem do produto.)</span></label>
+                                <label class="textarea"> <i class="icon-prepend fa fa-info-circle"></i>
+                                    <textarea rows="5" name="CB05_DESCRICAO" ></textarea> 
                                 </label>
                             </section>
                             <section class="col col-6">
-                                <label class="textarea"> Regras da Promoção <span style='font-size: 11px; margin-left: 8px;'>(Será exibido na aba regras no APP.)</span></label>
+                                <label class="textarea"> Importante <span style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_regras" class="tooltipestalecas">(Será exibido na aba Info.)</span></label>
                                 <label class="textarea"> <i class="icon-prepend fa fa-info-circle"></i>
                                     <textarea rows="5" name="CB05_IMPORTANTE" ></textarea> 
                                 </label>
@@ -175,7 +189,7 @@ $this->title = '';
                     </fieldset>
 
                     <fieldset>
-                        <h3>Itens do produto</h3>
+                        <h3>Itens do produto</h3><span style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_itens" class="tooltipestalecas">(Será exibido na aba Info.)</span>
                         <section id="item-produto" class="padding-top-15"></section>
                     </fieldset>
 
@@ -209,8 +223,13 @@ $this->title = '';
 </div>
 <?php
     echo '<script type="text/javascript">   
-        $(".imgpreview").anarchytip({
-  xOffset:800, // default position
-  yOffset:200 // default position
-})</script>';
-    exit();
+         $(document).ready(function() {
+          $(".tooltipestalecas").tooltipster({
+ 
+});
+    $(".tooltipestalecas2").tooltipster({
+ 
+});
+        });
+        </script>';
+    
