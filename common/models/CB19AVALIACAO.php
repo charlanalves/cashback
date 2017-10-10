@@ -54,7 +54,7 @@ class CB19AVALIACAO extends BaseCB19AVALIACAO {
                     CB06_AVALIACAO_ID IS NOT NULL AND 
                     NOW() >= DATE_ADD(CB16_DT_APROVACAO, INTERVAL CB10_TIME_AVALIACAO HOUR) AND 
                     /* DELIVERY PAGO E ENTREGUE OU PEDIDO BAIXADO */
-                    (((CB16_STATUS_DELIVERY IS NULL OR CB16_STATUS_DELIVERY = 3) AND CB16_STATUS = 30) OR CB16_STATUS = 20)";
+                    ((CB16_STATUS_DELIVERY = 3 AND CB16_STATUS = 30) OR CB16_STATUS = 20)";
 
         $connection = \Yii::$app->db;
         $command = $connection->createCommand($sql);

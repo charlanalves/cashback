@@ -507,7 +507,7 @@ class ApiEmpresaController extends GlobalBaseController {
                 'Dezembro'
             );
             
-            for($m=1;$m<=$qtdMeses;$m++){
+            for($m=0;$m<$qtdMeses;$m++){
 
                 $numMes = date('n')-$m;
                 $ano = date('Y');

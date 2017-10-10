@@ -21,12 +21,11 @@ class IuguComponent extends PaymentBaseComponent {
     {
        require_once(\Yii::getAlias('@vendor/iugu/Iugu.php'));
        
-       //teste
-    //  \Iugu::setApiKey("67dfbb3560a62cb5cee9ca8730737a98");
-       
-       //producao
-      //\Iugu::setApiKey(self::apiTokenTest);
-      \Iugu::setApiKey(self::apiTokenProd);
+        //teste
+        \Iugu::setApiKey(self::apiTokenTest);
+      
+        //producao
+        //\Iugu::setApiKey(self::apiTokenProd);
     }
     
     protected function prepareCreditCard($data)

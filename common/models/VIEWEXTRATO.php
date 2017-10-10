@@ -18,7 +18,8 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
         "E2ADM" => "TARIFA ESTALECAS", 
         "V2B" => "VIRTUAL TO BANCARIA", 
         "B2V" => "BANCARIA TO VIRTUAL",
-        "E2M" => "CASHBACK"
+        "E2M" => "CASHBACK",
+        "C2E" => "CLIENTE TO EMPRESA",
     ];
     
     /**
@@ -77,8 +78,8 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
                 FROM VIEW_EXTRATO
                 INNER JOIN CB16_PEDIDO ON (VIEW_EXTRATO.PEDIDO_ID = CB16_PEDIDO.CB16_ID)
                 INNER JOIN CB04_EMPRESA ON (CB04_EMPRESA.CB04_ID = CB16_PEDIDO.CB16_EMPRESA_ID)
-                WHERE USER = :idUser AND DT_CRIACAO BETWEEN :periodo AND LAST_DAY(:periodo)
-                GROUP BY USER ORDER BY DT_CRIACAO";
+                WHERE USER = :idUser AND DT_CRIACAO BETWEEN :periodo AND LAST_DAY(:periodo) AND TIPO IN('M2C')
+                ORDER BY DT_CRIACAO";
         $command = \Yii::$app->db->createCommand($sql);
         $command->bindValue(':idUser', $idUser);
         $command->bindValue(':periodo', $periodo . '-1');

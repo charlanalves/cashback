@@ -484,7 +484,8 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     
     public function actionExtrato() {
         $this->layout = 'smartAdminEstabelecimento';
-        
+//        var_dump($this);
+//        exit();
         $model = new VIEWEXTRATO();
         $al = $model->attributeLabels();
         $saldoAtual = $model->saldoAtualByCliente($this->user->id);

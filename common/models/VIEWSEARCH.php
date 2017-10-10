@@ -55,7 +55,8 @@ class VIEWSEARCH extends BaseVIEWSEARCH
                     CB04_ID, 
                     CB04_NOME, 
                     CB14_URL,
-                    MAX_CB.CB06_PRODUTO_ID
+                    MAX_CB.CB06_PRODUTO_ID,
+                    MAX_CB.CB06_ID
                 FROM CB05_PRODUTO
                 INNER JOIN CB06_VARIACAO MAX_CB ON(CB05_ID = MAX_CB.CB06_PRODUTO_ID)
                 INNER JOIN CB06_VARIACAO MIN_PRECO ON(CB05_ID = MIN_PRECO.CB06_PRODUTO_ID)
