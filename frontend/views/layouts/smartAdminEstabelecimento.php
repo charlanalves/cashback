@@ -72,7 +72,10 @@ $this->title = 'Estabelecimento';
         <link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
         <link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
         <!--<link rel="stylesheet" type="text/css" media="screen" href="css/your_style2.css"> -->
+        <link rel="stylesheet" type="text/css" href="js/tooltipster/dist/css/tooltipster.bundle.min.css" />
 
+    
+    
         <style>
             .fixed-navigation nav>ul {
                 width: 100%;
@@ -165,7 +168,7 @@ $this->title = 'Estabelecimento';
         <header id="header">
             <div id="logo-group">
                 <!-- PLACE YOUR LOGO HERE -->
-                <span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>
+                <span id="logo"> <img src="img/painel_estabelecimento.png" alt="SmartAdmin"> </span>
                 <!-- END LOGO PLACEHOLDER -->
             </div>
         </header>
@@ -245,8 +248,8 @@ $this->title = 'Estabelecimento';
 
         <!-- #PLUGINS -->
 
-        <script src="js/libs/jquery-2.1.1.min.js"></script>
-
+       
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
         <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
         
         <script src="js/plugin/jquery-block/jquery.blockUI.js"></script>
@@ -316,6 +319,8 @@ $this->title = 'Estabelecimento';
         <script src="js/smart-chat-ui/smart.chat.ui.min.js"></script>
         <script src="js/smart-chat-ui/smart.chat.manager.min.js"></script>
         <script src="js/global.js"></script>
+        
+        <script type="text/javascript" src="js/tooltipster/dist/js/tooltipster.bundle.min.js"></script>
 
         <?php $this->endBody() ?>
     </body>

@@ -1,5 +1,4 @@
 <?php
-/* @var $this yii\web\View */
 
 if ($maxProduto) {
     echo '<script type="text/javascript"> $("#remoteModalProduto").modal("hide"); Util.smallBox("' . $maxProduto . '", "", "danger", "frown-o", 8000);</script>';
@@ -128,6 +127,7 @@ $this->title = '';
 
 
 <div class="row">
+
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
 
         <div role="content">
@@ -140,33 +140,56 @@ $this->title = '';
                     <fieldset>
                         <h3>Sobre o produto</h3>
                         <div class="row padding-top-15">
-                            <section class="col col-6">
+                            <section class="col col-6" style="display:none;">
                                 <label class="input"> <i class="icon-prepend fa fa-tags"></i>
                                     <input type="text" name="CB05_NOME_CURTO" placeholder="<?= $al['CB05_NOME_CURTO'] ?>">
                                 </label>
                             </section>
                             <section class="col col-6">
+                                <div class="tooltip_templates" style="display:none">
+                                        <span id="tooltip_content_descricao">
+                                            <img src="img/tooltips/descricao_produto.png" />
+                                        </span>
+                                    </div>   
+                                    <div class="tooltip_templates" style="display:none">
+                                        <span id="tooltip_content_regras">
+                                            <img src="img/tooltips/regras.png" />
+                                        </span>
+                                    </div>   
+                                    <div class="tooltip_templates" style="display:none">
+                                        <span id="tooltip_content_titulo">
+                                            <img src="img/tooltips/titulo.png" />
+                                        </span>
+                                    </div>   
+                                    <div class="tooltip_templates" style="display:none">
+                                        <span id="tooltip_content_itens">
+                                            <img src="img/tooltips/itens.png" />
+                                        </span>
+                                    </div>   
+                                <label class="textarea"> Título<span id="aws" style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_titulo" class="tooltipestalecas">(Será exibido abaixo do nome da empresa.)</span></label>
                                 <label class="input"> <i class="icon-prepend fa fa-product-hunt"></i>
-                                    <input type="text" name="CB05_TITULO" placeholder="<?= $al['CB05_TITULO'] ?>">
+                                    <input type="text" name="CB05_TITULO">
                                 </label>
                             </section>
                         </div>
-                        <div class="row">
+                        <div class="row">                           
                             <section class="col col-6">
-                                <label class="textarea"> <i class="icon-prepend fa fa-suitcase"></i>
-                                    <textarea rows="5" name="CB05_DESCRICAO" placeholder="<?= $al['CB05_DESCRICAO'] ?>"></textarea> 
+                                <label class="textarea"> Descrição <span style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_descricao" class="tooltipestalecas">(Será exibido abaixo da imagem do produto.)</span></label>
+                                <label class="textarea"> <i class="icon-prepend fa fa-info-circle"></i>
+                                    <textarea rows="5" name="CB05_DESCRICAO" ></textarea> 
                                 </label>
                             </section>
                             <section class="col col-6">
+                                <label class="textarea"> Importante <span style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_regras" class="tooltipestalecas">(Será exibido na aba Info.)</span></label>
                                 <label class="textarea"> <i class="icon-prepend fa fa-info-circle"></i>
-                                    <textarea rows="5" name="CB05_IMPORTANTE" placeholder="<?= $al['CB05_IMPORTANTE'] ?>"></textarea> 
+                                    <textarea rows="5" name="CB05_IMPORTANTE" ></textarea> 
                                 </label>
                             </section>
                         </div>
                     </fieldset>
 
                     <fieldset>
-                        <h3>Itens do produto</h3>
+                        <h3>Itens do produto</h3><span style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_itens" class="tooltipestalecas">(Será exibido na aba Info.)</span>
                         <section id="item-produto" class="padding-top-15"></section>
                     </fieldset>
 
@@ -198,3 +221,15 @@ $this->title = '';
 
     </article>
 </div>
+<?php
+    echo '<script type="text/javascript">   
+         $(document).ready(function() {
+          $(".tooltipestalecas").tooltipster({
+ 
+});
+    $(".tooltipestalecas2").tooltipster({
+ 
+});
+        });
+        </script>';
+    

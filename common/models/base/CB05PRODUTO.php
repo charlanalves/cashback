@@ -66,7 +66,7 @@ class CB05PRODUTO extends \common\models\GlobalModel
             'CB05_NOME_CURTO' => 'Nome  Curto',
             'CB05_TITULO' => 'Título',
             'CB05_DESCRICAO' => 'Descrição',
-            'CB05_IMPORTANTE' => 'Importante',
+            'CB05_IMPORTANTE' => 'Regras',
             'CB05_ATIVO' => 'Ativo',
         ];
     }
