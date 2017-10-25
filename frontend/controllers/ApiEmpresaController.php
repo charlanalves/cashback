@@ -19,6 +19,7 @@ use common\models\CB16PEDIDO;
 use common\models\CB17PRODUTOPEDIDO;
 use common\models\CB18VARIACAOPEDIDO;
 use common\models\CB19AVALIACAO;
+use common\models\CB12ITEMCATEGEMPRESA;
 use common\models\CB21RESPOSTAAVALIACAO;
 use common\models\CB22COMENTARIOAVALIACAO;
 use common\models\VIEWEXTRATO;
@@ -304,7 +305,7 @@ class ApiEmpresaController extends GlobalBaseController {
         $saldoAtual = $this->getSaldoAtual($filter['auth_key']);
         $saldoPendente = 0;
         $CB06VARIACAO = CB06VARIACAO::getPromocao($this->url, $filter);
-        return json_encode(['saldoLiberado' =>  $saldoAtual, 'saldoPendente' => $saldoPendente, 'estabelecimentos' => $CB06VARIACAO]);
+        return json_encode(['saldoLiberado' =>  $saldoAtual, 'saldoPendente' => $saldoPendente, 'estabelecimentos' => $CB06VARIACAO, 'pg' => $filter['pg']]);
     }
 
     
@@ -312,7 +313,7 @@ class ApiEmpresaController extends GlobalBaseController {
      * Pesquisa
      */
     public function actionSearch() {
-        if ( ($param = \Yii::$app->request->post('param')) ) {
+        if ( ($param = \Yii::$app->request->post()) ) {
             return json_encode(VIEWSEARCH::getBuscaProduto($param));
         } else {
             return "{}";
@@ -324,8 +325,8 @@ class ApiEmpresaController extends GlobalBaseController {
      * Lista promocoes por categoria
      */
     public function actionPromotionsByCategory() {
-        if ( ($param = \Yii::$app->request->post('param')) ) {
-            return json_encode(['category' => CB10CATEGORIA::findOne($param)->CB10_NOME, 'result' => VIEWSEARCH::getPromotionsByCategory($param)]);
+        if ( ($param = \Yii::$app->request->post()) ) {
+            return json_encode(CB06VARIACAO::getPromocao($this->url, $param));
         } else {
             return "{}";
         }
@@ -602,21 +603,41 @@ class ApiEmpresaController extends GlobalBaseController {
         $post = \Yii::$app->request->post();
         $pedido = '';
         $retorno = ['status' => true];
+        $idUser = User::getIdByAuthKey($post['auth_key']);
         
         try {
-            if(!empty($post['address']) && !empty($post['order']) && ($idUser = User::getIdByAuthKey($post['auth_key']))) {
+            if(!empty($post['address']) && !empty($post['order']) && $idUser) {
+                
                 // verifica se o pedido do usuario
                 $CB16PEDIDO = new CB16PEDIDO();
                 if(($pedido = $CB16PEDIDO->find()->where('CB16_USER_ID = '. $idUser .' AND CB16_ID = ' . $post['order'])->one())) {
-
                     $pedido->scenario = 'SCENARIO_DELIVERY_ADDRESS';
                     $pedido->setAttributes($post['address']);
                     $pedido->save();
 
                 }
+                
             } else {
-                $pedidoData = CB16PEDIDO::find()->where('CB16_ID = ' . $post['order'])->one();
-                $retorno = ($pedidoData ? $pedidoData->attributes : '');
+                    
+                // dados do ultimo pedido delivery
+                $ultPedidoData = CB16PEDIDO::find()
+                        ->select('CB16_COMPRADOR_TEL_NUMERO,'
+                                . 'CB16_COMPRADOR_END_CEP,'
+                                . 'CB16_COMPRADOR_END_LOGRADOURO,'
+                                . 'CB16_COMPRADOR_END_NUMERO,'
+                                . 'CB16_COMPRADOR_END_BAIRRO,'
+                                . 'CB16_COMPRADOR_END_CIDADE,'
+                                . 'CB16_COMPRADOR_END_UF,'
+                                . 'CB16_COMPRADOR_END_COMPLEMENTO')
+                        ->where('CB16_STATUS_DELIVERY IS NOT NULL AND CB16_USER_ID = ' . $idUser)
+                        ->orderBy('CB16_ID DESC')
+                        ->one();
+                if (!empty($ultPedidoData)) {
+                    $retorno = $ultPedidoData->getAttributes();
+                } else {
+                    $retorno = '';
+                }
+                
             }
         } catch (\Exception $exc) {
             $retorno = ['status' => false, 'retorno' => $exc->getMessage()];
@@ -888,7 +909,15 @@ class ApiEmpresaController extends GlobalBaseController {
                 ->asArray()
                 ->one();
         
-        return json_encode($CB05_IMPORTANTE);
+        $CB12_ITEM_CATEG_EMPRESA = CB12ITEMCATEGEMPRESA::find()
+                ->select(['CB11_DESCRICAO'])
+                ->join('INNER JOIN', 'CB11_ITEM_CATEGORIA', 'CB12_ITEM_ID = CB11_ID')
+                ->where(['CB12_PRODUTO_ID' => $post['product']])
+                ->orderBy('CB11_DESCRICAO')
+                ->asArray()
+                ->all();
+        
+        return json_encode(['importante' => $CB05_IMPORTANTE, 'itens' => $CB12_ITEM_CATEG_EMPRESA]);
     }
     
     

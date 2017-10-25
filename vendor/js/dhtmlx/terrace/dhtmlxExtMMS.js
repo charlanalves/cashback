@@ -421,7 +421,7 @@ dhtmlXGridObject.prototype.copySelectedBlockMMS = function (msgCopy) {
 /*
  * Add botao no titulo da cell do layout
  */
-dhtmlXLayoutObject.prototype.addBtnTitle = function (btns, cell, collapse) {
+dhtmlXLayoutObject.prototype.addBtnTitleMMS = function (btns, cell, collapse) {
 	var cell = (cell || 'a'),
 		 collapse = (collapse || false),
 		 strBtns = '';

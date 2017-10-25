@@ -1,3 +1,17 @@
+
+$.blockUI.defaults.message = '<img src="img/loading.gif" />';
+$.blockUI.defaults.css = { 
+            padding: 0,
+            margin: 0,
+            width: '30%',
+            top: '40%',
+            left: '35%',
+            textAlign: 'center',
+            cursor: 'wait'
+        };
+//$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+
+
 var Form = function (formId) {
     this.form = $('#' + formId),
     this.getMoney = [],
@@ -18,9 +32,18 @@ var Form = function (formId) {
         });
         return data;
     },
+    this.getSelected = function (name) {
+        var selected = this.form.find('select[name=' + name + '] option:selected');
+        return {text: selected.text(), value: selected.val()};
+    },
+    this.isChecked = function (name) {
+        var checked = this.form.find('input[name=' + name + ']:checked').val();
+        return (typeof checked != 'undefined' ? checked : false);
+    },  
     this.send = function (url, callback)
     {
         var ajaxParams = {},
+            filesDropzone = [],
             data = this.getFormData(),
             inputFiles = this.form.find(':input[type="file"]');
 
@@ -29,8 +52,13 @@ var Form = function (formId) {
             ajaxParams.data = data;
             ajaxParams.dataType = 'json';
 
-            if (inputFiles.length > 0) {
-                var newAjaxParams = Util.getInputFilesData(inputFiles, ajaxParams);
+            // testa dropzone
+            if(typeof myDropzone == "object") {
+                filesDropzone = myDropzone.getAcceptedFiles();
+            }
+
+            if (inputFiles.length > 0 || filesDropzone.length > 0) {
+                var newAjaxParams = Util.getInputFilesData(inputFiles, ajaxParams, filesDropzone);
                 $.extend(ajaxParams, newAjaxParams);
             }
             
@@ -81,6 +109,7 @@ var Form = function (formId) {
     this.setFormData = function (data)
     {
         var $inputs = this.form.find(':input');
+        var money = this.getMoney;
         $inputs.each(function (k, v) {
             nameCompare = v.name.replace('[', '').replace(']', '');
             // input
@@ -100,8 +129,11 @@ var Form = function (formId) {
                         }
 
                     } else {
+                        // verifica se o campo é Money e formata
+                        if($.inArray(nameCompare, money) != -1){
+                            data[nameCompare] = Util.formatNumber(data[nameCompare]);
+                        }
                         $(this).val(data[nameCompare]);
-                        
                     }
                 }
             }
@@ -129,7 +161,8 @@ var Form = function (formId) {
             checkbox += '<label class="checkbox"><input type="checkbox" name="' + checkboxName + '[]" value="' + key + '"><i></i>' + value + '</label>' + "\n";
         });
         destiny.append($("<div></div>").attr("class", "inline-group").html(checkbox));
-    }, this.addCheckboxInLineFormPgto = function (destinyId, checkboxName, data)
+    }, 
+    this.addCheckboxInLineFormPgto = function (destinyId, checkboxName, data)
     {
         var destiny = this.form.find('#' + destinyId), checkbox = '';
         var count = 0;
@@ -149,6 +182,55 @@ var Form = function (formId) {
             count++;
         });
         destiny.append($("<div></div>").attr("class", "inline-group").html(checkbox));
+    },
+    this.clear = function (itemName) {
+        // se nao informar o itemName limpa todos os itens do form
+        if (typeof itemName != 'undefined') {
+            var clearItem = function (item) {
+                var qtdItem = item.length;
+                if (qtdItem > 1) {
+                    for(var i=0; i<qtdItem; i++){
+                        if (item[i].type == 'checkbox' || item[i].type == 'radio') {
+                            item[i].checked = false;
+                        } else {
+                            item[i].value = '';
+                        }
+                    }
+                } else {
+                    item.value = '';
+                }
+            };
+            
+            // para limpar apenas um campo, informa o attr name
+            if (typeof itemName == 'string') {    
+                clearItem(this[itemName]);
+                
+            // para mais de um item envia um array com os attr name
+            } else if (typeof itemName == 'object') {
+                for (var i in itemName) {
+                    clearItem(this[itemName[i]]);
+                }
+            }
+            
+        } else {
+            var input = this.inputs();
+            for (var i in input) {
+                switch(input[i].type) {
+                    case 'password':
+                    case 'select-multiple':
+                    case 'select-one':
+                    case 'text':
+                    case 'textarea':
+                        input[i].value = '';
+                        break;
+                    case 'checkbox':
+                    case 'radio':
+                        for (var ii in input[i].input)
+                            input[i].input[ii].checked = false;
+                        break;
+                }
+            }
+        }
     };
 
     var $inputs = this.form.find(':input'), data = this;
@@ -237,7 +319,7 @@ var Util = {
         
         pageSetUp();
         
-	var dropzonefunction = function() {
+    var dropzonefunction = function() {
             Dropzone.autoDiscover = false;
             myDropzone = $("#" + destinyId + ' div form').dropzone({
                 url: settings.urlSave,
@@ -307,9 +389,46 @@ var Util = {
                     }
                 }
             });  
-	};
-	loadScript("js/plugin/dropzone/dropzone.min.js", dropzonefunction);
+    };
+    loadScript("js/plugin/dropzone/dropzone.min.js", dropzonefunction);
         
+    },
+    dropZoneAsync: function (destinyId, settings, callback) {
+        var settings = (settings || {}), callback = (typeof callback == 'function' ? callback : function(){});
+        settings.urlSave = (settings.urlSave || '#');
+        settings.urlRemove = (settings.urlRemove || false);
+        settings.typeFile = (settings.typeFile || 'image/*');
+        settings.maxFiles = (settings.maxFiles || 100);
+        settings.message = (settings.message || 'Enviar arquivos');
+        
+        form = '<div class="fallback">' + 
+                  '<input name="file" type="file" multiple />' + 
+                '</div>';
+        
+        $("#" + destinyId).append($("<div></div>").attr("class", "dropzone").html(form));
+        pageSetUp();
+        
+        var dropzonefunction = function() {
+            Dropzone.autoDiscover = false;
+            maxSizeImg = 0.5; 
+            myDropzone = new Dropzone("#" + destinyId + " div",{
+                url: settings.urlSave,
+                autoProcessQueue: false, // aguarda para fazer upload
+                maxFilesize: maxSizeImg,
+                acceptedFiles: settings.typeFile,
+                maxFiles: settings.maxFiles,
+                dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg"><i class="fa fa-cloud-upload text-danger"></i> ' + settings.message + ' </span><span>&nbsp;&nbsp;<h4 class="display-inline"> (clique aqui)</h4></span>',
+                dictResponseError: 'Error ao tentar enviar!',
+                addRemoveLinks : true,
+                dictRemoveFile: 'remover',
+                dictMaxFilesExceeded: 'O máximo de imagens são ' + settings.maxFiles,
+                dictFileTooBig: 'O tamanho máximo da imagem é ' + maxSizeImg + 'MB',
+                init: function() {
+
+                }
+            });  
+	   };
+	   loadScript("js/plugin/dropzone/dropzone.min.js", dropzonefunction); 
     },
     galeria: function (destinyId, data) {
         var estrutura = '', imgUrl = '', imgTitle = '', imgDelete = '';
@@ -348,7 +467,7 @@ var Util = {
     reloadPage: function () {
         window.location.reload(false);
     },
-    getInputFilesData: function(inputFiles, ajaxParams) {
+    getInputFilesData: function(inputFiles, ajaxParams, filesDropzone) {
 
         var formData = new FormData(),
         extraData = ajaxParams.data;
@@ -358,13 +477,25 @@ var Util = {
         ajaxParams.contentType = false;
         ajaxParams.processData = false;
 
-        for (var i in inputFiles) {
-            if (typeof inputFiles[i].files != 'undefined') {
-                if (inputFiles[i].files.length > 0) {
-                    formData.append(inputFiles[i].name, inputFiles[i].files[0]);
+        // campo file
+        if(typeof inputFiles == "object") {
+        //if(inputFiles.length > 0){
+            for (var i in inputFiles) {
+                if (typeof inputFiles[i].files != 'undefined') {
+                    if (inputFiles[i].files.length > 0) {
+                        formData.append(inputFiles[i].name, inputFiles[i].files[0]);
+                    }
                 }
             }
         }
+
+        // dropzone
+        if(filesDropzone.length > 0){
+            for (var i in filesDropzone) {
+                formData.append(filesDropzone[i].name, filesDropzone[i]);
+            }
+        }
+
 
         // Inserindo os dados extras do form no obj formdata (requisito para funcionar com input file)
         if (typeof extraData != 'undefined' && Object.keys(extraData).length > 0) {
@@ -392,5 +523,64 @@ var Util = {
         ajaxParams.data = formData;
 
         return ajaxParams;
+    },
+    errorCartToString: function (data) {
+        var strError = '',
+        getErro = function (a){
+            var b = a;
+            switch(a) {
+                case 'is_invalid':
+                    b = 'Inválido';
+                break;
+                case 'is_empty':
+                    b = 'Não pode ficar em branco';
+                break;
+                case 'is not a valid credit card number':
+                    b = 'Não é valido';
+                break;
+            }
+            return b;
+        },
+        getAtributo = function (a){
+            var b = a;
+            switch(a) {
+                case 'number':
+                    b = 'Numero do cartão: ';
+                break;
+                case 'first_name':
+                    b = 'Primeiro nome: ';
+                break;
+                case 'last_name':
+                    b = 'Último nome: ';
+                break;
+                case 'full_name':
+                    b = 'Nome impresso no cartão: ';
+                break;
+                case 'expiration':
+                    b = 'Validade do cartão: ';
+                break;
+                case 'verification_value':
+                    b = 'CVV: ';
+                break;
+            }
+            return b;
+        };
+        for (var attribute in data) {
+            strError += getAtributo(attribute) + getErro(data[attribute]) + '<br />';
+        }
+        return strError;
+    },
+    openSelect: function(selector){
+        var element = $(selector)[0], worked = false;
+        if (document.createEvent) { // all browsers
+            var e = document.createEvent("MouseEvents");
+            e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            worked = element.dispatchEvent(e);
+        } else if (element.fireEvent) { // ie
+            worked = element.fireEvent("onmousedown");
+        }
+        if (!worked) { // unknown browser / error
+            alert("It didn't worked in your browser.");
+        }   
     }
 };

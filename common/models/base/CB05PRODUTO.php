@@ -35,7 +35,7 @@ class CB05PRODUTO extends \common\models\GlobalModel
     public function rules()
     {
         return [
-            [['CB05_EMPRESA_ID', 'CB05_NOME_CURTO', 'CB05_TITULO'], 'required'],
+            [['CB05_EMPRESA_ID', 'CB05_TITULO'], 'required'],
             [['CB05_EMPRESA_ID', 'CB05_ATIVO'], 'integer'],
             [['CB05_DESCRICAO', 'CB05_IMPORTANTE'], 'string'],
             [['CB05_NOME_CURTO'], 'string', 'max' => 15],

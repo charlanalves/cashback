@@ -25,17 +25,27 @@ use common\models\CB23TIPOAVALIACAO;
 use common\models\VIEWEXTRATO;
 use common\models\CB03CONTABANC;
 use common\models\PAG04TRANSFERENCIAS;
+use common\models\User;
+use common\models\EstabelecimentoExtratoModel;
 
 /**
  * Estabelecimento controller
  */
 class EstabelecimentoController extends \common\controllers\GlobalBaseController {
 
+   /**
+    * @var string Habilita validação Csrf 
+   */
+    public $enableCsrfValidation = false;
+    
     private $user = null;
     private $estabelecimento = null;
-
+    public $relatedModel = "";
+    
     public function __construct($id, $module, $config = []) 
     {
+        $this->btns =  [];
+        $this->layout = 'smartAdminEstabelecimento';
         if (($identity = \Yii::$app->user->identity)) {
             $this->user = $identity;
             $this->estabelecimento = ($this->user->id_company) ? \common\models\GlobalModel::findTable('CB04_EMPRESA', 'CB04_ID = ' . $this->user->id_company)[0] : null;
@@ -102,7 +112,6 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     }
 
     public function actionEmpresa() {
-        $this->layout = 'smartAdminEstabelecimento';
         $salvo = null;
 
         $model = new CB04EMPRESA();
@@ -202,7 +211,6 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     }
 
     public function actionProduto() {
-        $this->layout = 'smartAdminEstabelecimento';
         $salvo = null;
 
         $model = new CB05PRODUTO();
@@ -273,6 +281,51 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         ]);
     }
 
+    public function actionProdutoFullForm($produto = null) {
+        \Yii::$app->view->title = $maxProduto = "";
+        $this->layout = 'empty';
+
+        $dataProduto = [];
+
+        $model = new CB05PRODUTO();
+        $al = $model->attributeLabels();
+
+        $dataItemProduto = CB04EMPRESA::findCombo('CB11_ITEM_CATEGORIA', 'CB11_ID', 'CB11_DESCRICAO', 'CB11_STATUS=1 AND CB11_CATEGORIA_ID=' . $this->estabelecimento['CB04_CATEGORIA_ID']);
+        $limitFotos = SYS01PARAMETROSGLOBAIS::getValor(6); // limit de fotos do produto
+        
+        if (is_numeric($produto)) {
+            // dados do produto
+            $dataProduto = $model
+                    ->find()
+                    ->where(['CB05_EMPRESA_ID' => $this->user->id_company, 'CB05_ID' => $produto])
+                    ->orderBy('CB05_NOME_CURTO')
+                    ->one();
+            $dataProduto = $dataProduto->getAttributes();
+            $dataProduto['CB05_DESCRICAO'] = str_replace("\n", '\r\n', $dataProduto['CB05_DESCRICAO']);
+            $dataProduto['CB05_IMPORTANTE'] = str_replace("\n", '\r\n', $dataProduto['CB05_IMPORTANTE']);
+
+            // itens selecionados
+            $dataProduto["ITEM-PRODUTO"] = CB05PRODUTO::getItem($produto);
+        } else {
+            $qtdMaxProduto = (int) SYS01PARAMETROSGLOBAIS::getValor('3');
+            $qtdProduto = CB05PRODUTO::find()->where(['CB05_EMPRESA_ID' => $this->user->id_company])->count();
+            if ($qtdMaxProduto <= $qtdProduto) {
+                $maxProduto = "Você atingiu o limite de produtos do sistema.";
+            }
+        }
+
+        return $this->render('produtoFullForm', [
+                    'tituloTela' => 'Produto',
+                    'usuario' => $this->user->attributes,
+                    'produto' => $dataProduto,
+                    'itemProduto' => $dataItemProduto,
+                    'limitFotos' => $limitFotos,
+                    'al' => $al,
+                   // 'maxProduto' => $maxProduto,
+        		   	'maxProduto' => 0,
+        ]);
+    }
+
     public function fotoProduto() {
         $getAction = Yii::$app->request->get('param');
         $produto = Yii::$app->request->get('produto');
@@ -284,9 +337,9 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                 // testa quantidade de fotos
                 $limitFotos = SYS01PARAMETROSGLOBAIS::getValor(6); // limit de fotos do produto
                 $qtdFotos = CB14FOTOPRODUTO::find()->where(['CB14_PRODUTO_ID' => $produto])->count();
-               /* if($limitFotos <= $qtdFotos) {
+                if($limitFotos <= $qtdFotos) {
                     throw new \Exception('Limite de fotos atingido para o produto!');
-                }*/
+                }
 
                 $infoFile = \Yii::$app->u->infoFile($_FILES['file']);
                 $infoFile['path'] = 'img/fotos/produto/';
@@ -325,6 +378,73 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $CB05PRODUTO = (empty($param[$modelId])) ? new CB05PRODUTO() : CB05PRODUTO::findOne($param[$modelId]);
         $CB05PRODUTO->saveProduto($param);
     }
+    
+    
+    public function createProdutoFull($param) {
+        
+        $param['CB05_EMPRESA_ID'] = $this->user->id_company;
+        $transaction = \Yii::$app->db->beginTransaction();
+        
+        try {
+
+            // cria produto
+            $CB05PRODUTO = new CB05PRODUTO();
+            $CB05PRODUTO->setAttributes($param);
+            $CB05PRODUTO->save();
+            $produto = $CB05PRODUTO->CB05_ID;
+
+            // cria os itens do produto
+            foreach ($param['ITEM-PRODUTO'] as $item) {
+                $CB12ITEMCATEGEMPRESA = new CB12ITEMCATEGEMPRESA();
+                $CB12ITEMCATEGEMPRESA->setAttributes(['CB12_PRODUTO_ID' => $produto, 'CB12_ITEM_ID' => $item]);
+                $CB12ITEMCATEGEMPRESA->save();
+            }
+            
+            // salva promocao
+            $param['CB06_ID'] = null;
+            $param['CB06_PRODUTO_ID'] = $produto;
+            $this->savePromocao($param);
+            
+            // fotos do produto
+            if($_FILES){
+                
+                // testa quantidade de fotos
+                $limitFotos = (int) SYS01PARAMETROSGLOBAIS::getValor(6); // limit de fotos do produto
+                $qtdFotos = 0;
+
+                foreach ($_FILES as $foto) {
+                    $qtdFotos++;
+                    if($limitFotos < $qtdFotos) {
+                        break;
+//                        $transaction->rollBack();
+//                        throw new \Exception('Limite de fotos atingido para o produto!');
+                    }
+
+                    $infoFile = \Yii::$app->u->infoFile($foto);
+                    $infoFile['path'] = 'img/fotos/produto/';
+                    $infoFile['newName'] = uniqid($produto."_") . '.' . $infoFile['ex'];
+
+                    $CB14FOTOPRODUTO = new CB14FOTOPRODUTO();
+                    $CB14FOTOPRODUTO->setAttributes([
+                       'CB14_PRODUTO_ID' => $produto,
+                       'CB14_URL' => $infoFile['path'] . $infoFile['newName']
+                    ]);
+                    $CB14FOTOPRODUTO->save();
+
+                    $file = \yii\web\UploadedFile::getInstanceByName(str_replace('.', '_', $infoFile['name']));
+                    $file->saveAs($infoFile['path'] . $infoFile['newName']);
+                    
+                }
+            }
+            
+            $transaction->commit();
+            return json_encode(['status' => true]);
+
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw new \Exception($exc->getMessage());
+        }
+    }
 
     public function deleteProduto($produto) {
         //CB07CASHBACK::deleteAll(['CB07_PRODUTO_ID' => $produto]);
@@ -333,7 +453,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         CB05PRODUTO::deleteAll(['CB05_ID' => $produto]);
     }
 
-    public function actionPromocaoForm($produto) {
+    public function actionPromocaoForm($produto, $promocao) {
         \Yii::$app->view->title = '';
         $this->layout = 'empty';
 
@@ -343,6 +463,13 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $qtdMaxPromocao = (int) SYS01PARAMETROSGLOBAIS::getValor('4');
         $qtdPromocao = CB06VARIACAO::find()->where(['CB06_PRODUTO_ID' => $produto])->count();
         $maxPromocao = ($qtdMaxPromocao <= $qtdPromocao) ? "Você atingiu o limite de promoções por produto." : "";
+
+        // dados da promocao quando edicao
+        $attrPromocao = '';
+        if($promocao) {
+            $promocao = CB06VARIACAO::findOne($promocao);
+            $attrPromocao = (!empty($promocao->attributes) ? $promocao->attributes : '');
+        }
         
         // Avaliacoes ativas cadastradas pela empresa
         $avaliacoes = CB06VARIACAO::findCombo('CB19_AVALIACAO', 'CB19_ID', 'CB19_NOME', 'CB19_STATUS=1 AND CB19_EMPRESA_ID=' . $this->user->id_company);
@@ -351,15 +478,17 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'tituloTela' => 'Promoção',
                     'usuario' => $this->user->attributes,
                     'produto' => ['CB06_PRODUTO_ID' => $produto],
+                    'promocao' => $attrPromocao,
                     'avaliacoes' => $avaliacoes,
                     'al' => $al,
                     'estabelecimento' => $this->estabelecimento,
                     'maxPromocao' => $maxPromocao,
+                    'semProduto' => !($produto)
         ]);
     }
 
     public function savePromocao($param) {
-        $CB06VARIACAO = new CB06VARIACAO();
+        $CB06VARIACAO = ($param['CB06_ID']) ?  CB06VARIACAO::findOne($param['CB06_ID']) : new CB06VARIACAO();
         if ($this->estabelecimento['CB04_FLG_DELIVERY']) {
             $CB06VARIACAO->scenario = CB06VARIACAO::SCENARIODELIVERY;
         }
@@ -412,7 +541,6 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     }
     
     public function actionDelivery() {
-        $this->layout = 'smartAdminEstabelecimento';
         return $this->render('delivery', [
                     'tituloTela' => 'Delivery',
                     'usuario' => $this->user->attributes,
@@ -441,7 +569,6 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     }
     
     public function actionBaixarCompra() {
-        $this->layout = 'smartAdminEstabelecimento';
         $salvo = null;
 
         $model = new CB05PRODUTO();
@@ -483,7 +610,6 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
 
     
     public function actionExtrato() {
-        $this->layout = 'smartAdminEstabelecimento';
 //        var_dump($this);
 //        exit();
         $model = new VIEWEXTRATO();
@@ -514,8 +640,36 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         return $this->renderPartial('extratoGrid', $param);
     }
     
+    public function actionExtratoDx() {
+        
+        $model = new VIEWEXTRATO();
+        
+        $al = $model->attributeLabels();
+        
+        $saldoAtual = $model->saldoAtualByCliente($this->user->id);
+        $saldoReceber = $model->saldoReceberByCliente($this->user->id);
+
+        echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
+        echo $this->renderFile('@app/views/estabelecimento/extratoDxInit.php');
+        return $this->render('extratoDx', [
+                    'tituloTela' => 'Extrato',
+                    'usuario' => $this->user->attributes,
+                    'al' => $al,
+                    'saldoAtual' => Yii::$app->u->moedaReal($saldoAtual),
+                    'saldoReceber' => Yii::$app->u->moedaReal($saldoReceber)
+        ]);
+    }
+    
+    public function actionGlobalRead($gridName, $param = '', $json = false) {
+        switch ($gridName) {
+            case 'ExtratoMain':
+                $this->relatedModel = "common\models\EstabelecimentoExtratoModel";
+            break;
+        }
+        parent::actionGlobalRead($gridName, $param, $json);
+    }
+    
     public function actionSaque() {
-        $this->layout = 'smartAdminEstabelecimento';
             
         $saque_realizado = false;
         $formData = \Yii::$app->request->post();
@@ -591,7 +745,6 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
 
     
     public function actionAvaliacao() {
-        $this->layout = 'smartAdminEstabelecimento';
         
         $model = new CB19AVALIACAO();
         $al = $model->attributeLabels();
@@ -733,4 +886,57 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     }
     
     
+    /**
+     * view Alterar senha 
+     */
+    public function actionAlterarSenha() {
+        return $this->render('alterarSenha');
+    }
+    
+    /**
+     * action Alterar senha 
+     */
+    public function alterarSenha() {
+        $post = \Yii::$app->request->post();
+        $retorno = [];
+        
+        // valida senha
+        if($post) {
+            
+            $current_password = $post['current-password'];
+            $new_password = $post['new-password'];
+            $auth_key = $this->user->auth_key;
+
+            if (\Yii::$app->security->validatePassword($current_password, User::getHashPasswordByAuthKey($auth_key))) {
+                $new_password_hash = \Yii::$app->security->generatePasswordHash($new_password);
+                $user = User::findOne(['auth_key' => $auth_key]);
+                $user->setAttribute('password_hash', $new_password_hash);
+                $user->setAttribute('password_reset_token', NULL);
+                if ($user->save()) {
+                    $retorno = ['status' => true, 'message' => 'A senha foi alterada com sucesso!'];
+                } else {
+                    $retorno = ['status' => false, 'message' => 'A senha não foi alterada, tente novamente!'];
+                }
+
+            } else {
+                $retorno = ['status' => false, 'message' => 'A senha atual esta incorreta!'];
+
+            }
+        }
+        
+        exit(json_encode($retorno));
+    }
+    
+    
+    public function callMethodDynamically($action, $data, $returnThowException = true, $class = NULL) {
+        if (empty($class)) {
+            $class = $this;
+        }
+
+        $methodExists = method_exists($class, $action);
+        Yii::$app->v->isFalse(['methodExists' => $methodExists], '', 'app', $returnThowException);
+
+        return call_user_func_array([$class, $action], [$data]);
+    }
+
 }

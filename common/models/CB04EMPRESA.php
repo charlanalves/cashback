@@ -191,29 +191,28 @@ class CB04EMPRESA extends BaseCB04EMPRESA
     }
 
     public function saveEstabelecimento($data) {
-            // dados do estabelecimento
-            $this->setAttributes($data);
-            $this->CB04_CNPJ = preg_replace("/[^0-9]/", "", $this->CB04_CNPJ);
-            $this->CB04_CONTA_VERIFICADA = 1;
-            $this->save();
-            // dados da forma de pagamento (exclui e cadastra)
-            CB09FORMAPAGTOEMPRESA::deleteAll(['CB09_ID_EMPRESA' => $this->CB04_ID]);
-            if (!empty($data['FORMA-PAGTO'])) {
-                foreach ($data['FORMA-PAGTO'] as $fp) {
-                	
-                    $CB09FORMAPAGTOEMPRESA = new CB09FORMAPAGTOEMPRESA();
-                    $CB09FORMAPAGTOEMPRESA->CB09_ID_EMPRESA = $this->CB04_ID;
-                    $CB09FORMAPAGTOEMPRESA->CB09_ID_FORMA_PAG = $fp['CB09_ID_FORMA_PAG'];
-                    $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADQ = $fp['CB09_PERC_ADQ'];
-                    $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADMIN = $fp['CB09_PERC_ADMIN'];
-                    
-                    $CB09FORMAPAGTOEMPRESA->save();
-                }
-                
+        // dados do estabelecimento
+        $this->setAttributes($data);
+        $this->CB04_CNPJ = preg_replace("/[^0-9]/", "", $this->CB04_CNPJ);
+        $this->CB04_CONTA_VERIFICADA = 1;
+        $this->save();
+
+        /*
+        // dados da forma de pagamento (exclui e cadastra)
+        CB09FORMAPAGTOEMPRESA::deleteAll(['CB09_ID_EMPRESA' => $this->CB04_ID]);
+        if (!empty($data['FORMA-PAGTO'])) {
+            foreach ($data['FORMA-PAGTO'] as $fp) {
+                $CB09FORMAPAGTOEMPRESA = new CB09FORMAPAGTOEMPRESA();
+                $CB09FORMAPAGTOEMPRESA->CB09_ID_EMPRESA = $this->CB04_ID;
+                $CB09FORMAPAGTOEMPRESA->CB09_ID_FORMA_PAG = $fp['CB09_ID_FORMA_PAG'];
+                $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADQ = $fp['CB09_PERC_ADQ'];
+                $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADMIN = $fp['CB09_PERC_ADMIN'];   
+                $CB09FORMAPAGTOEMPRESA->save();
             }
-        
-            return $this->CB04_ID;
-        
+        }
+         */
+
+        return $this->CB04_ID;
     }
 	
 }

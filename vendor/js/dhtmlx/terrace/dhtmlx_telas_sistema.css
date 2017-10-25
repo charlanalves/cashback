@@ -9550,37 +9550,37 @@ button.button-cell-icon {
 }
 
 button.icon-adicionar {
-    background-image: url(imgs/adicionar.png);
+    background-image: url(../../vendor/js/layoutMask/imgs/adicionar.png);
 	background-size: 19px 19px;
    background-position: 0px -1px;
 }
 
 button.icon-editar {
-    background-image: url(imgs/editar.png);
+    background-image: url(../../vendor/js/layoutMask/imgs/editar.png);
     background-size: 14px 15px;
     background-position: 2px 1px;
 }
 
 button.icon-excluir {
-	background-image: url(imgs/excluir.png);
+	background-image: url(../../vendor/js/layoutMask/imgs/excluir.png);
 	background-size: 15px 15px;
 	background-position: 1px 1px;
 }
 
 button.icon-excel {
-    background-image: url(imgs/Excel.png);
+    background-image: url(../../vendor/js/layoutMask/imgs/excel.png);
     background-size: 13px 14px;
     background-position: 3px 2px;
 }
 
 button.icon-enviar {
-    background-image: url(imgs/enviar.png);
+    background-image: url(../../vendor/js/layoutMask/imgs/enviar.png);
     background-size: 13px 13px;
     background-position: 3px 2px;
 }
 
 button.icon-resumo {
-    background-image: url(imgs/resumo.png);
+    background-image: url(../../vendor/js/layoutMask/imgs/resumo.png);
     background-size: 15px 15px;
     background-position: 2px 1px;
 }

@@ -215,6 +215,7 @@ C7.loadGrid = function(target, fnName, param, autoLoad, btns) {
 	objGrid =  layoutGrid_A.attachGrid();
 	objGrid.init();
 	objGrid.enableRowsHover(true, 'hover');
+	objGrid.layout = layoutGrid;
 	objGrid.layoutCell = layoutGrid_A;
 	
 	SYSTEM[fnName] = objGrid;
@@ -231,18 +232,18 @@ C7.loadGrid = function(target, fnName, param, autoLoad, btns) {
 	}
 	
 	if ( typeof C7[ 'setToolbarGrid' + fnName ] != 'undefined' ) {
-		C7.setGridBtns(objGrid, C7[ 'setToolbarGrid' + fnName ](), layoutGrid);
+		C7.setGridBtns(objGrid, C7[ 'setToolbarGrid' + fnName ](), layoutGrid, fnName);
 	}
 	
 
 }
 
-C7.setGridBtns = function(grid, btns, layoutGrid) {
+C7.setGridBtns = function(grid, btns, layoutGrid, param = '') {
 	for(i in btns){
 		var action = btns[i]['action'],
 			title =  btns[i]['title'],
 			icon =  btns[i]['icon'],
-			fnName = 'C7.action' + action + '()';
+			fnName = 'C7.action' + action + '("' + param + '")';
 		
     	btn = U.btnTopCell(fnName, title, icon);
     	
@@ -911,4 +912,35 @@ C7.alertAtencao = function (message){
 	});	
 }
 
+C7.exportGridToCSV = function(gridName) {
+   var btn = [{
+            action: 'ExportGridToCSVGlobal',
+            title: 'Exportar CSV',
+            icon: 'excel'
+        }];
+    C7.setGridBtns(C7.grid[gridName], btn, C7.grid[gridName].layout, gridName);
+};
+
+C7.actionExportGridToCSVGlobal = function (gridName){
+    var filename = 'relatorio.csv';
+    var csvFile = C7.grid[gridName].serializeToCSV()
+
+    var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, filename);
+    } else {
+        var link = document.createElement("a");
+        if (link.download !== undefined) { // feature detection
+            // Browsers that support HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+
+};
 </script>

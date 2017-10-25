@@ -56,6 +56,7 @@ class GlobalBaseController extends Controller {
      */
     protected $modelRelated = '';
 
+    
     public function __construct($id, $module) {
         $this->btnsDefault = [
             'editar' => '../libs/layoutMask/imgs/editar.png^' . Yii::t("app", "Editar") . '^javascript:Form.runAction("GlobalUpdate", true)^_self',
@@ -130,8 +131,9 @@ class GlobalBaseController extends Controller {
         }
 
         $xml = Yii::$app->dataDumpComponent->getXML($result, $configGrid);
-
-        return $this->renderPartial('@app/views/default/xmlMask', array("xml" => $xml));
+        
+        echo $xml;
+        //$this->renderPartial('@app/views/default/xmlMask', array("xml" => $xml));
     }
 
     private function globalGetGridData($gridXmlFn, $param, $throwException, $instanceModel) {

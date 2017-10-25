@@ -73,8 +73,12 @@ class CB06VARIACAO extends BaseCB06VARIACAO
      */
     public static function getPromocao($url, $filter)
     {
-        // filter categoria e ordenacao
-        $filterBind = (empty($filter['cat']) || empty($filter['ord'])) ? false : true;
+        
+        // filter categoria e ordenacao + limit
+        $filterBindCat = empty($filter['cat']) ? false : true;
+        $filterBindOrd = empty($filter['ord']) ? false : true;
+        $limiteInicio = (!empty($filter['limiteInicio'])) ? $filter['limiteInicio'] : '0';
+        $limiteQtd = (!empty($filter['limiteQtd'])) ? $filter['limiteQtd'] : '15';
         
        /* $sql = "
             SELECT 
@@ -99,30 +103,48 @@ class CB06VARIACAO extends BaseCB06VARIACAO
         */
         
         
-      $sql = " 
-      
-       		SELECT  MAX(CB06_VARIACAO.CB06_DINHEIRO_VOLTA) AS CB06_DINHEIRO_VOLTA, CB04_EMPRESA.CB04_ID, CB04_EMPRESA.CB04_NOME, CB04_EMPRESA.CB04_END_COMPLEMENTO, - - CONCAT(  '" . $url . "', CB04_EMPRESA.CB04_URL_LOGOMARCA ) AS CB04_URL_LOGOMARCA, - - CONCAT(  '" . $url . "', CB14_FOTO_PRODUTO.CB14_URL ) AS CB14_URL, CB04_EMPRESA.CB04_URL_LOGOMARCA AS CB04_URL_LOGOMARCA, CB14_FOTO_PRODUTO.CB14_URL AS CB14_URL, CB05_PRODUTO.CB05_ID, CB05_PRODUTO.CB05_TITULO, CB06_VARIACAO.CB06_DESCRICAO,
-                        CB04_END_LATITUDE,CB04_END_LONGITUDE,CB06_ID
-			FROM CB06_VARIACAO
-			INNER JOIN CB05_PRODUTO ON ( CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID ) 
-			INNER JOIN CB14_FOTO_PRODUTO ON ( CB14_FOTO_PRODUTO.CB14_PRODUTO_ID = CB05_PRODUTO.CB05_ID ) 
-			INNER JOIN CB04_EMPRESA ON ( CB04_EMPRESA.CB04_ID = CB05_PRODUTO.CB05_EMPRESA_ID )
-			   " . (!$filterBind ? "" : "WHERE CB04_CATEGORIA_ID = :categoria") . "
-			GROUP BY CB06_DESCRICAO,CB06_ID
-			ORDER BY " . (!$filterBind ? 'CB06_DINHEIRO_VOLTA DESC' : ":ordem");
+      $sql = "  SELECT  
+                    MAX(CB06_VARIACAO.CB06_DINHEIRO_VOLTA) AS CB06_DINHEIRO_VOLTA,
+                    CB06_ID, 
+                    CB06_PRECO_PROMOCIONAL, 
+                    CB06_PRECO,
+                    CB04_ID, 
+                    CB04_NOME, 
+                    CB04_END_COMPLEMENTO,
+                    -- CONCAT(  '" . $url . "', CB04_EMPRESA.CB04_URL_LOGOMARCA ) AS CB04_URL_LOGOMARCA,
+                    -- CONCAT(  '" . $url . "', CB14_FOTO_PRODUTO.CB14_URL ) AS CB14_URL, 
+                    CB04_EMPRESA.CB04_URL_LOGOMARCA AS CB04_URL_LOGOMARCA, 
+                    CB14_FOTO_PRODUTO.CB14_URL AS CB14_URL, 
+                    CB05_ID, 
+                    CB05_TITULO, 
+                    CB06_DESCRICAO,
+                    CB04_END_LATITUDE,
+                    CB04_END_LONGITUDE,
+                    CB06_PRODUTO_ID
+                FROM CB06_VARIACAO
+                INNER JOIN CB05_PRODUTO ON (CB05_ATIVO = 1 AND CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID ) 
+                INNER JOIN CB04_EMPRESA ON (CB04_STATUS = 1 AND CB04_EMPRESA.CB04_ID = CB05_PRODUTO.CB05_EMPRESA_ID )
+                LEFT JOIN (
+                    SELECT MIN(CB14_ID) AS CB14_ID, CB14_PRODUTO_ID, CB14_URL 
+                    FROM CB14_FOTO_PRODUTO
+                    GROUP BY CB14_PRODUTO_ID) CB14_FOTO_PRODUTO ON(CB14_PRODUTO_ID = CB05_ID)
+                " . (!$filterBindCat ? "" : "WHERE CB04_CATEGORIA_ID = :categoria") . "
+                GROUP BY CB05_ID
+                ORDER BY " . (!$filterBindOrd ? 'CB06_DINHEIRO_VOLTA DESC' : ":ordem") . "
+                LIMIT $limiteInicio, $limiteQtd";
 			
-			
-      
         $command = \Yii::$app->db->createCommand($sql);
-        if ($filterBind) {
+        if ($filterBindCat) {
             $command->bindValue(':categoria', $filter['cat']);
+        }
+        if ($filterBindOrd) {
             $command->bindValue(':ordem', \Yii::$app->u->filterOrder($filter['ord']));
         }
         $result = $command->queryAll();
             
         // ordena por proximidade
-        if(!empty($filter['latitude']) && !empty($filter['longitude']) && !empty($filter['ord']) && $filter['ord'] == 'mais-proximos') {
-            $proximos = $outros = [];
+        if(!empty($filter['latitude']) && !empty($filter['longitude'])) {
+            $proximos = $outros = $ordemOriginal = [];
             foreach ($result as $r) {
                 if($r['CB04_END_LATITUDE'] && $r['CB04_END_LONGITUDE']) {
                     $r['DISTANCIA'] = \Yii::$app->u->arredondar(\Yii::$app->u->distanciaGeografica($filter['latitude'], $r['CB04_END_LATITUDE'], $filter['longitude'], $r['CB04_END_LONGITUDE']));
@@ -130,11 +152,17 @@ class CB06VARIACAO extends BaseCB06VARIACAO
                 } else {
                     $outros[] = $r;
                 }
+                $ordemOriginal[] = $r;
             }
-            // ordena os estabelecimentos com a geoposicao  , 
-            $proximos = \Yii::$app->u->orderArrayMult($proximos, 'DISTANCIA');
-            // merge com os outros que nao tem geoposicao
-            $result = array_merge($proximos, $outros);
+            
+            // ordena os estabelecimentos com a geoposicao  
+            if(!empty($filter['ord']) && $filter['ord'] == 'mais-proximos') {
+                $proximos = \Yii::$app->u->orderArrayMult($proximos, 'DISTANCIA');
+                // merge com os outros que nao tem geoposicao
+                $result = array_merge($proximos, $outros);
+            } else {
+                $result = $ordemOriginal;
+            }
         }
         return $result; 
     }
