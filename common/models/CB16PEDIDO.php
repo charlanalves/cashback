@@ -64,7 +64,7 @@ class CB16PEDIDO extends BaseCB16PEDIDO
             'CB16_COMPRADOR_EMAIL' => 'Cb16  Comprador  Email',
             'CB16_COMPRADOR_CPF' => 'Cb16  Comprador  Cpf',
             'CB16_COMPRADOR_TEL_DDD' => 'Cb16  Comprador  Tel  Ddd',
-            'CB16_COMPRADOR_TEL_NUMERO' => 'Cb16  Comprador  Tel  Numero',
+            'CB16_COMPRADOR_TEL_NUMERO' => 'Telefone',
             'CB16_COMPRADOR_END_LOGRADOURO' => 'Logradouro',
             'CB16_COMPRADOR_END_NUMERO' => 'Numero',
             'CB16_COMPRADOR_END_BAIRRO' => 'Bairro',
@@ -77,6 +77,12 @@ class CB16PEDIDO extends BaseCB16PEDIDO
         ];
     }
     
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_DELIVERY_ADDRESS] = ['CB16_COMPRADOR_TEL_NUMERO','CB16_COMPRADOR_END_CEP', 'CB16_COMPRADOR_END_LOGRADOURO', 'CB16_COMPRADOR_END_NUMERO', 'CB16_COMPRADOR_END_BAIRRO', 'CB16_COMPRADOR_END_CIDADE', 'CB16_COMPRADOR_END_UF'];
+        return $scenarios;
+    }
     
     /**
      * @inheritdoc
@@ -95,11 +101,11 @@ class CB16PEDIDO extends BaseCB16PEDIDO
             [['CB16_COMPRADOR_NOME', 'CB16_COMPRADOR_EMAIL', 'CB16_COMPRADOR_CPF', 'CB16_COMPRADOR_TEL_DDD', 'CB16_COMPRADOR_TEL_NUMERO', 'CB16_COMPRADOR_END_LOGRADOURO', 'CB16_COMPRADOR_END_NUMERO', 'CB16_COMPRADOR_END_BAIRRO', 'CB16_COMPRADOR_END_CEP', 'CB16_COMPRADOR_END_CIDADE', 'CB16_COMPRADOR_END_UF'], 'string', 'max' => 100],
             [['CB16_COMPRADOR_END_PAIS'], 'string', 'max' => 2],
             [['CB16_COMPRADOR_END_COMPLEMENTO'], 'string', 'max' => 500],             
-            [['CB16_COMPRADOR_END_CEP', 'CB16_COMPRADOR_END_LOGRADOURO', 'CB16_COMPRADOR_END_NUMERO', 'CB16_COMPRADOR_END_BAIRRO', 'CB16_COMPRADOR_END_CIDADE', 'CB16_COMPRADOR_END_UF'], 'required' ,'on' => self::SCENARIO_DELIVERY_ADDRESS , 'message'=>'O {attribute} é obrigatório'],
+            [['CB16_COMPRADOR_TEL_NUMERO','CB16_COMPRADOR_END_CEP', 'CB16_COMPRADOR_END_LOGRADOURO', 'CB16_COMPRADOR_END_NUMERO', 'CB16_COMPRADOR_END_BAIRRO', 'CB16_COMPRADOR_END_CIDADE', 'CB16_COMPRADOR_END_UF'], 'required' ,'on' => self::SCENARIO_DELIVERY_ADDRESS , 'message'=>'O {attribute} é obrigatório'],
         ]);
     }
-    
-     public static function getPedido($pedido, $usuario)
+  
+    public static function getPedido($pedido, $usuario)
     {
         
         $sql = "SELECT CB16_PEDIDO.*, CB06_VARIACAO.*, CB17_PRODUTO_PEDIDO.*, CB04_EMPRESA.*, CB14_FOTO_PRODUTO.CB14_URL 

@@ -8,6 +8,9 @@ use common\widgets\Alert;
 
 $this->title = 'Estabelecimento';
 
+use app\assets\CashBackAsset;
+CashBackAsset::register($this);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -107,6 +110,13 @@ $this->title = 'Estabelecimento';
             .dropzone {
                 min-height: 155px!important;
             }
+            
+            /* CSS DX ---------------------------------------- */
+            .dx-grid {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
         </style>
 
         <script>
@@ -132,12 +142,20 @@ $this->title = 'Estabelecimento';
                     document.location.href = 'index.php?r=estabelecimento/extrato';
                     return false;
                 });
+                $("a#menu-extrato-dx").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/extrato-dx';
+                    return false;
+                });
                 $("a#menu-saque").click(function (e) {
                     document.location.href = 'index.php?r=estabelecimento/saque';
                     return false;
                 });
                 $("a#menu-avaliacao").click(function (e) {
                     document.location.href = 'index.php?r=estabelecimento/avaliacao';
+                    return false;
+                });
+                $("a#menu-alterar-senha").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/alterar-senha';
                     return false;
                 });
                 
@@ -193,13 +211,19 @@ $this->title = 'Estabelecimento';
                         <a href="#" title="Extrato" id="menu-extrato"><i class="fa fa-lg fa-fw fa-list-ul"></i> <span class="menu-item-parent">Extrato</span></a>
                     </li>
                     <li class="">
+                        <a href="#" title="Extrato Dx" id="menu-extrato-dx"><i class="fa fa-lg fa-fw fa-list-ul"></i> <span class="menu-item-parent">Extrato Dx</span></a>
+                    </li>
+                    <li class="">
                         <a href="#" title="Saque" id="menu-saque"><i class="fa fa-lg fa-fw fa-money"></i> <span class="menu-item-parent">Saque</span></a>
                     </li>
                     <li class="">
-                        <a href="#" title="Avaliaão" id="menu-avaliacao"><i class="fa fa-lg fa-fw fa-list-alt"></i> <span class="menu-item-parent">Avaliação</span></a>
+                        <a href="#" title="Avaliação" id="menu-avaliacao"><i class="fa fa-lg fa-fw fa-list-alt"></i> <span class="menu-item-parent">Avaliação</span></a>
                     </li>
                     <li class="">
                         <a href="#" title="Empresa" id="menu-empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>
+                    </li>
+                    <li class="">
+                        <a href="#" title="Alterar Senha" id="menu-alterar-senha"><i class="fa fa-lg fa-fw fa-key"></i> <span class="menu-item-parent">Alterar Senha</span></a>
                     </li>
                     <?=
                     Html::beginForm(['/estabelecimento/logout'], 'post', ['name' => 'form-sair'])
@@ -248,14 +272,14 @@ $this->title = 'Estabelecimento';
 
         <!-- #PLUGINS -->
 
-       
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+        <script src="js/libs/jquery-2.1.1.min.js"></script>
+
         <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
         
         <script src="js/plugin/jquery-block/jquery.blockUI.js"></script>
 
         <script src="js/jquery.priceformat.min.js"></script>
-
+        
         <!-- IMPORTANT: APP CONFIG -->
         <script src="js/app.config.js"></script>
 

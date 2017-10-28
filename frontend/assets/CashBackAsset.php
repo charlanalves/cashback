@@ -19,7 +19,7 @@ class CashBackAsset extends AssetBundle
     public $baseUrl = '@web';
 	
     public $css = [
-		'dxassets/dhtmlx/terrace/dhtmlx_telas_sistema.css?a=78s',		
+		'dxassets/dhtmlx/terrace/dhtmlx_telas_sistema.css?a=7sadasdadasds',		
 		'dxassets/custom_scroll/customscroll.css',        
     ];
     public $js = [

@@ -136,6 +136,10 @@ $this->title = '';
                     CB04_CATEGORIA_ID: {
                         required: true
                     },
+                    CB04_EMAIL: {
+                        required: true,
+                        email: true
+                    },
                     CB04_END_CEP: {
                         required: true
                     },
@@ -158,6 +162,10 @@ $this->title = '';
                     },
                     CB04_CATEGORIA_ID: {
                         required: 'Campo obrigatório'
+                    },
+                    CB04_EMAIL: {
+                        required: 'Campo obrigatório',
+                        email: 'Informe um e-mail válido'
                     },
                     CB04_END_CEP: {
                         required: 'Campo obrigatório'
@@ -217,12 +225,17 @@ $this->title = '';
                             </section>
                         </div>
                         <div class="row">
-                            <section class="col col-6"><?= $al['CB04_NOME'] ?>
+                            <section class="col col-4"><?= $al['CB04_NOME'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
                                     <input type="text" name="CB04_NOME" placeholder="">
                                 </label>
                             </section>
-                            <section class="col col-6"><?= $al['CB04_CATEGORIA_ID'] ?>
+                            <section class="col col-4"><?= $al['CB04_EMAIL'] ?>
+                                <label class="input"> <i class="icon-prepend fa fa-envelope"></i>
+                                    <input type="text" name="CB04_EMAIL" placeholder="">
+                                </label>
+                            </section>
+                            <section class="col col-4"><?= $al['CB04_CATEGORIA_ID'] ?>
                                 <label class="select">
                                     <select name="CB04_CATEGORIA_ID" disabled="">
                                         <option value="" selected="" disabled="">Categoria...</option>

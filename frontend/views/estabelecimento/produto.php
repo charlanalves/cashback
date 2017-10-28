@@ -26,12 +26,33 @@ $this->title = '';
                 .load('index.php?r=estabelecimento/produto-form' + urlGet);
     }
 
-    function modalPromocao(id) {
-        $('#remoteModalPromocaoLabel').text('Nova promoção');
+    function modalProdutoFull(id) {
+        if (typeof id == 'undefined') {
+            titulo = "Novo produto";
+            urlGet = "";
+        } else {
+            titulo = "Editar produto";
+            urlGet = "&produto=" + id;
+        }
+
+        $('#remoteModalProdutoFullLabel').text(titulo);
+        $.blockUI();
+        $('#remoteModalProdutoFull')
+                .find('.modal-body')
+                .html('')
+                .load('index.php?r=estabelecimento/produto-full-form' + urlGet, function(){
+                    $.unblockUI();
+                    // exibir modal
+                    $('#remoteModalProdutoFull').modal('show');
+                });
+    }
+
+    function modalPromocao(produto, promocao = '') {
+        $('#remoteModalPromocaoLabel').text( promocao ? 'Editar promoção' : 'Nova promoção' );
         $('#remoteModalPromocao').modal('show')
                 .find('.modal-body')
                 .html('')
-                .load('index.php?r=estabelecimento/promocao-form&produto=' + id);
+                .load('index.php?r=estabelecimento/promocao-form&produto=' + produto + '&promocao=' + promocao);
     }
 
     function modalCashback(id) {
@@ -147,7 +168,7 @@ $this->title = '';
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <!-- Button trigger modal produto -->
-        <a href="javascript:void(0)" onclick="modalProduto()" class="btn btn-success pull-right">
+        <a href="javascript:void(0)" onclick="modalProdutoFull()" class="btn btn-success pull-right">
             <i class="fa fa-circle-arrow-up fa-lg"></i> 
             Cadastrar produto &nbsp;<i class="fa fa-plus-circle"></i>
         </a>
@@ -200,6 +221,20 @@ $this->title = '';
 </div>
 <!-- END MODAL -->
 
+<!-- MODAL PRODUTO FULL -->
+<div class="modal fade" id="remoteModalProdutoFull" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 800px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="remoteModalProdutoFullLabel"></h4>
+            </div>
+            <div class="modal-body no-padding"></div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL -->
+
 <div class="row bg-color-white">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
 
@@ -223,7 +258,7 @@ $this->title = '';
                             ?>
                             <tbody style="background-color: #EFF5FB">
                                 <tr id="tr-produto-<?= $at['CB05_ID'] ?>">
-                                    <td><?= "<h3>" . $at['CB05_NOME_CURTO'] . " <small>" . $at['CB05_TITULO'] . "</small></h3>" ?></td>
+                                    <td><?= "<h3>" . $at['CB05_TITULO'] . " <small></small></h3>" ?></td>
                                     <td class="smart-form" style="padding: 5px 16px;">
                                         <label class="checkbox">
                                             <input type="checkbox" id="ativo-<?= $at['CB05_ID'] ?>" onchange="produtoAtivo(<?= $at['CB05_ID'] ?>)" value="<?= $at['CB05_ID'] ?>" <?= ($at['CB05_ATIVO']) ? "checked" : "" ?> /><i></i>
@@ -232,9 +267,9 @@ $this->title = '';
                                     <td>
                                         <select class="btn btn-primary btn-xs" onchange="acaoProduto($(this), <?= $at['CB05_ID'] ?>)">
                                             <option value="">Selecione</option>
-                                            <option value="modalCashback">Cashback</option>
-                                            <option value="modalPromocao">Promoções</option>
-                                            <option value="modalProduto">Editar</option>
+                                            <!--<option value="modalCashback">Cashback</option>-->
+                                            <option value="modalPromocao">Criar Promoção</option>
+                                            <option value="modalProduto">Editar Produto</option>
                                             <option value="excluirProduto">Excluir</option>
                                         </select>
                                     </td>
@@ -253,7 +288,16 @@ $this->title = '';
                                                             <strong>&bull; <?= $variacao['CB06_DESCRICAO'] ?></strong> <?= ($variacao['CB06_AVALIACAO_ID'] ? '(Avaliando)' : '') ?> <br /> 
                                                             Valor original: <strong>R$ <?= \Yii::$app->u->moedaReal($variacao['CB06_PRECO']) ?></strong> | Valor promocional: <strong>R$ <?= \Yii::$app->u->moedaReal($variacao['CB06_PRECO_PROMOCIONAL']) ?></strong> | Dinheiro de volta: <strong><?= \Yii::$app->u->moedaReal($variacao['CB06_DINHEIRO_VOLTA']) ?>%</strong>
                                                         </td>
-                                                        <td align="center"><button class="btn btn-danger btn-xs margin-top-5" onclick="excluirVariacao(<?= $variacao['CB06_ID'] ?>)">Excluir &nbsp;<i class="fa fa-trash-o"></i></button></td>
+                                                        <td align="center">
+                                                            <button class="btn btn-warning btn-xs margin-top-5" onclick="modalPromocao(<?= $at['CB05_ID'] . ',' . $variacao['CB06_ID'] ?>)">
+                                                                Editar &nbsp;<i class="fa fa-pencil-square-o"></i>
+                                                            </button>
+                                                        </td>
+                                                        <td align="center">
+                                                            <button class="btn btn-danger btn-xs margin-top-5" onclick="excluirVariacao(<?= $variacao['CB06_ID'] ?>)">
+                                                                Excluir &nbsp;<i class="fa fa-trash-o"></i>
+                                                            </button>
+                                                        </td>
                                                     </tr>
                                                     <?php
                                                 }
