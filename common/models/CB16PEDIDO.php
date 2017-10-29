@@ -318,7 +318,8 @@ class CB16PEDIDO extends BaseCB16PEDIDO
                     WHEN " . self::status_delivery_aguardando . " THEN 'Aguardando entrega'
                     WHEN " . self::status_delivery_saiu_entrega . " THEN 'Saiu para entrega'
                     WHEN " . self::status_delivery_entregue . " THEN 'Entregue'
-                    ELSE '' END AS STATUS_DELIVERY
+                    ELSE '' END AS STATUS_DELIVERY,
+                CONCAT('img/editar.png^Alterar status da entrega^javascript:alterarStatusDelivery(', CB16_PEDIDO.CB16_ID, ')^_self;') AS editar
 
                 FROM CB16_PEDIDO 
                 INNER JOIN CB17_PRODUTO_PEDIDO ON(CB16_PEDIDO.CB16_ID = CB17_PRODUTO_PEDIDO.CB17_PEDIDO_ID)
@@ -356,13 +357,14 @@ class CB16PEDIDO extends BaseCB16PEDIDO
         $al = $this->attributeLabels();
         return [
             ['btnsAvailable' => []],
-            ['sets' => ['title' => $al['CB16_ID'], 'align' => 'center', 'width' => '75', 'type' => 'ro', 'id' => 'CB16_ID'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => $al['CB16_ID'], 'align' => 'center', 'width' => '70', 'type' => 'ro', 'id' => 'CB16_ID'], 'filter' => ['title' => '#text_filter']],
             ['sets' => ['title' => $al['CB16_DT_APROVACAO'], 'align' => 'center', 'width' => '120', 'type' => 'ro', 'id' => 'CB16_DT_APROVACAO'], 'filter' => ['title' => '#text_filter']],
             ['sets' => ['title' => $al['CB16_USER_ID'], 'align' => 'left', 'width' => '200', 'type' => 'ro', 'id' => 'name'], 'filter' => ['title' => '#text_filter']],
             ['sets' => ['title' => $al['CB16_COMPRADOR_TEL_NUMERO'], 'align' => 'center', 'width' => '100', 'type' => 'ro', 'id' => 'CB16_COMPRADOR_TEL_NUMERO'], 'filter' => ['title' => '#text_filter']],
             ['sets' => ['title' => $al['ENDERECO_COMPLETO'], 'align' => 'left', 'width' => '250', 'type' => 'ro', 'id' => 'ENDERECO_COMPLETO'], 'filter' => ['title' => '#text_filter']],
             ['sets' => ['title' => $al['CB17_NOME_PRODUTO'], 'align' => 'left', 'width' => '200', 'type' => 'ro', 'id' => 'CB17_NOME_PRODUTO'], 'filter' => ['title' => '#text_filter']],            
             ['sets' => ['title' => $al['STATUS_DELIVERY'], 'align' => 'center', 'width' => '80', 'type' => 'ro', 'id' => 'STATUS_DELIVERY'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => 'EDITAR', 'align' => 'center', 'width' => '70', 'type' => 'img', 'id' => 'editar'], 'filter' => ['title' => '']],
         ];
     }
 }

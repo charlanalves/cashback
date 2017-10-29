@@ -66,7 +66,7 @@ class EstabelecimentoExtratoModel extends BaseEstabelecimentoExtratoModel {
                 IFNULL(Replace(Replace(Replace(Format(TAXA_ADQUIRENTE, 2), '.', '|'), ',', '.'), '|', ','), '-') AS TAXA_ADQUIRENTE,
                 IFNULL(Replace(Replace(Replace(Format(TAXA_ESTALECA, 2), '.', '|'), ',', '.'), '|', ','), '-') AS TAXA_ESTALECA,
                 IFNULL(Replace(Replace(Replace(Format(DINHEIRO_VOLTA, 2), '.', '|'), ',', '.'), '|', ','), '-') AS DINHEIRO_VOLTA,
-                IFNULL(Replace(Replace(Replace(Format(SALDO, 2), '.', '|'), ',', '.'), '|', ','), '-') AS SALDO
+                IFNULL(Replace(Replace(Replace(Format(SALDO, 2), '.', '|'), ',', '.'), '|', ','), '-') AS SALDO,
             FROM VIEW_EXTRATO_ESTABELECIMENTO
             INNER JOIN CB16_PEDIDO ON (CB16_ID = PEDIDO_ID AND CB16_EMPRESA_ID = :empresa)";
 

@@ -38,7 +38,8 @@ class EstabelecimentoDeliveryModel extends BaseEstabelecimentoDeliveryModel {
                 IFNULL(Replace(Replace(Replace(Format(TAXA_ADQUIRENTE, 2), '.', '|'), ',', '.'), '|', ','), '-') AS TAXA_ADQUIRENTE,
                 IFNULL(Replace(Replace(Replace(Format(TAXA_ESTALECA, 2), '.', '|'), ',', '.'), '|', ','), '-') AS TAXA_ESTALECA,
                 IFNULL(Replace(Replace(Replace(Format(DINHEIRO_VOLTA, 2), '.', '|'), ',', '.'), '|', ','), '-') AS DINHEIRO_VOLTA,
-                IFNULL(Replace(Replace(Replace(Format(SALDO, 2), '.', '|'), ',', '.'), '|', ','), '-') AS SALDO
+                IFNULL(Replace(Replace(Replace(Format(SALDO, 2), '.', '|'), ',', '.'), '|', ','), '-') AS SALDO,
+                CONCAT('img/editar.png^Alterar status da entrega^alterarStatusDelivery(', PEDIDO_ID, ');') AS editar
             FROM VIEW_EXTRATO_ESTABELECIMENTO
             INNER JOIN CB16_PEDIDO ON (CB16_ID = PEDIDO_ID AND CB16_EMPRESA_ID = :empresa)";
 
@@ -65,6 +66,7 @@ class EstabelecimentoDeliveryModel extends BaseEstabelecimentoDeliveryModel {
             ['sets' => ['title' => $al['DINHEIRO_VOLTA'], 'align' => 'right', 'width' => '120', 'type' => 'ro', 'id' => 'DINHEIRO_VOLTA'], 'filter' => ['title' => '#text_filter']],
             ['sets' => ['title' => $al['SALDO'], 'align' => 'right', 'width' => '120', 'type' => 'ro', 'id' => 'SALDO'], 'filter' => ['title' => '#text_filter']],
             ['sets' => ['title' => $al['DATA_LIBERACAO'], 'align' => 'center', 'width' => '150', 'type' => 'ro', 'id' => 'DATA_LIBERACAO'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => 'EDITAR', 'align' => 'center', 'width' => '80', 'type' => 'ro', 'id' => 'editar'], 'filter' => ['title' => '']],
         ];
     }
 

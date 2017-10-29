@@ -369,13 +369,16 @@ dhtmlXGridObject.prototype.getValueCheckedRowsMMS = function(indexColData, index
 
 dhtmlXGridObject.prototype.loadXMLMMS = function(url, callback) {
 	that = this;
-        callback = (callback || function(){});
+        callback = (callback || function(){});        
+        $.blockUI();
 	$.ajax({
 	   type: 'post',
 	   url:  url,
 	   success: function(retorno){
 		   try {
-                            callback();
+                            callback();           
+                            $.unblockUI();
+                            
 			   xmlDoc = $.parseXML(retorno);
 			   that.parse(retorno);
 		   } catch (erro) {

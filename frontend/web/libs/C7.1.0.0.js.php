@@ -529,7 +529,7 @@ C7.reloadGrid = function(params) {
     		C7.settings.gridReload.load(C7.settings.urlReloadGrid, C7.settings.callbackReloadGrid);
     	} else {
     		if ( typeof SYSTEM[C7.settings.gridReload] != 'undefined') {
-				SYSTEM[C7.settings.gridReload].load(C7.settings.urlReloadGrid);
+				SYSTEM[C7.settings.gridReload].loadXMLMMS(C7.settings.urlReloadGrid);
     		} else if ( typeof C7.settings.gridReload == 'function') {
     			C7.settings.gridReload.load(C7.settings.urlReloadGrid);
     		}

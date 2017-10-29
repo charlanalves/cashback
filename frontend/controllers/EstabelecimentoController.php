@@ -565,12 +565,12 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     
     public function actionDeliveryDx() {
         $model = new CB16PEDIDO();
-        $al = $model->attributeLabels();
         echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
         echo $this->renderFile('@app/views/estabelecimento/deliveryDxInit.php');
         return $this->render('deliveryDx', [
                     'tituloTela' => 'Delivery',
-                    'al' => $al,
+                    'al' => $model->attributeLabels(),
+                    'status' => $model->status_delivery,
                     'usuario' => $this->user->attributes,
         ]);
     }
@@ -578,7 +578,6 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     // altera status da entrega
     public function setStatusDelivery($param) {
         $CB16PEDIDO = CB16PEDIDO::find()->where("CB16_ID = ".$param['pedido']." and CB16_STATUS >= 30")->all()[0];
-     
         if ($CB16PEDIDO) {
             $CB16PEDIDO->setAttribute('CB16_STATUS_DELIVERY', $param['new_status']);
             $CB16PEDIDO->save();     
