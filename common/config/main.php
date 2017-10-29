@@ -55,6 +55,7 @@ return [
             'admin/*',
             'cliente/*',
             'api/*',
+            'debug/*',
             'administrador/index',
             'administrador/login',
             'administrador/logout',

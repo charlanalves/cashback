@@ -2,12 +2,12 @@
 
 namespace common\models;
 
-use common\models\base\EstabelecimentoExtratoModel as BaseEstabelecimentoExtratoModel;
+use common\models\base\EstabelecimentoDeliveryModel as BaseEstabelecimentoDeliveryModel;
 
 /**
- * This is the model class for table "PAG04_TRANSFERENCIAS".
+ * This is the model class for table "CB16_PEDIDO".
  */
-class EstabelecimentoExtratoModel extends BaseEstabelecimentoExtratoModel {
+class EstabelecimentoDeliveryModel extends BaseEstabelecimentoDeliveryModel {
 
     /**
      * @inheritdoc
@@ -28,35 +28,7 @@ class EstabelecimentoExtratoModel extends BaseEstabelecimentoExtratoModel {
     /**
      * @inheritdoc
      */
-    public static function saldoAtual() {
-        $id_company = \Yii::$app->user->identity->id_company;
-        $sql = "SELECT SUM(SALDO) AS SALDO 
-                FROM VIEW_EXTRATO_ESTABELECIMENTO 
-                INNER JOIN CB16_PEDIDO ON (CB16_ID = PEDIDO_ID AND CB16_EMPRESA_ID = :empresa)
-                WHERE DATA_LIBERACAO IS NOT NULL";
-        $command = \Yii::$app->db->createCommand($sql);
-        $command->bindValue(':empresa', $id_company);
-        return $command->queryOne()['SALDO'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function saldoPendente() {
-        $id_company = \Yii::$app->user->identity->id_company;
-        $sql = "SELECT SUM(SALDO) AS SALDO 
-                FROM VIEW_EXTRATO_ESTABELECIMENTO 
-                INNER JOIN CB16_PEDIDO ON (CB16_ID = PEDIDO_ID AND CB16_EMPRESA_ID = :empresa)
-                WHERE DATA_LIBERACAO IS NULL";
-        $command = \Yii::$app->db->createCommand($sql);
-        $command->bindValue(':empresa', $id_company);
-        return $command->queryOne()['SALDO'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function gridQueryExtratoMain() {
+    public function gridQueryDeliveryMain() {
         $id_company = \Yii::$app->user->identity->id_company;
         $query = "
             SELECT PEDIDO_ID,
@@ -81,7 +53,7 @@ class EstabelecimentoExtratoModel extends BaseEstabelecimentoExtratoModel {
     /**
      * @inheritdoc
      */
-    public function gridSettingsExtratoMain() {
+    public function gridSettingsDeliveryMain() {
         $al = $this->attributeLabels();
         return [
             ['btnsAvailable' => []],

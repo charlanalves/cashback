@@ -42,11 +42,11 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     public function attributeLabels()
     {
         return [
-     		'CB16_ID' => 'Cb16  ID',
+            'CB16_ID' => 'Pedido',
             'CB16_TRANS_CRIADAS' => 'Cb16  Trans  Criadas',
             'CB16_EMPRESA_ID' => 'Cb16  Empresa  ID',
             'CB16_ID_COMPRADOR' => 'Cb16  Id  Comprador',
-            'CB16_USER_ID' => 'Id User',
+            'CB16_USER_ID' => 'Cliente',
             'CB16_ID_FORMA_PAG_EMPRESA' => 'Cb16  Id  Forma  Pag  Empresa',
             'CB16_VALOR' => 'Cb16  Vlr',
             'CB16_PERC_ADMIN' => 'Cb16  Perc  Admin',
@@ -55,7 +55,7 @@ class CB16PEDIDO extends BaseCB16PEDIDO
             'CB16_FRETE' => 'Cb16  Frete',
             'CB16_STATUS' => 'Cb16  Status',
             'CB16_DT' => 'Cb16  Dt',
-            'CB16_DT_APROVACAO' => 'Cb16  Dt  Aprovacao',
+            'CB16_DT_APROVACAO' => 'Data',
             'CB16_FORMA_PAG' => 'Cb16  Forma  Pag',
             'CB16_CARTAO_TOKEN' => 'Cb16  Cartao  Token',
             'CB16_CARTAO_NUM_PARCELA' => 'Cb16  Cartao  Num  Parcela',
@@ -74,6 +74,9 @@ class CB16PEDIDO extends BaseCB16PEDIDO
             'CB16_COMPRADOR_END_PAIS' => 'Pais',
             'CB16_COMPRADOR_END_COMPLEMENTO' => 'Complemento',
             'CB16_STATUS_DELIVERY' => 'Status da entrega',
+            'STATUS_DELIVERY' => 'Situação',
+            'ENDERECO_COMPLETO' => 'Endereço',
+            'CB17_NOME_PRODUTO' => 'Pedido'
         ];
     }
     
@@ -298,8 +301,9 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     public static function getPedidoDelivery($empresa = "", $pedido = "")
     {
         
-        $sql = "SELECT CB16_PEDIDO.*, CB17_PRODUTO_PEDIDO.*, user.*, DATE_FORMAT(CB16_DT,'%d/%m/%Y') as CB16_DT,
+        $sql = "SELECT CB16_PEDIDO.CB16_ID AS ID, CB16_PEDIDO.*, CB17_PRODUTO_PEDIDO.*, user.*, DATE_FORMAT(CB16_DT,'%d/%m/%Y') as CB16_DT,
                 DATE_FORMAT(CB16_DT_APROVACAO,'%d/%m/%Y %H:%i') as CB16_DT_APROVACAO, 
+                CONCAT(CB16_COMPRADOR_END_LOGRADOURO , ', ', CB16_COMPRADOR_END_NUMERO, ' - ', CB16_COMPRADOR_END_BAIRRO, ' - ', CB16_COMPRADOR_END_CIDADE, '/', CB16_COMPRADOR_END_UF, '<br />', CB16_COMPRADOR_END_COMPLEMENTO) AS ENDERECO_COMPLETO,
                 CASE CB16_STATUS 
                     WHEN " . self::status_cancelado . " THEN 'Cancelado'
                     WHEN " . self::status_aguardando_pagamento . " THEN 'Aguardando pagamento'
@@ -325,6 +329,7 @@ class CB16PEDIDO extends BaseCB16PEDIDO
 
         $connection = \Yii::$app->db;
         $command = $connection->createCommand($sql);
+        
         if ($empresa) {
             $command->bindValue(':empresa', $empresa);
         }
@@ -336,4 +341,28 @@ class CB16PEDIDO extends BaseCB16PEDIDO
     }
     
 	
+    /**
+     * @inheritdoc
+     */
+    public function gridQueryDeliveryMain() {
+        $id_company = \Yii::$app->user->identity->id_company;
+        return $this->getPedidoDelivery($id_company);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function gridSettingsDeliveryMain() {
+        $al = $this->attributeLabels();
+        return [
+            ['btnsAvailable' => []],
+            ['sets' => ['title' => $al['CB16_ID'], 'align' => 'center', 'width' => '75', 'type' => 'ro', 'id' => 'CB16_ID'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => $al['CB16_DT_APROVACAO'], 'align' => 'center', 'width' => '120', 'type' => 'ro', 'id' => 'CB16_DT_APROVACAO'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => $al['CB16_USER_ID'], 'align' => 'left', 'width' => '200', 'type' => 'ro', 'id' => 'name'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => $al['CB16_COMPRADOR_TEL_NUMERO'], 'align' => 'center', 'width' => '100', 'type' => 'ro', 'id' => 'CB16_COMPRADOR_TEL_NUMERO'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => $al['ENDERECO_COMPLETO'], 'align' => 'left', 'width' => '250', 'type' => 'ro', 'id' => 'ENDERECO_COMPLETO'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => $al['CB17_NOME_PRODUTO'], 'align' => 'left', 'width' => '200', 'type' => 'ro', 'id' => 'CB17_NOME_PRODUTO'], 'filter' => ['title' => '#text_filter']],            
+            ['sets' => ['title' => $al['STATUS_DELIVERY'], 'align' => 'center', 'width' => '80', 'type' => 'ro', 'id' => 'STATUS_DELIVERY'], 'filter' => ['title' => '#text_filter']],
+        ];
+    }
 }

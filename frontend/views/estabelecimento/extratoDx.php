@@ -13,10 +13,13 @@
 
         C7.init();
         
+        C7.callbackLoadGridExtratoMain = function () {};
+        
         C7.load('Grid', 'ExtratoMain', 'gridExtrato');
 
         C7.exportGridToCSV('ExtratoMain');
         
+        C7.grid.ExtratoMain.enableCopyMMS();
     });
     
 </script>

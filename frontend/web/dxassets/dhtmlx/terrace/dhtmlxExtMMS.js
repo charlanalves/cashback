@@ -367,13 +367,15 @@ dhtmlXGridObject.prototype.getValueCheckedRowsMMS = function(indexColData, index
 	return data.join(',');
 }
 
-dhtmlXGridObject.prototype.loadXMLMMS = function(url) {
+dhtmlXGridObject.prototype.loadXMLMMS = function(url, callback) {
 	that = this;
+        callback = (callback || function(){});
 	$.ajax({
 	   type: 'post',
 	   url:  url,
 	   success: function(retorno){
 		   try {
+                            callback();
 			   xmlDoc = $.parseXML(retorno);
 			   that.parse(retorno);
 		   } catch (erro) {

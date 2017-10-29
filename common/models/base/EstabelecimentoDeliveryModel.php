@@ -5,24 +5,24 @@ namespace common\models\base;
 use \Yii;
 
 /**
- * This is the base model class for table "VIEW_EXTRATO_ESTABELECIMENTO".
+ * This is the base model class for table "CB16_PEDIDO".
  *
  */
-class EstabelecimentoExtratoModelModel extends \common\models\GlobalModel {
+class EstabelecimentoExtratoModel extends \common\models\GlobalModel {
 
     /**
      * @inheritdoc
      */
     public static function tableName() {
         $this->primaryKey();
-        return 'VIEW_EXTRATO_ESTABELECIMENTO';
+        return 'CB16_PEDIDO';
     }
 
     /**
      * @inheritdoc
      */
     public static function primaryKey() {
-        return ['PEDIDO_ID'];
+        return ['CB16_ID'];
     }
 
     /**

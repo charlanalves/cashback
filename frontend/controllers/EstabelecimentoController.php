@@ -314,6 +314,9 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
             }
         }
 
+        // Avaliacoes ativas cadastradas pela empresa
+        $avaliacoes = CB06VARIACAO::findCombo('CB19_AVALIACAO', 'CB19_ID', 'CB19_NOME', 'CB19_STATUS=1 AND CB19_EMPRESA_ID=' . $this->user->id_company);
+
         return $this->render('produtoFullForm', [
                     'tituloTela' => 'Produto',
                     'usuario' => $this->user->attributes,
@@ -321,6 +324,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'itemProduto' => $dataItemProduto,
                     'limitFotos' => $limitFotos,
                     'al' => $al,
+                    'avaliacoes' => $avaliacoes,
                    // 'maxProduto' => $maxProduto,
         		   	'maxProduto' => 0,
         ]);
@@ -558,6 +562,19 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         return $this->renderPartial('deliveryGrid', $param);
     }
     
+    
+    public function actionDeliveryDx() {
+        $model = new CB16PEDIDO();
+        $al = $model->attributeLabels();
+        echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
+        echo $this->renderFile('@app/views/estabelecimento/deliveryDxInit.php');
+        return $this->render('deliveryDx', [
+                    'tituloTela' => 'Delivery',
+                    'al' => $al,
+                    'usuario' => $this->user->attributes,
+        ]);
+    }
+
     // altera status da entrega
     public function setStatusDelivery($param) {
         $CB16PEDIDO = CB16PEDIDO::find()->where("CB16_ID = ".$param['pedido']." and CB16_STATUS >= 30")->all()[0];
@@ -567,6 +584,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
             $CB16PEDIDO->save();     
         }
     }
+    
     
     public function actionBaixarCompra() {
         $salvo = null;
@@ -642,12 +660,10 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     
     public function actionExtratoDx() {
         
-        $model = new VIEWEXTRATO();
-        
+        $model = new EstabelecimentoExtratoModel();
         $al = $model->attributeLabels();
-        
-        $saldoAtual = $model->saldoAtualByCliente($this->user->id);
-        $saldoReceber = $model->saldoReceberByCliente($this->user->id);
+        $saldoAtual = $model->saldoAtual();
+        $saldoReceber = $model->saldoPendente();
 
         echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
         echo $this->renderFile('@app/views/estabelecimento/extratoDxInit.php');
@@ -660,14 +676,6 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         ]);
     }
     
-    public function actionGlobalRead($gridName, $param = '', $json = false) {
-        switch ($gridName) {
-            case 'ExtratoMain':
-                $this->relatedModel = "common\models\EstabelecimentoExtratoModel";
-            break;
-        }
-        parent::actionGlobalRead($gridName, $param, $json);
-    }
     
     public function actionSaque() {
             
@@ -939,4 +947,16 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         return call_user_func_array([$class, $action], [$data]);
     }
 
+    public function actionGlobalRead($gridName, $param = '', $json = false) {
+        switch ($gridName) {
+            case 'ExtratoMain':
+                $this->relatedModel = "common\models\EstabelecimentoExtratoModel";
+            break;
+            case 'DeliveryMain':
+                $this->relatedModel = "common\models\CB16PEDIDO";
+            break;
+        }
+        parent::actionGlobalRead($gridName, $param, $json);
+    }
+    
 }

@@ -15,6 +15,7 @@ $this->title = '';
             produto = JSON.parse('<?= json_encode($produto) ?>'),
             itemProduto = JSON.parse('<?= json_encode($itemProduto) ?>'),
             limitFotos = JSON.parse('<?= json_encode($limitFotos) ?>'),
+            avaliacoes = JSON.parse('<?= json_encode($avaliacoes) ?>'),
             callbackSaveProduto = function (data) {
                 if (data.status == true) {
                     message = 'Dados salvos com sucesso.';
@@ -50,6 +51,9 @@ $this->title = '';
         // cria checkbox com as formas de pagamento
         FormProduto.addCheckboxInLine("item-produto", "ITEM-PRODUTO", itemProduto);
 
+        // Opcoes com as Avaliações cadastradas
+        FormProduto.addOptionsSelect('CB06_AVALIACAO_ID', avaliacoes);
+        
         // Preenche o form com os dados da produto se for edicao
         if (produto.CB05_ID) {
             FormProduto.setFormData(produto);
@@ -57,6 +61,18 @@ $this->title = '';
 
         // add formatação de moeda para o campo preço
         FormProduto.setMoney(['CB06_PRECO', 'CB06_PRECO_PROMOCIONAL', 'CB06_DINHEIRO_VOLTA']);
+
+        // ao alterar a opcao de distribuicao
+        FormProduto.form.find("select[name=CB06_DISTRIBUICAO]").change(function (e) {
+            // se for delivery preenche o campos de tempo min e max
+            if(this.value == 1) {
+                FormProduto.form.find("#CB06_TEMPO_MIN").show();
+                FormProduto.form.find("#CB06_TEMPO_MAX").show();
+            } else {
+                FormProduto.form.find("#CB06_TEMPO_MIN").hide();
+                FormProduto.form.find("#CB06_TEMPO_MAX").hide();
+            } 
+        });
 
         $("div#modalProdutoFullForm #btn-reset").click(function (e) {
             FormProduto.setFormData(produto);
