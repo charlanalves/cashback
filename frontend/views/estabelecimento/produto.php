@@ -267,9 +267,9 @@ $this->title = '';
                                     <td>
                                         <select class="btn btn-primary btn-xs" onchange="acaoProduto($(this), <?= $at['CB05_ID'] ?>)">
                                             <option value="">Selecione</option>
-                                            <option value="modalCashback">Cashback</option>
-                                            <option value="modalPromocao">Promoções</option>
-                                            <option value="modalProduto">Editar</option>
+                                            <!--<option value="modalCashback">Cashback</option>-->
+                                            <option value="modalPromocao">Criar Promoção</option>
+                                            <option value="modalProduto">Editar Produto</option>
                                             <option value="excluirProduto">Excluir</option>
                                         </select>
                                     </td>

@@ -354,6 +354,7 @@ CashBackAsset::register($this);
         <script src="js/global.js"></script>
         
         <script type="text/javascript" src="js/tooltipster/dist/js/tooltipster.bundle.min.js"></script>
+        <script type="text/javascript" src="js/tooltipster/dist/js/tooltipsterExt.js"></script>
 
         <?php $this->endBody() ?>
     </body>
