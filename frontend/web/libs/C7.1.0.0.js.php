@@ -923,11 +923,15 @@ C7.exportGridToCSV = function(gridName) {
     C7.setGridBtns(C7.grid[gridName], btn, C7.grid[gridName].layout, gridName);
 };
 
-C7.actionExportGridToCSVGlobal = function (gridName){
-    var filename = 'relatorio.csv';
-    var csvFile = C7.grid[gridName].serializeToCSV()
+C7.actionExportGridToCSVGlobal = function (gridName, skipCol){
+    C7.grid[gridName].enableCSVHeader(true);
+    C7.grid[gridName].setCSVDelimiter(';');
+    skipColCSV = function(csv, skipCol) {return csv;};
+    var filename = 'relatorio.csv',
+        csvFile = C7.grid[gridName].serializeToCSV(true),
+        csvFileSkip = (skipCol ? skipColCSV(csvFile, skipCol) : csvFile),
+        blob = new Blob([csvFileSkip], { type: 'text/csv;charset=utf-8;' });
 
-    var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
     if (navigator.msSaveBlob) { // IE 10+
         navigator.msSaveBlob(blob, filename);
     } else {
@@ -945,4 +949,7 @@ C7.actionExportGridToCSVGlobal = function (gridName){
     }
 
 };
+
+
 </script>
+
