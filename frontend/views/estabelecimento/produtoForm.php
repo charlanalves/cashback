@@ -152,32 +152,6 @@ $this->title = '';
                                 </label>
                             </section>
                         </div>
-                        <section class="">
-                            <div class="tooltip_templates" style="display:none">
-                                    <span id="tooltip_content_descricao">
-                                        <img src="img/tooltips/descricao_produto.png" />
-                                    </span>
-                                </div>   
-                                <div class="tooltip_templates" style="display:none">
-                                    <span id="tooltip_content_regras">
-                                        <img src="img/tooltips/regras.png" />
-                                    </span>
-                                </div>   
-                                <div class="tooltip_templates" style="display:none">
-                                    <span id="tooltip_content_titulo">
-                                        <img src="img/tooltips/titulo.png" />
-                                    </span>
-                                </div>   
-                                <div class="tooltip_templates" style="display:none">
-                                    <span id="tooltip_content_itens">
-                                        <img src="img/tooltips/itens.png" />
-                                    </span>
-                                </div>   
-                            <label class="textarea"> Título<span id="aws" style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_titulo" class="tooltipestalecas">(Será exibido abaixo do nome da empresa.)</span></label>
-                            <label class="input"> <i class="icon-prepend fa fa-product-hunt"></i>
-                                <input type="text" name="CB05_TITULO">
-                            </label>
-                        </section>
                         <div class="row">                           
                             <section class="col col-6">
                                 <label class="textarea"> Descrição <span id="descricao_produto" class="tooltipestalecas tooltipSmallFont">(Será exibido abaixo da imagem do produto.)</span></label>

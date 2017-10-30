@@ -261,3 +261,8 @@ div#form-bootstrapWizard {
 }
 
 
+
+.modal-open .modal {
+
+    z-index: 999 !important;
+}

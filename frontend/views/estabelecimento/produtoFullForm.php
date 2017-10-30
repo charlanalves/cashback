@@ -162,44 +162,22 @@ $this->title = '';
                                     <input type="text" name="CB05_NOME_CURTO" placeholder="<?= $al['CB05_NOME_CURTO'] ?>">
                                 </label>
                             </section>
+                            <section class="col col-6">                             
+                                <label class="textarea"> Título<span id="titulo" class="tooltipestalecas tooltipSmallFont"><i class="fa fa-info-circle" aria-hidden="true"></i></span></label>
+                                <label class="input"> <i class="icon-prepend fa fa-product-hunt"></i>
+                                    <input type="text" name="CB05_TITULO">
+                                </label>
+                            </section>
                         </div>
-
-                        <section class="">
-                            <div class="tooltip_templates" style="display:none">
-                                    <span id="tooltip_content_descricao">
-                                        <img src="img/tooltips/descricao_produto.png" />
-                                    </span>
-                                </div>   
-                                <div class="tooltip_templates" style="display:none">
-                                    <span id="tooltip_content_regras">
-                                        <img src="img/tooltips/regras.png" />
-                                    </span>
-                                </div>   
-                                <div class="tooltip_templates" style="display:none">
-                                    <span id="tooltip_content_titulo">
-                                        <img src="img/tooltips/titulo.png" />
-                                    </span>
-                                </div>   
-                                <div class="tooltip_templates" style="display:none">
-                                    <span id="tooltip_content_itens">
-                                        <img src="img/tooltips/itens.png" />
-                                    </span>
-                                </div>   
-                            <label class="textarea"> Título<span id="aws" style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_titulo" class="tooltipestalecas">(Será exibido abaixo do nome da empresa.)</span></label>
-                            <label class="input"> <i class="icon-prepend fa fa-product-hunt"></i>
-                                <input type="text" name="CB05_TITULO">
-                            </label>
-                        </section>
-
                         <div class="row">                           
                             <section class="col col-6">
-                                <label class="textarea"> Descrição <span style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_descricao" class="tooltipestalecas">(Será exibido abaixo da imagem do produto.)</span></label>
+                                <label class="textarea"> Descrição <span id="descricao_produto" class="tooltipestalecas tooltipSmallFont"><i class="fa fa-info-circle" aria-hidden="true"></i></span></label>
                                 <label class="textarea"> <i class="icon-prepend fa fa-info-circle"></i>
                                     <textarea rows="5" name="CB05_DESCRICAO" ></textarea> 
                                 </label>
                             </section>
                             <section class="col col-6">
-                                <label class="textarea"> Importante <span style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_regras" class="tooltipestalecas">(Será exibido na aba Info.)</span></label>
+                                <label class="textarea"> Importante <span id="regras" class="tooltipestalecas tooltipSmallFont"><i class="fa fa-info-circle" aria-hidden="true"></i></span></label>
                                 <label class="textarea"> <i class="icon-prepend fa fa-info-circle"></i>
                                     <textarea rows="5" name="CB05_IMPORTANTE" ></textarea> 
                                 </label>
@@ -208,15 +186,19 @@ $this->title = '';
                     </fieldset>
 
                     <fieldset>
-                        <h3>Itens do produto</h3><span style='font-size: 11px; margin-left: 8px;' data-tooltip-content="#tooltip_content_itens" class="tooltipestalecas">(Será exibido na aba Info.)</span>
+                        <h3>
+                            Itens do produto
+                            <span id="itens" class="tooltipestalecas tooltipSmallFont"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
                         <section id="item-produto" class="padding-top-15"></section>
+                        </h3>
                     </fieldset>
 
                     <fieldset id="fieldset-fotos">
-                        <h3>Fotos</h3>
+                        <h3>Fotos<span id="imgs_produto" class="tooltipestalecas tooltipSmallFont"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
                         <div class="row no-margin padding-top-15">
                             <div id="dropzoneProdutoFull"></div>
                         </div>
+                        </h3>
                         <small id="limitFotos"></small>
                     </fieldset>
 
@@ -249,12 +231,7 @@ $this->title = '';
 <?php
     echo '<script type="text/javascript">   
          $(document).ready(function() {
-          $(".tooltipestalecas").tooltipster({
- 
-});
-    $(".tooltipestalecas2").tooltipster({
- 
-});
+          $(".tooltipestalecas").tooltipsterESTALECAS();  
         });
         </script>';
     

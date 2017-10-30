@@ -164,22 +164,26 @@ $this->title = '';
                 <input type="hidden" name="CB06_PRODUTO_ID" value="" />
                 <fieldset>
                     <section>Descrição
+                        <span id="descricao_promo" class="tooltipestalecas tooltipSmallFont"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
                         <label class="input"> <i class="icon-prepend fa fa-tags"></i>
                             <input type="text" name="CB06_DESCRICAO" placeholder="">
                         </label>
                     </section>
                     <div class="row">
-                        <section class="col col-4">Preço Original
+                        <section class="col col-4">Preço Original 
+                            <span id="preco_original" class="tooltipestalecas tooltipSmallFont"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
                             <label class="input"> <i class="icon-prepend fa fa-usd"></i>
                                 <input type="text" name="CB06_PRECO" placeholder="" maxlength="8">
                             </label>
                         </section>
-                        <section class="col col-4">Preço Promocional
+                        <section class="col col-4">Preço Promocional 
+                            <span id="preco_promocional" class="tooltipestalecas tooltipSmallFont"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
                             <label class="input"> <i class="icon-prepend fa fa-usd"></i>
                                 <input type="text" name="CB06_PRECO_PROMOCIONAL" placeholder="">
                             </label>
                         </section>
                         <section class="col col-4"><?= $al['CB06_DINHEIRO_VOLTA'] ?>
+                            <span id="dinheiro_volta" class="tooltipestalecas tooltipSmallFont"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
                             <label class="input"> <i class="icon-prepend fa fa-percent"></i>
                                 <input type="text" name="CB06_DINHEIRO_VOLTA" placeholder="" maxlength="8">
                             </label>
@@ -239,3 +243,10 @@ $this->title = '';
 
     </article>
 </div>
+
+<?php
+    echo '<script type="text/javascript">   
+         $(document).ready(function() {
+          $(".tooltipestalecas").tooltipsterESTALECAS();  
+        });
+        </script>';

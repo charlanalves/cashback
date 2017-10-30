@@ -230,21 +230,18 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     }
     
     public function saveEmpresa($param) {
+        
         unset($param['CB04_URL_LOGOMARCA']);
         
         $model = (!$param['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($param['CB04_ID']);
-        
         \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
-      
-            $id = $model->saveEstabelecimento($param);
-            
-            $this->saveContaBancaria($param);
-            
-            $data = $this->prepareAccountData($param);
-            
-            \Yii::$app->Iugu->execute('createCompanyAccount',[ 'data'=> $data,'model'=> $model, 'id'=> $id] );
+        $id = $model->saveEstabelecimento($param);
+        $this->saveContaBancaria($param);
         
-       
+        if ($model->isNewRecord) {
+            $data = $this->prepareAccountData($param);
+            \Yii::$app->Iugu->execute('createCompanyAccount',[ 'data'=> $data,'model'=> $model, 'id'=> $id] );
+        }
     }
     
     
