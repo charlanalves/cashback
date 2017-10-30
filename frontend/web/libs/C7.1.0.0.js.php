@@ -213,6 +213,8 @@ C7.loadGrid = function(target, fnName, param, autoLoad, btns) {
 	layoutGrid_A.setText(( this.settings["titleGrid" + fnName] || "<?= Yii::t('app','Listagem ')?>"));
 	
 	objGrid =  layoutGrid_A.attachGrid();
+        objGrid.enableMultiline(true);
+        objGrid.enableAutoWidth(true);
 	objGrid.init();
 	objGrid.enableRowsHover(true, 'hover');
 	objGrid.layout = layoutGrid;
@@ -258,7 +260,7 @@ C7.systemReloadGrid = function(fnName, param) {
 	SYSTEM[fnName].clearAll();
 	urlLoad = this.settings.urlLoadGridPrefix + fnName + '&json=true&param=' + param;
 	$.blockUI();
-	SYSTEM[fnName].load(urlLoad, function () {
+	SYSTEM[fnName].loadXMLMMS(urlLoad, function () {
 		callbackLoadGrid();
 		$.unblockUI();
 	});
@@ -527,7 +529,7 @@ C7.reloadGrid = function(params) {
     		C7.settings.gridReload.load(C7.settings.urlReloadGrid, C7.settings.callbackReloadGrid);
     	} else {
     		if ( typeof SYSTEM[C7.settings.gridReload] != 'undefined') {
-				SYSTEM[C7.settings.gridReload].load(C7.settings.urlReloadGrid);
+				SYSTEM[C7.settings.gridReload].loadXMLMMS(C7.settings.urlReloadGrid);
     		} else if ( typeof C7.settings.gridReload == 'function') {
     			C7.settings.gridReload.load(C7.settings.urlReloadGrid);
     		}

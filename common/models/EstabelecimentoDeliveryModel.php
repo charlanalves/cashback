@@ -2,12 +2,12 @@
 
 namespace common\models;
 
-use common\models\base\EstabelecimentoExtratoModel as BaseEstabelecimentoExtratoModel;
+use common\models\base\EstabelecimentoDeliveryModel as BaseEstabelecimentoDeliveryModel;
 
 /**
- * This is the model class for table "PAG04_TRANSFERENCIAS".
+ * This is the model class for table "CB16_PEDIDO".
  */
-class EstabelecimentoExtratoModel extends BaseEstabelecimentoExtratoModel {
+class EstabelecimentoDeliveryModel extends BaseEstabelecimentoDeliveryModel {
 
     /**
      * @inheritdoc
@@ -28,35 +28,7 @@ class EstabelecimentoExtratoModel extends BaseEstabelecimentoExtratoModel {
     /**
      * @inheritdoc
      */
-    public static function saldoAtual() {
-        $id_company = \Yii::$app->user->identity->id_company;
-        $sql = "SELECT SUM(SALDO) AS SALDO 
-                FROM VIEW_EXTRATO_ESTABELECIMENTO 
-                INNER JOIN CB16_PEDIDO ON (CB16_ID = PEDIDO_ID AND CB16_EMPRESA_ID = :empresa)
-                WHERE DATA_LIBERACAO IS NOT NULL";
-        $command = \Yii::$app->db->createCommand($sql);
-        $command->bindValue(':empresa', $id_company);
-        return $command->queryOne()['SALDO'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function saldoPendente() {
-        $id_company = \Yii::$app->user->identity->id_company;
-        $sql = "SELECT SUM(SALDO) AS SALDO 
-                FROM VIEW_EXTRATO_ESTABELECIMENTO 
-                INNER JOIN CB16_PEDIDO ON (CB16_ID = PEDIDO_ID AND CB16_EMPRESA_ID = :empresa)
-                WHERE DATA_LIBERACAO IS NULL";
-        $command = \Yii::$app->db->createCommand($sql);
-        $command->bindValue(':empresa', $id_company);
-        return $command->queryOne()['SALDO'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function gridQueryExtratoMain() {
+    public function gridQueryDeliveryMain() {
         $id_company = \Yii::$app->user->identity->id_company;
         $query = "
             SELECT PEDIDO_ID,
@@ -67,6 +39,7 @@ class EstabelecimentoExtratoModel extends BaseEstabelecimentoExtratoModel {
                 IFNULL(Replace(Replace(Replace(Format(TAXA_ESTALECA, 2), '.', '|'), ',', '.'), '|', ','), '-') AS TAXA_ESTALECA,
                 IFNULL(Replace(Replace(Replace(Format(DINHEIRO_VOLTA, 2), '.', '|'), ',', '.'), '|', ','), '-') AS DINHEIRO_VOLTA,
                 IFNULL(Replace(Replace(Replace(Format(SALDO, 2), '.', '|'), ',', '.'), '|', ','), '-') AS SALDO,
+                CONCAT('img/editar.png^Alterar status da entrega^alterarStatusDelivery(', PEDIDO_ID, ');') AS editar
             FROM VIEW_EXTRATO_ESTABELECIMENTO
             INNER JOIN CB16_PEDIDO ON (CB16_ID = PEDIDO_ID AND CB16_EMPRESA_ID = :empresa)";
 
@@ -81,7 +54,7 @@ class EstabelecimentoExtratoModel extends BaseEstabelecimentoExtratoModel {
     /**
      * @inheritdoc
      */
-    public function gridSettingsExtratoMain() {
+    public function gridSettingsDeliveryMain() {
         $al = $this->attributeLabels();
         return [
             ['btnsAvailable' => []],
@@ -93,6 +66,7 @@ class EstabelecimentoExtratoModel extends BaseEstabelecimentoExtratoModel {
             ['sets' => ['title' => $al['DINHEIRO_VOLTA'], 'align' => 'right', 'width' => '120', 'type' => 'ro', 'id' => 'DINHEIRO_VOLTA'], 'filter' => ['title' => '#text_filter']],
             ['sets' => ['title' => $al['SALDO'], 'align' => 'right', 'width' => '120', 'type' => 'ro', 'id' => 'SALDO'], 'filter' => ['title' => '#text_filter']],
             ['sets' => ['title' => $al['DATA_LIBERACAO'], 'align' => 'center', 'width' => '150', 'type' => 'ro', 'id' => 'DATA_LIBERACAO'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => 'EDITAR', 'align' => 'center', 'width' => '80', 'type' => 'ro', 'id' => 'editar'], 'filter' => ['title' => '']],
         ];
     }
 

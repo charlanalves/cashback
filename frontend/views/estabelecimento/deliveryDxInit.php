@@ -4,13 +4,13 @@
         
         var conf = {
             currentCenterMethod: "global-crud",
-            currentModule: "EstabelecimentoExtratoModel",
+            currentModule: "CB16PEDIDO",
             currentController: 'estabelecimento',
-            actionReloadGrid: 'Main',
-            gridReload: 'Main',
-            urlReloadGrid: './index.php?r=estabelecimento/global-read&gridName=ExtratoMain',
+            actionReloadGrid: 'DeliveryMain',
+            gridReload: 'DeliveryMain',
+            urlReloadGrid: './index.php?r=estabelecimento/global-read&gridName=DeliveryMain',
             urlLoadGridPrefix: './index.php?r=estabelecimento/global-read&gridName=',
-            titleGridExtratoMain: "Transferências",
+            titleWindowMain: "Status da entrega",
          }; 
 
         C7.init = function() {   

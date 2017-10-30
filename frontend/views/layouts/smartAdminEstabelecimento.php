@@ -130,6 +130,10 @@ CashBackAsset::register($this);
                     document.location.href = 'index.php?r=estabelecimento/delivery';
                     return false;
                 });
+                $("a#menu-delivery-dx").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/delivery-dx';
+                    return false;
+                });
                 $("a#menu-produto").click(function (e) {
                     document.location.href = 'index.php?r=estabelecimento/produto';
                     return false;
@@ -205,13 +209,18 @@ CashBackAsset::register($this);
                         <a href="#" title="Delivery" id="menu-delivery"><i class="fa fa-lg fa-fw fa-truck"></i> <span class="menu-item-parent">Delivery</span></a>
                     </li>
                     <li class="">
+                        <a href="#" title="Delivery Dx" id="menu-delivery-dx"><i class="fa fa-lg fa-fw fa-truck"></i> <span class="menu-item-parent">Delivery Dx</span></a>
+                    </li>
+                    <li class="">
                         <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
                     </li>
+                    <!--
                     <li class="">
                         <a href="#" title="Extrato" id="menu-extrato"><i class="fa fa-lg fa-fw fa-list-ul"></i> <span class="menu-item-parent">Extrato</span></a>
                     </li>
+                    -->
                     <li class="">
-                        <a href="#" title="Extrato Dx" id="menu-extrato-dx"><i class="fa fa-lg fa-fw fa-list-ul"></i> <span class="menu-item-parent">Extrato Dx</span></a>
+                        <a href="#" title="Extrato" id="menu-extrato-dx"><i class="fa fa-lg fa-fw fa-list-ul"></i> <span class="menu-item-parent">Extrato</span></a>
                     </li>
                     <li class="">
                         <a href="#" title="Saque" id="menu-saque"><i class="fa fa-lg fa-fw fa-money"></i> <span class="menu-item-parent">Saque</span></a>
