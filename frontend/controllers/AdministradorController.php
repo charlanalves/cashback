@@ -10,22 +10,30 @@ use common\models\CB04EMPRESA;
 use common\models\CB03CONTABANC;
 use common\models\CB09FORMAPAGEMPRESA;
 use common\models\CB05PRODUTO;
-use common\models\CB11ITEMCATEGORIA;
 use common\models\CB12ITEMCATEGEMPRESA;
 use common\models\CB06VARIACAO;
 use common\models\CB07CASHBACK;
+use common\models\CB10CATEGORIA;
+use common\models\CB11ITEMCATEGORIA;
 use common\models\CB13FOTOEMPRESA;
 use common\models\CB14FOTOPRODUTO;
 use common\models\SYS01PARAMETROSGLOBAIS;
 use common\models\CB16PEDIDO;
+use common\models\CB23TIPOAVALIACAO;
 
 /**
  * Administrador controller
  */
 class AdministradorController extends \common\controllers\GlobalBaseController {
 
+   /**
+    * @var string Habilita validação Csrf 
+   */
+    public $enableCsrfValidation = false;
+    
     private $user = null;
     public $layout = 'smartAdminAdministrador';
+    public $relatedModel = "";
 
     public function __construct($id, $module, $config = []) {
         if (($identity = \Yii::$app->user->identity)) {
@@ -295,5 +303,88 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
             }
         }
     }
+    
+    public function actionCategoria() {
+        $model = new CB10CATEGORIA();
+        echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
+        echo $this->renderFile('@app/views/administrador/categoriaDxInit.php');
+        return $this->render('categoria', [
+                    'tituloTela' => 'Categoria',
+                    'al' => $model->attributeLabels()
+        ]);
+    }
 
+    public function createCategoria($param) {
+        $model = new CB10CATEGORIA();
+        $model->setAttribute('CB10_NOME', $param['nome']);
+        $model->setAttribute('CB10_STATUS', 1);
+        $model->save();
+    }
+
+    public function categoriaDisable($param) {
+        $model = CB10CATEGORIA::findOne($param['id']);
+        if($model) {
+            $model->setAttribute('CB10_STATUS', 0);
+            $model->save();
+        }
+    }
+
+    public function createItemCategoria($param) {
+        $model = new CB11ITEMCATEGORIA();
+        $model->setAttribute('CB11_CATEGORIA_ID', $param['cat']);
+        $model->setAttribute('CB11_DESCRICAO', $param['item']);
+        $model->setAttribute('CB11_STATUS', 1);
+        $model->save();
+    }
+
+    public function itemCategoriaDisable($param) {
+        $model = CB11ITEMCATEGORIA::findOne($param['id']);
+        if($model) {
+            $model->setAttribute('CB11_STATUS', 0);
+            $model->save();
+        }
+    }
+
+    public function createItemAvaliacao($param) {
+        $model = new CB23TIPOAVALIACAO();
+        $model->setAttribute('CB23_CATEGORIA_ID', $param['cat']);
+        $model->setAttribute('CB23_DESCRICAO', $param['item']);
+        $model->setAttribute('CB23_ICONE', $param['ico']);
+        $model->setAttribute('CB23_STATUS', 1);
+        $model->save();
+    }
+
+    public function itemAvaliacaoDisable($param) {
+        $model = CB23TIPOAVALIACAO::findOne($param['id']);
+        if($model) {
+            $model->setAttribute('CB23_STATUS', 0);
+            $model->save();
+        }
+    }
+
+    public function callMethodDynamically($action, $data, $returnThowException = true, $class = NULL) {
+        if (empty($class)) {
+            $class = $this;
+        }
+
+        $methodExists = method_exists($class, $action);
+        Yii::$app->v->isFalse(['methodExists' => $methodExists], '', 'app', $returnThowException);
+
+        return call_user_func_array([$class, $action], [$data]);
+    }
+
+    public function actionGlobalRead($gridName, $param = '', $json = false) {
+        switch ($gridName) {
+            case 'CategoriaMain':
+                $this->relatedModel = "common\models\CB10CATEGORIA";
+            break;
+            case 'ItensCategoriaMain':
+                $this->relatedModel = "common\models\CB11ITEMCATEGORIA";
+            break;
+            case 'ItensAvaliacaoMain':
+                $this->relatedModel = "common\models\CB23TIPOAVALIACAO";
+            break;
+        }
+        parent::actionGlobalRead($gridName, $param, $json);
+    }
 }

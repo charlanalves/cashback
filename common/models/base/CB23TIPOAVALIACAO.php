@@ -46,11 +46,11 @@ class CB23TIPOAVALIACAO extends \common\models\GlobalModel
     public function attributeLabels()
     {
         return [
-            'CB23_ID' => 'Cb23  ID',
-            'CB23_CATEGORIA_ID' => 'Cb23  Categoria  ID',
-            'CB23_DESCRICAO' => 'Cb23  Descricao',
-            'CB23_ICONE' => 'Cb23  Icone',
-            'CB23_STATUS' => 'Cb23  Status',
+            'CB23_ID' => 'Cod',
+            'CB23_CATEGORIA_ID' => 'Categoria',
+            'CB23_DESCRICAO' => 'Descrição',
+            'CB23_ICONE' => 'Icone',
+            'CB23_STATUS' => 'Status',
         ];
     }
     

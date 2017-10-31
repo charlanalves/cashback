@@ -107,6 +107,13 @@ CashBackAsset::register($this);
             .dropzone {
                 min-height: 155px!important;
             }
+            
+            /* CSS DX ---------------------------------------- */
+            .dx-grid {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
         </style>
 
         <script>
@@ -119,6 +126,11 @@ CashBackAsset::register($this);
                 
                  $("a#menu-transferencias").click(function (e) {                   
                     document.location.href = 'index.php?r=administrador/transferencias';
+                    return false;
+                });
+                
+                 $("a#menu-categoria").click(function (e) {                   
+                    document.location.href = 'index.php?r=administrador/categoria';
                     return false;
                 });
                 
@@ -135,7 +147,7 @@ CashBackAsset::register($this);
                     });
                     return false;
                 });
-
+                
             });
 
         </script>
@@ -163,6 +175,9 @@ CashBackAsset::register($this);
                     </li>
                     <li class="">
                         <a href="#" title="Transferências" id="menu-transferencias"><i class="fa fa-exchange"></i> <span class="menu-item-parent">Transferências</span></a>
+                    </li>
+                    <li class="">
+                        <a href="#" title="Categorias" id="menu-categoria"><i class="fa fa-flag"></i> <span class="menu-item-parent">Categorias</span></a>
                     </li>
                     <?=
                     Html::beginForm(['/administrador/logout'], 'post', ['name' => 'form-sair'])

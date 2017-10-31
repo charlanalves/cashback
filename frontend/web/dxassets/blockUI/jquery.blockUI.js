@@ -112,7 +112,7 @@
 		// override these in your code to change the default behavior and style
 		$.blockUI.defaults = {
 			// message displayed when blocking (use null for no message)
-			message:  '<h1>Please wait...</h1>',
+			message:  '<h1>Carregando...</h1>',
 
 			title: null,		// title string; only used when theme == true
 			draggable: true,	// only used when theme == true (requires jquery-ui.js to be loaded)
@@ -179,7 +179,7 @@
 			forceIframe: false,
 
 			// z-index for the blocking overlay
-			baseZ: 1000,
+			baseZ: 9000,
 
 			// set these to true to have the message automatically centered
 			centerX: true, // <-- only effects element blocking (page block controlled via css above)

@@ -533,6 +533,20 @@ dhtmlXGridObject.prototype.getCellTextSelected = function(colId) {
 /************************************************ FIM DOS M�TODOS DHTMLX GRID ***************************************************************/
 
 
+function eXcell_ico(cell){ //the eXcell name is defined here
+    if (cell){                // the default pattern, just copy it
+        this.cell = cell;
+        this.grid = this.cell.parentNode.grid;
+    }
+    this.edit = function(){}  //read-only cell doesn't have edit method
+    // the cell is read-only, so it's always in the disabled state
+    this.isDisabled = function(){ return true; }
+    this.setValue=function(val){
+        this.setCValue("<i class='fa fa-"+val+"' aria-hidden='true'></i>",val);                                      
+    }
+}
+eXcell_ico.prototype = new eXcell;
+
 
 U.isEmpty = function(value) {
   return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;

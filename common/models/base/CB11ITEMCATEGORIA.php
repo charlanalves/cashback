@@ -31,8 +31,6 @@ class CB11ITEMCATEGORIA extends \common\models\GlobalModel
             [['CB11_CATEGORIA_ID', 'CB11_DESCRICAO'], 'required'],
             [['CB11_CATEGORIA_ID', 'CB11_STATUS'], 'integer'],
             [['CB11_DESCRICAO'], 'string', 'max' => 30],
-            
-            
         ];
     }
     
@@ -51,10 +49,10 @@ class CB11ITEMCATEGORIA extends \common\models\GlobalModel
     public function attributeLabels()
     {
         return [
-            'CB11_ID' => 'Cb11  ID',
-            'CB11_CATEGORIA_ID' => 'Cb11  Categoria  ID',
-            'CB11_DESCRICAO' => 'Cb11  Descricao',
-            'CB11_STATUS' => 'Cb11  Status',
+            'CB11_ID' => 'Cod',
+            'CB11_CATEGORIA_ID' => 'Categoria',
+            'CB11_DESCRICAO' => 'Descrição',
+            'CB11_STATUS' => 'Status',
         ];
     }
     
