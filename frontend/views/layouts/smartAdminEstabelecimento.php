@@ -199,18 +199,22 @@ CashBackAsset::register($this);
 
             <nav>
                 <ul>
-<!--                    <li class="top-menu-invisible open active">
+                    <!--                    
+                    <li class="top-menu-invisible open active">
                         <a href="#" title="Principal"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Home</span></a>
                     </li>-->
                     <li class="">
                         <a href="#" title="Baixar Compra" id="menu-baixar-compra"><i class="fa fa-lg fa-fw  fa-arrow-circle-down"></i> <span class="menu-item-parent">Baixar Compra</span></a>
                     </li>
+                    <!--
                     <li class="">
                         <a href="#" title="Delivery" id="menu-delivery"><i class="fa fa-lg fa-fw fa-truck"></i> <span class="menu-item-parent">Delivery</span></a>
                     </li>
+                    -->
                     <li class="">
                         <a href="#" title="Delivery Dx" id="menu-delivery-dx"><i class="fa fa-lg fa-fw fa-truck"></i> <span class="menu-item-parent">Delivery Dx</span></a>
                     </li>
+                    <?php if (!$this->context->funcionario) { ?>
                     <li class="">
                         <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
                     </li>
@@ -234,6 +238,7 @@ CashBackAsset::register($this);
                     <li class="">
                         <a href="#" title="Alterar Senha" id="menu-alterar-senha"><i class="fa fa-lg fa-fw fa-key"></i> <span class="menu-item-parent">Alterar Senha</span></a>
                     </li>
+                    <?php } ?>
                     <?=
                     Html::beginForm(['/estabelecimento/logout'], 'post', ['name' => 'form-sair'])
                      . Html::endForm()

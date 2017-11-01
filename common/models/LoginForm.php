@@ -57,7 +57,7 @@ class LoginForm extends Model
             // validar estabelecimento
             ['cpf_cnpj', 'string', 'length' => 14, 'message' => 'Informe um CNPJ válido.', 'on' => self::SCENARIOESTABELECIMENTO],
             ['id', 'filter', 'filter' => function ($idUser) {
-                if (!AuthAssignment::findOne(['user_id' => $idUser, 'item_name' => 'estabelecimento'])) {
+                if (!AuthAssignment::find()->where("user_id = $idUser AND item_name IN('estabelecimento','funcionario')")->one()) {
                     $this->addError('cpf_cnpj', '');
                     $this->addError('password', 'Seu usuário não tem permissão de acesso, entre em contato com o administrador do sistema.');
                 } else {
