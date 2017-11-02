@@ -235,10 +235,10 @@ CashBackAsset::register($this);
                     <li class="">
                         <a href="#" title="Empresa" id="menu-empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>
                     </li>
+                    <?php } ?>
                     <li class="">
                         <a href="#" title="Alterar Senha" id="menu-alterar-senha"><i class="fa fa-lg fa-fw fa-key"></i> <span class="menu-item-parent">Alterar Senha</span></a>
                     </li>
-                    <?php } ?>
                     <?=
                     Html::beginForm(['/estabelecimento/logout'], 'post', ['name' => 'form-sair'])
                      . Html::endForm()

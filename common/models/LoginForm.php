@@ -11,7 +11,7 @@ use yii\base\Model;
  * @property User|null $user This property is read-only.
  *
  */
-class LoginForm extends Model
+class LoginForm extends User
 {
  public $id;
     public $username;
@@ -55,9 +55,10 @@ class LoginForm extends Model
             ['email_valid', 'safe'],
 
             // validar estabelecimento
-            ['cpf_cnpj', 'string', 'length' => 14, 'message' => 'Informe um CNPJ válido.', 'on' => self::SCENARIOESTABELECIMENTO],
+            //['cpf_cnpj', 'string', 'length' => 14, 'message' => 'Informe um CNPJ válido.', 'on' => self::SCENARIOESTABELECIMENTO],
             ['id', 'filter', 'filter' => function ($idUser) {
-                if (!AuthAssignment::find()->where("user_id = $idUser AND item_name IN('estabelecimento','funcionario')")->one()) {
+                if(!$idUser){
+                } else if (!AuthAssignment::find()->where("user_id = $idUser AND item_name IN('estabelecimento','funcionario')")->one()) {
                     $this->addError('cpf_cnpj', '');
                     $this->addError('password', 'Seu usuário não tem permissão de acesso, entre em contato com o administrador do sistema.');
                 } else {
@@ -122,7 +123,7 @@ class LoginForm extends Model
             }
             
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Usuário ou senha incorretos.');
+                $this->addError($attribute, 'Dados incorretos.');
             } else {
                 $this->id = $user->id;
             }

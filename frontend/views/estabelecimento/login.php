@@ -35,7 +35,7 @@ $urlResetPass = Url::to(['site/request']);
         <?= $form
             ->field($model, 'cpf_cnpj', $fieldOptions1)
             ->label(false)
-            ->textInput(['placeholder' => 'CNPJ', 'title' => 'CNPJ', 'type' => 'number']) ?>
+            ->textInput(['placeholder' => 'CNPJ', 'title' => 'CNPJ', 'type' => 'text']) ?>
 
         <?= $form
             ->field($model, 'password', $fieldOptions2)

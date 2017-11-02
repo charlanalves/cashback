@@ -15,6 +15,11 @@ class User extends BaseUser implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
     
+    const PERFIL_ADMINISTRADOR = 'administrador';
+    const PERFIL_CLIENTE = 'cliente';
+    const PERFIL_ESTABELECIMENTO = 'estabelecimento';
+    const PERFIL_FUNCIONARIO = 'funcionario';
+    
     /**
      * @inheritdoc
      */
@@ -29,22 +34,19 @@ class User extends BaseUser implements IdentityInterface
             ['name', 'required'],
             ['name', 'string', 'min' => 5, 'max' => 255],
 
+            ['cpf_cnpj', 'string', 'min' => 11, 'max' => 17],
             ['cpf_cnpj', 'trim'],
-            ['cpf_cnpj', 'required', 'message' => 'O campo <b>{attribute}</b> é obrigatório'],
-            ['cpf_cnpj', 'filter', 'filter' => function($value) {
-                return preg_replace('/[^0-9]/', '', $value);
-            }],
+//            ['cpf_cnpj', 'filter', 'filter' => function($value) {
+//                return preg_replace('/[^0-9]/', '', $value);
+//            }],
             ['cpf_cnpj', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este CPF/CNPJ já foi usado.'],
-            ['cpf_cnpj', 'string', 'min' => 11, 'max' => 14],
             
             ['email', 'trim'],
-            ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
+            ['email','default', 'value' => null],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este e-mail já foi usado.'],
-            
            
-            
             ['id_indicacao', 'integer'],
             ['id_indicacao', 'exist', 'targetClass' => '\common\models\User', 'targetAttribute' => 'id', 'message' => 'A indicação não é valida.'],
         ];
@@ -208,9 +210,31 @@ class User extends BaseUser implements IdentityInterface
         return (($user = self::findOne(['auth_key' => $authKey]))) ? $user->password_hash : false;
     }
     
+    // o usuario do estabelecimento com o perfil "estabelecimento" e o pricipal
     public static function getCompanyUserMainId($company)
     {
-        return (($user = self::findOne(['id_company' => $company, 'user_principal' => 1]))) ? $user->id : false;
+        $sql = "SELECT user.*
+                FROM user
+                INNER JOIN auth_assignment on (id = user_id AND item_name = :perfil)
+                WHERE id_company = :company";
+
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':company', $company);
+        $command->bindValue(':perfil', self::PERFIL_ESTABELECIMENTO);
+        return $command->queryOne();
+    }
+    
+    public static function getFuncionarios($company)
+    {
+        $sql = "SELECT user.*
+                FROM user
+                INNER JOIN auth_assignment on (id = user_id AND item_name = :perfil)
+                WHERE id_company = :company";
+
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':company', $company);
+        $command->bindValue(':perfil', self::PERFIL_FUNCIONARIO);
+        return $command->queryAll();
     }
 
 }
