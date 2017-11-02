@@ -134,6 +134,11 @@ CashBackAsset::register($this);
                     return false;
                 });
                 
+                 $("a#menu-param-sistema").click(function (e) {                   
+                    document.location.href = 'index.php?r=administrador/param-sistema';
+                    return false;
+                });
+                
                 // SAIR ----------------------------------------------------                
                 $("#menu_sair").click(function (e) {
                     $.SmartMessageBox({
@@ -178,6 +183,9 @@ CashBackAsset::register($this);
                     </li>
                     <li class="">
                         <a href="#" title="Categorias" id="menu-categoria"><i class="fa fa-flag"></i> <span class="menu-item-parent">Categorias</span></a>
+                    </li>
+                    <li class="">
+                        <a href="#" title="Parâmetros do Sistema" id="menu-param-sistema"><i class="fa fa-cogs"></i> <span class="menu-item-parent">Config. Sistema</span></a>
                     </li>
                     <?=
                     Html::beginForm(['/administrador/logout'], 'post', ['name' => 'form-sair'])

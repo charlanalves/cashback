@@ -361,6 +361,20 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
             $model->save();
         }
     }
+    
+    public function actionParamSistema() {
+        $parans = SYS01PARAMETROSGLOBAIS::find()->asArray()->all();
+        return $this->render('param-sistema', [
+                    'tituloTela' => 'Parâmetros do Sistema',
+                    'parans' => Yii::$app->u->jsonEncodeRecursive($parans)
+        ]);
+    }
+    
+    public function saveParamSistema($param) {
+        foreach ($param as $key => $value) {
+            SYS01PARAMETROSGLOBAIS::setValor($key, $value);
+        }
+    }
 
     public function callMethodDynamically($action, $data, $returnThowException = true, $class = NULL) {
         if (empty($class)) {
