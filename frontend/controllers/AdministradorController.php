@@ -242,14 +242,16 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         unset($param['CB04_URL_LOGOMARCA']);
         
         $model = (!$param['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($param['CB04_ID']);
+        $new = $model->isNewRecord;
         \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
         $id = $model->saveEstabelecimento($param);
         $this->saveContaBancaria($param);
         
-        if ($model->isNewRecord) {
+        if ($new) {
             $data = $this->prepareAccountData($param);
             \Yii::$app->Iugu->execute('createCompanyAccount',[ 'data'=> $data,'model'=> $model, 'id'=> $id] );
         }
+        $a  = 1;
     }
     
     
@@ -344,7 +346,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
 
     public function createItemAvaliacao($param) {
         $model = new CB23TIPOAVALIACAO();
-        $model->setAttribute('CB23_CATEGORIA_ID', $param['cat']);
+        $model->setAttribute('CB23_CATEGORIA_ID', $param['id']);
         $model->setAttribute('CB23_DESCRICAO', $param['item']);
         $model->setAttribute('CB23_ICONE', $param['ico']);
         $model->setAttribute('CB23_STATUS', 1);

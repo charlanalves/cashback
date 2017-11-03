@@ -22,7 +22,7 @@ class IuguComponent extends PaymentBaseComponent {
        require_once(\Yii::getAlias('@vendor/iugu/Iugu.php'));
        
         //teste
-        \Iugu::setApiKey(self::apiTokenTest);
+        \Iugu::setApiKey(self::apiTokenProd);
       
         //producao
         //\Iugu::setApiKey(self::apiTokenProd);
@@ -149,6 +149,11 @@ class IuguComponent extends PaymentBaseComponent {
         $this->verifyAccount($data);
         $this->saveApiCod($model);
         $this->saveCompanyLogo($model, $id);
+        
+        //Cria o usuário do admin do estabelecimento
+        $this->createCompanyUser($model);
+        
+        //Cria o usuário do funcionario
         $this->createCompanyUser($model);
     }
 
