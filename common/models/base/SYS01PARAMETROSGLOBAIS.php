@@ -28,7 +28,7 @@ class SYS01PARAMETROSGLOBAIS extends \common\models\GlobalModel
             [['SYS01_NOME', 'SYS01_COD', 'SYS01_VALOR'], 'required'],
             [['SYS01_VALOR'], 'string'],
             [['SYS01_NOME'], 'string', 'max' => 50],
-            [['SYS01_COD'], 'string', 'max' => 5],
+            [['SYS01_COD'], 'string', 'max' => 7],
             [['SYS01_NOME'], 'unique'],
             [['SYS01_COD'], 'unique'],
             
@@ -52,10 +52,10 @@ class SYS01PARAMETROSGLOBAIS extends \common\models\GlobalModel
     public function attributeLabels()
     {
         return [
-            'SYS01_ID' => 'Sys01  ID',
-            'SYS01_NOME' => 'Sys01  Nome',
-            'SYS01_COD' => 'Sys01  Cod',
-            'SYS01_VALOR' => 'Sys01  Valor',
+            'SYS01_ID' => 'ID',
+            'SYS01_NOME' => 'Nome',
+            'SYS01_COD' => 'Código',
+            'SYS01_VALOR' => 'Valor',
         ];
     }
 

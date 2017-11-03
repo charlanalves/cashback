@@ -119,6 +119,54 @@ class UtilComponent extends Component {
         return [1 => 'CORRENTE', 2 => 'POUPANÇA'];
     }
 
+    public function jsonEncodeRecursive($a) {
+        
+        function json_encode_recursive($in) {
+            $_escape = function ($str) {
+                return addcslashes($str, "\v\t\n\r\f\"\\/");
+            };
+            $out = "";
+            if (is_object($in)) {
+                $class_vars = get_object_vars(($in));
+                $arr = array();
+                foreach ($class_vars as $key => $val) {
+                    $arr[$key] = "\"{$_escape($key)}\":\"{$val}\"";
+                }
+                $val = implode(',', $arr);
+                $out .= "{{$val}}";
+            } elseif (is_array($in)) {
+                $obj = false;
+                $arr = array();
+                foreach ($in AS $key => $val) {
+                    if (!is_numeric($key)) {
+                        $obj = true;
+                    }
+                    $arr[$key] = json_encode_recursive($val);
+                }
+                if ($obj) {
+                    foreach ($arr AS $key => $val) {
+                        $arr[$key] = "\"{$_escape($key)}\":{$val}";
+                    }
+                    $val = implode(',', $arr);
+                    $out .= "{{$val}}";
+                } else {
+                    $val = implode(',', $arr);
+                    $out .= "[{$val}]";
+                }
+            } elseif (is_bool($in)) {
+                $out .= $in ? 'true' : 'false';
+            } elseif (is_null($in)) {
+                $out .= 'null';
+            } elseif (is_string($in)) {
+                $out .= "\"". $_escape(str_replace(array("\r\n","\r","\n","\r","\n","\r\n"),'\n', addslashes($in))) ."\"";
+            } else {
+                $out .= $in;
+            }
+            return "{$out}";
+        }
+        return json_encode_recursive($a);
+    }
+
     
     
     public function setMaskBancaria($banco, $agencia, $conta, $tp_conta = null) {

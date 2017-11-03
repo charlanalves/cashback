@@ -9573,3 +9573,8 @@ button.button-flat.button-cell-icon.icon-transfer {
     background-image: url('./imgs/transfer.png');
     background-size: 20px;
 }
+
+/* exibir a ultima linha do grid dhtmlx  - Eduardo Matias */
+div[id^="dhxGridObj"] div.objbox {
+    padding-bottom: 100px;
+}

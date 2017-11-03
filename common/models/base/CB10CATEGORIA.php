@@ -51,9 +51,9 @@ class CB10CATEGORIA extends \common\models\GlobalModel
     public function attributeLabels()
     {
         return [
-            'CB10_ID' => 'Cb10  ID',
-            'CB10_NOME' => 'Cb10  Nome',
-            'CB10_STATUS' => 'Cb10  Status',
+            'CB10_ID' => 'Cod',
+            'CB10_NOME' => 'Nome',
+            'CB10_STATUS' => 'Status',
             'CB10_ICO' => 'Icone',
         ];
     }

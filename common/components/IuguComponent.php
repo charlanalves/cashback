@@ -91,37 +91,67 @@ class IuguComponent extends PaymentBaseComponent {
             }
         }
     }
-    private function createCompanyUser($empresa)
-    {        
+    
+    /**
+     * Cria usuario para o estabelecimento
+     * o primeiro e criado como principal, responsavel pela gestao dos dados do 
+     * estabelecimento e fica com o perfil "estabelecimento"
+     * o seguntes sao funcionario
+     * @param int/instance $empresa ( id ou instancia da empresa (CB04_EMPRESA))
+     * @return void
+     */
+    private function createCompanyUser($empresa) {
+        
+        // valida empresa
+        if (!($empresa = is_int($empresa) ? \common\models\CB04EMPRESA::findOne($empresa) : $empresa)) {
+            throw new UserException("Erro ao tentar criar o usuário, empresa não encontrada.");
+        }
+
+        // verifica se existe usuario, se existe ele cria usuario com perfil funcionario
+        $userEstabelecimento = \common\models\User::getCompanyUserMainId($empresa->CB04_ID);
+        $qtdFuncionarios = $userEstabelecimento ? count(\common\models\User::getFuncionarios($empresa->CB04_ID)) + 1 : 0;
+
         $user = new \common\models\User;
-        $user->cpf_cnpj = $empresa->CB04_CNPJ;
-        $user->name = $empresa->CB04_NOME;
-        $user->user_principal = 1;
+
+        if (!$qtdFuncionarios) {
+            // estabelecimento
+            $perfil = \common\models\User::PERFIL_ESTABELECIMENTO;
+            $user->email = $empresa->CB04_EMAIL;
+            $user->cpf_cnpj = $empresa->CB04_CNPJ;
+            $user->username = $empresa->CB04_CNPJ;
+        } else {
+            // funcionario
+            $perfil = \common\models\User::PERFIL_FUNCIONARIO;
+            $user->cpf_cnpj = $empresa->CB04_CNPJ . "-" . $qtdFuncionarios;
+            $user->username = $empresa->CB04_CNPJ . "-" . $qtdFuncionarios;
+        }
+
         $user->id_company = $empresa->CB04_ID;
-        $user->email = $empresa->CB04_EMAIL;
-        $user->username = $empresa->CB04_CNPJ;
+        $user->name = $empresa->CB04_NOME;
+//        $user->user_principal = 1;
         $user->setPassword(123456);
         $user->generateAuthKey();
         $user->save();
 
         $assignment = new \common\models\AuthAssignment;
-        $assignment->item_name = 'estabelecimento';
+        $assignment->item_name = $perfil;
         $assignment->user_id = (string) $user->id;
         $assignment->save();
+        
     }
-    
-   public function createCompanyAccount($dataApi) 
-   {
-       $data = $dataApi['data'];
-       $model = $dataApi['model'];
-       $id = $dataApi['id'];
-       
-       $this->_createAccount($data['cnpj']);
-       $this->verifyAccount($data);
-       $this->saveApiCod($model);
-       $this->saveCompanyLogo($model, $id);
-       $this->createCompanyUser($model);
-   }
+
+    public function createCompanyAccount($dataApi) {
+        $data = $dataApi['data'];
+        $model = $dataApi['model'];
+        $id = $dataApi['id'];
+
+        $this->_createAccount($data['cnpj']);
+        $this->verifyAccount($data);
+        $this->saveApiCod($model);
+        $this->saveCompanyLogo($model, $id);
+        $this->createCompanyUser($model);
+    }
+
     public function createAccount($accountName) 
     {   
     	$this->_createAccount($accountName);

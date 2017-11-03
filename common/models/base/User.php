@@ -4,11 +4,6 @@ namespace common\models\base;
 
 use Yii;
 
-
-
-
-
-
 /**
  * This is the base model class for table "user".
  *
@@ -50,11 +45,11 @@ class User extends \common\models\GlobalModel
     {
         return [
             [['id_company', 'id_cliente', 'status', 'created_at', 'updated_at', 'id_indicacao'], 'integer'],
-            [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at', 'cpf_cnpj'], 'required', 'message' => 'O campo <b>{attribute}</b> é obrigatório'],
+            [['username', 'auth_key', 'password_hash', 'created_at', 'updated_at'], 'required', 'message' => 'O campo <b>{attribute}</b> é obrigatório'],
             [['name'], 'string', 'max' => 200],
             [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
-            [['cpf_cnpj'], 'string', 'max' => 14],
+            ['cpf_cnpj', 'string', 'min' => 11, 'max' => 17],
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['cpf_cnpj'], 'unique'],

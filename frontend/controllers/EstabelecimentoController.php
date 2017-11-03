@@ -41,6 +41,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     private $user = null;
     private $estabelecimento = null;
     public $relatedModel = "";
+    public $funcionario = null;
     
     public function __construct($id, $module, $config = []) 
     {
@@ -48,6 +49,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $this->layout = 'smartAdminEstabelecimento';
         if (($identity = \Yii::$app->user->identity)) {
             $this->user = $identity;
+            $this->funcionario = self::isFuncionario($this->user->id);
             $this->estabelecimento = ($this->user->id_company) ? \common\models\GlobalModel::findTable('CB04_EMPRESA', 'CB04_ID = ' . $this->user->id_company)[0] : null;
         }
         parent::__construct($id, $module, $config);
@@ -60,7 +62,12 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
 
     private function goLogin() {
         return $this->redirect(\yii\helpers\Url::to('index.php?r=estabelecimento/login'));
+    }    
+
+    private static function isFuncionario($user) {
+        return \common\models\GlobalModel::findTable('auth_assignment', 'item_name = \'funcionario\' AND user_id = ' . $user) ? true : false;
     }
+    
 
     /**
      * Displays homepage.
@@ -80,7 +87,11 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $this->layout = 'main-login';
 
         if (!\Yii::$app->user->isGuest) {
-            $this->redirect(\yii\helpers\Url::to('index.php?r=estabelecimento/produto'));
+            if (!$this->funcionario) {
+                $this->redirect(\yii\helpers\Url::to('index.php?r=estabelecimento/produto'));
+            } else {
+                $this->redirect(\yii\helpers\Url::to('index.php?r=estabelecimento/delivery-dx'));
+            }
             return;
         }
 
