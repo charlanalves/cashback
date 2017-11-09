@@ -3,9 +3,9 @@ return [
     'components' => [
         'db' => [
            'class' => 'yii\db\Connection',
-           'dsn' => 'mysql:host=52.67.208.141;dbname=estalecasdev',
+           'dsn' => 'mysql:host=localhost;dbname=estalecasdev',
            'username' => 'root',
-           'password' => '@by02016Abio#',
+           'password' => 'est@l3C@sSuccEss',
            'charset' => 'utf8',
         ],
        /* 'db' => [
