@@ -43,8 +43,15 @@
 
     var FormParam = {},
         camposHtml = "",
-        paramDefault = {};
-        param = JSON.parse('<?= $parans ?>'),
+        paramDefault = {},
+		pp = '<?= $parans ?>';
+		
+		if (Array.isArray(pp)) {
+			param = pp;
+		}else {
+			param = JSON.parse('<?= $parans ?>');
+		}
+
         callbackSaveParam = function (data) {
             if (data.status == true) {
                 message = 'Parâmetros salvos.';
