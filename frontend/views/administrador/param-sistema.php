@@ -44,7 +44,7 @@
     var FormParam = {},
         camposHtml = "",
         paramDefault = {},
-		pp = '<?= $parans ?>';
+		pp = <?= $parans ?>;
 		
 		if (Array.isArray(pp)) {
 			param = pp;
