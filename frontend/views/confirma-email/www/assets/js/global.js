@@ -15,10 +15,10 @@ $.blockUI.defaults.css = {
 var Form = function (formId) {
     this.form = $('#' + formId),
     this.getMoney = [],
-    this.setMoney = function (input) { 
+    this.setMoney = function (input) {         
         if(typeof input != 'undefined' && Array.isArray(input)) {
             for (var i in input) {
-                $(this[input[i]]).maskMoney({thousands:'.', decimal:',', allowZero: true});
+                $(this[input[i]]).maskMoney({thousands:'.', decimal:',', allowZero: true});                
                 this.getMoney.push(input[i]);
             }
         }

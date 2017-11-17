@@ -57,7 +57,7 @@ class CB07CASHBACK extends \common\models\GlobalModel
             'CB07_PRODUTO_ID' => 'Cb07  Produto  ID',
             'CB07_VARIACAO_ID' => 'Cb07  Variacao  ID',
             'CB07_DIA_SEMANA' => 'Cb07  Dia  Semana',
-            'CB07_PERCENTUAL' => 'Cb07  Percentual',
+            'CB07_PERCENTUAL' => 'Percentual',
         ];
     }
     
