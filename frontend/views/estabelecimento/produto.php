@@ -173,15 +173,15 @@ $this->title = '';
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <!-- Button trigger modal produto -->
         <div>
-            <a href="javascript:void(0)" onclick="modalProdutoFull()" class="btn btn-success pull-right">
+            <a href="javascript:void(0)" onclick="modalProdutoFull()" class="btn btn-success pull-right" style="margin-left: 19px;">
                 <i class="fa fa-circle-arrow-up fa-lg"></i> 
                 Cadastrar produto &nbsp;<i class="fa fa-plus-circle"></i>
             </a>
         </div>
         <div>
-            <a id="cashBackDiario" href="javascript:void(0)" onclick="modalCashback(1)"class="btn btn-success pull-right">
+            <a id="cashBackDiario" href="javascript:void(0)" onclick="modalCashback(1)"class="btn btn-info pull-right">
                 <i class="fa fa-circle-arrow-up fa-lg"></i> 
-                Cadastrar Cashback Diário &nbsp;<i class="fa fa-plus-circle"></i>
+                Cadastrar Cashback Diário &nbsp;<i class="fa fa-money"></i>
             </a>
         </div>
         <h1 class="page-title txt-color-blueDark">
