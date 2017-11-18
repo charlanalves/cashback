@@ -40,7 +40,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
     }
     
    
-    public static function getEmpresas($a = []) {
+    public static function getInfoEmpresa($a = []) {
         $categoria = $item = '';
 
         if (!empty($a['categoria'])) {

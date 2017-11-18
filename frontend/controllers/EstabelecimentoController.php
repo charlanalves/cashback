@@ -526,7 +526,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
 
         $dataProduto = CB05PRODUTO::findOne($produto)->getAttributes();
         $dataVariacao = CB04EMPRESA::findCombo('CB06_VARIACAO', 'CB06_ID', 'CB06_DESCRICAO', 'CB06_PRODUTO_ID=' . $produto);
-
+        
         $dataProduto['CB05_DESCRICAO'] = str_replace("\n", '\r\n', $dataProduto['CB05_DESCRICAO']);
         $dataProduto['CB05_IMPORTANTE'] = str_replace("\n", '\r\n', $dataProduto['CB05_IMPORTANTE']);
 
@@ -534,7 +534,28 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
                     'tituloTela' => 'CASHBACK',
                     'usuario' => $this->user->attributes,
                     'produto' => $dataProduto,
-                    'variacao' => $dataVariacao
+                    'variacao' => $dataVariacao,
+                    'empresa' => $this->estabelecimento,                    
+        ]);
+    }
+    public function actionCashbackDiarioForm($produto) {
+        \Yii::$app->view->title = '';
+        $this->layout = 'empty';
+
+        $dataProduto = CB05PRODUTO::findOne($produto)->getAttributes();
+        $dataVariacao = CB04EMPRESA::findCombo('CB06_VARIACAO', 'CB06_ID', 'CB06_DESCRICAO', 'CB06_PRODUTO_ID=' . $produto);
+        $dataCbEmpresa = CB07CASHBACK::getCashbackDiario(\Yii::$app->user->identity->id_company);
+        
+        $dataProduto['CB05_DESCRICAO'] = str_replace("\n", '\r\n', $dataProduto['CB05_DESCRICAO']);
+        $dataProduto['CB05_IMPORTANTE'] = str_replace("\n", '\r\n', $dataProduto['CB05_IMPORTANTE']);
+
+        return $this->render('cashbackDiarioForm', [
+                    'tituloTela' => 'CASHBACK',
+                    'usuario' => $this->user->attributes,
+                    'produto' => $dataProduto,
+                    'variacao' => $dataVariacao,
+                    'empresa' => $this->estabelecimento,
+                    'cashback' => json_encode($dataCbEmpresa[0]),
         ]);
     }
 
@@ -547,7 +568,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
 
     public function saveCashback($param) {
         $CB07CASHBACK = new CB07CASHBACK();
-        $CB07CASHBACK->saveCashback($param);
+        $CB07CASHBACK->saveCashbackDiario($param);
     }
 
     public function deleteCashback($param) {

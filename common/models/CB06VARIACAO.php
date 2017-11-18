@@ -122,14 +122,15 @@ class CB06VARIACAO extends BaseCB06VARIACAO
                     CB04_END_LONGITUDE,
                     CB06_PRODUTO_ID
                 FROM CB06_VARIACAO
-                INNER JOIN CB05_PRODUTO ON (CB05_ATIVO = 1 AND CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID ) 
-                INNER JOIN CB04_EMPRESA ON (CB04_STATUS = 1 AND CB04_EMPRESA.CB04_ID = CB05_PRODUTO.CB05_EMPRESA_ID )
+                LEFT JOIN CB05_PRODUTO ON (CB05_ATIVO = 1 AND CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID ) 
+                LEFT JOIN CB04_EMPRESA ON (CB04_STATUS = 1 AND CB04_EMPRESA.CB04_ID = CB05_PRODUTO.CB05_EMPRESA_ID )
                 LEFT JOIN (
                     SELECT MIN(CB14_ID) AS CB14_ID, CB14_PRODUTO_ID, CB14_URL 
                     FROM CB14_FOTO_PRODUTO
                     GROUP BY CB14_PRODUTO_ID) CB14_FOTO_PRODUTO ON(CB14_PRODUTO_ID = CB05_ID)
                 " . (!$filterBindCat ? "" : "WHERE CB04_CATEGORIA_ID = :categoria") . "
-                GROUP BY CB05_ID
+                
+                GROUP BY CB04_EMPRESA.CB04_ID
                 ORDER BY " . (!$filterBindOrd ? 'CB06_DINHEIRO_VOLTA DESC' : ":ordem") . "
                 LIMIT $limiteInicio, $limiteQtd";
 			

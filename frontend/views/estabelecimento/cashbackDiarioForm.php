@@ -11,13 +11,14 @@ $this->title = '';
             produto = JSON.parse('<?= json_encode($produto) ?>'),
             promocao = JSON.parse('<?= json_encode($variacao) ?>'),
             callbackSaveCashback = function (data) {
+                console.log(data)
                 if (data.status == true) {
                     message = 'Cashback cadastrado.';
                     messageBody = '';
                     type = 'success';
                     ico = 'check-circle';
-                    time = 4000;
-                    loadGridCashback(produto.CB05_ID);
+                    time = 4000;    
+                    $('#remoteModalCashback').modal('hide');
                 } else {
                     message = 'O cashback não foi cadastrado.';
                     messageBody = data.message;
@@ -32,10 +33,9 @@ $this->title = '';
     FormCashback = new Form('cashback-form');
 
     FormCashback.setMoney(['DIA_1', 'DIA_2', 'DIA_3', 'DIA_4', 'DIA_5', 'DIA_6', 'DIA_0']);
-
-    FormCashback.setFormData({DIA_1: '0,00', DIA_2: '0,00', DIA_3: '0,00', DIA_4: '0,00', DIA_5: '0,00', DIA_6: '0,00', DIA_0: '0,00'});
     
-    
+    // Carrega os cashbacks ja cadastrados anteriormente para edição
+    FormCashback.setFormData(<?=$cashback?>);
     
     // add opcoes no select
     FormCashback.addOptionsSelect('PRODUTO_VARIACAO', [{ID: 'P' + produto.CB05_ID, TEXTO: produto.CB05_NOME_CURTO + ' - ' + produto.CB05_TITULO}]);
@@ -44,12 +44,6 @@ $this->title = '';
     $("#btn-salvar").click(function (e) {
         FormCashback.form.submit();
     });
-    
-    function loadGridCashback(produto){
-        $('div#grid-cashback').load('index.php?r=estabelecimento/cashback-grid&produto=' + produto);
-    }
-    
-    loadGridCashback(produto.CB05_ID);
     
     pageSetUp();
 
@@ -151,10 +145,6 @@ $this->title = '';
                         </button>
                     </footer>
                 </form>
-
-                <fieldset>
-                    <div id="grid-cashback"></div>
-                </fieldset>
 
             </div>
 

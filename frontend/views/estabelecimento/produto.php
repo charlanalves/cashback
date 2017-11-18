@@ -54,13 +54,14 @@ $this->title = '';
                 .html('')
                 .load('index.php?r=estabelecimento/promocao-form&produto=' + produto + '&promocao=' + promocao);
     }
+  
 
     function modalCashback(id) {
-        $('#remoteModalCashbackLabel').text('CASHBACK');
+        $('#remoteModalCashbackLabel').text('CASHBACK DIÁRIO');
         $('#remoteModalCashback').modal('show')
                 .find('.modal-body')
                 .html('')
-                .load('index.php?r=estabelecimento/cashback-form&produto=' + id);
+                .load('index.php?r=estabelecimento/cashback-diario-form&produto=' + id);
     }
     
     function acaoProduto(obj, id) {
@@ -163,15 +164,26 @@ $this->title = '';
     .table-bordered tbody tr h3 {
         margin: 0px
     }
+    .smart-form .col-9 {
+    width: 100%;
+}
 </style>
 
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <!-- Button trigger modal produto -->
-        <a href="javascript:void(0)" onclick="modalProdutoFull()" class="btn btn-success pull-right">
-            <i class="fa fa-circle-arrow-up fa-lg"></i> 
-            Cadastrar produto &nbsp;<i class="fa fa-plus-circle"></i>
-        </a>
+        <div>
+            <a href="javascript:void(0)" onclick="modalProdutoFull()" class="btn btn-success pull-right" style="margin-left: 19px;">
+                <i class="fa fa-circle-arrow-up fa-lg"></i> 
+                Cadastrar produto &nbsp;<i class="fa fa-plus-circle"></i>
+            </a>
+        </div>
+        <div>
+            <a id="cashBackDiario" href="javascript:void(0)" onclick="modalCashback(1)"class="btn btn-info pull-right">
+                <i class="fa fa-circle-arrow-up fa-lg"></i> 
+                Cadastrar Cashback Diário &nbsp;<i class="fa fa-money"></i>
+            </a>
+        </div>
         <h1 class="page-title txt-color-blueDark">
             <i class="fa-fw fa fa-pencil-square-o"></i> 
             Produto <span></span>
@@ -181,7 +193,7 @@ $this->title = '';
 
 <!-- MODAL CASHBACK -->
 <div class="modal fade" id="remoteModalCashback" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width: 950px">
+    <div class="modal-dialog" style="width: 750px">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -267,7 +279,7 @@ $this->title = '';
                                     <td>
                                         <select class="btn btn-primary btn-xs" onchange="acaoProduto($(this), <?= $at['CB05_ID'] ?>)">
                                             <option value="">Selecione</option>
-                                            <!--<option value="modalCashback">Cashback</option>-->
+                                            <option value="modalCashback">Cashback</option>
                                             <option value="modalPromocao">Criar Promoção</option>
                                             <option value="modalProduto">Editar Produto</option>
                                             <option value="excluirProduto">Excluir</option>

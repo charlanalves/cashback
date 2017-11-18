@@ -314,7 +314,6 @@ class GlobalBaseController extends Controller {
         $status = true;
 
         try {
-
             $this->callMethodDynamically($action, $params, true);
         } catch (\Exception $e) {
 
