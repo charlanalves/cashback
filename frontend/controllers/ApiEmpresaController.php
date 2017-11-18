@@ -326,10 +326,51 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionPromotionsByCategory() {
         if ( ($param = \Yii::$app->request->post()) ) {
-            return json_encode(CB06VARIACAO::getPromocao($this->url, $param));
+            return json_encode(CB06VARIACAO::getPromocao($this->url, $param));        
         } else {
             return "{}";
         }
+    }
+    /**
+     * Informações da empresa
+     */
+    public function actionInfoEmpresa() {    
+        if ( !isset(\Yii::$app->user->identity->id_company) ) {
+            return "{}";
+        }
+        
+        $dados = \common\models\CB07CASHBACK::getCashbackDiario(\Yii::$app->user->identity->id_company);
+        $d = [];
+        $diaSemana = 'DIA_'.date('w', strtotime(date('Y-m-d')));
+        $c = 0;
+        foreach ($dados[0] as $diaCb => $p){
+            $d[$c]['HOJE'] = ($diaSemana == $diaCb) ? true : false;
+            $d[$c]['PERC'] = substr($p, 0, -1) .'%';
+            $c++;
+        }
+        
+        $d['CREDITO']['EXISTE'] = 0;
+        $d['DEBITO']['EXISTE'] = 0;
+        $d['VOUCHER']['EXISTE'] = 0;
+        
+        
+        $d['CREDITO']['BANDEIRAS'] = \common\models\CB07CASHBACK::getFormasPgtoEmpresa(\Yii::$app->user->identity->id_company, 'CREDITO');
+        $d['DEBITO']['BANDEIRAS'] = \common\models\CB07CASHBACK::getFormasPgtoEmpresa(\Yii::$app->user->identity->id_company, 'DEBITO');
+        $d['VOUCHER']['BANDEIRAS'] = \common\models\CB07CASHBACK::getFormasPgtoEmpresa(\Yii::$app->user->identity->id_company, 'VOUCHER');
+       
+        if(count($d['CREDITO']['BANDEIRAS']) > 0) {
+              $d['CREDITO']['EXISTE'] = 1;
+        }
+        
+         if(count($d['DEBITO']['BANDEIRAS']) > 0) {
+              $d['CREDITO']['EXISTE'] = 1;
+        }
+         if(count($d['VOUCHER']['BANDEIRAS']) > 0) {
+              $d['CREDITO']['EXISTE'] = 1;
+        }
+        
+        return json_encode($d);        
+      
     }
     
     

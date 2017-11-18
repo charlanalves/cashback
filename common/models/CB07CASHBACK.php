@@ -57,7 +57,7 @@ class CB07CASHBACK extends BaseCB07CASHBACK
             GROUP_CONCAT(IF(CB07_DIA_SEMANA = 4, CB07_PERCENTUAL, NULL)) AS DIA_4,
             GROUP_CONCAT(IF(CB07_DIA_SEMANA = 5, CB07_PERCENTUAL, NULL)) AS DIA_5,
             GROUP_CONCAT(IF(CB07_DIA_SEMANA = 6, CB07_PERCENTUAL, NULL)) AS DIA_6,
-            GROUP_CONCAT(IF(CB07_DIA_SEMANA = 0, CB07_PERCENTUAL, NULL)) AS DIA_0
+            GROUP_CONCAT(IF(CB07_DIA_SEMANA = 0, CB07_PERCENTUAL, NULL)) AS DIA_0          
             FROM CB07_CASH_BACK 
             WHERE CB07_EMPRESA_ID = :idEmpresa
             ";
@@ -65,6 +65,28 @@ class CB07CASHBACK extends BaseCB07CASHBACK
         $connection = \Yii::$app->db;
         $command = $connection->createCommand($query);
         $command->bindParam(':idEmpresa', $idEmpresa);
+        $reader = $command->query();
+        
+        return $reader->readAll();
+    }
+    public static function getFormasPgtoEmpresa($idEmpresa, $tipoFormaPgto)
+    {
+        $query = "
+            SELECT 
+            CB04_EMPRESA.CB04_NOME,
+            CB08_FORMA_PAGAMENTO.CB08_NOME, 
+            CB08_FORMA_PAGAMENTO.CB08_URL_IMG
+            FROM CB04_EMPRESA
+            JOIN CB09_FORMA_PAGTO_EMPRESA ON CB09_FORMA_PAGTO_EMPRESA.CB09_ID_EMPRESA = CB04_EMPRESA.CB04_ID
+            JOIN CB08_FORMA_PAGAMENTO ON CB08_FORMA_PAGAMENTO.CB08_ID = CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG
+            WHERE CB04_EMPRESA.CB04_ID =:idEmpresa AND CB08_FORMA_PAGAMENTO.CB08_TIPO =:tipoFormaPgto
+            GROUP BY CB04_EMPRESA.CB04_NOME, CB08_FORMA_PAGAMENTO.CB08_NOME
+            ";
+           
+        $connection = \Yii::$app->db;
+        $command = $connection->createCommand($query);
+        $command->bindParam(':idEmpresa', $idEmpresa);
+        $command->bindParam(':tipoFormaPgto', $tipoFormaPgto);
         $reader = $command->query();
         
         return $reader->readAll();
