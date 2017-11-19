@@ -1137,79 +1137,20 @@ class ApiEmpresaController extends GlobalBaseController {
      * Actions - App Operacional
      */
     public function actionOperacionalLogin() {
+        $model = new LoginForm();
+        $model->setScenario(LoginForm::SCENARIOFUNCIONARIO);
+        $model->setAttributes(\Yii::$app->request->post());
+        $model->loginCpfCnpj(); 
+        return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
+    }
+    
+    public function actionOperacionalMain() {
         $post = \Yii::$app->request->post();
-        echo json_encode($post);
+        return json_encode(['cbDia' => 10.5]);
     }
     
     public function actionOperacionalListaPromocoes() {
-        echo json_encode([
-            [
-                'id' => '1',
-                'promococao' => 'Pizza a moda + Refri 2L',
-                'vlr' => '20.99',
-                'cb_percent' => '20'
-            ],
-            [
-                'id' => '2',
-                'promococao' => 'Pizza 4 queijos + Refri 2L',
-                'vlr' => '25.00',
-                'cb_percent' => '30'
-            ],
-            [
-                'id' => '3',
-                'promococao' => 'Pizza especial da casa + Refri 2L',
-                'vlr' => '30',
-                'cb_percent' => '35'
-            ],            
-            [
-                'id' => '4',
-                'promococao' => 'Pizza a moda + Refri 2L',
-                'vlr' => '22.35',
-                'cb_percent' => '50'
-            ],
-            [
-                'id' => '5',
-                'promococao' => 'Pizza 4 queijos + Refri 2L',
-                'vlr' => '25.90',
-                'cb_percent' => '50'
-            ],
-            [
-                'id' => '6',
-                'promococao' => 'Pizza especial da casa + Refri 2L',
-                'vlr' => '50',
-                'cb_percent' => '50'
-            ],
-            [
-                'id' => '7',
-                'promococao' => 'Pizza 4 queijos + Refri 2L',
-                'vlr' => '25.90',
-                'cb_percent' => '50'
-            ],
-            [
-                'id' => '8',
-                'promococao' => 'Pizza especial da casa + Refri 2L',
-                'vlr' => '30',
-                'cb_percent' => '50'
-            ],            
-            [
-                'id' => '9',
-                'promococao' => 'Pizza a moda + Refri 2L',
-                'vlr' => '20',
-                'cb_percent' => '50'
-            ],
-            [
-                'id' => '10',
-                'promococao' => 'Pizza 4 queijos + Refri 2L',
-                'vlr' => '25.90',
-                'cb_percent' => '50'
-            ],
-            [
-                'id' => 11,
-                'promococao' => 'Pizza especial da casa + Refri 2L',
-                'vlr' => '30',
-                'cb_percent' => '50'
-            ]
-        ]);
+        return json_encode(CB06VARIACAO::getPromocaoByEstabelecimento(\Yii::$app->request->post('id_company')));
     }
     
 }

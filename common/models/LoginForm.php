@@ -27,6 +27,7 @@ class LoginForm extends User
     
     const SCENARIOADMINISTRADOR = 'SCENARIOADMINISTRADOR';
     const SCENARIOESTABELECIMENTO = 'SCENARIOESTABELECIMENTO';
+    const SCENARIOFUNCIONARIO = 'SCENARIOFUNCIONARIO';
     const SCENARIOVALIDAREMAIL = 'SCENARIOVALIDAREMAIL';
     
     public function scenarios()
@@ -34,6 +35,7 @@ class LoginForm extends User
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIOADMINISTRADOR] = ['username', 'password', 'rememberMe', 'id'];
         $scenarios[self::SCENARIOESTABELECIMENTO] = ['cpf_cnpj', 'password', 'rememberMe', 'id'];
+        $scenarios[self::SCENARIOFUNCIONARIO] = ['cpf_cnpj', 'password', 'rememberMe', 'id'];
         $scenarios[self::SCENARIO_COMPANY_LOGIN] = ['cpf_cnpj', 'password', 'rememberMe', 'id'];
         $scenarios[self::SCENARIOVALIDAREMAIL] = ['email_valid'];
         return $scenarios;
@@ -65,6 +67,17 @@ class LoginForm extends User
                     return true;
                 }
             }, 'on' => self::SCENARIOESTABELECIMENTO],
+
+            // validar app funcionario
+            ['id', 'filter', 'filter' => function ($idUser) {
+                if(!$idUser){
+                } else if (!AuthAssignment::find()->where("user_id = $idUser AND item_name IN('funcionario')")->one()) {
+                    $this->addError('cpf_cnpj', '');
+                    $this->addError('password', 'Seu usuário não tem permissão de acesso, entre em contato com o administrador do sistema.');
+                } else {
+                    return true;
+                }
+            }, 'on' => self::SCENARIOFUNCIONARIO],
                     
             // validar administrador
             ['username', 'required', 'on' => self::SCENARIOADMINISTRADOR],

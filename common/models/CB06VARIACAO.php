@@ -167,5 +167,26 @@ class CB06VARIACAO extends BaseCB06VARIACAO
         }
         return $result; 
     }
-	
+
+    
+    /**
+     * @inheritdoc
+     * @return promocoes ativas do estabelecimento
+     */
+    public static function getPromocaoByEstabelecimento($estabelecimento)
+    {
+      $sql = "  SELECT  
+                    CB06_ID as ID, 
+                    CB06_DINHEIRO_VOLTA as CB_PERCENT,
+                    CB06_PRECO_PROMOCIONAL as VLR,
+                    CONCAT(CB05_TITULO, ': ', CB06_DESCRICAO) as PROMOCAO
+                FROM CB06_VARIACAO
+                INNER JOIN CB05_PRODUTO ON (CB05_ATIVO = 1 AND CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID)
+                WHERE CB05_PRODUTO.CB05_EMPRESA_ID = :estabelecimento
+                ORDER BY CB05_TITULO, CB06_DESCRICAO";
+			
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':estabelecimento', $estabelecimento);
+        return $command->queryAll();
+    }
 }
