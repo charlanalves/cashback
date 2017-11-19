@@ -1133,4 +1133,24 @@ class ApiEmpresaController extends GlobalBaseController {
         return SYS01PARAMETROSGLOBAIS::getValor($ambiente);
     }
     
+    /*
+     * Actions - App Operacional
+     */
+    public function actionOperacionalLogin() {
+        $model = new LoginForm();
+        $model->setScenario(LoginForm::SCENARIOFUNCIONARIO);
+        $model->setAttributes(\Yii::$app->request->post());
+        $model->loginCpfCnpj(); 
+        return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
+    }
+    
+    public function actionOperacionalMain() {
+        $post = \Yii::$app->request->post();
+        return json_encode(['cbDia' => 10.5]);
+    }
+    
+    public function actionOperacionalListaPromocoes() {
+        return json_encode(CB06VARIACAO::getPromocaoByEstabelecimento(\Yii::$app->request->post('id_company')));
+    }
+    
 }
