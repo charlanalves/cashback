@@ -363,10 +363,10 @@ class ApiEmpresaController extends GlobalBaseController {
         }
         
          if(count($d['DEBITO']['BANDEIRAS']) > 0) {
-              $d['CREDITO']['EXISTE'] = 1;
+              $d['DEBITO']['EXISTE'] = 1;
         }
          if(count($d['VOUCHER']['BANDEIRAS']) > 0) {
-              $d['CREDITO']['EXISTE'] = 1;
+              $d['VOUCHER']['EXISTE'] = 1;
         }
         
         return json_encode($d);        
