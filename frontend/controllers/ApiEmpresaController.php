@@ -9,6 +9,7 @@ use common\models\CB03CONTABANC;
 use common\models\CB04EMPRESA;
 use common\models\CB05PRODUTO;
 use common\models\CB06VARIACAO;
+use common\models\CB07CASHBACK;
 use common\models\CB08FORMAPAGAMENTO;
 use common\models\CB09FORMAPAGTOEMPRESA;
 use common\models\CB10CATEGORIA;
@@ -1146,11 +1147,47 @@ class ApiEmpresaController extends GlobalBaseController {
     
     public function actionOperacionalMain() {
         $post = \Yii::$app->request->post();
-        return json_encode(['cbDia' => 10.5]);
+        $cbDia = CB07CASHBACK::getCurrentCashback($post['id_company']);
+        return json_encode(['cbDia' => $cbDia]);
     }
     
     public function actionOperacionalListaPromocoes() {
         return json_encode(CB06VARIACAO::getPromocaoByEstabelecimento(\Yii::$app->request->post('id_company')));
+    }
+    
+    public function actionOperacionalGetClientePdv() {
+        $retorno = array();
+        $post = \Yii::$app->request->post();
+        if (($cliente = User::find()->where("cpf_cnpj='" . $post['busca_cpf'] . "'")->asArray()->one())) {
+            $retorno['cliente'] = $cliente;
+            $retorno['formasPagamento'] = $this->operacionalFormasPagamentoPdv($post['auth_key'], $post['id_company'], $post['total_compra']);
+        }
+        return json_encode($retorno ? $retorno : false);
+    }
+    
+    private function operacionalFormasPagamentoPdv($auth_key, $company, $vlr) {
+        
+        // formas de pagamento do checkout
+        $forma_pagamento = CB04EMPRESA::find()
+                ->select(['CB08_ID as ID','CB08_NOME as TEXTO'])
+                ->join('JOIN','CB09_FORMA_PAGTO_EMPRESA','CB09_FORMA_PAGTO_EMPRESA.CB09_ID_EMPRESA = CB04_EMPRESA.CB04_ID')
+                ->join('JOIN','CB08_FORMA_PAGAMENTO','CB08_FORMA_PAGAMENTO.CB08_ID = CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG')
+                ->where(['CB08_STATUS' => 1])
+                ->andWhere(['CB04_EMPRESA.CB04_ID' => $company])
+                ->orderBy('CB08_ID')
+                ->asArray()
+                ->all();
+
+        // saldo estaleca sempre tem que ser o primeiro 
+        // o saldo deve ser maior que o valor da compra
+        $saldoAtual = $this->getSaldoAtual($auth_key);
+        if($vlr <= $saldoAtual) {
+            $forma_pagamento[0]['TEXTO'] = $forma_pagamento[0]['TEXTO'] .' (R$ '. $saldoAtual . ')';
+        } else {
+            unset($forma_pagamento[0]);
+        }
+                
+        return $forma_pagamento;
     }
     
 }
