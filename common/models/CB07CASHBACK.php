@@ -148,5 +148,10 @@ class CB07CASHBACK extends BaseCB07CASHBACK
     public function deleteCashback($data) {
         self::deleteAll($data);
     }
+    
+    public static function getCurrentCashback($empresa) {
+        $current = self::find()->where("CB07_EMPRESA_ID=" . $empresa . " AND CB07_DIA_SEMANA=" . date('w'))->one();
+        return $current ? $current->CB07_PERCENTUAL : 0;
+    }
 	
 }

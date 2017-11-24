@@ -42,7 +42,7 @@ class CB16PEDIDO extends \common\models\GlobalModel
             [['CB16_VALOR', 'CB16_PERC_ADMIN', 'CB16_PERC_ADQ', 'CB16_VLR_CB_TOTAL', 'CB16_FRETE', 'CB16_CARTAO_VLR_PARCELA'], 'number'],
             [['CB16_DT', 'CB16_DT_APROVACAO', 'CB16_STATUS_DELIVERY'], 'safe'],
             [['CB16_CARTAO_TOKEN'], 'string'],
-            [['CB16_FORMA_PAG'], 'string', 'max' => 50],
+            [['CB16_FORMA_PAG', 'CB16_ORIGEM'], 'string', 'max' => 50],
             [['CB16_COMPRADOR_NOME', 'CB16_COMPRADOR_EMAIL', 'CB16_COMPRADOR_CPF', 'CB16_COMPRADOR_TEL_DDD', 'CB16_COMPRADOR_TEL_NUMERO', 'CB16_COMPRADOR_END_LOGRADOURO', 'CB16_COMPRADOR_END_NUMERO', 'CB16_COMPRADOR_END_BAIRRO', 'CB16_COMPRADOR_END_CEP', 'CB16_COMPRADOR_END_CIDADE', 'CB16_COMPRADOR_END_UF'], 'string', 'max' => 100],
             [['CB16_COMPRADOR_END_PAIS'], 'string', 'max' => 2],
             [['CB16_COMPRADOR_END_COMPLEMENTO'], 'string', 'max' => 500],
