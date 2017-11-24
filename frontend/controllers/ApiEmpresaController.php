@@ -1052,7 +1052,7 @@ class ApiEmpresaController extends GlobalBaseController {
                     $produtoPedido->CB17_PEDIDO_ID = $idPedido;
                     $produtoPedido->CB17_PRODUTO_ID = $dadosP['CB05_ID'];
                     $produtoPedido->CB17_NOME_PRODUTO =  $dadosP['CB05_TITULO'] . ' - ' . $dadosV['CB06_DESCRICAO'];
-                    $produtoPedido->CB17_VLR_UNID = $dadosV['CB06_PRECO'];
+                    $produtoPedido->CB17_VLR_UNID = $dadosV['CB06_PRECO_PROMOCIONAL'];
                     $produtoPedido->CB17_VARIACAO_ID = $dadosV['CB06_ID'];
                     $produtoPedido->CB17_QTD = 1;
                     $produtoPedido->save();
@@ -1158,7 +1158,7 @@ class ApiEmpresaController extends GlobalBaseController {
     public function actionOperacionalGetClientePdv() {
         $retorno = array();
         $post = \Yii::$app->request->post();
-        if (($cliente = User::find()->where("cpf_cnpj='" . $post['busca_cpf'] . "'")->asArray()->one())) {
+        if (($cliente = User::find()->where("cpf_cnpj='" . $post['busca_cpf'] . "' AND status = " . User::STATUS_ACTIVE)->asArray()->one())) {
             $retorno['cliente'] = $cliente;
             $retorno['formasPagamento'] = $this->operacionalFormasPagamentoPdv($post['auth_key'], $post['id_company'], $post['total_compra']);
         }
@@ -1188,6 +1188,92 @@ class ApiEmpresaController extends GlobalBaseController {
         }
                 
         return $forma_pagamento;
+    }
+    
+    public function actionOperacionalFinalizarPdv() {
+        
+        //return true;
+        //return json_encode(['error' => ['Erro1','Erro2']]);
+        
+        $post = \Yii::$app->request->post();
+        $usuario = $post['usuario'];
+        unset($post['usuario']);
+        $promocoes = $post['promocoes'];
+        unset($post['promocoes']);
+        
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+
+        try {
+            
+            $idCliente = User::findByCpfCnpj($post['busca_cpf'])->id;
+            $idEmpresa = $usuario['id_company'];
+            $vlrPedido = $post['total_compra'];
+            $vlrCbTotal = $post['cb_total'];
+            
+            $percPag = $this->getPercPag(['FORMA-PAGAMENTO' => $post['forma_pagamento']], ['CB16_EMPRESA_ID' => $idEmpresa]);
+            
+            // salva pedido
+            $pedido = new CB16PEDIDO();
+            $pedido->CB16_EMPRESA_ID = $idEmpresa;                    
+            $pedido->CB16_USER_ID = $idCliente;
+            $pedido->CB16_VALOR = $vlrPedido;
+            $pedido->CB16_VLR_CB_TOTAL = $vlrCbTotal;
+            $pedido->CB16_ORIGEM = "PDV";
+            $pedido->CB16_COD_TRANSACAO = $post['cod_venda'];
+            $pedido->CB16_FORMA_PAG = $post['forma_pagamento_name'];
+            $pedido->CB16_ID_FORMA_PAG_EMPRESA = $post['forma_pagamento'];
+            $pedido->CB16_STATUS = CB16PEDIDO::status_baixado;
+            $pedido->CB16_TRANS_CRIADAS = 1;
+            $pedido->CB16_DT_APROVACAO = date('Y-m-d H:i:s');
+            $pedido->CB16_PERC_ADMIN = $percPag['CB09_PERC_ADMIN'];
+            $pedido->CB16_PERC_ADQ = $percPag['CB09_PERC_ADQ'];
+            $pedido->save();
+            $idPedido = $pedido->CB16_ID;
+
+            if ($promocoes) {
+                foreach ($promocoes as $k => $p) {
+                    // dados da promocao/variacao
+                    $dadosV = CB06VARIACAO::findOne(['CB06_ID' => $p['promocao']])->attributes;
+                    // salva itens pedido
+                    $produtoPedido = new CB17PRODUTOPEDIDO();
+                    $produtoPedido->CB17_PEDIDO_ID = $idPedido;
+                    $produtoPedido->CB17_PRODUTO_ID = $dadosV['CB06_PRODUTO_ID'];
+                    $produtoPedido->CB17_NOME_PRODUTO = $p['nome'];
+                    $produtoPedido->CB17_VLR_UNID = $dadosV['CB06_PRECO_PROMOCIONAL'];
+                    $produtoPedido->CB17_VARIACAO_ID = $dadosV['CB06_ID'];
+                    $produtoPedido->CB17_QTD = $p['qtd'];
+                    $produtoPedido->save();
+                }
+            }
+
+            $vlrCliente = floor($pedido->CB16_VLR_CB_TOTAL * 100) / 100;
+            $vlrAdmin = floor((($pedido->CB16_PERC_ADMIN/100) * $pedido->CB16_VALOR) * 100) / 100;
+            $vlrAdq = floor((($pedido->CB16_PERC_ADQ/100) * $pedido->CB16_VALOR) * 100) / 100;
+            $dtPrevisao = $pedido->CB16_DT_APROVACAO;
+
+            $trans = new PAG04TRANSFERENCIAS(); 
+
+            // TRANSFÊNCIA EMPRESA TO MASTER
+            $trans->createE2M($idEmpresa, $vlrCliente, $dtPrevisao, $idPedido);
+
+            // TRANSFÊNCIA MASTER TO CLIENTE
+            $trans->createM2C($idCliente, $vlrCliente, $idPedido);
+            
+            // TRANSFÊNCIA EMPRESA TO ADMIN
+            $trans->createE2ADM($idEmpresa, $vlrAdmin, $dtPrevisao, $idPedido);
+
+            // TRANSFÊNCIA EMPRESA TO ADQ
+            $trans->createE2ADQ($idEmpresa, $vlrAdq, $dtPrevisao, $idPedido);
+            
+            $transaction->commit();
+            return true;
+
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            return json_encode(['error' => ['Erro ao tentar finalizar o pedido, tente novamente.']]);
+        }
+
     }
     
 }
