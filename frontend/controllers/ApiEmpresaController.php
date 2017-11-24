@@ -334,18 +334,21 @@ class ApiEmpresaController extends GlobalBaseController {
     /**
      * Informações da empresa
      */
-    public function actionInfoEmpresa() {    
-        if ( !isset(\Yii::$app->user->identity->id_company) ) {
+    public function actionInfoEmpresa() {   
+        $company = \Yii::$app->request->post('company');
+        if ( is_null($company) ) {
             return "{}";
         }
         
         $dados = \common\models\CB07CASHBACK::getCashbackDiario(\Yii::$app->user->identity->id_company);
-        $d = [];
+        $d1 = [];
         $diaSemana = 'DIA_'.date('w', strtotime(date('Y-m-d')));
         $c = 0;
         foreach ($dados[0] as $diaCb => $p){
-            $d[$c]['HOJE'] = ($diaSemana == $diaCb) ? true : false;
-            $d[$c]['PERC'] = substr($p, 0, -1) .'%';
+            $d1[$c]['HOJE'] = ($diaSemana == $diaCb) ? true : false;
+           
+                 $d1[$c]['PERC'] = substr($p, 0, -1) .'%';
+           
             $c++;
         }
         
@@ -354,9 +357,9 @@ class ApiEmpresaController extends GlobalBaseController {
         $d['VOUCHER']['EXISTE'] = 0;
         
         
-        $d['CREDITO']['BANDEIRAS'] = \common\models\CB07CASHBACK::getFormasPgtoEmpresa(\Yii::$app->user->identity->id_company, 'CREDITO');
-        $d['DEBITO']['BANDEIRAS'] = \common\models\CB07CASHBACK::getFormasPgtoEmpresa(\Yii::$app->user->identity->id_company, 'DEBITO');
-        $d['VOUCHER']['BANDEIRAS'] = \common\models\CB07CASHBACK::getFormasPgtoEmpresa(\Yii::$app->user->identity->id_company, 'VOUCHER');
+        $d['CREDITO']['BANDEIRAS'] = \common\models\CB07CASHBACK::getFormasPgtoEmpresa($company, 'CREDITO');
+        $d['DEBITO']['BANDEIRAS'] = \common\models\CB07CASHBACK::getFormasPgtoEmpresa($company, 'DEBITO');
+        $d['VOUCHER']['BANDEIRAS'] = \common\models\CB07CASHBACK::getFormasPgtoEmpresa($company, 'VOUCHER');
        
         if(count($d['CREDITO']['BANDEIRAS']) > 0) {
               $d['CREDITO']['EXISTE'] = 1;
@@ -369,8 +372,7 @@ class ApiEmpresaController extends GlobalBaseController {
               $d['VOUCHER']['EXISTE'] = 1;
         }
         
-        return json_encode($d);        
-      
+        return json_encode(['P' => $d1,'F' => $d]);        
     }
     
     
@@ -915,25 +917,54 @@ class ApiEmpresaController extends GlobalBaseController {
         
         // produtos da empresa
         $PRODUTO_DATA = CB05PRODUTO::getProduto($post['product']);
+        $ATIVAR_ABA_PROMOCOES = false;
+        $ATIVAR_ABA_INFO = false;
         
-        return json_encode(['IMG' => $imagens, 'PRODUTO' => $post['product'], 'PRODUTO_DATA' => $PRODUTO_DATA]);
+        if (!empty($post['ativarAbaInfo'])){
+           $ATIVAR_ABA_INFO = true;
+        } else {
+           $ATIVAR_ABA_PROMOCOES = true;
+        }
+        return json_encode(['ATIVAR_ABA_PROMOCOES'=> $ATIVAR_ABA_PROMOCOES,'ATIVAR_ABA_INFO'=> $ATIVAR_ABA_INFO,'IMG' => $imagens, 'PRODUTO' => $post['product'], 'PRODUTO_DATA' => $PRODUTO_DATA, ]);
     }
     
     
     /**
      * Promocoes/variacoes do produto
      */
-    public function actionCompanyPromotions() {
+    public function actionProductPromotions() {
         $post = \Yii::$app->request->post();
 
         // promocoes/variacoes do produto
-        $promocoes = CB06VARIACAO::find()
-            ->where(['CB06_PRODUTO_ID' => $post['product']])
-            ->orderBy('CB06_DESCRICAO')
+        $produtos = CB05PRODUTO::find()
+            ->where(['CB05_EMPRESA_ID' => $post['company']])
+            ->groupBy('CB05_ID')            
             ->asArray()
             ->all();
         
-        return json_encode(['PROMOCOES' => $promocoes, 'PRODUTO' => $post['product'], 'PROMOCAO_SELECIONADA' => (!empty($post['promotion'])) ? $post['promotion']: false]);
+        if (count($produtos)){
+            foreach($produtos as $key => $p){
+                 $produtos[$key]['PROMOCOES'] = CB06VARIACAO::find()
+                    ->where(['CB06_PRODUTO_ID' => $p['CB05_ID']])                            
+                    ->asArray()
+                    ->all();
+                 
+                  $produtos[$key]['FOTOS'] = CB14FOTOPRODUTO::find()
+                    ->where(['CB14_PRODUTO_ID' => $p['CB05_ID']])                            
+                    ->asArray()
+                    ->all();
+                  
+                   $produtos[$key]['ITENS'] = CB12ITEMCATEGEMPRESA::find()
+                    ->select(['CB11_DESCRICAO'])
+                    ->join('INNER JOIN', 'CB11_ITEM_CATEGORIA', 'CB12_ITEM_ID = CB11_ID')
+                    ->where(['CB12_PRODUTO_ID' => $p['CB05_ID']])
+                    ->orderBy('CB11_DESCRICAO')
+                    ->asArray()
+                    ->all();
+            }
+        }
+        
+        return json_encode($produtos);
     }
     
     
