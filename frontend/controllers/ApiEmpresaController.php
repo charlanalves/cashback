@@ -341,7 +341,7 @@ class ApiEmpresaController extends GlobalBaseController {
             return "{}";
         }
         
-        $dados = \common\models\CB07CASHBACK::getCashbackDiario(\Yii::$app->user->identity->id_company);
+        $dados = \common\models\CB07CASHBACK::getCashbackDiario($company);
         $d1 = [];
         $diaSemana = 'DIA_'.date('w', strtotime(date('Y-m-d')));
         $c = 0;
