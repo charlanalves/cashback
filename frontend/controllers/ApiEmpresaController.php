@@ -1228,7 +1228,7 @@ class ApiEmpresaController extends GlobalBaseController {
         unset($post['usuario']);
 	
 	// verifica promocoes selecionadas
-    	if (empty($post['promocoes']) {
+    	if (empty($post['promocoes'])) {
 	    $promocoes = false;
         } else {
 	    $promocoes = $post['promocoes'];

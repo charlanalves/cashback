@@ -13,11 +13,12 @@ class SendMailComponent extends Component {
         //$link = $this->urlController . 'valid-mail&c='. $post['auth_key'];
         //$texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
         
-        \Yii::$app->mail->compose('confirmacaoemail',['authKey' => $authKey])
+      $teste =  \Yii::$app->mail->compose('confirmacaoemail',['authKey' => $authKey])
         ->setFrom('nao-responda@estalecas.com.br')
         ->setTo($email)
         ->setSubject('E$TALECA - Confirmação de E-mail')
         ->send();
+      $a=1;
     }
     
     public function enviarEmailNovaSenha($email, $senha)
