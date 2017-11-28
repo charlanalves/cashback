@@ -1222,15 +1222,18 @@ class ApiEmpresaController extends GlobalBaseController {
     }
     
     public function actionOperacionalFinalizarPdv() {
-        
-        //return true;
-        //return json_encode(['error' => ['Erro1','Erro2']]);
-        
+	
         $post = \Yii::$app->request->post();
         $usuario = $post['usuario'];
         unset($post['usuario']);
-        $promocoes = $post['promocoes'];
-        unset($post['promocoes']);
+	
+	// verifica promocoes selecionadas
+    	if (empty($post['promocoes']) {
+	    $promocoes = false;
+        } else {
+	    $promocoes = $post['promocoes'];
+	    unset($post['promocoes']);
+        }
         
         $connection = \Yii::$app->db;
         $transaction = $connection->beginTransaction();
