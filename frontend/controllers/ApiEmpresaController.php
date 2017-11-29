@@ -1200,12 +1200,13 @@ class ApiEmpresaController extends GlobalBaseController {
         
         // formas de pagamento do checkout
         $forma_pagamento = CB04EMPRESA::find()
-                ->select(['CB08_ID as ID','CB08_NOME as TEXTO'])
+                ->select(['CB09_ID as ID','CB08_NOME as TEXTO'])
                 ->join('JOIN','CB09_FORMA_PAGTO_EMPRESA','CB09_FORMA_PAGTO_EMPRESA.CB09_ID_EMPRESA = CB04_EMPRESA.CB04_ID')
                 ->join('JOIN','CB08_FORMA_PAGAMENTO','CB08_FORMA_PAGAMENTO.CB08_ID = CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG')
                 ->where(['CB08_STATUS' => 1])
                 ->andWhere(['CB04_EMPRESA.CB04_ID' => $company])
-                ->orderBy('CB08_ID')
+                ->groupBy('CB08_NOME')
+                ->orderBy('CB09_ID')
                 ->asArray()
                 ->all();
 

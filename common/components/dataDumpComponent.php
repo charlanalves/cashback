@@ -19,7 +19,7 @@ use yii\base\Component;
 class dataDumpComponent extends Component
 {
 
-    public function getXmlGrid($dados=null,$config=null)
+    public function getXml($dados=null,$config=null)
     {
 		$novaLinhaCol = $attachHeader = null;
         $numColuna = array();
