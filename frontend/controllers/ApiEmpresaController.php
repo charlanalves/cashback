@@ -1254,6 +1254,9 @@ class ApiEmpresaController extends GlobalBaseController {
 
             $trans = new PAG04TRANSFERENCIAS(); 
 
+            // TRANSFÊNCIA CLIENTE TO EMPRESA
+            $trans->createC2E($idCliente, $idEmpresa, 0, $idPedido);
+
             // TRANSFÊNCIA EMPRESA TO MASTER
             $trans->createE2M($idEmpresa, $vlrCliente, $dtPrevisao, $idPedido);
 
