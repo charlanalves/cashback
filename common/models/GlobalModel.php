@@ -67,7 +67,7 @@ class GlobalModel extends ActiveRecord
         
         return $reader->readAll();
     }
-    
+   
     /**
     * @inheritdoc
     */
@@ -131,12 +131,11 @@ class GlobalModel extends ActiveRecord
         try {
             
             parent::save($runValidation, $attributeNames);            
-            
             $modelErro = $this->getFirstErrors();
             $msg = '';
             if (!empty($modelErro)) {
                 foreach ($modelErro as $m) {
-                    $msg .= $m . '<br />';
+                    $msg .= $m . ' <br> ';
                 }
             } else {
                 $this->globalCheckAndUploadFiles();
@@ -146,8 +145,8 @@ class GlobalModel extends ActiveRecord
             throw new \Exception($e->getMessage());    
         }
         
-        if (!empty($modelErro)) {            
-            throw new \yii\base\UserException($msg);            
+        if (!empty($modelErro)) {                        
+            throw new \yii\base\UserException(utf8_decode($msg));            
         }
         return true;
     }
