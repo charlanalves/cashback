@@ -260,7 +260,7 @@ $("#termosdeuso").click(function(){
                                 'a ganhar muito dinheiro de volta.',
                             type: 'info',
                             showCancelButton: false,                            
-                            confirmButtonText: '<a href="my.special.scheme">Baixar O Aplicativo Agora.</a>'
+                           // confirmButtonText: '<a href="my.special.scheme">Baixar O Aplicativo Agora.</a>'
                           }).then((result) => {
                             if (result.value) {
                                
