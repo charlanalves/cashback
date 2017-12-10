@@ -318,6 +318,15 @@ class IuguComponent extends PaymentBaseComponent {
         $user->id_cliente = $cliente->CB02_ID;
         $user->email = $cliente->CB02_EMAIL;
         $user->username = $cliente->CB02_CPF_CNPJ;
+        
+        // logica da indicação do amigo
+        if (!empty($atributos['auth_key'])){
+            $user->auth_key = $atributos['auth_key'];
+            $friend = \common\models\User::findBySql('SELECT * FROM user where auth_key  = "'.$atributos['auth_key'].'"')->one();
+            if (!empty($friend->id)){
+                $user->id_indicacao = $friend->id;                
+            }
+        }
      
         if(!empty($atributos['cod_indicacao'])){
             $user->id_indicacao = (\common\models\User::getIdByAuthKey($atributos['cod_indicacao'])) ? : null;

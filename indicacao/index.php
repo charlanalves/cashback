@@ -215,16 +215,29 @@ $("#termosdeuso").click(function(){
                   CB02_NOME: fullName,
                   CB02_CPF_CNPJ: cpf,
                   CB02_EMAIL: email,
-                  password: pass
+                  password: pass,
+                  auth_key: '<?=$uid?>'
               };
                  var url = 'http://www.estalecas.com.br/api/frontend/web/index.php?r=api-empresa/login-create';
-                 var url = 'http://localhost/apiestalecas/frontend/web/index.php?r=api-empresa/login-create';
+                // var url = 'http://localhost/apiestalecas/frontend/web/index.php?r=api-empresa/login-create';
                  $.blockUI({ message: '<img src="js/l.gif" />' });
                   $.ajax({
                      url:url,
                      type:"POST",
                      data: data,                     
                      dataType:"json",
+                     error: function(){
+                        $.unblockUI();      
+                         swal({
+                              title: 'Erro',
+                              type: 'error',
+                              html: 'Ocorreu um erro interno. Tente novamente mais tarde',
+                              showCloseButton: true,
+                              showCancelButton: false,
+                              focusConfirm: true
+                            });
+                            return;
+                     },
                      success: function(data){ 
                         $.unblockUI();
                          if (!data.status) {

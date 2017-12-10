@@ -31,7 +31,7 @@ class User extends BaseUser implements IdentityInterface
             [['cpf_or_cnpj', 'email_valid'], 'safe'],
             
             ['name', 'trim'],
-            ['name', 'required'],
+            ['name', 'required', 'message' => 'O'],
             ['name', 'string', 'min' => 5, 'max' => 255],
 
             ['cpf_cnpj', 'string', 'min' => 11, 'max' => 17],
