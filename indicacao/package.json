@@ -1,0 +1,16 @@
+{
+    "name": "io.cordova.hellocordova",
+    "version": "1.0.0",
+    "displayName": "Estalecas",
+    "cordova": {
+        "platforms": [
+            
+        ],
+        "plugins": {
+          
+        }
+    },
+    "dependencies": {
+   
+    }
+}

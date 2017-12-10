@@ -18,7 +18,7 @@ class CB02CLIENTE extends BaseCB02CLIENTE
         return array_replace_recursive(parent::rules(),
 	    [
             [['CB02_ID_USUARIO', 'CB02_TEL_DDD', 'CB02_TEL_NUMERO', 'CB02_NUMERO', 'CB02_STATUS'], 'integer'],
-            [['CB02_NOME', 'CB02_CPF_CNPJ', 'CB02_EMAIL'], 'required'],
+            [['CB02_NOME', 'CB02_CPF_CNPJ', 'CB02_EMAIL'], 'required' , 'message' => 'O campo <b>{attribute}</b> é obrigatório'],
             [['CB02_DADOS_API_TOKEN', 'CB02_COD_CONTA_VIRTUAL'], 'string'],
             [['CB02_DT_CADASTRO', 'CB02_DATA_NASCIMENTO'], 'safe'],
             [['CB02_NOME', 'CB02_EMAIL'], 'string', 'max' => 50],
