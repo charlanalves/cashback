@@ -261,16 +261,7 @@ $("#termosdeuso").click(function(){
                             type: 'info',
                             showCancelButton: false,                            
                            // confirmButtonText: '<a href="my.special.scheme">Baixar O Aplicativo Agora.</a>'
-                          }).then((result) => {
-                            if (result.value) {
-                               
-                              swal(
-                                'Deleted!',
-                                'Your file has been deleted.',
-                                'success'
-                              )
-                            }
-                          })
+                          });
                        
                     }
                 });
