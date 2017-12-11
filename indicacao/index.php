@@ -213,7 +213,7 @@ $("#termosdeuso").click(function(){
         
             var data = {
                   CB02_NOME: fullName,
-                  CB02_CPF_CNPJ: cpf,
+                  CB02_CPF_CNPJ: cpf.replace(/[\.\-]/g,''),
                   CB02_EMAIL: email,
                   password: pass,
                   auth_key: '<?=$uid?>'
