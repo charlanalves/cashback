@@ -25,7 +25,26 @@ $uid = $_GET['auth_key'];
 <!-- Include a polyfill for ES6 Promises (optional) for IE11 and Android browser -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
 <style type="text/css">
+@media (max-width: 399px) 
+{
+    .blockUI.blockMsg.blockPage{        
+        top: 25% !important;
+        left: -6% !important;    
+        color: rgb(0, 0, 0);
+        border: none !important;
+        background-color: transparent !important;        
+    }
+}
 
+@media (min-width: 400px) {
+    .blockUI.blockMsg.blockPage{        
+        top: 25% !important;
+        left: 1% !important;    
+        color: rgb(0, 0, 0);
+        border: none !important;
+        background-color: transparent !important;        
+    }
+}
 html,
 body {
     height: 100%;
