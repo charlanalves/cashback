@@ -33,6 +33,7 @@ class CB10CATEGORIA extends BaseCB10CATEGORIA {
                     GROUP BY CB04_CATEGORIA_ID
                 ) CB ON (CB.CB04_CATEGORIA_ID = CB10_ID)
                 WHERE CB10_ID NOT IN (3,4)
+                AND CB10_CATEGORIA.CB10_STATUS = 1
                 ORDER BY CB10_NOME";
         $command = \Yii::$app->db->createCommand($sql);
         return $command->query()->readAll();
