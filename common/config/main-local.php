@@ -19,12 +19,12 @@ return [
          'class' => 'yii\swiftmailer\Mailer',
          'transport' => [
             'class' => 'Swift_SmtpTransport',
-             'host' => 'smtp.sendgrid.net',  // e.g. smtp.mandrillapp.com or smtp.gmail.com
-             'username' => 'apikey',
-             'password' => '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',
-             'port' => '587', // Port 25 is a very common port too
-             'encryption' => 'tls', // It is often used, check your provider or mail server specs
-         ],
+            'host' => 'smtp.gmail.com',
+            'username' => 'appestalecas@gmail.com',
+            'password' => 'p@ssw0rd1234',
+            'port' => '587',
+            'encryption' => 'tls',
+        ],
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
