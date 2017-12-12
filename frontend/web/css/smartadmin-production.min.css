@@ -18297,3 +18297,7 @@ body.menu-on-top.fixed-header.fixed-navigation.fixed-ribbon #ribbon {
     font-size: 11px; 
     margin-left: 2px;
 }
+label.checkbox {
+    max-width: 22px;
+    
+}
