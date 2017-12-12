@@ -197,7 +197,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
         $this->CB04_CONTA_VERIFICADA = 1;
         $this->save();
 
-        /*
+        
         // dados da forma de pagamento (exclui e cadastra)
         CB09FORMAPAGTOEMPRESA::deleteAll(['CB09_ID_EMPRESA' => $this->CB04_ID]);
         if (!empty($data['FORMA-PAGTO'])) {
@@ -210,7 +210,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
                 $CB09FORMAPAGTOEMPRESA->save();
             }
         }
-         */
+         
 
         return $this->CB04_ID;
     }
