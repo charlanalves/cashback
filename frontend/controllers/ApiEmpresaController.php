@@ -942,6 +942,10 @@ class ApiEmpresaController extends GlobalBaseController {
         
         // imagens do produto
         $imagens = CB14FOTOPRODUTO::find()
+            ->select('*')
+            ->join('JOIN', 'CB05_PRODUTO', 'CB05_ID = CB14_PRODUTO_ID')
+            ->join('JOIN', 'CB04_EMPRESA', 'CB04_ID = CB05_EMPRESA_ID')
+            ->join('LEFT JOIN', 'CB13_FOTO_EMPRESA', 'CB13_EMPRESA_ID = CB04_ID')
             ->where(['CB14_PRODUTO_ID' => $post['product']])
             ->orderBy('CB14_CAPA DESC')
             ->asArray()
