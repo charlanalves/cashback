@@ -64,19 +64,32 @@
 
     // modal Categoria
     var modalCategoria = function () {
-        // limpar campo
-        $('#remoteModalCategoria input[name=CB10_NOME]').val('');
+
+        var objName = $('#remoteModalCategoria input[name=CB10_NOME]');
+        var objIcone = $('#remoteModalCategoria input[name=CB10_ICO]');
+
+        // valor padrao do form
+        objName.val('star');
+        objIcone.val('star');
+        $('i#icone-categoria').attr('class', 'fa fa-lg fa-star');
+
+        // altera icone
+        objIcone.keyup(function () {
+            $('i#icone-categoria').attr('class', 'fa fa-lg fa-' + $(this).val());
+        });
+
         $('#remoteModalCategoria')
             .modal('show')
             .find('#btn-salvar')
             .on('click', function () {
-                var new_name = $('#remoteModalCategoria input[name=CB10_NOME]').val();
+                var new_name = objName.val();
+                var new_ico = objIcone.val();
                 if(!new_name){
                     Util.smallBox('Preencha o nome da categoria.', '', 'danger');
                 } else {
                     $('#remoteModalCategoria').modal('hide');
                     $.blockUI();
-                    Util.ajaxPost('index.php?r=administrador/global-crud&action=createCategoria', {nome: new_name}, function (data) {
+                    Util.ajaxPost('index.php?r=administrador/global-crud&action=createCategoria', {nome: new_name, ico: new_ico}, function (data) {
                         $.unblockUI();
                         if (data.responseText) {
                             Util.smallBox('Opss, tente novamente...', '', 'danger', 'close');
@@ -230,7 +243,7 @@
 
 <!-- MODAL CATEGORIA -->
 <div class="modal fade" id="remoteModalCategoria" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width: 350px">
+    <div class="modal-dialog" style="width: 450px">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -239,12 +252,21 @@
             <div class="modal-body no-padding">
                 <form action="" class="smart-form" novalidate="novalidate">
                     <fieldset>
-                        <section class="">
-                            <label class="">Nome da categoria</label>
-                            <label class="input">
-                                <input type="text" name="CB10_NOME" />
-                            </label>
-                        </section>
+                        <div class="row">
+                            <section class="col col-6">
+                                <label class="">Nome da categoria</label>
+                                <label class="input">
+                                    <input type="text" name="CB10_NOME" />
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label class="">Icone: &nbsp;<i id="icone-categoria" class=""></i></label>
+                                <label class="input">
+                                    <input type="text" name="CB10_ICO" value="star" />
+                                </label>
+                                <div class="note"><a href="http://fontawesome.io/icons/#new" target="_blank">fontawesome</a></div>
+                            </section>
+                        </div>
                     </fieldset>
                     <footer style="padding: 10px;">
                         <button id="btn-salvar" type="button" class="btn btn-success" style="margin:0px 4px" onclick="">

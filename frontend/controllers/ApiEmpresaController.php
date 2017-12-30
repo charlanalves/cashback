@@ -940,16 +940,14 @@ class ApiEmpresaController extends GlobalBaseController {
     public function actionCompanyProduct() {
         $post = \Yii::$app->request->post();
         
-        // imagens do produto
-        $imagens = CB14FOTOPRODUTO::find()
+        // Dados da empresa
+        $imagens = CB05PRODUTO::find()
             ->select('*')
-            ->join('JOIN', 'CB05_PRODUTO', 'CB05_ID = CB14_PRODUTO_ID')
             ->join('JOIN', 'CB04_EMPRESA', 'CB04_ID = CB05_EMPRESA_ID')
-            ->join('LEFT JOIN', 'CB13_FOTO_EMPRESA', 'CB13_EMPRESA_ID = CB04_ID')
-            ->where(['CB14_PRODUTO_ID' => $post['product']])
-            ->orderBy('CB14_CAPA DESC')
+            ->join('JOIN', 'CB10_CATEGORIA', 'CB10_ID = CB04_CATEGORIA_ID')
+            ->where(['CB05_ID' => $post['product']])
             ->asArray()
-            ->all();
+            ->one();
         
         // produtos da empresa
         $PRODUTO_DATA = CB05PRODUTO::getProduto($post['product']);
@@ -961,7 +959,7 @@ class ApiEmpresaController extends GlobalBaseController {
         } else {
            $ATIVAR_ABA_PROMOCOES = true;
         }
-        return json_encode(['ATIVAR_ABA_PROMOCOES'=> $ATIVAR_ABA_PROMOCOES,'ATIVAR_ABA_INFO'=> $ATIVAR_ABA_INFO,'IMG' => $imagens, 'PRODUTO' => $post['product'], 'PRODUTO_DATA' => $PRODUTO_DATA, ]);
+        return json_encode(['ATIVAR_ABA_PROMOCOES'=> $ATIVAR_ABA_PROMOCOES,'ATIVAR_ABA_INFO'=> $ATIVAR_ABA_INFO,'DADOS' => $imagens, 'PRODUTO' => $post['product'], 'PRODUTO_DATA' => $PRODUTO_DATA, ]);
     }
     
     
