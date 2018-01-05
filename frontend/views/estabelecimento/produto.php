@@ -5,7 +5,15 @@ $this->title = '';
 ?>
 
 <script type="text/javascript">
-
+$(document).ready(function() {
+  
+        $('#remoteModalCashbackLabel').text('CASHBACK DIÁRIO');
+        $('#remoteModalCashback').modal('show')
+		.find('.modal-body')
+		.html('')
+		.load('index.php?r=estabelecimento/cashback-diario-form&produto=1');
+    
+});
     var ultimoCEP = '',
             salvo = '<?= $salvo ?>',
             reloadPage = function () {window.location.reload(false);};
