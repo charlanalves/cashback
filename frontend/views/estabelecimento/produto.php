@@ -7,7 +7,7 @@ $this->title = '';
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function(){
 	
-	     $('#remoteModalCashbackLabel').text('CASHBACK DIÁRIO');
+	     $('#remoteModalCashbackLabel').text('Definir Dinheiro de Volta');
         $('#remoteModalCashback').modal('show')
 		.find('.modal-body')
 		.html('')
