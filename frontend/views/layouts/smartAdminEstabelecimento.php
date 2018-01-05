@@ -216,7 +216,7 @@ CashBackAsset::register($this);
                     </li>  -->
                     <?php if (!$this->context->funcionario) { ?>
                     <li class="">
-                        <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Dinheiro de Volta</span></a>
+                        <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Dinheiro de V.</span></a>
                     </li>
                     <!--
                     <li class="">
