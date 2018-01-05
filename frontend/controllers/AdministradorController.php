@@ -316,6 +316,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     public function createCategoria($param) {
         $model = new CB10CATEGORIA();
         $model->setAttribute('CB10_NOME', $param['nome']);
+        $model->setAttribute('CB10_ICO', $param['ico']);
         $model->setAttribute('CB10_STATUS', 1);
         $model->save();
     }
