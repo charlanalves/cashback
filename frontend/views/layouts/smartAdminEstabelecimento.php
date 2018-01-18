@@ -211,12 +211,12 @@ CashBackAsset::register($this);
                         <a href="#" title="Delivery" id="menu-delivery"><i class="fa fa-lg fa-fw fa-truck"></i> <span class="menu-item-parent">Delivery</span></a>
                     </li>
                     -->
-                    <li class="">
+                     <!--<li class="">
                         <a href="#" title="Delivery Dx" id="menu-delivery-dx"><i class="fa fa-lg fa-fw fa-truck"></i> <span class="menu-item-parent">Delivery Dx</span></a>
-                    </li>
+                    </li>  -->
                     <?php if (!$this->context->funcionario) { ?>
                     <li class="">
-                        <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Produto</span></a>
+                        <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Dinheiro de V.</span></a>
                     </li>
                     <!--
                     <li class="">
@@ -226,9 +226,10 @@ CashBackAsset::register($this);
                     <li class="">
                         <a href="#" title="Extrato" id="menu-extrato-dx"><i class="fa fa-lg fa-fw fa-list-ul"></i> <span class="menu-item-parent">Extrato</span></a>
                     </li>
+					   <!--
                     <li class="">
                         <a href="#" title="Saque" id="menu-saque"><i class="fa fa-lg fa-fw fa-money"></i> <span class="menu-item-parent">Saque</span></a>
-                    </li>
+                    </li>  -->
                     <li class="">
                         <a href="#" title="Avaliação" id="menu-avaliacao"><i class="fa fa-lg fa-fw fa-list-alt"></i> <span class="menu-item-parent">Avaliação</span></a>
                     </li>
