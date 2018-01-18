@@ -38,7 +38,7 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
 	
     public static function saldoAtualByCliente($cliente) 
     {
-        $sql = "SELECT SUM(SALDO) AS SALDO FROM (
+        $sql = "SELECT SUM(TBL.SALDO) AS SALDO FROM (
                     SELECT VIEW_EXTRATO.VALOR AS SALDO 
                         FROM VIEW_EXTRATO 
                         -- PEDIDOS DEPOSITADOS
@@ -47,7 +47,7 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
                                 FROM VIEW_EXTRATO 
                                 WHERE TIPO = 'C2E' AND DT_DEPOSITO IS NOT NULL
                                 ) E_C2E ON(E_C2E.PEDIDO_ID = VIEW_EXTRATO.PEDIDO_ID)
-                        WHERE VIEW_EXTRATO.USER = 19 AND VIEW_EXTRATO.TIPO IN ('C2E','E2ADQ','E2ADM','E2M')
+                        WHERE VIEW_EXTRATO.USER = :cliente /* AND VIEW_EXTRATO.TIPO IN ('C2E','E2ADQ','E2ADM','E2M') */
                         GROUP BY VIEW_EXTRATO.TRANSFERENCIA_ID,VIEW_EXTRATO.PEDIDO_ID,VIEW_EXTRATO.TIPO
                 ) TBL";
         $command = \Yii::$app->db->createCommand($sql);
@@ -65,7 +65,7 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
                                 FROM VIEW_EXTRATO 
                                 WHERE TIPO = 'C2E' AND DT_DEPOSITO IS NULL
                                 ) E_C2E ON(E_C2E.PEDIDO_ID = VIEW_EXTRATO.PEDIDO_ID)
-                        WHERE VIEW_EXTRATO.USER = 19 AND VIEW_EXTRATO.TIPO IN ('C2E','E2ADQ','E2ADM','E2M')
+                        WHERE VIEW_EXTRATO.USER = :cliente /*AND VIEW_EXTRATO.TIPO IN ('C2E','E2ADQ','E2ADM','E2M') */
                         GROUP BY VIEW_EXTRATO.TRANSFERENCIA_ID,VIEW_EXTRATO.PEDIDO_ID,VIEW_EXTRATO.TIPO
                 ) TBL";
         $command = \Yii::$app->db->createCommand($sql);

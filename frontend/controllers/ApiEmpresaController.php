@@ -1224,7 +1224,7 @@ class ApiEmpresaController extends GlobalBaseController {
         $post = \Yii::$app->request->post();
         if (($cliente = User::find()->where("cpf_cnpj='" . $post['busca_cpf'] . "' AND status = " . User::STATUS_ACTIVE)->asArray()->one())) {
             $retorno['cliente'] = $cliente;
-            $retorno['formasPagamento'] = $this->operacionalFormasPagamentoPdv($post['auth_key'], $post['id_company'], $post['total_compra']);
+            $retorno['formasPagamento'] = $this->operacionalFormasPagamentoPdv($cliente['id'], $post['id_company'], $post['total_compra']);
         }
         return json_encode($retorno ? $retorno : false);
     }
@@ -1233,25 +1233,26 @@ class ApiEmpresaController extends GlobalBaseController {
         
         // formas de pagamento do checkout
         $forma_pagamento = CB04EMPRESA::find()
-                ->select(['CB09_ID as ID','CB08_NOME as TEXTO'])
+                ->select(['CB08_ID as ID','CB08_NOME as TEXTO'])
                 ->join('JOIN','CB09_FORMA_PAGTO_EMPRESA','CB09_FORMA_PAGTO_EMPRESA.CB09_ID_EMPRESA = CB04_EMPRESA.CB04_ID')
                 ->join('JOIN','CB08_FORMA_PAGAMENTO','CB08_FORMA_PAGAMENTO.CB08_ID = CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG')
                 ->where(['CB08_STATUS' => 1])
                 ->andWhere(['CB04_EMPRESA.CB04_ID' => $company])
                 ->groupBy('CB08_NOME')
-                ->orderBy('CB09_ID')
+                ->orderBy('CB08_ID')
                 ->asArray()
                 ->all();
 
         // saldo estaleca sempre tem que ser o primeiro 
         // o saldo deve ser maior que o valor da compra
         $saldoAtual = $this->getSaldoAtual($auth_key);
-        if($vlr <= $saldoAtual) {
-            $forma_pagamento[0]['TEXTO'] = $forma_pagamento[0]['TEXTO'] .' (R$ '. $saldoAtual . ')';
-        } else {
-            unset($forma_pagamento[0]);
+        if($forma_pagamento[0]['ID'] == 1){
+            if($vlr <= $saldoAtual) {
+                $forma_pagamento[0]['TEXTO'] = $forma_pagamento[0]['TEXTO'] .' (R$ '. $saldoAtual . ')';
+            } else {
+                unset($forma_pagamento[0]);
+            }        
         }
-                
         return $forma_pagamento;
     }
     
@@ -1323,7 +1324,7 @@ class ApiEmpresaController extends GlobalBaseController {
             $trans = new PAG04TRANSFERENCIAS(); 
 
             // TRANSFÊNCIA CLIENTE TO EMPRESA
-            $trans->createC2E($idCliente, $idEmpresa, 0, $idPedido);
+            $trans->createC2E($idCliente, $idEmpresa, $pedido->CB16_ID_FORMA_PAG_EMPRESA == 1 ? $vlrPedido : 0, $idPedido);
 
             // TRANSFÊNCIA EMPRESA TO MASTER
             $trans->createE2M($idEmpresa, $vlrCliente, $dtPrevisao, $idPedido);
