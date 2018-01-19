@@ -487,6 +487,7 @@ class ApiEmpresaController extends GlobalBaseController {
                             $PAG04TRANSFERENCIAS->setAttributes([
                                 'PAG04_ID_USER_CONTA_ORIGEM' => $idUser,
                                 'PAG04_DT_PREV' => date('Y-m-d', strtotime("+" . SYS01PARAMETROSGLOBAIS::getValor('PO_SQ') ." days", strtotime(date('Y-m-d')))),
+                                'PAG04_DT_DEP' => date('Y-m-d H:i:s'),
                                 'PAG04_VLR' => $dadosSaque->CB03_VALOR,
                                 'PAG04_TIPO' => 'V2B',
                             ]);
@@ -1195,6 +1196,7 @@ class ApiEmpresaController extends GlobalBaseController {
     
     public function actionParam() {
         $ambiente = SYS01PARAMETROSGLOBAIS::getValor('APP-AMB');
+        //$ambiente = 'APP-LO2';
         return SYS01PARAMETROSGLOBAIS::getValor($ambiente);
     }
     
