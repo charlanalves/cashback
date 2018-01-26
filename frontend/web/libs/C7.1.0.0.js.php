@@ -215,6 +215,7 @@ C7.loadGrid = function(target, fnName, param, autoLoad, btns) {
 	objGrid =  layoutGrid_A.attachGrid();
         objGrid.enableMultiline(true);
         objGrid.enableAutoWidth(true);
+        objGrid.setImagesPath("./dxassets/dhtmlx/terrace/imgs/");
 	objGrid.init();
 	objGrid.enableRowsHover(true, 'hover');
 	objGrid.layout = layoutGrid;

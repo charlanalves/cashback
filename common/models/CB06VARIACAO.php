@@ -123,16 +123,15 @@ class CB06VARIACAO extends BaseCB06VARIACAO
                     CB06_PRODUTO_ID,
                     CB04_URL_LOGOMARCA,
                     CB10_ICO
-                FROM CB06_VARIACAO
-                LEFT JOIN CB05_PRODUTO ON (CB05_ATIVO = 1 AND CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID )
-                LEFT JOIN CB04_EMPRESA ON (CB04_STATUS = 1 AND CB04_EMPRESA.CB04_ID = CB05_PRODUTO.CB05_EMPRESA_ID )
+                FROM CB04_EMPRESA
+                LEFT JOIN CB05_PRODUTO ON (CB04_STATUS = 1 AND CB04_EMPRESA.CB04_ID = CB05_PRODUTO.CB05_EMPRESA_ID )
+		LEFT JOIN CB06_VARIACAO ON (CB05_ATIVO = 1 AND CB05_PRODUTO.CB05_ID = CB06_VARIACAO.CB06_PRODUTO_ID)
                 LEFT JOIN CB10_CATEGORIA ON (CB04_EMPRESA.CB04_CATEGORIA_ID = CB10_CATEGORIA.CB10_ID )
                 LEFT JOIN (
                     SELECT MIN(CB14_ID) AS CB14_ID, CB14_PRODUTO_ID, CB14_URL 
                     FROM CB14_FOTO_PRODUTO
                     GROUP BY CB14_PRODUTO_ID) CB14_FOTO_PRODUTO ON(CB14_PRODUTO_ID = CB05_ID)
-                " . (!$filterBindCat ? "" : "WHERE CB04_CATEGORIA_ID = :categoria") . "
-                
+                WHERE AND CB04_TIPO = 1 " . (!$filterBindCat ? "" : " AND CB04_CATEGORIA_ID = :categoria") . "
                 GROUP BY CB04_EMPRESA.CB04_ID
                 ORDER BY " . (!$filterBindOrd ? 'CB06_DINHEIRO_VOLTA DESC' : ":ordem") . "
                 LIMIT $limiteInicio, $limiteQtd";
