@@ -13,8 +13,9 @@
 **/
 
 namespace common\models;
-use yii\db\ActiveRecord;
-use yii\db\Exception;
+use \yii\db\ActiveRecord;
+use \yii\db\Exception;
+use app\modules\Seguranca\models\LoginModel;
 
 class GlobalModel extends ActiveRecord
 {
@@ -25,13 +26,21 @@ class GlobalModel extends ActiveRecord
      */
     const ALIAS_ID_COMBO = 'ID';
     const ALIAS_TEXT_COMBO = 'TEXTO';
+    const SCENARIO_CREATE = 'SCENARIO_CREATE';
+    const SCENARIO_UPDATE = 'SCENARIO_UPDATE';
+    const SCENARIO_DELETE = 'SCENARIO_DELETE';
+    const SCENARIO_INACTIVATE = 'SCENARIO_INACTIVATE';
+    const ACT_CREATE = 'C';
+    const ACT_UPDATE = 'U';
+    const ACT_DELETE = 'D';
+    
     
     
     /**
      * Path para fazer upload de arquivo
     */
     public $globalPathFile = '';
-    
+                
     
     /**
      * Nome do arquivo do upload
@@ -49,12 +58,88 @@ class GlobalModel extends ActiveRecord
     */
     public $globalFileDescJasper;
     
+    
+    /**
+     * Categoria de tradução
+    */
+    public $i18nCat = "app";
+    
+    /**
+     * Ação atual usada na funcão de log do sistema
+     */
+    public $gCurrentAction = "CREATE";
+    
+    /**
+     * Ação atual usada na funcão de log do sistema
+     */
+    public $enableLogAudit = '';
+    
+        /**
+     * Ação atual usada na funcão de log do sistema
+     */
+    const TB_LOG = 'MMS22_LOG_AUDITORIA';
+    
+    
+    
+    public function __construct($config = [])
+    {
+        if (!empty(\Yii::$app->controller->module->id)) {
+            $this->i18nCat = \Yii::$app->controller->module->id;
+        }
+        parent::__construct($config);
+    }
+    
+    /**
+     * getMMS22_JSON_AUDITORIA
+     * Obtem os campos para log com seus respectivos valores antigos e novos 
+     *
+     * @package GlobalModel
+     * @param array $ca campos modificados
+     * @param Active Record $lastModel modelo que realizou a operação 
+     * 
+     * @since  09/2017
+     * @author Charlan Santos
+     **/
+    private function getMMS22_JSON_AUDITORIA($ca = '', $lastModel, $op)
+    {   
+        $attr = $lastModel->attributes;
+        if (!empty($ca)){
+            // removendo campos que não foram alterados
+            $attr = array_intersect_key($attr, $ca);
+        }
+        
+        $arrayLog = [];
+        $c = 0;
+        foreach( $attr as $campo => $valor )
+        {
+            $arrayLog[$c]['CAMPO'] = $campo;
+            switch ($op) {
+                case self::ACT_CREATE;
+                    $arrayLog[$c]['VALOR_ANTIGO'] = '';
+                    $arrayLog[$c]['VALOR_NOVO'] = $valor;
+                break;
+                case self::ACT_UPDATE;
+                    $arrayLog[$c]['VALOR_ANTIGO'] = (!empty($ca[$campo]))? $ca[$campo]: $valor;
+                    $arrayLog[$c]['VALOR_NOVO'] = $valor;
+                break;
+                case self::ACT_DELETE;
+                    $arrayLog[$c]['VALOR_ANTIGO'] = $valor;
+                    $arrayLog[$c]['VALOR_NOVO'] = '';
+                break;
+            }
+            $c++;
+        }
 
+     return json_encode($arrayLog);
+   
+    
+    }
     /**
     * @inheritdoc
     */
     public static function findCustom($table, $columnId, $columnText)
     {
+
         if (empty($table) || empty($columnId) || empty($columnText)) {
             return false;            
         }
@@ -67,22 +152,24 @@ class GlobalModel extends ActiveRecord
         
         return $reader->readAll();
     }
-   
+    
     /**
     * @inheritdoc
     */
-    public static function findCombo($table, $columnId, $columnText, $whereCustom='', $limit = null)
+    public static function findCombo($table, $columnId, $columnText, $whereCustom='', $limit)
     {
         if (empty($table) || empty($columnId) || empty($columnText)) {
             return false;
         }
         
-        $limit = (is_numeric($limit)) ? 'LIMIT ' . $limit : 'LIMIT 100';
+        $whereCustom = ($whereCustom) ? "$whereCustom AND" : $whereCustom;
+
+        $limit = isset($limit) ? 'ROWNUM <'.$limit : 'ROWNUM < 100';
         
         $query =  "SELECT DISTINCT $columnId AS ".self::ALIAS_ID_COMBO.", $columnText AS ".self::ALIAS_TEXT_COMBO." 
-                    FROM $table 
-                    " . (!$whereCustom ? : "WHERE $whereCustom") . " 
-                    ORDER BY $columnText $limit";
+                    FROM (SELECT * FROM $table ORDER BY $columnText)
+                    WHERE $whereCustom $limit
+                    ORDER BY $columnText";
 
         $connection = \Yii::$app->db;
         $command = $connection->createCommand($query);
@@ -113,8 +200,9 @@ class GlobalModel extends ActiveRecord
         
         $query =  "SELECT DISTINCT $columnId AS ".self::ALIAS_ID_COMBO.", $columnText AS ".self::ALIAS_TEXT_COMBO." 
 				   FROM (SELECT * FROM $table ORDER BY $columnText)
-				   WHERE $where 
-				   ORDER BY $columnText LIMIT 100";
+				   WHERE $where
+						 ROWNUM < 100 
+				   ORDER BY $columnText";
 
         $connection = \Yii::$app->db;
         $command = $connection->createCommand($query);
@@ -124,37 +212,192 @@ class GlobalModel extends ActiveRecord
     }
     
 	
-     /**
-     * @inheritdoc
-     */
-    public function save($runValidation = true, $attributeNames = NULL) {
-        try {
-            
-            parent::save($runValidation, $attributeNames);            
-            $modelErro = $this->getFirstErrors();
-            $msg = '';
-            if (!empty($modelErro)) {
-                foreach ($modelErro as $m) {
-                    $msg .= $m . ' <br> ';
-                }
-            } else {
-                $this->globalCheckAndUploadFiles();
-            }
-            
-        } catch (\Exception $e) {            
-            throw new \Exception($e->getMessage());    
+    /**
+     * globalSaveLog
+     * Salva na tabela de log estado atual e anterior dos registros
+     *
+     * @package GlobalModel
+     * @since  07/2017
+     * @author Charlan Santos
+     **/
+    private function globalSaveLog($changedAttributes)
+    {
+        $ctrlEnableLogAudit = \Yii::$app->controller->getEnableLogAudit();
+        
+        // Se setar o atributo enableLogAudit no modelo ele assume a preferência
+        // do contrário obtém o valor definido no controller
+       if 
+        ( $this->enableLogAudit == '' && !empty( $ctrlEnableLogAudit )
+        )
+        {
+            $this->enableLogAudit = $ctrlEnableLogAudit;
         }
         
-        if (!empty($modelErro)) {                        
-            throw new \yii\base\UserException(utf8_decode($msg));            
-        }
-        return true;
+      if( $this->enableLogAudit === true  && $this->tableName() != self::TB_LOG)
+      {
+          $log = new MMS22_LOG_AUDITORIAModel;
+          
+          $log->setAttributesLog($log, $this, $changedAttributes);
+          
+          $log->save();
+          
+          $this->gCurrentAction = '';
+      }
+    }
+
+
+     /**
+     * setAttributesLog
+     * Salva na tabela de log estado atual e anterior dos registros
+     *
+     * @package GlobalModel
+     * @since  07/2017
+     * @param ActiveRecord $modelLog - model da tabela de log passado por referência
+     * @param array $changedAttributes - Atributos que estavam persistidos no banco de dados antes do update
+     * @return void
+     * @author Charlan Santos
+     **/
+    private function setAttributesLog(ActiveRecord &$modelLog, $lastModel, $changedAttributes = '')
+    {
+        $modelLog->MMS22_SG_TAB_REFERENCIA = $lastModel->tableName();
+        $modelLog->MMS22_ID_TAB_REFERENCIA = $lastModel->primaryKey;
+        $modelLog->MMS22_ID_USUARIO = LoginModel::buscaIdUser(\Yii::$app->session['userId']);
+        $modelLog->MMS22_TP_ACAO = $lastModel->gCurrentAction;
+        $modelLog->MMS22_NM_MODULO = $this->i18nCat;
+        $modelLog->MMS22_JSON_AUDITORIA = $this->getMMS22_JSON_AUDITORIA
+        (
+            $changedAttributes, 
+            $lastModel,
+            $lastModel->gCurrentAction 
+        );
     }
     
+    /**
+     * afterSave
+     * Reune operações a serem executas após salvar ou editar um registro 
+     * no banco de dados
+     *
+     * @package GlobalModel
+     * @since  07/2017
+     * @author Charlan Santos
+     * 
+     * @param int $insert - identifica se foi uma exclusão ou atualização
+     * @param array $changedAttributes - Atributos que estavam persistidos no banco de dados antes do update
+     * @return string - retorna 'C' para create 'D' para delete 'U' para update 
+     **/
+    public function afterSave($insert, $changedAttributes) 
+    {
+        parent::afterSave($insert, $changedAttributes);
+        
+        $op = $this->gSetCurretAction($insert);
+        
+        return $this->gExecuteAfterCrudOperations(                 
+                $this, 
+                $op,
+                $changedAttributes
+        );
+    }
     
+    /**
+     * @inheritdoc
+    */
+    public function save($runValidation=true, $attributeName=null)
+    {
+       if(!parent::save($runValidation, $attributeName)){
+            return $this->gExecuteAfterCrudOperations($this);
+       }
+       return true;
+    }
+    
+    /**
+     * gSetCurretAction
+     * Define a ação atual
+     * no banco de dados
+     *
+     * @package GlobalModel
+     * @since  07/2017
+     * @author Charlan Santos
+     *
+     * @param int $insert - identifica se foi uma exclusão ou atualização  
+     * @return int - 1 para inclusão 0 para edição   
+     **/
+    private function gSetCurretAction($insert)
+    {
+        $op = self::ACT_CREATE;
+        
+        if (!$insert) {
+            $op = self::ACT_UPDATE;
+        }
+        
+        return $op;
+    }
+    
+    /**
+     * afterDelete
+     * Reune operações a serem executas após deletar um registro
+     * no banco de dados
+     *
+     * @package GlobalModel
+     * @since  07/2017
+     * @author Charlan Santos
+     *   
+     **/
+    public function afterDelete()
+    {
+        parent::afterDelete();
+    
+        return $this->gExecuteAfterCrudOperations($this, self::ACT_DELETE);
+    }
+    
+    /**
+     * gExecuteAfterCrudOperations
+     * Reune operações a serem executas após deletar um registro
+     * no banco de dados
+     *
+     * @package GlobalModel
+     * @since  07/2017
+     * @author Charlan Santos
+     *
+     * @param int $op - identifica se foi uma exclusão ou atualização
+     * @param array $changedAttributes - Atributos que estavam persistidos no banco de dados antes do update
+     * @param ActiveRecord - $model - modelo envolvido
+     **/
+    private function gExecuteAfterCrudOperations($model,$op = null, $changedAttributes = '')
+    {
+        
+        $this->gCurrentAction = $op;
+        
+        try {
+        
+            $modelErro = $model->getFirstErrors();
+        
+            if (!empty($modelErro)) {
+                $errorMsg = ['message' => [
+                    'dev' => array_values($modelErro)[0],
+                    'prod' => array_values($modelErro)[0]],
+                ];
+            } else {
+                $model->globalCheckAndUploadFiles();
+                $model->globalSaveLog($changedAttributes);
+            }
+        
+        
+        } catch (\Exception $e) {
+        
+            $errorMsg = ['message' => ['dev' => $e->getMessage()]];
+        }
+        
+        if (!empty($errorMsg)) {
+            $errorMsg = \Yii::$app->v->getErrorMsgCurrentEnv($errorMsg);
+            throw new \Exception($errorMsg);
+        }
+        
+        return true;
+    }
+   
     protected function globalCheckAndUploadFiles()
     {        
-        if (!empty($_FILES["filesMMS"]) && !empty($this->globalPathFile)) {
+        if (!empty($_FILES["filesMMS"]["tmp_name"]) && !empty($this->globalPathFile)) {
       
             $this->generateDefaultFileName();
             
@@ -211,19 +454,19 @@ class GlobalModel extends ActiveRecord
         return $scenarioc;
     }
 
+
 	private function _saveMultiple($dados, $model=null, $relacao=null, $flgAtivo, $scenarioModelFilho = null)
 	{
 		try{
-		
-    			preg_match('/.*(?<=\\\\)/si', get_class($this), $match);
-                
-    			if (empty($match[0])) {
-    				return false;
-    			}
-    	
-    			$namespace = $match[0];
-		
-		
+
+			preg_match('/.*(?<=\\\\)/si', get_class($this), $match);
+
+			if (empty($match[0])) {
+				return false;
+			}
+
+			$namespace = $match[0];
+
 			if(!empty($relacao)) {
 				$modelRelacao = $namespace . $relacao[0];
 				$idRelacao = $relacao[1];
@@ -579,4 +822,29 @@ class GlobalModel extends ActiveRecord
 	    return $value;
 	}
 	
+	/**
+	 * globalDxDateToMMSDate
+	 * Formata data de um campo dhtmlxCalendar para o padrão d/m/Y
+	 * 
+	 * @param $campoData nome do atributo
+	 * @return void
+	 * @since 08/2017
+	 */
+	public function globalDxDateToMMSDate($campoData)
+	{   
+	  $this->$campoData = date('d/m/Y',strtotime(str_ireplace(' (Hora oficial do Brasil)', '', $this->$campoData)));
+	}
+	
+	/**
+	 * ucFirstMMS
+	 * Coloca a primeria letra da string maiuscula
+	 *
+	 * @param $campoData nome do atributo
+	 * @return void
+	 * @since 08/2017
+	 */
+	public function ucFirstMMS($campoData)
+	{
+	    $this->$campoData = ucfirst(strtolower($this->$campoData));
+	}	
 }
