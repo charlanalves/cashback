@@ -19,7 +19,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
 	    [
             [['CB04_CNPJ','CB04_TEL_NUMERO', 'CB04_NOME', 'CB04_CATEGORIA_ID', 'CB04_FUNCIONAMENTO','CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_UF', 'CB04_END_NUMERO',  'CB04_END_CEP'], 'required'],
             [['CB04_DADOS_API_TOKEN', 'CB04_FUNCIONAMENTO', 'CB04_OBSERVACAO'], 'string'],
-            [['CB04_CATEGORIA_ID', 'CB04_STATUS', 'CB04_QTD_FAVORITO', 'CB04_QTD_COMPARTILHADO'], 'integer'],
+            [['CB04_CATEGORIA_ID', 'CB04_STATUS', 'CB04_QTD_FAVORITO', 'CB04_QTD_COMPARTILHADO', 'CB04_TIPO'], 'integer'],
             [['CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_COMPLEMENTO'], 'string', 'max' => 50],
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
             [['CB04_END_UF'], 'string', 'max' => 2],
@@ -76,7 +76,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
             LEFT JOIN CB10_CATEGORIA ON(CB10_ID = CB04_CATEGORIA_ID)
             LEFT JOIN CB12_ITEM_CATEG_EMPRESA ON(CB12_EMPRESA_ID = CB04_ID OR CB05_ID = CB12_PRODUTO_ID)
             LEFT JOIN CB07_CASH_BACK ON(CB07_PRODUTO_ID = CB05_ID  OR CB07_VARIACAO_ID = CB06_ID)
-        WHERE CB04_EMPRESA.CB04_STATUS = 1 $categoria $item
+        WHERE CB04_EMPRESA.CB04_STATUS = 1 AND CB04_TIPO = 1  $categoria $item
             GROUP BY CB04_ID, CB04_NOME, CB04_QTD_FAVORITO, CB04_QTD_COMPARTILHADO, CB04_END_LOGRADOURO, 
             CB04_END_BAIRRO, CB04_END_CIDADE, CB04_END_UF, CB04_END_NUMERO, CB04_NOME
             ORDER BY RAND()";
@@ -92,7 +92,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
         $retorno = [];
 
         // dados da empresa
-        if (($retorno['empresa'] = self::find()->where('CB04_ID=' . $id . ' AND CB04_STATUS = 1')->one())) {
+        if (($retorno['empresa'] = self::find()->where('CB04_ID=' . $id . ' AND CB04_STATUS = 1 AND CB04_TIPO = 1  ')->one())) {
 
             // like
             $retorno['like'] = ($idUser) ? ((bool) CB15LIKEEMPRESA::findOne(['CB15_EMPRESA_ID' => $id, 'CB15_USER_ID' => $idUser])) : false;
@@ -197,20 +197,26 @@ class CB04EMPRESA extends BaseCB04EMPRESA
         $this->CB04_CONTA_VERIFICADA = 1;
         $this->save();
 
-        
         // dados da forma de pagamento (exclui e cadastra)
         CB09FORMAPAGTOEMPRESA::deleteAll(['CB09_ID_EMPRESA' => $this->CB04_ID]);
-        if (!empty($data['FORMA-PAGTO'])) {
-            foreach ($data['FORMA-PAGTO'] as $fp) {
-                $CB09FORMAPAGTOEMPRESA = new CB09FORMAPAGTOEMPRESA();
-                $CB09FORMAPAGTOEMPRESA->CB09_ID_EMPRESA = $this->CB04_ID;
-                $CB09FORMAPAGTOEMPRESA->CB09_ID_FORMA_PAG = $fp['CB09_ID_FORMA_PAG'];
-                $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADQ = $fp['CB09_PERC_ADQ'];
-                $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADMIN = $fp['CB09_PERC_ADMIN'];   
-                $CB09FORMAPAGTOEMPRESA->save();
+        if (!empty($data['FORMAS_PAGAMENTO'])) {
+            $array_fp = str_getcsv($data['FORMAS_PAGAMENTO'],"\n");
+            foreach ($array_fp as $fp) {
+                // cadastra apenas os ativos
+                $fp = explode(',', $fp);
+                if ($fp[0]) {
+                    $CB09FORMAPAGTOEMPRESA = new CB09FORMAPAGTOEMPRESA();
+                    $CB09FORMAPAGTOEMPRESA->CB09_ID_EMPRESA = $this->CB04_ID;
+                    $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADQ = $fp[2];
+                    $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADMIN = $fp[3];
+                    $CB09FORMAPAGTOEMPRESA->CB09_PERC_FUNCIONARIO = $fp[4];   
+                    $CB09FORMAPAGTOEMPRESA->CB09_PERC_REPRESENTANTE = $fp[5];   
+                    $CB09FORMAPAGTOEMPRESA->CB09_PERC_FUNC_ADMIN = $fp[6];   
+                    $CB09FORMAPAGTOEMPRESA->CB09_ID_FORMA_PAG = $fp[7];
+                    $CB09FORMAPAGTOEMPRESA->save();
+                }
             }
         }
-         
 
         return $this->CB04_ID;
     }

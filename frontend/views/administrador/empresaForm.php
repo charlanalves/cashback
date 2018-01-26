@@ -1,12 +1,12 @@
 <style>
-.smart-form .inline-group .checkbox, .smart-form .inline-group .radio { 
-    position: relative;
-    top: 38px;
-    margin-left: 31px;
-}
-.smart-form .inline-group .checkbox, .smart-form .inline-group .radio:first-child {
-    margin-left: 0px;
-}
+    .smart-form .inline-group .checkbox, .smart-form .inline-group .radio { 
+        position: relative;
+        top: 38px;
+        margin-left: 31px;
+    }
+    .smart-form .inline-group .checkbox, .smart-form .inline-group .radio:first-child {
+        margin-left: 0px;
+    }
 
 </style>
 <div class="row">
@@ -40,12 +40,12 @@
                                     <input type="number" name="CB04_CNPJ" placeholder="">
                                 </label>
                             </section>
-                             <section class="col col-6"><?= $al['CB04_EMAIL'] ?>
+                            <section class="col col-6"><?= $al['CB04_EMAIL'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
                                     <input type="email" name="CB04_EMAIL" placeholder="">
                                 </label>
                             </section>
-                             <section class="col col-6"><?= $al['CB04_TEL_NUMERO'] ?>
+                            <section class="col col-6"><?= $al['CB04_TEL_NUMERO'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
                                     <input type="number" name="CB04_TEL_NUMERO" placeholder="">
                                 </label>
@@ -80,17 +80,15 @@
                             </section>
                         </div>
                     </fieldset>
- 					<fieldset>
-                        <h3>Formas de pagamento</h3>
-                        <section id="forma-pagamento" class="padding-top-15"></section>
-                     
+
+                    <fieldset>
+                        <section id="forma-pagamento" class="padding-top-15" style="height: 455px;"></section>
+                        <input type="hidden" name="FORMAS_PAGAMENTO" />
                     </fieldset>
-                    
+
                     <fieldset>                        
-                        <h3>Dados Bancários (para transfências)</h3>                        
-                    </fieldset>
-                    
-                    <div class="row">
+                        <h3>Dados Bancários (para transfências)</h3>
+                        <div class="row">
                             <section class="col col-6"><?= $al['CB03_NOME_BANCO'] ?>
                                 <label class="select">
                                     <select name="CB03_NOME_BANCO">
@@ -115,23 +113,23 @@
                                     <input required type="text" name="CB03_AGENCIA" placeholder="">
                                 </label>
                             </section>
-                             <section class="col col-6"><?= $al['CB03_NUM_CONTA'] ?>
+                            <section class="col col-6"><?= $al['CB03_NUM_CONTA'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
                                     <input required type="text" name="CB03_NUM_CONTA" placeholder="">
                                 </label>
                             </section>
-                              <section class="col col-6"><?= $al['CB03_SAQUE_MIN'] ?>
+                            <section class="col col-6"><?= $al['CB03_SAQUE_MIN'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
                                     <input required type="text" name="CB03_SAQUE_MIN" placeholder="" pattern="([0-9]{1,3}\.)?[0-9]{1,3},[0-9]{2}$">
                                 </label>
                             </section>
-                              <section class="col col-6"><?= $al['CB03_SAQUE_MAX'] ?>
+                            <section class="col col-6"><?= $al['CB03_SAQUE_MAX'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
                                     <input required type="text" name="CB03_SAQUE_MAX" placeholder="" pattern="([0-9]{1,3}\.)?[0-9]{1,3},[0-9]{2}$">
                                 </label>
                             </section>
-                         
                         </div>
+                    </fieldset>
 
                     <fieldset>
                         <h3>Endereço</h3>
@@ -188,7 +186,7 @@
                             </section>
                         </div>
                     </fieldset>
-                    
+
                     <footer>
                         <button id="btn-salvar" type="button" class="btn btn-primary">
                             Salvar
@@ -236,8 +234,8 @@
                     $('#remoteModalEmpresa').modal('hide')
                 } else {
                     console.log(data)
-                    if (typeof data.retorno != 'undefined'){
-                        message = data.retorno;                        
+                    if (typeof data.retorno != 'undefined') {
+                        message = data.retorno;
                     } else {
                         message = data.message;
                     }
@@ -255,7 +253,7 @@
         }
     }
 
-    
+
     function preencheEndereco(data) {
         if (data.erro) {
             $.smallBox({
@@ -286,7 +284,7 @@
 
     function loadGaleria() {
         var loadImgens = function (retorno) {
-            if(typeof retorno.message != 'undefined') {
+            if (typeof retorno.message != 'undefined') {
                 fotos = JSON.parse(retorno.message);
                 objFotos = [];
                 for (var i in fotos) {
@@ -302,13 +300,13 @@
     }
 
     function excluirImg(id) {
-        if(id) {
+        if (id) {
             Util.ajaxGet('index.php?r=administrador/global-crud', {action: 'fotoEmpresa', param: 'delete', foto: id, empresa: estabelecimento.CB04_ID}, loadGaleria);
         }
     }
 
-    function loadDropzoneAndGaleria (id) {
-        if(id && dropzoneAtivo === false) {
+    function loadDropzoneAndGaleria(id) {
+        if (id && dropzoneAtivo === false) {
             estabelecimento.CB04_ID = id;
             $('form#empresa-form input[name=CB04_ID]').val(id);
             $('#limitFotos').html("Permitido o envio de até <strong>" + limitFotos + "</strong> fotos.");
@@ -329,18 +327,18 @@
     FormEmpresa.addOptionsSelect('CB04_CATEGORIA_ID', categorias);
 
     // cria checkbox com as formas de pagamento
-    FormEmpresa.addCheckboxInLineFormPgto("forma-pagamento", "FORMA-PAGAMENTO", formaPagamento);
+    //FormEmpresa.addCheckboxInLineFormPgto("forma-pagamento", "FORMA-PAGAMENTO", formaPagamento);
+    $(FormEmpresa.form).find('#forma-pagamento');
 
-    
     if (typeof estabelecimento.CB04_ID != 'undefined') {
-    
+
         if (estabelecimento.CB04_URL_LOGOMARCA) {
             $('img#logo-empresa').attr('src', estabelecimento.CB04_URL_LOGOMARCA);
         }
-    
+
         // Preenche o form com os dados da empresa
         FormEmpresa.setFormData(estabelecimento);
-        
+
         loadDropzoneAndGaleria(estabelecimento.CB04_ID);
 
         $("#btn-reset").click(function (e) {
@@ -354,9 +352,10 @@
 
 
     $("#btn-salvar").click(function (e) {
+        FormEmpresa.setFormData({FORMAS_PAGAMENTO: C7.grid.FormaPagamentoMain.serializeToCSV()});
         FormEmpresa.form.submit();
     });
-    
+
     pageSetUp();
 
     var pagefunction = function () {
@@ -437,5 +436,41 @@
 
     // Load form valisation dependency 
     loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
+
+
+
+    C7.init();
+
+    C7.callbackLoadGridFormaPagamentoMain = function() {
+        C7.grid.FormaPagamentoMain.setNumberFormat("0.00", 2, ",", ".");
+        C7.grid.FormaPagamentoMain.setNumberFormat("0.00", 3, ",", ".");
+        C7.grid.FormaPagamentoMain.setNumberFormat("0.00", 4, ",", ".");
+        C7.grid.FormaPagamentoMain.setNumberFormat("0.00", 5, ",", ".");
+        C7.grid.FormaPagamentoMain.setNumberFormat("0.00", 6, ",", ".");
+
+        C7.grid.FormaPagamentoMain.attachEvent("onEditCell", function (stage, rId, cInd, nValue, oValue) {
+            if (stage === 1) {
+                return false;
+            }
+            var v = stage === 0 ? this.cells(rId, cInd).getValue() : nValue;
+            if (parseFloat(v) >= 0) {
+                if (stage === 0) {
+                    v = String(v).replace('.', ',');
+                } else {
+                    v = String(v).replace('.', '').replace(',', '.');
+                    v = parseFloat(v).toFixed(2);
+                }
+            } else {
+                v = '0';
+            }
+            this.cells(rId, cInd).setValue(v || '0');
+            return true;
+        });
+
+        C7.exportGridToCSV('FormaPagamentoMain');
+        C7.grid.FormaPagamentoMain.enableCopyMMS(true, false);
+    };
+    
+    C7.load('Grid', 'FormaPagamentoMain', 'forma-pagamento', {empresa: estabelecimento.CB04_ID});
 
 </script>

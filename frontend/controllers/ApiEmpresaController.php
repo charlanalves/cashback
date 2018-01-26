@@ -749,6 +749,7 @@ class ApiEmpresaController extends GlobalBaseController {
                         ->join('JOIN','CB08_FORMA_PAGAMENTO','CB08_FORMA_PAGAMENTO.CB08_ID = CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG')
                         ->where(['CB08_STATUS' => 1])
                         ->andWhere(['CB04_EMPRESA.CB04_ID' => $CB16PEDIDO['CB16_EMPRESA_ID']])
+                        ->andWhere(['CB04_TIPO' => 1])
                         ->orderBy('CB08_ID')
                         ->asArray()
                         ->all();
@@ -1240,6 +1241,7 @@ class ApiEmpresaController extends GlobalBaseController {
                 ->join('JOIN','CB08_FORMA_PAGAMENTO','CB08_FORMA_PAGAMENTO.CB08_ID = CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG')
                 ->where(['CB08_STATUS' => 1])
                 ->andWhere(['CB04_EMPRESA.CB04_ID' => $company])
+                ->andWhere(['CB04_EMPRESA.CB04_TIPO' => 1])
                 ->groupBy('CB08_NOME')
                 ->orderBy('CB08_ID')
                 ->asArray()

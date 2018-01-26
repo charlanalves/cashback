@@ -8,7 +8,7 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\CB04EMPRESA;
 use common\models\CB03CONTABANC;
-use common\models\CB09FORMAPAGEMPRESA;
+use common\models\CB09FORMAPAGTOEMPRESA;
 use common\models\CB05PRODUTO;
 use common\models\CB12ITEMCATEGEMPRESA;
 use common\models\CB06VARIACAO;
@@ -100,6 +100,8 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
 
     public function actionEmpresa() 
     {
+        echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
+        echo $this->renderFile('@app/views/administrador/formaPagamentoDxInit.php');
         return $this->render('empresa', [
                     'tituloTela' => 'Empresa',
                     'usuario' => $this->user->attributes
@@ -189,7 +191,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         if(($busca = (string) Yii::$app->request->get('busca'))){
             $empresas = CB04EMPRESA::findAll(['' => $busca]);        
         } else {
-            $empresas = CB04EMPRESA::find()->orderBy('CB04_ID DESC')->all();
+            $empresas = CB04EMPRESA::find()->where('CB04_TIPO = 1')->orderBy('CB04_ID DESC')->all();
         }
         
         if ($empresas) {
@@ -250,6 +252,8 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         if ($new) {
             $data = $this->prepareAccountData($param);
             \Yii::$app->Iugu->execute('createCompanyAccount',[ 'data'=> $data,'model'=> $model, 'id'=> $id] );
+        } else {        
+            \Yii::$app->Iugu->transaction->commit();
         }
         $a  = 1;
     }
@@ -397,6 +401,9 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
             break;
             case 'ItensAvaliacaoMain':
                 $this->relatedModel = "common\models\CB23TIPOAVALIACAO";
+            break;
+            case 'FormaPagamentoMain':
+                $this->relatedModel = "common\models\CB09FORMAPAGTOEMPRESA";
             break;
         }
         parent::actionGlobalRead($gridName, $param, $json);
