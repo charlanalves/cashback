@@ -20,6 +20,7 @@ use common\models\CB14FOTOPRODUTO;
 use common\models\SYS01PARAMETROSGLOBAIS;
 use common\models\CB16PEDIDO;
 use common\models\CB23TIPOAVALIACAO;
+use common\models\VIEWREPRESENTANTE;
 
 /**
  * Administrador controller
@@ -390,7 +391,79 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
 
         return call_user_func_array([$class, $action], [$data]);
     }
+    
+    /*
+     * REPRESENTANTE
+     */
 
+    public function actionRepresentante()
+    {
+        return $this->render('representante', [
+                    'tituloTela' => 'Representante',
+                    'usuario' => $this->user->attributes
+        ]);
+    }
+
+    public function actionRepresentanteGrid()
+    {
+        $param = VIEWREPRESENTANTE::getRepresentantes();
+        return $this->renderPartial('representanteGrid', ['error' => $param ? false : 'Nenhum registro encontrado...', 'representantes' => $param]);
+    }
+
+    public function actionRepresentanteForm()
+    {
+        $this->layout = 'empty';
+
+        $model = new VIEWREPRESENTANTE();
+        $al = $model->attributeLabels();
+        $dataRepresentante = [];
+
+        if (($representante = Yii::$app->request->get('representante'))) {
+            if (($dataRepresentante = $model->findOne($representante))) {
+                $dataRepresentante = $dataRepresentante->getAttributes();
+                $dataRepresentante['CB04_OBSERVACAO'] = str_replace("\r\n", '\r\n', $dataRepresentante['CB04_OBSERVACAO']);
+            }
+        }
+
+        return $this->render('representanteForm', [
+                    'tituloTela' => 'Representante',
+                    'usuario' => $this->user->attributes,
+                    'representante' => $dataRepresentante,
+                    'al' => $al,
+        ]);
+    }
+
+    public function saveRepresentante($param)
+    {
+        $model = (!$param['CB04_ID']) ? new VIEWREPRESENTANTE() : VIEWREPRESENTANTE::findOne($param['CB04_ID']);
+        $new = $model->isNewRecord;
+        \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
+        $id = $model->saveRepresentante($param);
+        $this->saveContaBancaria($param);
+
+        if ($new) {
+            $data = $this->prepareAccountData($param);
+            \Yii::$app->sendMail->enviarEmailCreateRevendedor($param['CB04_EMAIL'], [
+                'nome' => $param['CB04_NOME'],
+                'cnpj' => $param['CB04_CNPJ'],
+                'email' => $param['CB04_EMAIL'],
+                'telefone' => $param['CB04_TEL_NUMERO'],
+                'observacao' => $param['CB04_OBSERVACAO'],
+                'endereco' => $param['CB04_END_LOGRADOURO'] . ', ' . $param['CB04_END_NUMERO'] . ', ' . $param['CB04_END_BAIRRO'] . ' - ' . $param['CB04_END_CIDADE'] . '/' . $param['CB04_END_UF'],
+                'dados_banco' => $param['CB03_NOME_BANCO'] . ' - ' . ($param['CB03_TP_CONTA'] ? 'Corrente' : 'Poupança') . ' Ag.: ' . $param['CB03_AGENCIA'] . ' Conta:' . $param['CB03_NUM_CONTA']
+            ]);
+            \Yii::$app->Iugu->execute('createRepresentanteAccount', [ 'data' => $data, 'model' => $model, 'id' => $id]);
+        } else {
+            \Yii::$app->Iugu->transaction->commit();
+        }
+    }
+
+    public function actionRepresentanteAtivar($representante, $status) {
+        $model = VIEWREPRESENTANTE::findOne($representante);
+        $model->setAttribute('CB04_STATUS', $status);
+        return ($model->save()) ? '' : 'error';
+    }
+    
     public function actionGlobalRead($gridName, $param = '', $json = false) {
         switch ($gridName) {
             case 'CategoriaMain':

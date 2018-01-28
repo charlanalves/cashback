@@ -139,6 +139,30 @@ class IuguComponent extends PaymentBaseComponent {
         $assignment->save();
         
     }
+    
+    private function createRepresentanteUser($representante) {
+        
+        // valida representante
+        if (!($representante = is_int($representante) ? \common\models\VIEWREPRESENTANTE::findOne($representante) : $representante)) {
+            throw new UserException("Erro ao tentar criar o usuário, representante não encontrado.");
+        }
+
+        $user = new \common\models\User;
+        $user->email = $representante->CB04_EMAIL;
+        $user->cpf_cnpj = $representante->CB04_CNPJ;
+        $user->username = $representante->CB04_CNPJ;
+        $user->id_company = $representante->CB04_ID;
+        $user->name = $representante->CB04_NOME;
+        $user->setPassword(123456);
+        $user->generateAuthKey();
+        $user->save();
+
+        $assignment = new \common\models\AuthAssignment;
+        $assignment->item_name = \common\models\User::PERFIL_REPRESENTANTE;
+        $assignment->user_id = (string) $user->id;
+        $assignment->save();
+        
+    }
 
     public function createCompanyAccount($dataApi) {
         $data = $dataApi['data'];
@@ -155,6 +179,20 @@ class IuguComponent extends PaymentBaseComponent {
         
         //Cria o usuário do funcionario
         $this->createCompanyUser($model);
+    }
+
+    public function createRepresentanteAccount($dataApi) {
+        $data = $dataApi['data'];
+        $model = $dataApi['model'];
+        $id = $dataApi['id'];
+
+        $this->_createAccount($data['cnpj']);
+        $this->verifyAccount($data);
+        $this->saveApiCod($model);
+        $this->saveCompanyLogo($model, $id);
+        
+        //Cria o usuário representante
+        $this->createRepresentanteUser($model);
     }
 
     public function createAccount($accountName) 
