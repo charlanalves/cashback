@@ -19,6 +19,7 @@ class User extends BaseUser implements IdentityInterface
     const PERFIL_CLIENTE = 'cliente';
     const PERFIL_ESTABELECIMENTO = 'estabelecimento';
     const PERFIL_FUNCIONARIO = 'funcionario';
+    const PERFIL_REPRESENTANTE = 'representante';
     
     /**
      * @inheritdoc

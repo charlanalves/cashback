@@ -124,6 +124,11 @@ CashBackAsset::register($this);
                     return false;
                 });
                 
+                $("a#menu-representante").click(function (e) {
+                    document.location.href = 'index.php?r=administrador/representante';
+                    return false;
+                });
+                
                  $("a#menu-transferencias").click(function (e) {                   
                     document.location.href = 'index.php?r=administrador/transferencias';
                     return false;
@@ -177,6 +182,9 @@ CashBackAsset::register($this);
                 <ul>
                     <li class="">
                         <a href="#" title="Empresa" id="menu-empresa"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Empresa</span></a>
+                    </li>
+                    <li class="">
+                        <a href="#" title="Representante" id="menu-representante"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Representante</span></a>
                     </li>
                     <li class="">
                         <a href="#" title="Transferências" id="menu-transferencias"><i class="fa fa-exchange"></i> <span class="menu-item-parent">Transferências</span></a>
