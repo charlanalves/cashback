@@ -199,8 +199,9 @@ class CB16PEDIDO extends BaseCB16PEDIDO
             JOIN CB02_CLIENTE ON CB02_CLIENTE.CB02_ID = user.id_cliente
             WHERE 
             PAG04_TRANSFERENCIAS.PAG04_TIPO = 'V2B' AND
-            PAG04_TRANSFERENCIAS.PAG04_DT_DEP IS NULL AND
+            PAG04_TRANSFERENCIAS.PAG04_STATUS IS NULL AND
             PAG04_TRANSFERENCIAS.PAG04_ID_PEDIDO IS NULL
+            
         ";
         
         $connection = \Yii::$app->db;

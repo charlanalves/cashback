@@ -189,7 +189,7 @@ class UtilComponent extends Component {
             // Santander
             case '33':
                 $r['A'] = $agencia;
-                $r['C'] = ($tp_conta == 1 ? '001' : '013') . $conta_s_d . '-' . $d_conta;
+                $r['C'] = $conta_s_d . '-' . $d_conta;
             break;
             
             // Caixa Econômica
