@@ -271,7 +271,7 @@ class IuguComponent extends PaymentBaseComponent {
                     "telephone" => '31999999999', 
                     "bank" => $param['CB03_NOME_BANCO'], 
                     "bank_ag" => $param['CB03_AGENCIA'], 
-                    "account_type" => ($param['CB03_TP_CONTA']) ? 'Poupança': 'Corrente', 
+                    "account_type" => ($param['CB03_TP_CONTA']) ? 'Corrente': 'Poupança', 
                     "bank_cc" => $param['CB03_NUM_CONTA']
                ]
 	    ];  
@@ -288,7 +288,7 @@ class IuguComponent extends PaymentBaseComponent {
                 $this->doTranfer($param['PAG04_VLR'] , $token->account_id);
                    
                 $trans = \common\models\PAG04TRANSFERENCIAS::findOne($param['PAG04_ID']);
-                $trans->PAG04_DT_DEP = date('Y-m-d H:i:s');
+                $trans->PAG04_STATUS = 1;
                 $trans->save();
                 
             } else {
@@ -305,7 +305,7 @@ class IuguComponent extends PaymentBaseComponent {
 
     }
     
-    
+
     public function doTranfer($amount, $accountId) 
     {   
         
