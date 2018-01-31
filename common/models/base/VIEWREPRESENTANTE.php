@@ -48,7 +48,7 @@ class VIEWREPRESENTANTE extends \common\models\GlobalModel
     {
         return [
             [['CB04_CNPJ', 'CB04_TEL_NUMERO', 'CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_UF', 'CB04_END_NUMERO', 'CB04_END_CEP', 'CB04_EMAIL'], 'required'],
-            [['CB04_DADOS_API_TOKEN', 'CB04_FUNCIONAMENTO', 'CB04_OBSERVACAO'], 'string'],
+            [['CB04_DADOS_API_TOKEN', 'CB04_FUNCIONAMENTO', 'CB04_OBSERVACAO', 'CB04_COD_CONTA_VIRTUAL'], 'string'],
             [['CB04_CATEGORIA_ID', 'CB04_STATUS', 'CB04_QTD_FAVORITO', 'CB04_QTD_COMPARTILHADO', 'CB04_TIPO'], 'integer'],
             [['CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_COMPLEMENTO'], 'string', 'max' => 50],
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
@@ -56,7 +56,7 @@ class VIEWREPRESENTANTE extends \common\models\GlobalModel
             [['CB04_FLG_DELIVERY'], 'integer', 'min' => 0, 'max' => 1],
             [['CB04_END_NUMERO'], 'string', 'max' => 5],
             [['CB04_END_LONGITUDE', 'CB04_END_LATITUDE'], 'string', 'max' => 20],
-            [['CB04_CNPJ'], 'string', 'max' => 14],
+            [['CB04_CNPJ'], 'string', 'max' => 11], // salva o CPF do representante
         ];
     }
 
@@ -100,7 +100,7 @@ class VIEWREPRESENTANTE extends \common\models\GlobalModel
             'CB04_END_NUMERO' => 'Número',
             'CB04_END_COMPLEMENTO' => 'Complemento',
             'CB04_END_CEP' => 'CEP',
-            'CB04_CNPJ' => 'CNPJ',
+            'CB04_CNPJ' => 'CPF',
             'CB04_TEL_NUMERO' => 'Telefone (Com DDD)',
             'CB03_NOME_BANCO' => 'Banco',
             'CB03_AGENCIA' => 'Agência',

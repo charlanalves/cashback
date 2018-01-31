@@ -421,6 +421,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         if (($representante = Yii::$app->request->get('representante'))) {
             if (($dataRepresentante = $model->findOne($representante))) {
                 $dataRepresentante = $dataRepresentante->getAttributes();
+                unset($dataRepresentante['CB04_DADOS_API_TOKEN']);
                 $dataRepresentante['CB04_OBSERVACAO'] = str_replace("\r\n", '\r\n', $dataRepresentante['CB04_OBSERVACAO']);
             }
         }
@@ -435,26 +436,20 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
 
     public function saveRepresentante($param)
     {
-        $model = (!$param['CB04_ID']) ? new VIEWREPRESENTANTE() : VIEWREPRESENTANTE::findOne($param['CB04_ID']);
-        $new = $model->isNewRecord;
-        \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
-        $id = $model->saveRepresentante($param);
-        $this->saveContaBancaria($param);
-
-        if ($new) {
-            $data = $this->prepareAccountData($param);
-            \Yii::$app->sendMail->enviarEmailCreateRevendedor($param['CB04_EMAIL'], [
-                'nome' => $param['CB04_NOME'],
-                'cnpj' => $param['CB04_CNPJ'],
-                'email' => $param['CB04_EMAIL'],
-                'telefone' => $param['CB04_TEL_NUMERO'],
-                'observacao' => $param['CB04_OBSERVACAO'],
-                'endereco' => $param['CB04_END_LOGRADOURO'] . ', ' . $param['CB04_END_NUMERO'] . ', ' . $param['CB04_END_BAIRRO'] . ' - ' . $param['CB04_END_CIDADE'] . '/' . $param['CB04_END_UF'],
-                'dados_banco' => $param['CB03_NOME_BANCO'] . ' - ' . ($param['CB03_TP_CONTA'] ? 'Corrente' : 'Poupança') . ' Ag.: ' . $param['CB03_AGENCIA'] . ' Conta:' . $param['CB03_NUM_CONTA']
-            ]);
-            \Yii::$app->Iugu->execute('createRepresentanteAccount', [ 'data' => $data, 'model' => $model, 'id' => $id]);
-        } else {
-            \Yii::$app->Iugu->transaction->commit();
+        try {
+            \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
+            $model = (!$param['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($param['CB04_ID']);
+            $new = $model->isNewRecord;
+            $id = $model->saveRepresentante($param);
+            $this->saveContaBancaria($param);
+            if ($new) {
+                \Yii::$app->Iugu->execute('createRepresentanteAccount', ['data' => $param, 'id' => $id]);
+            } else {
+                \Yii::$app->Iugu->transaction->commit();
+            }
+        } catch (\Exception $ex) {
+            \Yii::$app->Iugu->transaction->rollBack();
+            throw new \yii\base\UserException($ex->getMessage());
         }
     }
 
