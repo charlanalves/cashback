@@ -47,31 +47,27 @@ class TransferenciasModel extends BaseTransferenciasModel
             'PAG04_DT_DEP_CONTA_VIRTUAL_MASTER' => \Yii::t('app','Pag04  Dt  Dep  Conta  Virtual  Master'),
             'PAG04_DT_PREV_DEP_SUBCONTA_VIRTUAL' => \Yii::t('app','Pag04  Dt  Prev  Dep  Subconta  Virtual'),
             'PAG04_DT_DEP_SUBCONTA_VIRTUAL' => \Yii::t('app','Pag04  Dt  Dep  Subconta  Virtual'),
-	        'CB04_ID' => \Yii::t('app','Cod Empresa'),
-	        'CB04_NOME' => \Yii::t('app','Empresa'),
-	        'VLR_TOTAL' => \Yii::t('app','Valor Total Transferências (R$)'),
-        	'CB16_ID' => \Yii::t('app','Cod Produto'),
-	        'CB16_COD_TRANSACAO' => \Yii::t('app','Cod Transação'),
-	        'CB02_NOME' => \Yii::t('app','Cliente'),
-	        'CB16_VALOR' => \Yii::t('app','Valor R$'),
-	        'PAG04_DT_PREV' => \Yii::t('app','Previsão Lib.'),
-	        'CB16_VLR_CB_TOTAL' => \Yii::t('app','CB Cliente R$'),
-	        'CB16_PERC_ADQ' => \Yii::t('app','Perc ADQ %'),
-	        'CB16_PERC_ADMIN' => \Yii::t('app','Perc Admin %'),
-        	'CB16_DT' => \Yii::t('app','Criado'),
-        	'TIPO' => \Yii::t('app','Tipo'),
-        	'PAG04_VLR' => \Yii::t('app','Valor'),
-       		'NOME' => \Yii::t('app','Nome'),
-       		'CB02_NOME' => \Yii::t('app','Cliente'),
-        'PAG04_DATA_CRIACAO' => \Yii::t('app','Criado'),
-        'PAG04_ID_PEDIDO' => \Yii::t('app','Cod Pedido'),
-        
-        
-        
-        
-    
-        
-        
+            'CB04_ID' => \Yii::t('app','Cod Empresa'),
+            'CB04_NOME' => \Yii::t('app','Empresa'),
+            'VLR_TOTAL' => \Yii::t('app','Valor Total Transferências (R$)'),
+            'CB16_ID' => \Yii::t('app','Cod Produto'),
+            'CB16_COD_TRANSACAO' => \Yii::t('app','Cod Transação'),
+            'CB02_NOME' => \Yii::t('app','Cliente'),
+            'CB16_VALOR' => \Yii::t('app','Valor R$'),
+            'PAG04_DT_PREV' => \Yii::t('app','Previsão Lib.'),
+            'CB16_VLR_CB_TOTAL' => \Yii::t('app','CB Cliente R$'),
+            'CB16_PERC_ADQ' => \Yii::t('app','Perc ADQ %'),
+            'CB16_PERC_ADMIN' => \Yii::t('app','Perc Admin %'),
+            'CB16_DT' => \Yii::t('app','Criado'),
+            'TIPO' => \Yii::t('app','Tipo'),
+            'PAG04_VLR' => \Yii::t('app','Valor'),
+            'NOME' => \Yii::t('app','Nome'),
+            'CB02_NOME' => \Yii::t('app','Cliente'),
+            'PAG04_DATA_CRIACAO' => \Yii::t('app','Criado'),
+            'PAG04_VLR' => \Yii::t('app','Valor'),
+            'name' => \Yii::t('app','Cliente'),
+            'PAG04_STATUS' => \Yii::t('app','STATUS'),
+            'BTN' => \Yii::t('app','AÇÃO'),
         
         ];
     }
@@ -82,10 +78,27 @@ class TransferenciasModel extends BaseTransferenciasModel
     public function gridQueryMain()
     {
 	    $query =  "
-                        SELECT * FROM PAG04_TRANSFERENCIAS
-                        WHERE 
-                            PAG04_TRANSFERENCIAS.PAG04_DT_DEP_CONTA_BANC_MASTER IS NOT NULL 
-                            AND PAG04_TRANSFERENCIAS.PAG04_DT_DEP_CONTA_VIRTUAL_MASTER IS NULL
+	    				     SELECT DISTINCT
+                              	DATE_FORMAT(PAG04_TRANSFERENCIAS.PAG04_DATA_CRIACAO, '%d/%m/%Y %H:%i:%s')AS PAG04_DATA_CRIACAO,
+                                PAG04_TRANSFERENCIAS.PAG04_ID AS ID,
+                                PAG04_TRANSFERENCIAS.PAG04_ID,
+                                PAG04_TRANSFERENCIAS.PAG04_VLR,
+                                user.name,
+                                CASE 
+                                WHEN PAG04_STATUS = 1 then 'REALIZADO'
+                                ELSE 'PENDENTE'
+                                END AS PAG04_STATUS
+                              
+                              FROM PAG04_TRANSFERENCIAS
+                              JOIN user on user.id = PAG04_TRANSFERENCIAS.PAG04_ID_USER_CONTA_ORIGEM
+                              JOIN CB03_CONTA_BANC ON CB03_CONTA_BANC.CB03_USER_ID = user.id
+                              JOIN CB02_CLIENTE ON CB02_CLIENTE.CB02_ID = user.id_cliente
+                              WHERE 
+                              PAG04_TRANSFERENCIAS.PAG04_TIPO = 'V2B' AND
+                              PAG04_TRANSFERENCIAS.PAG04_STATUS IS NULL AND
+                              PAG04_TRANSFERENCIAS.PAG04_ID_PEDIDO IS NULL
+                              GROUP BY PAG04_ID
+                              ORDER BY PAG04_DATA_CRIACAO DESC
             ";
 		
             $connection = \Yii::$app->db;
@@ -102,23 +115,12 @@ class TransferenciasModel extends BaseTransferenciasModel
     {
     	$al = $this->attributeLabels();
         return [
-            ['btnsAvailable' => ['editar', 'excluir']],
-            ['sets' => ['title'=>\Yii::t("app",'AÇÕES'), 'width'=>'60' , 'type'=>'img', 'sort'=>'str', 'align'=>'center', 'id' => 'editar', 'id' => 'editar']],        
-            ['sets' => ['title'=>'#cspan' ,'width'=>'60', 'type'=>'img', 'sort'=>'str', 'align'=>'center', 'id' => 'excluir']],
-            ['sets' => ['title' => $al['PAG04_ID_TRANSACAO'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_ID_TRANSACAO' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_COD_TRANS_ADQ'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_COD_TRANS_ADQ' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_VLR_TRANS'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_VLR_TRANS' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_VLR_TRANS_LIQ'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_VLR_TRANS_LIQ' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_VLR_EMPRESA'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_VLR_EMPRESA' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_VLR_CLIENTE'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_VLR_CLIENTE' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_VLR_ADMIN'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_VLR_ADMIN' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_DT_PREV_DEP_CONTA_BANC_MASTER'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_DT_PREV_DEP_CONTA_BANC_MASTER' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_DT_DEP_CONTA_BANC_MASTER'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_DT_DEP_CONTA_BANC_MASTER' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_DT_PREV_DEP_CONTA_VIRTUAL_MASTER'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_DT_PREV_DEP_CONTA_VIRTUAL_MASTER' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_DT_DEP_CONTA_VIRTUAL_MASTER'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_DT_DEP_CONTA_VIRTUAL_MASTER' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_DT_PREV_DEP_SUBCONTA_VIRTUAL'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_DT_PREV_DEP_SUBCONTA_VIRTUAL' ], 'filter' => ['title'=>'#text_filter']], 
-            ['sets' => ['title' => $al['PAG04_DT_DEP_SUBCONTA_VIRTUAL'], 'width'=>'200', 'type'=>'ro' , 'id'  => 'PAG04_DT_DEP_SUBCONTA_VIRTUAL' ], 'filter' => ['title'=>'#text_filter']], 
-                        				
+            ['btnsAvailable' => ['editar']],
+            ['sets' => ['title' => 'ID', 'width'=>'50', 'type'=>'ro' , 'id'  => 'PAG04_ID' ], 'filter' => ['title'=>'#text_filter']], 
+            ['sets' => ['title' => $al['PAG04_DATA_CRIACAO'], 'width'=>'170', 'type'=>'ro' , 'id'  => 'PAG04_DATA_CRIACAO' ], 'filter' => ['title'=>'#text_filter']], 
+            ['sets' => ['title' => $al['PAG04_VLR'], 'width'=>'100', 'type'=>'ro' , 'id'  => 'PAG04_VLR' ], 'filter' => ['title'=>'#text_filter']], 
+            ['sets' => ['title' => $al['name'], 'width'=>'300', 'type'=>'ro' , 'id'  => 'name' ], 'filter' => ['title'=>'#text_filter']],            
+            ['sets' => ['title'=>\Yii::t("app",'AÇÕES'), 'width'=>'60' , 'type'=>'img', 'sort'=>'str', 'align'=>'center', 'id' => 'editar', 'id' => 'editar']],
         ];
     }
     
@@ -161,7 +163,8 @@ class TransferenciasModel extends BaseTransferenciasModel
             ['sets' => ['title' => $al['VLR_TOTAL'], 'width'=>'*', 'type'=>'ro' , 'id'  => 'OO' ], 'filter' => ['title'=>'#text_filter']],
             ['sets' => [ 'width'=>'*', 'type'=>'ro' , 'id'  => 'CB04_ID' ], 'filter' => ['title'=>'']],
             ['sets' => [ 'width'=>'*', 'type'=>'ro' , 'id'  => 'CB04_NOME' ], 'filter' => ['title'=>'']],
-            ['sets' => [ 'width'=>'*', 'type'=>'ro' , 'id'  => 'VLR_TOTAL' ], 'filter' => ['title'=>'']],
+            ['sets' => [ 'width'=>'*', 'type'=>'ro' , 'id'  => 'VLR_TOTAL' ], 'filter' => ['title'=>'']],            
+            
                                       				
         ];
     

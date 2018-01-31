@@ -9578,3 +9578,10 @@ button.button-flat.button-cell-icon.icon-transfer {
 div[id^="dhxGridObj"] div.objbox {
     padding-bottom: 100px;
 }
+
+div.gridbox_dhx_terrace table.obj tr td img {
+    width: 42px;
+    height: auto; 
+    margin-left: 4px;
+    margin-right: 4px;
+}

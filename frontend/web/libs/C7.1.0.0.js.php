@@ -256,14 +256,17 @@ C7.setGridBtns = function(grid, btns, layoutGrid, param = '') {
 }
 
 C7.systemReloadGrid = function(fnName, param) {
+    
 	param = (typeof param == "object" ? JSON.stringify(param) : param);
 	var callbackLoadGrid = (typeof C7['callbackLoadGrid' + fnName] == "function" ? C7['callbackLoadGrid' + fnName] : function(){});
 	SYSTEM[fnName].clearAll();
 	urlLoad = this.settings.urlLoadGridPrefix + fnName + '&json=true&param=' + param;
 	$.blockUI();
 	SYSTEM[fnName].loadXMLMMS(urlLoad, function () {
+            
+            $.unblockUI();
 		callbackLoadGrid();
-		$.unblockUI();
+		
 	});
 }
 
@@ -319,7 +322,7 @@ C7.Toolbar = function(itemId) {
 
 
 C7.runAction = function(action, checkPermissions, validate, params, sendForm, actionType, callback) {
-
+ $.blockUI();
 	var action = C7.capitalise(action),
     	checkPermissions = (checkPermissions || this.settings.checkPermissions),
     	validate = (validate || this.settings.validate),
@@ -672,7 +675,7 @@ C7.callbackReload = function (loader, response) {
 
 
 C7.sendDataCallbackDefault = function(response) {
-	
+	$.unblockUI();
 	if (response.status) {	
 		 C7.reloadGrid();
 		

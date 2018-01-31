@@ -24,10 +24,11 @@ class TransferenciasController extends BaseController
     
     public function __construct($id, $module)
 	{
-		
-		$this->btns =  [];
-	
+       	
         parent::__construct($id, $module);
+         $this->btnsDefault = [
+            'editar' => '../web/dxassets/dhtmlx/terrace/imgs/transfer2.png^' . Yii::t("app", "Transferir") . '^javascript:C7.runAction("DoTransfer")^_self',
+        ];
 	} 
 
     public function actionIndex()
@@ -45,7 +46,10 @@ class TransferenciasController extends BaseController
 
         return $this->render('index', ['tituloTela'=> $get['tituloTela']]);
     }
-
+   public function realizaSaques($id) 
+    {	
+       \Yii::$app->Iugu->realizaSaques($id['id']);
+    }
   
    public function callMethodDynamically($action, $data, $returnThowException = true, $class = NULL)
    {   

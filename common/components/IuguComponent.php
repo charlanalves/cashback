@@ -247,12 +247,13 @@ class IuguComponent extends PaymentBaseComponent {
         if (isset($this->lastResponse->errors)) {
             throw new UserException("Erro ao Verificar conta");
         }
+     
     	
     }
     
     public function verifyClientAccount($param)
     {
-        try {
+        
             
         $data = [
                 "data" =>
@@ -293,15 +294,23 @@ class IuguComponent extends PaymentBaseComponent {
                 
             } else {
                 $this->lastResponse = \Iugu_Account::requestVerification($data, $token->account_id);  
-                   
-                if (isset($this->lastResponse->errors)) {
-                     throw new UserException("Erro ao Verificar a conta.");
-                }
+                $msg = '';
+             if (isset($this->lastResponse->errors)) {
+	        	if(is_array($this->lastResponse->errors)) {
+	        		foreach ($this->lastResponse->errors as $key => $value) {
+	        			 if(is_array($this->lastResponse->errors[$key])) {
+	        			 	foreach ($this->lastResponse->errors[$key] as $v2) {
+	        			 		$msg .= $v2." <br> ";
+	        			 	}
+	        			 
+	        			}
+	        		}
+	        	}
+	          throw new \Exception($msg);
+	        }
             }
          }
-         } catch (\Exception $ex) {
-            
-        }
+       
 
     }
     
@@ -316,9 +325,19 @@ class IuguComponent extends PaymentBaseComponent {
         
                 
     	$this->lastResponse = \Iugu_Transfer::create($data);  
-        
+        $msg = '';
         if (isset($this->lastResponse->errors)) {
-          throw new UserException("Erro ao criar conta.");
+        	if(is_array($this->lastResponse->errors)) {
+        		foreach ($this->lastResponse->errors as $key => $value) {
+        			 if(is_array($this->lastResponse->errors[$key])) {
+        			 	foreach ($this->lastResponse->errors[$key] as $v2) {
+        			 		$msg .= $v2." <br> ";
+        			 	}
+        			 
+        			}
+        		}
+        	}
+          throw new \Exception($msg);
         }
     }
  
@@ -415,22 +434,29 @@ class IuguComponent extends PaymentBaseComponent {
     	}
     }
     
-    public function realizaSaques() 
+    public function realizaSaques($id = '') 
     {   
-
-        if (($saquesPendentes = \common\models\CB16PEDIDO::getSaquesPendentes())) {
-
-            $this->transaction = \Yii::$app->db->beginTransaction();
-            
-            foreach ($saquesPendentes as $sp) {
-
-                $token = json_decode($sp['CB02_DADOS_API_TOKEN']);
-                $this->verifyClientAccount($sp);
-            }
+    	  try {
+           
+	    	  if (($saquesPendentes = \common\models\CB16PEDIDO::getSaquesPendentes($id))) {
+	
+	            $this->transaction = \Yii::$app->db->beginTransaction();
+	            
+	            foreach ($saquesPendentes as $sp) {
+	
+	                $token = json_decode($sp['CB02_DADOS_API_TOKEN']);
+	                $this->verifyClientAccount($sp);
+	            }
+	        }
+        } catch (\Exception $e) {
+            $status = false;
+            $message = $retorno = $dev = $e->getMessage(); 
         }
+        
+        exit(json_encode(['status' => $status, 'message'=> $message, 'retorno' => utf8_encode($retorno), 'dev' => utf8_encode($dev), 'lastResponse'=> $this->lastResponse]));
     
     }
-    
+
     protected function prepareDebitCard($data){}
     
     public function criaTransferenciaPagSaldo($pedido) 

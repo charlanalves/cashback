@@ -500,6 +500,7 @@ dhtmlXGridObject.prototype.loadXMLMMS = function(url) {
 		   try {
 			   xmlDoc = $.parseXML(retorno);
 			   that.parse(retorno);
+                           $.unblockUI()
 		   } catch (erro) {
 			   var json = JSON.parse(retorno);
 			   if (typeof json.msgPermissaoAction != "undefined") {
