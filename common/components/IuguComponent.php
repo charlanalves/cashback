@@ -277,11 +277,19 @@ class IuguComponent extends PaymentBaseComponent
         $data['receiver_id'] = $accountId;
         $data['amount_cents'] = $amount * 100;
 
-
         $this->lastResponse = \Iugu_Transfer::create($data);
-
+        $msg = '';
         if (isset($this->lastResponse->errors)) {
-            throw new UserException("Erro ao criar conta.");
+            if (is_array($this->lastResponse->errors)) {
+                foreach ($this->lastResponse->errors as $key => $value) {
+                    if (is_array($this->lastResponse->errors[$key])) {
+                        foreach ($this->lastResponse->errors[$key] as $v2) {
+                            $msg .= $v2 . " <br> ";
+                        }
+                    }
+                }
+            }
+            throw new \Exception($msg);
         }
     }
 
@@ -432,15 +440,15 @@ class IuguComponent extends PaymentBaseComponent
         $this->verifyRepresentanteAccount($model['CB04_DADOS_API_TOKEN'], $this->prepareRepresentanteAccountData($data));
         $this->createRepresentanteUser($model);
 
-//        \Yii::$app->sendMail->enviarEmailCreateRevendedor($data['CB04_EMAIL'], [
-//            'nome' => $data['CB04_NOME'],
-//            'cnpj' => $data['CB04_CNPJ'],
-//            'email' => $data['CB04_EMAIL'],
-//            'telefone' => $data['CB04_TEL_NUMERO'],
-//            'observacao' => $data['CB04_OBSERVACAO'],
-//            'endereco' => $data['CB04_END_LOGRADOURO'] . ', ' . $data['CB04_END_NUMERO'] . ', ' . $data['CB04_END_BAIRRO'] . ' - ' . $data['CB04_END_CIDADE'] . '/' . $data['CB04_END_UF'],
-//            'dados_banco' => $data['CB03_NOME_BANCO'] . ' - ' . ($data['CB03_TP_CONTA'] ? 'Corrente' : 'Poupança') . ' Ag.: ' . $data['CB03_AGENCIA'] . ' Conta:' . $data['CB03_NUM_CONTA']
-//        ]);
+        \Yii::$app->sendMail->enviarEmailCreateRevendedor($data['CB04_EMAIL'], [
+            'nome' => $data['CB04_NOME'],
+            'cnpj' => $data['CB04_CNPJ'],
+            'email' => $data['CB04_EMAIL'],
+            'telefone' => $data['CB04_TEL_NUMERO'],
+            'observacao' => $data['CB04_OBSERVACAO'],
+            'endereco' => $data['CB04_END_LOGRADOURO'] . ', ' . $data['CB04_END_NUMERO'] . ', ' . $data['CB04_END_BAIRRO'] . ' - ' . $data['CB04_END_CIDADE'] . '/' . $data['CB04_END_UF'],
+            'dados_banco' => $data['CB03_NOME_BANCO'] . ' - ' . ($data['CB03_TP_CONTA'] ? 'Corrente' : 'Poupança') . ' Ag.: ' . $data['CB03_AGENCIA'] . ' Conta:' . $data['CB03_NUM_CONTA']
+        ]);
 
         return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
     }
@@ -462,19 +470,39 @@ class IuguComponent extends PaymentBaseComponent
         }
     }
 
-    public function realizaSaques()
-    {
-
-        if (($saquesPendentes = \common\models\CB16PEDIDO::getSaquesPendentes())) {
-
-            $this->transaction = \Yii::$app->db->beginTransaction();
-
-            foreach ($saquesPendentes as $sp) {
-
-                $token = json_decode($sp['CB02_DADOS_API_TOKEN']);
-                $sp = $this->prepareClientAccountData($sp);
-                $this->verifyClientAccount($sp);
-            }
+//    public function realizaSaques()
+//    {
+//
+//        if (($saquesPendentes = \common\models\CB16PEDIDO::getSaquesPendentes())) {
+//
+//            $this->transaction = \Yii::$app->db->beginTransaction();
+//
+//            foreach ($saquesPendentes as $sp) {
+//
+//                $token = json_decode($sp['CB02_DADOS_API_TOKEN']);
+//                $sp = $this->prepareClientAccountData($sp);
+//                $this->verifyClientAccount($sp);
+//            }
+//        }
+//    }
+    
+    public function realizaSaques($id = '') 
+    {   
+    	  try {
+           
+	    	  if (($saquesPendentes = \common\models\CB16PEDIDO::getSaquesPendentes($id))) {
+	
+	            $this->transaction = \Yii::$app->db->beginTransaction();
+	            
+	            foreach ($saquesPendentes as $sp) {
+	
+	                $token = json_decode($sp['CB02_DADOS_API_TOKEN']);
+	                $this->verifyClientAccount($sp);
+	            }
+	        }
+        } catch (\Exception $e) {
+            $status = false;
+            $message = $retorno = $dev = $e->getMessage(); 
         }
     }
 

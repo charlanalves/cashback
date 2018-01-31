@@ -10,31 +10,17 @@ C7.init = function(conf){
     
    //---------------------Tab Conta Virtual-------------------------
     C7.load('Tab', 'TransVirtual');
-    //C7.load('Grid', 'Main', tabsInternas.cells('virtual'));
+    C7.load('Grid', 'Main', layoutVirtual.cells('a'));
     
    //---------------------Tab Conta Virtual-------------------------
-    C7.load('Tab', 'TransBancaria');
-    C7.load('Grid', 'Agendadas', layoutVirtual.cells("a"));
-    
-    C7.grid.Agendadas.attachEvent("onSubGridCreated", function(subgrid, rId){
- 
-    	 subgrid.setStyle("background-color:#3a3633;color:white; font-weight:bold;", "","color:red;", "");
-          var url  = './index.php?r=transferencias/global-read&gridName=TAPedidosEmp&param='+ rId;
-    	  subgrid.load(url, function(){
-    	           subgrid.callEvent("onGridReconstructed",[]);
-    	  });
-   	});
-
-    C7.grid.Agendadas.attachEvent("onSubGridLoaded", function(subgrid){
-    	 subgrid.enableAutoHeight(true,100,true);
-    	});
-
-    C7.load('Grid', 'SolSaquesClientes',  layoutBancario.cells("a"));
-    C7.load('Grid', 'Vencer',  layoutBancario.cells("b"));
-    C7.load('Grid', 'Vencidas', layoutBancario.cells("c"));
-
-    
+   
   
+}
+C7.setDefaultValuesFields = function(){}
+C7.actionDoTransfer = function(){	
+    var idRow = C7.grid.Main.getSelectedRowId(); 
+    C7.sendForm = false;
+    C7.runActionB('realizaSaques',{id: idRow});
 }
 
 C7.setToolbarGridVencerHoje = function(){
@@ -75,13 +61,6 @@ C7.getTabTransVirtual = function(){
     
 }
 
-C7.getTabTransBancaria = function(){
-    tabsInternas.addTab('bancaria','Solicitações de Saque',"300px");
-    layoutBancario = tabsInternas.cells('bancaria').attachLayout('3E');
-    layoutBancario.cells("a").setText("Transações a Vencer Hoje");
-    layoutBancario.cells("b").setText("Transações a vencer");
-    layoutBancario.cells("c").setText("Transações Vencidas");
-}
 
 
 </script>

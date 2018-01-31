@@ -54,7 +54,7 @@ class CB09FORMAPAGTOEMPRESA extends \common\models\GlobalModel
             'CB09_ID_FORMA_PAG' => 'Forma de pagamento',
             'CB09_PERC_ADQ' => 'Adquirente',
             'CB09_PERC_ADMIN' => 'Admin',
-            'CB09_PERC_FUNCIONARIO' => 'Funcionário',
+            'CB09_PERC_FUNCIONARIO' => 'Funcionário Emp.',
             'CB09_PERC_REPRESENTANTE' => 'Representante',
             'CB09_PERC_FUNC_ADMIN' => 'Funcionário Admin',
         ];

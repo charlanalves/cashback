@@ -519,7 +519,10 @@ class ApiEmpresaController extends GlobalBaseController {
         ]);
     }
     
-    
+      public function actionRealizaSaques() 
+    {	
+       \Yii::$app->Iugu->execute('realizaSaques', ['']);
+    }
     /**
      * Mensagem de saque
      */

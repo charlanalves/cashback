@@ -189,7 +189,7 @@ class UtilComponent extends Component {
             // Santander
             case '33':
                 $r['A'] = $agencia;
-                $r['C'] = ($tp_conta == 1 ? '001' : '013') . $conta_s_d . '-' . $d_conta;
+                $r['C'] = $conta_s_d . '-' . $d_conta;
             break;
             
             // Caixa Econômica
@@ -220,11 +220,11 @@ class UtilComponent extends Component {
     public function getBancos() {
         
         return [
-            "1" => "Banco do Brasil S.A.",
-            "33" => "Banco Santander (Brasil) S.A.",
-            "104" => "Caixa Econômica Federal",
-            "237" => "Banco Bradesco S.A.",
-            "341" => "Itaú Unibanco S.A.",
+            "1" => "Banco do Brasil",
+            "33" => "Santander",
+            "104" => "Caixa Econômica",
+            "237" => "Bradesco",
+            "341" => "Itaú",
         ];
         
         /*

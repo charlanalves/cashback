@@ -50,7 +50,7 @@
        var conf = {
             titleWindowDelete:"<?= Yii::t("app", 'Remover Registro') ?>",
     		currentCenterMethod: "global-crud",
-    		currentModule: "admin",
+    		currentModule: "",
     		currentController: 'transferencias',
             actionReloadGrid: 'Main',
             gridReload: 'Main',

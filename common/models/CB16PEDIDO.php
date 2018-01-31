@@ -190,8 +190,13 @@ class CB16PEDIDO extends BaseCB16PEDIDO
         
     }
     
-    public static function getSaquesPendentes()
+    public static function getSaquesPendentes($id = '')
     {
+        $and = '';
+        if (!empty($id)) {
+            $and = " AND PAG04_TRANSFERENCIAS.PAG04_ID = :ID";
+        }
+        
         $sql = "
             SELECT * FROM PAG04_TRANSFERENCIAS
             JOIN user on user.id = PAG04_TRANSFERENCIAS.PAG04_ID_USER_CONTA_ORIGEM
@@ -199,12 +204,17 @@ class CB16PEDIDO extends BaseCB16PEDIDO
             JOIN CB02_CLIENTE ON CB02_CLIENTE.CB02_ID = user.id_cliente
             WHERE 
             PAG04_TRANSFERENCIAS.PAG04_TIPO = 'V2B' AND
-            PAG04_TRANSFERENCIAS.PAG04_DT_DEP IS NULL AND
+            PAG04_TRANSFERENCIAS.PAG04_STATUS IS NULL AND
             PAG04_TRANSFERENCIAS.PAG04_ID_PEDIDO IS NULL
+            
+            $and
         ";
         
         $connection = \Yii::$app->db;
         $command = $connection->createCommand($sql);
+        if (!empty($id)) {
+            $command->bindValue(':ID', $id);
+        }
         return $command->query()->readAll();
     }
     
