@@ -13,7 +13,7 @@
             titleGridFormaPagamentoMain: 'Formas de pagamento e comissões',
          }; 
 
-        C7.init = function() {   
+        C7.init_formaPagamento = function() {   
            $.extend(this.settings, conf);
         };
 

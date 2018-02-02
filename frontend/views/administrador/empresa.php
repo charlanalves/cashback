@@ -43,17 +43,17 @@
         };
 
 
-        C7.init();
+        C7.init_empresa();
 
         C7.callbackLoadGridEmpresasMain = function() {
             C7.grid.EmpresasMain.attachEvent("onCheck", function(rId,cInd,state){
                 Util.ajaxGet('index.php?r=administrador/empresa-ativar&empresa=' + this.cells(rId, 0).getValue() + '&status=' + (state ? 1 : 0), false);
             });
-            C7.exportGridToCSV('EmpresasMain');
-            C7.grid.EmpresasMain.enableCopyMMS(true, false);
         };
         
         C7.load('Grid', 'EmpresasMain', 'grid-empresas');
+        C7.exportGridToCSV('EmpresasMain');
+        C7.grid.EmpresasMain.enableCopyMMS(true, false);
 
     });
 

@@ -230,7 +230,7 @@
                     ico = 'check-circle';
                     loadDropzoneAndGaleria(data.message);
                     $("div#dropzone").focus();
-                    loadGrid();
+                    C7.systemReloadGrid('EmpresasMain');
                     $('#remoteModalEmpresa').modal('hide')
                 } else {
                     console.log(data)
@@ -445,7 +445,8 @@
     // Load form valisation dependency 
     loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
 
-
+    C7.init_formaPagamento();
+    
     C7.callbackLoadGridFormaPagamentoMain = function() {
         C7.grid.FormaPagamentoMain.setNumberFormat("0.00", 2, ",", ".");
         C7.grid.FormaPagamentoMain.setNumberFormat("0.00", 3, ",", ".");

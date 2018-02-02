@@ -10,10 +10,10 @@
             gridReload: 'EmpresasMain',
             urlReloadGrid: './index.php?r=administrador/global-read&gridName=EmpresasMain',
             urlLoadGridPrefix: './index.php?r=administrador/global-read&gridName=',
-            titleGridFormaPagamentoMain: 'Empresas',
+            titleGridEmpresasMain: 'Empresas',
          }; 
 
-        C7.init = function() {   
+        C7.init_empresa = function() {   
            $.extend(this.settings, conf);
         };
 

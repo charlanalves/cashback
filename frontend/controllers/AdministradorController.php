@@ -102,8 +102,8 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     public function actionEmpresa() 
     {
         echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
-        echo $this->renderFile('@app/views/administrador/empresaDxInit.php');
         echo $this->renderFile('@app/views/administrador/formaPagamentoDxInit.php');
+        echo $this->renderFile('@app/views/administrador/empresaDxInit.php');
         return $this->render('empresa', [
                     'tituloTela' => 'Empresa',
                     'usuario' => $this->user->attributes
