@@ -491,7 +491,7 @@ dhtmlXGridObject.prototype.getValueCheckedRowsMMS = function(indexColData, index
         return data;
 }
 
-dhtmlXGridObject.prototype.loadXMLMMS = function(url) {
+dhtmlXGridObject.prototype.loadXMLMMS = function(url, callback) {
 	that = this;
 	$.ajax({
 	   type: 'post',
@@ -500,7 +500,10 @@ dhtmlXGridObject.prototype.loadXMLMMS = function(url) {
 		   try {
 			   xmlDoc = $.parseXML(retorno);
 			   that.parse(retorno);
-                           $.unblockUI()
+			   if(typeof callback === 'function'){
+			   		callback();
+			   }
+               $.unblockUI()
 		   } catch (erro) {
 			   var json = JSON.parse(retorno);
 			   if (typeof json.msgPermissaoAction != "undefined") {

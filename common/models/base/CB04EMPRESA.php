@@ -81,7 +81,7 @@ class CB04EMPRESA extends \common\models\GlobalModel
     public function attributeLabels()
     {
         return [
-            'CB04_ID' => 'Cb04  ID',
+            'CB04_ID' => 'COD',
             'CB04_DADOS_API_TOKEN' => 'Cb04  Dados  Api  Token',
             'CB04_NOME' => 'Nome Fantasia',
             'CB04_CATEGORIA_ID' => 'Categoria',

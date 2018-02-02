@@ -234,5 +234,32 @@ class CB04EMPRESA extends BaseCB04EMPRESA
         $this->save();
         return $this->CB04_ID;
     }
+    
+    /**
+     * @inheritdoc
+     */
+    public function gridQueryEmpresasMain() {
+        $sql = "SELECT CB04_ID as ID, CB04_ID, CB04_NOME, CB04_STATUS,
+                CONCAT('img/editar.png^Editar^javascript:gridEmpresa_editar(', CB04_ID, ');') AS EDITAR
+                FROM CB04_EMPRESA
+                WHERE  CB04_TIPO = 1 
+                ORDER BY CB04_STATUS DESC,CB04_ID DESC";
+        $command = \Yii::$app->db->createCommand($sql);
+        return $command->query()->readAll();
+    }
 
+    /**
+     * @inheritdoc
+     */
+    public function gridSettingsEmpresasMain() {
+        $al = $this->attributeLabels();
+        return [
+            ['btnsAvailable' => []],
+            ['sets' => ['title' => $al['CB04_ID'], 'align' => 'center', 'width' => '80', 'type' => 'ro', 'id' => 'CB04_ID'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => $al['CB04_NOME'], 'align' => 'left', 'width' => '*', 'type' => 'ro', 'id' => 'CB04_NOME'], 'filter' => ['title' => '#text_filter']],
+            ['sets' => ['title' => 'ATIVO', 'align' => 'center', 'width' => '80', 'type' => 'ch', 'id' => 'CB04_STATUS'], 'filter' => ['title' => '']],
+            ['sets' => ['title' => 'EDITAR', 'align' => 'center', 'width' => '80', 'type' => 'img', 'id' => 'EDITAR'], 'filter' => ['title' => '']],
+        ];
+    }
+    
 }

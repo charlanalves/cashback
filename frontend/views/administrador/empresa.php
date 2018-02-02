@@ -1,7 +1,11 @@
 <script type="text/javascript">
 
     // functions
-    var loadGrid = modalEmpresa = {};
+    var loadGrid = {}; 
+    var modalEmpresa = {};
+    var gridEmpresa = {};
+    var gridEmpresa_empresaAtivo = {};
+    var gridEmpresa_editar = {};
 
     document.addEventListener("DOMContentLoaded", function (event) {
 
@@ -34,15 +38,22 @@
         };
 
 
-        loadGrid = function () {
-            var busca = (busca || '');
-            $.blockUI();
-            $('#gridEmpresas').find('tbody').load('index.php?r=administrador/empresa-grid&busca=' + busca, function () {
-                $.unblockUI();
-            });
+        gridEmpresa_editar = function (id) {
+            modalEmpresa(id);
         };
 
-        loadGrid();
+
+        C7.init();
+
+        C7.callbackLoadGridEmpresasMain = function() {
+            C7.grid.EmpresasMain.attachEvent("onCheck", function(rId,cInd,state){
+                Util.ajaxGet('index.php?r=administrador/empresa-ativar&empresa=' + this.cells(rId, 0).getValue() + '&status=' + (state ? 1 : 0), false);
+            });
+            C7.exportGridToCSV('EmpresasMain');
+            C7.grid.EmpresasMain.enableCopyMMS(true, false);
+        };
+        
+        C7.load('Grid', 'EmpresasMain', 'grid-empresas');
 
     });
 
@@ -81,8 +92,9 @@
 
         <div role="content">
 
-            <div class="widget-body">
+            <div class="widget-body" id="grid-empresas" style="height: 570px; width: 100%;">
 
+                <!--
                 <table class="table table-bordered" id="gridEmpresas">
                     <thead>
                         <tr>
@@ -95,6 +107,7 @@
                     <tbody>
                     </tbody>
                 </table>
+                -->
 
             </div>
 

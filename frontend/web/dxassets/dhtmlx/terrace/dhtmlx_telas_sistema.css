@@ -9580,7 +9580,7 @@ div[id^="dhxGridObj"] div.objbox {
 }
 
 div.gridbox_dhx_terrace table.obj tr td img {
-    width: 42px;
+    /*width: 42px;*/
     height: auto; 
     margin-left: 4px;
     margin-right: 4px;

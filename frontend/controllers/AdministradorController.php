@@ -102,6 +102,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     public function actionEmpresa() 
     {
         echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
+        echo $this->renderFile('@app/views/administrador/empresaDxInit.php');
         echo $this->renderFile('@app/views/administrador/formaPagamentoDxInit.php');
         return $this->render('empresa', [
                     'tituloTela' => 'Empresa',
@@ -472,6 +473,9 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
             break;
             case 'FormaPagamentoMain':
                 $this->relatedModel = "common\models\CB09FORMAPAGTOEMPRESA";
+            break;
+            case 'EmpresasMain':
+                $this->relatedModel = "common\models\CB04EMPRESA";
             break;
         }
         parent::actionGlobalRead($gridName, $param, $json);
