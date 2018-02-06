@@ -1,7 +1,11 @@
 <script type="text/javascript">
 
     // functions
-    var loadGrid = modalRepresentante = {};
+    var loadGrid = {};
+    var modalRepresentante = {};
+    var gridRepresentante = {};
+    var gridRepresentante_representanteAtivo = {};
+    var gridRepresentante_editar = {};
 
     document.addEventListener("DOMContentLoaded", function (event) {
 
@@ -34,15 +38,23 @@
         };
 
 
-        loadGrid = function () {
-            var busca = (busca || '');
-            $.blockUI();
-            $('#gridRepresentantes').find('tbody').load('index.php?r=administrador/representante-grid&busca=' + busca, function () {
-                $.unblockUI();
+        gridRepresentante_editar = function (id) {
+            modalRepresentante(id);
+        };
+
+
+        C7.init();
+
+        C7.callbackLoadGridRepresentantesMain = function () {
+            C7.grid.RepresentantesMain.attachEvent("onCheck", function (rId, cInd, state) {
+                Util.ajaxGet('index.php?r=administrador/representante-ativar&representante=' + this.cells(rId, 0).getValue() + '&status=' + (state ? 1 : 0), false);
             });
         };
 
-        loadGrid();
+        C7.load('Grid', 'RepresentantesMain', 'grid-representantes');
+        C7.exportGridToCSV('RepresentantesMain');
+        C7.grid.RepresentantesMain.enableCopyMMS(true, false);
+
 
     });
 
@@ -81,8 +93,9 @@
 
         <div role="content">
 
-            <div class="widget-body">
+            <div class="widget-body" id="grid-representantes" style="height: 570px; width: 100%;">
 
+                <!--
                 <table class="table table-bordered" id="gridRepresentantes">
                     <thead>
                         <tr>
@@ -95,6 +108,7 @@
                     <tbody>
                     </tbody>
                 </table>
+                -->
 
             </div>
 

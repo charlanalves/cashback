@@ -20,6 +20,8 @@ class PAG04TRANSFERENCIAS extends BasePAG04TRANSFERENCIAS
     const C2E = 'C2E';
     const M2C = 'M2C';
     const E2M = 'E2M';
+    const M2F = 'M2F';
+    const M2R = 'M2R';
      
     /**
      * @inheritdoc
@@ -127,6 +129,24 @@ class PAG04TRANSFERENCIAS extends BasePAG04TRANSFERENCIAS
     {
         $now = date('Y-m-d H:i:s');
         return $this->createTransacao(self::C2E, $cliente, $empresa, $valor, $now, $pedido, $now);
+    }
+    
+    /*
+     * Master to Funcionario
+     */
+    public function createM2F($funcionario, $valor, $pedido = null)
+    {
+    	$dtPrevisao = date('Y-m-d', strtotime("+" . (\common\models\SYS01PARAMETROSGLOBAIS::getValor('DEP_FUN') ? : 0) . " days", strtotime(date('Y-m-d'))));
+        return $this->createTransacao(self::M2F, \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CT_MA'), $funcionario, $valor, $dtPrevisao, $pedido, null);
+    }
+    
+    /*
+     * Master to Representante
+     */
+    public function createM2R($representante, $valor, $pedido = null)
+    {
+    	$dtPrevisao = date('Y-m-d', strtotime("+" . (\common\models\SYS01PARAMETROSGLOBAIS::getValor('DEP_REP') ? : 0) . " days", strtotime(date('Y-m-d'))));
+        return $this->createTransacao(self::M2R, \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CT_MA'), $representante, $valor, $dtPrevisao, $pedido, null);
     }
     
 }

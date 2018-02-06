@@ -23,6 +23,7 @@ use common\models\CB21RESPOSTAAVALIACAO;
 use common\models\CB22COMENTARIOAVALIACAO;
 use common\models\CB23TIPOAVALIACAO;
 use common\models\VIEWEXTRATO;
+use common\models\VIEWFUNCIONARIO;
 use common\models\CB03CONTABANC;
 use common\models\PAG04TRANSFERENCIAS;
 use common\models\User;
@@ -967,6 +968,82 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
     }
     
     
+    /*
+     * FUNCIONARIO
+     */
+
+    public function actionFuncionario()
+    {
+        $model = new VIEWFUNCIONARIO();
+        echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
+        echo $this->renderFile('@app/views/estabelecimento/funcionarioDxInit.php');
+        return $this->render('funcionario', [
+                    'tituloTela' => 'Funcionário',
+                    'empresa' => $this->user->id_company,
+                    'al' => $model->attributeLabels()
+        ]);
+    }
+    
+    public function actionFuncionarioForm()
+    {
+        $this->layout = 'empty';
+
+        $model = new VIEWFUNCIONARIO();
+        $al = $model->attributeLabels();
+        $dataFuncionario = [];
+
+        if (($representante = Yii::$app->request->get('funcionario'))) {
+            if (($dataFuncionario = $model->findOne($representante))) {
+                $dataFuncionario = $dataFuncionario->getAttributes();
+                unset($dataFuncionario['CB04_DADOS_API_TOKEN']);
+                $dataFuncionario['CB04_OBSERVACAO'] = str_replace("\r\n", '\r\n', $dataFuncionario['CB04_OBSERVACAO']);
+            }
+        }
+
+        return $this->render('funcionarioForm', [
+                    'tituloTela' => 'Funcionário',
+                    'usuario' => $this->user->attributes,
+                    'funcionario' => $dataFuncionario,
+                    'al' => $al,
+        ]);
+    }
+
+    private function saveContaBancaria($param)
+    {	 
+	   $conta = new CB03CONTABANC;
+	   $param['CB03_USER_ID'] = \Yii::$app->user->identity->id;
+	   $conta->setAttributes($param);
+	   $conta->save();
+    }
+    
+    public function saveFuncionario($param)
+    {
+        try {
+            \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
+            $model = (!$param['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($param['CB04_ID']);
+            $param['CB04_ID_EMPRESA'] = $this->user->id_company;
+            $new = $model->isNewRecord;
+            $id = $model->saveFuncionario($param);
+            $this->saveContaBancaria($param);
+            if ($new) {
+                \Yii::$app->Iugu->execute('createFuncionarioAccount', ['data' => $param, 'id' => $id]);
+            } else {
+                \Yii::$app->Iugu->transaction->commit();
+            }
+        } catch (\Exception $ex) {
+            \Yii::$app->Iugu->transaction->rollBack();
+            throw new \yii\base\UserException($ex->getMessage());
+        }
+    }
+
+    public function actionFuncionarioAtivar($funcionario, $status) {
+        $model = VIEWFUNCIONARIO::findOne($funcionario);
+        $model->setAttribute('CB04_STATUS', $status);
+        return ($model->save()) ? '' : 'error';
+    }
+    
+    
+    
     public function callMethodDynamically($action, $data, $returnThowException = true, $class = NULL) {
         if (empty($class)) {
             $class = $this;
@@ -985,6 +1062,9 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
             break;
             case 'DeliveryMain':
                 $this->relatedModel = "common\models\CB16PEDIDO";
+            break;
+            case 'FuncionariosMain':
+                $this->relatedModel = "common\models\VIEWFUNCIONARIO";
             break;
         }
         parent::actionGlobalRead($gridName, $param, $json);

@@ -138,6 +138,10 @@ CashBackAsset::register($this);
                     document.location.href = 'index.php?r=estabelecimento/produto';
                     return false;
                 });
+                $("a#menu-funcionario").click(function (e) {
+                    document.location.href = 'index.php?r=estabelecimento/funcionario';
+                    return false;
+                });
                 $("a#menu-baixar-compra").click(function (e) {
                     document.location.href = 'index.php?r=estabelecimento/baixar-compra';
                     return false;
@@ -217,6 +221,9 @@ CashBackAsset::register($this);
                     <?php if (!$this->context->funcionario) { ?>
                     <li class="">
                         <a href="#" title="Produto" id="menu-produto"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Dinheiro de V.</span></a>
+                    </li>
+                    <li class="">
+                        <a href="#" title="Funcionário" id="menu-funcionario"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Funcionário</span></a>
                     </li>
                     <!--
                     <li class="">

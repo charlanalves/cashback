@@ -5,7 +5,7 @@ namespace common\models\base;
 use Yii;
 
 /**
- * This is the base model class for table "VIEW_REPRESENTANTE".
+ * This is the base model class for table "VIEW_FUNCIONARIO".
  *
  * @property integer $CB04_ID
  * @property string $CB04_DADOS_API_TOKEN
@@ -38,7 +38,7 @@ use Yii;
  * @property common\models\User[] $cB15USERs
  * @property common\models\User[] $users
  */
-class VIEWREPRESENTANTE extends \common\models\GlobalModel
+class VIEWFUNCIONARIO extends \common\models\GlobalModel
 {
 
     /**
@@ -56,7 +56,7 @@ class VIEWREPRESENTANTE extends \common\models\GlobalModel
             [['CB04_FLG_DELIVERY'], 'integer', 'min' => 0, 'max' => 1],
             [['CB04_END_NUMERO'], 'string', 'max' => 5],
             [['CB04_END_LONGITUDE', 'CB04_END_LATITUDE'], 'string', 'max' => 20],
-            [['CB04_CNPJ'], 'string', 'max' => 11], // salva o CPF do representante
+            [['CB04_CNPJ'], 'string', 'max' => 11], // salva o CPF do funcionario
         ];
     }
 
@@ -65,7 +65,7 @@ class VIEWREPRESENTANTE extends \common\models\GlobalModel
      */
     public static function tableName()
     {
-        return 'VIEW_REPRESENTANTE';
+        return 'VIEW_FUNCIONARIO';
     }
 
     /**

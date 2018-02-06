@@ -399,9 +399,12 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
 
     public function actionRepresentante()
     {
+        $model = new VIEWREPRESENTANTE();
+        echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
+        echo $this->renderFile('@app/views/administrador/representanteDxInit.php');
         return $this->render('representante', [
                     'tituloTela' => 'Representante',
-                    'usuario' => $this->user->attributes
+                    'al' => $model->attributeLabels()
         ]);
     }
 
@@ -476,6 +479,9 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
             break;
             case 'EmpresasMain':
                 $this->relatedModel = "common\models\CB04EMPRESA";
+            break;
+            case 'RepresentantesMain':
+                $this->relatedModel = "common\models\VIEWREPRESENTANTE";
             break;
         }
         parent::actionGlobalRead($gridName, $param, $json);

@@ -453,6 +453,83 @@ class IuguComponent extends PaymentBaseComponent
         return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
     }
 
+    
+    private function prepareFuncionarioAccountData($param)
+    {
+        return [
+            "data" =>
+            [
+                "price_range" => "Mais que R$ 500,00",
+                "physical_products" => false,
+                "business_type" => "Comissão Funcionário",
+                "automatic_transfer" => true,
+                "person_type" => 'Pessoa Física',
+                "cpf" => $param['CB04_CNPJ'],
+                "name" => $param['CB04_NOME'],
+                "address" => 'Rua inexisteste',
+                "cep" => '31650-000',
+                "city" => 'BH',
+                "state" => 'MG',
+                "telephone" => '31999999999',
+                "bank" => $param['CB03_NOME_BANCO'],
+                "bank_ag" => $param['CB03_AGENCIA'],
+                "account_type" => ($param['CB03_TP_CONTA']) ? 'Corrente' : 'Poupança',
+                "bank_cc" => $param['CB03_NUM_CONTA']
+            ]
+        ];
+    }
+
+    private function verifyFuncionarioAccount($CB04_DADOS_API_TOKEN, $param)
+    {
+        return $this->verifyRepresentanteAccount($CB04_DADOS_API_TOKEN, $param);
+    }
+    
+    private function createFuncionarioUser($funcionario)
+    {
+
+        // valida representante
+        if (!($funcionario = is_int($funcionario) ? \common\models\VIEWFUNCIONARIO::findOne($funcionario) : $funcionario)) {
+            throw new UserException("Erro ao tentar criar o usuário, funcionário não encontrado.");
+        }
+
+        $user = new \common\models\User;
+        $user->email = $funcionario->CB04_EMAIL;
+        $user->cpf_cnpj = $funcionario->CB04_CNPJ;
+        $user->username = $funcionario->CB04_CNPJ;
+        $user->id_company = $funcionario->CB04_ID;
+        $user->name = $funcionario->CB04_NOME;
+        $user->setPassword(123456);
+        $user->generateAuthKey();
+        $user->save();
+
+        $assignment = new \common\models\AuthAssignment;
+        $assignment->item_name = \common\models\User::PERFIL_REPRESENTANTE;
+        $assignment->user_id = (string) $user->id;
+        $assignment->save();
+    }
+    
+    protected function createFuncionarioAccount($dataApi)
+    {
+        $data = $dataApi['data'];
+        $this->createAccount($data['CB04_CNPJ']);
+        $model = \common\models\VIEWFUNCIONARIO::findOne($dataApi['id']);
+        $this->saveApiCod($model);
+        $this->verifyFuncionarioAccount($model['CB04_DADOS_API_TOKEN'], $this->prepareFuncionarioAccountData($data));
+        $this->createFuncionarioUser($model);
+
+        \Yii::$app->sendMail->enviarEmailCreateFuncionario($data['CB04_EMAIL'], [
+            'nome' => $data['CB04_NOME'],
+            'cnpj' => $data['CB04_CNPJ'],
+            'email' => $data['CB04_EMAIL'],
+            'telefone' => $data['CB04_TEL_NUMERO'],
+            'observacao' => $data['CB04_OBSERVACAO'],
+            'endereco' => $data['CB04_END_LOGRADOURO'] . ', ' . $data['CB04_END_NUMERO'] . ', ' . $data['CB04_END_BAIRRO'] . ' - ' . $data['CB04_END_CIDADE'] . '/' . $data['CB04_END_UF'],
+            'dados_banco' => $data['CB03_NOME_BANCO'] . ' - ' . ($data['CB03_TP_CONTA'] ? 'Corrente' : 'Poupança') . ' Ag.: ' . $data['CB03_AGENCIA'] . ' Conta:' . $data['CB03_NUM_CONTA']
+        ]);
+
+        return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
+    }
+
     public function fetchUpdateDtDepInvoice(array $invoices)
     {
         foreach ($invoices as $key => $invoice) {

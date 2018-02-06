@@ -41,4 +41,13 @@ class SendMailComponent extends Component {
         ->setSubject('E$TALECAS - Seja bem vindo!')
         ->send();
     }
+    
+    public function enviarEmailCreateFuncionario($email, $dados)
+    {
+        \Yii::$app->mail->compose('createfuncionario', $dados)
+        ->setFrom('nao-responda@estalecas.com.br')
+        ->setTo($email)
+        ->setSubject('E$TALECAS - Seja bem vindo!')
+        ->send();
+    }
 }

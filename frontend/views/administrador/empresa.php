@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
     // functions
-    var loadGrid = {}; 
+    var loadGrid = {};
     var modalEmpresa = {};
     var gridEmpresa = {};
     var gridEmpresa_empresaAtivo = {};
@@ -30,11 +30,11 @@
             $.blockUI();
             $('#remoteModalEmpresaLabel').text(titulo);
             $('#remoteModalEmpresa').modal('show')
-                                    .find('.modal-body')
-                                    .html('')
-                                    .load('index.php?r=administrador/empresa-form' + urlGet, function() {
-                                        $.unblockUI();
-                                    });
+                    .find('.modal-body')
+                    .html('')
+                    .load('index.php?r=administrador/empresa-form' + urlGet, function () {
+                        $.unblockUI();
+                    });
         };
 
 
@@ -45,12 +45,12 @@
 
         C7.init_empresa();
 
-        C7.callbackLoadGridEmpresasMain = function() {
-            C7.grid.EmpresasMain.attachEvent("onCheck", function(rId,cInd,state){
+        C7.callbackLoadGridEmpresasMain = function () {
+            C7.grid.EmpresasMain.attachEvent("onCheck", function (rId, cInd, state) {
                 Util.ajaxGet('index.php?r=administrador/empresa-ativar&empresa=' + this.cells(rId, 0).getValue() + '&status=' + (state ? 1 : 0), false);
             });
         };
-        
+
         C7.load('Grid', 'EmpresasMain', 'grid-empresas');
         C7.exportGridToCSV('EmpresasMain');
         C7.grid.EmpresasMain.enableCopyMMS(true, false);

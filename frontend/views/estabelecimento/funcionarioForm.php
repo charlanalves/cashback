@@ -16,12 +16,12 @@
 
             <div class="widget-body no-padding">
 
-                <form action="#" id="representante-form" class="smart-form" novalidate="novalidate" method="post">
+                <form action="#" id="funcionario-form" class="smart-form" novalidate="novalidate" method="post">
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" />
                     <input type="hidden" name="CB04_ID" value="" />
 
                     <fieldset>
-                        <h3>Sobre o representante</h3>
+                        <h3>Sobre o funcionário</h3>
                         <div class="row">
                             <section class="col col-6"><?= $al['CB04_NOME'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
@@ -173,15 +173,16 @@
 <script>
 
     var ultimoCEP = '',
-            FormRepresentante = {},
-            representante = JSON.parse('<?= json_encode($representante) ?>'),
-            callbackSaveRepresentante = function (data) {
+            FormFuncionario = {},
+            funcionario = JSON.parse('<?= json_encode($funcionario) ?>'),
+            empresa = <?= empty($_GET['empresa']) ? : $_GET['empresa'] ?>,
+            callbackSaveFuncionario = function (data) {
                 if (data.status === true) {
-                    message = 'Representante salvo.';
+                    message = 'Funcionario salvo.';
                     type = 'success';
                     ico = 'check-circle';
-                    C7.systemReloadGrid('RepresentantesMain');
-                    $('#remoteModalRepresentante').modal('hide');
+                    C7.systemReloadGrid('FuncionariosMain', {empresa});
+                    $('#remoteModalFuncionario').modal('hide');
                 } else {
                     console.log(data)
                     if (typeof data.retorno !== 'undefined') {
@@ -213,7 +214,7 @@
                 iconSmall: "fa fa-times fa-2x fadeInRight animated",
                 timeout: 8000
             });
-            FormRepresentante.setFormData({
+            FormFuncionario.setFormData({
                 CB04_END_LOGRADOURO: '',
                 CB04_END_BAIRRO: '',
                 CB04_END_CIDADE: '',
@@ -222,7 +223,7 @@
             });
 
         } else {
-            FormRepresentante.setFormData({
+            FormFuncionario.setFormData({
                 CB04_END_LOGRADOURO: data.logradouro,
                 CB04_END_BAIRRO: data.bairro,
                 CB04_END_CIDADE: data.localidade,
@@ -233,15 +234,15 @@
     }
 
     // obj form
-    FormRepresentante = new Form('representante-form');
+    FormFuncionario = new Form('funcionario-form');
 
-    if (typeof representante.CB04_ID !== 'undefined') {
+    if (typeof funcionario.CB04_ID !== 'undefined') {
 
-        // Preenche o form com os dados da representante
-        FormRepresentante.setFormData(representante);
+        // Preenche o form com os dados do funcionario
+        FormFuncionario.setFormData(funcionario);
 
         $("#btn-reset").click(function (e) {
-            FormRepresentante.setFormData(representante);
+            FormFuncionario.setFormData(funcionario);
         });
 
     } else {
@@ -250,14 +251,14 @@
 
 
     $("#btn-salvar").click(function (e) {
-        FormRepresentante.form.submit();
+        FormFuncionario.form.submit();
     });
 
     pageSetUp();
 
     var pagefunction = function () {
 
-        var $representanteForm = FormRepresentante.form.validate({
+        var $funcionarioForm = FormFuncionario.form.validate({
             rules: {
                 CB04_NOME: {
                     required: true
@@ -291,6 +292,9 @@
                 CB04_NOME: {
                     required: 'Campo obrigatório'
                 },
+                CB04_CNPJ: {
+                    required: 'Campo obrigatório'
+                },
                 CB04_EMAIL: {
                     required: 'Campo obrigatório'
                 },
@@ -320,7 +324,7 @@
                 error.insertAfter(element.parent());
             },
             submitHandler: function () {
-                FormRepresentante.send('index.php?r=administrador/global-crud&action=saveRepresentante', callbackSaveRepresentante);
+                FormFuncionario.send('index.php?r=estabelecimento/global-crud&action=saveFuncionario', callbackSaveFuncionario);
             }
         });
     };

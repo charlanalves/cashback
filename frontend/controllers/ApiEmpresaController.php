@@ -775,7 +775,7 @@ class ApiEmpresaController extends GlobalBaseController {
     private function getPercPag($data, $pedido)
     {	
        return CB09FORMAPAGTOEMPRESA::find()
-                 ->select(['CB09_ID', 'CB09_PERC_ADMIN', 'CB09_PERC_ADQ'])
+                 ->select(['CB09_ID', 'CB09_PERC_ADMIN', 'CB09_PERC_ADQ', 'CB09_PERC_FUNCIONARIO', 'CB09_PERC_REPRESENTANTE', 'CB09_PERC_FUNC_ADMIN'])
                  ->where(['CB09_ID_FORMA_PAG' => $data['FORMA-PAGAMENTO'], 'CB09_ID_EMPRESA' => $pedido['CB16_EMPRESA_ID']])
                  ->asArray()
                  ->one();                    
@@ -1304,6 +1304,8 @@ class ApiEmpresaController extends GlobalBaseController {
             $pedido->CB16_DT_APROVACAO = date('Y-m-d H:i:s');
             $pedido->CB16_PERC_ADMIN = $percPag['CB09_PERC_ADMIN'];
             $pedido->CB16_PERC_ADQ = $percPag['CB09_PERC_ADQ'];
+            $pedido->CB16_PERC_REP = $percPag['CB09_PERC_REPRESENTANTE'];
+            $pedido->CB16_PERC_FUN = $percPag['CB09_PERC_FUNCIONARIO'];
             $pedido->save();
             $idPedido = $pedido->CB16_ID;
 
@@ -1326,6 +1328,8 @@ class ApiEmpresaController extends GlobalBaseController {
             $vlrCliente = floor($pedido->CB16_VLR_CB_TOTAL * 100) / 100;
             $vlrAdmin = floor((($pedido->CB16_PERC_ADMIN/100) * $pedido->CB16_VALOR) * 100) / 100;
             $vlrAdq = floor((($pedido->CB16_PERC_ADQ/100) * $pedido->CB16_VALOR) * 100) / 100;
+            $vlrRep = floor((($pedido->CB16_PERC_REP/100) * $pedido->CB16_VALOR) * 100) / 100;
+            $vlrFun = floor((($pedido->CB16_PERC_FUN/100) * $pedido->CB16_VALOR) * 100) / 100;
             $dtPrevisao = $pedido->CB16_DT_APROVACAO;
 
             $trans = new PAG04TRANSFERENCIAS(); 
@@ -1344,6 +1348,12 @@ class ApiEmpresaController extends GlobalBaseController {
 
             // TRANSFÊNCIA EMPRESA TO ADQ
             $trans->createE2ADQ($idEmpresa, $vlrAdq, $dtPrevisao, $idPedido);
+
+            // TRANSFÊNCIA MASTER TO REPRESENTANTE
+            $trans->createM2R($idEmpresa, $vlrRep, $idPedido);
+
+            // TRANSFÊNCIA EMPRESA TO FUNCIONARIO
+            $trans->createM2F($idEmpresa, $vlrFun, $idPedido);
             
             $transaction->commit();
             return true;
