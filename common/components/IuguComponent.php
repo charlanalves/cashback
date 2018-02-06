@@ -487,7 +487,7 @@ class IuguComponent extends PaymentBaseComponent
     private function createFuncionarioUser($funcionario)
     {
 
-        // valida representante
+        // valida funcionario
         if (!($funcionario = is_int($funcionario) ? \common\models\VIEWFUNCIONARIO::findOne($funcionario) : $funcionario)) {
             throw new UserException("Erro ao tentar criar o usuário, funcionário não encontrado.");
         }
@@ -503,7 +503,7 @@ class IuguComponent extends PaymentBaseComponent
         $user->save();
 
         $assignment = new \common\models\AuthAssignment;
-        $assignment->item_name = \common\models\User::PERFIL_REPRESENTANTE;
+        $assignment->item_name = \common\models\User::PERFIL_FUNCIONARIO;
         $assignment->user_id = (string) $user->id;
         $assignment->save();
     }
