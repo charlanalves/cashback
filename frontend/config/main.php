@@ -1,15 +1,13 @@
 <?php
+
 $params = array_merge(
-    require(__DIR__ . '/../../common/config/params.php'),
-    require(__DIR__ . '/../../common/config/params-local.php'),
-    require(__DIR__ . '/params.php'),
-    require(__DIR__ . '/params-local.php')
+        require(__DIR__ . '/../../common/config/params.php'), require(__DIR__ . '/../../common/config/params-local.php'), require(__DIR__ . '/params.php'), require(__DIR__ . '/params-local.php')
 );
 
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log','debug'],
+    'bootstrap' => ['log', 'debug'],
     'controllerNamespace' => 'frontend\controllers',
     'defaultRoute' => 'empresa',
     'modules' => [
@@ -18,6 +16,17 @@ return [
         ],
     ],
     'components' => [
+        'mail' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp-relay.sendinblue.com',
+                'username' => 'charlan.job@gmail.com',
+                'password' => 'BYDg2LkW6sUy0x7Z',
+                'port' => '587', 
+                'encryption' => 'tls',
+            ],
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
@@ -42,8 +51,6 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-     
-        
     ],
     'homeUrl' => 'index.php?r=empresa',
     'defaultRoute' => 'empresa',

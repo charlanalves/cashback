@@ -37,7 +37,7 @@
                             </section>
                             <section class="col col-6"><?= $al['CB04_CNPJ'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
-                                    <input type="number" name="CB04_CNPJ" placeholder="" maxlength="11">
+                                    <input type="number" name="CB04_CNPJ" placeholder="">
                                 </label>
                             </section>
                             <section class="col col-6"><?= $al['CB04_EMAIL'] ?>
@@ -373,7 +373,8 @@
                 },
                 CB04_CNPJ: {
                     required: true,
-                    length: 11,
+                    minlength: 14,
+                    maxlength: 14,
                 },
                 CB04_OBSERVACAO: {
                     required: true
@@ -391,7 +392,8 @@
                     required: true
                 },
                 CB04_END_NUMERO: {
-                    required: true
+                    required: true,
+                    maxlength: 5,
                 },
                 CB04_END_UF: {
                     required: true
@@ -409,7 +411,8 @@
                 },
                 CB04_CNPJ: {
                     required: 'Campo obrigatório',
-                    length: 'O CPF tem 11 dígitos'
+                    minlength: 'O CNPJ tem 14 dígitos',
+                    maxlength: 'O CNPJ tem 14 dígitos',
                 },
                 CB04_OBSERVACAO: {
                     required: 'Campo obrigatório'
@@ -427,7 +430,8 @@
                     required: 'Campo obrigatório'
                 },
                 CB04_END_NUMERO: {
-                    required: 'Campo obrigatório'
+                    required: 'Campo obrigatório',
+                    maxlength: 'Máximo 5 dígitos',
                 },
                 CB04_END_UF: {
                     required: 'Campo obrigatório'
