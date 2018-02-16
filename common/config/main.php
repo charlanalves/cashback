@@ -63,10 +63,9 @@ return [
     		'transferencias/*',
             'indicacao/index',
             'confirma-email/index',
-            'api-empresa/validar-usuario',
-
 
             'api-empresa/*',
+            'api-comissao/*',
             
             // The actions listed here will be allowed to everyone including guests.
             // So, 'admin/*' should not appear here in the production, of course.

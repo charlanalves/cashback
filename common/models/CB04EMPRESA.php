@@ -19,7 +19,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
 	    [
             [['CB04_CNPJ','CB04_TEL_NUMERO', 'CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_UF', 'CB04_END_NUMERO',  'CB04_END_CEP'], 'required'],
             [['CB04_DADOS_API_TOKEN', 'CB04_FUNCIONAMENTO', 'CB04_OBSERVACAO'], 'string'],
-            [['CB04_CATEGORIA_ID', 'CB04_STATUS', 'CB04_QTD_FAVORITO', 'CB04_QTD_COMPARTILHADO', 'CB04_TIPO', 'CB04_ID_EMPRESA'], 'integer'],
+            [['CB04_CATEGORIA_ID', 'CB04_STATUS', 'CB04_QTD_FAVORITO', 'CB04_QTD_COMPARTILHADO', 'CB04_TIPO', 'CB04_ID_EMPRESA', 'CB04_ID_REPRESENTANTE'], 'integer'],
             [['CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_COMPLEMENTO'], 'string', 'max' => 50],
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
             [['CB04_END_UF'], 'string', 'max' => 2],
@@ -275,5 +275,30 @@ class CB04EMPRESA extends BaseCB04EMPRESA
             ['sets' => ['title' => 'EDITAR', 'align' => 'center', 'width' => '80', 'type' => 'img', 'id' => 'EDITAR'], 'filter' => ['title' => '']],
         ];
     }
+    
+    /**
+     * @inheritdoc
+     */
+    public function getEmpresasComissao($user) {
+        $sql = "SELECT TBL.CB04_ID, TBL.CB04_NOME
+                FROM (
+                    SELECT CB04_EMPRESA.CB04_ID, CB04_EMPRESA.CB04_NOME
+                    FROM CB04_EMPRESA
+                    INNER JOIN VIEW_FUNCIONARIO ON(VIEW_FUNCIONARIO.CB04_ID_EMPRESA = CB04_EMPRESA.CB04_ID)
+                    INNER JOIN user ON(user.id_company = VIEW_FUNCIONARIO.CB04_ID_EMPRESA and user.id = 164)
+                    WHERE CB04_EMPRESA.CB04_TIPO = 1 
+                    UNION
+                    SELECT CB04_EMPRESA.CB04_ID, CB04_EMPRESA.CB04_NOME
+                    FROM CB04_EMPRESA
+                    INNER JOIN VIEW_REPRESENTANTE ON(VIEW_REPRESENTANTE.CB04_ID = CB04_EMPRESA.CB04_ID_REPRESENTANTE)
+                    INNER JOIN user ON(user.id_company = VIEW_REPRESENTANTE.CB04_ID and user.id = 164)
+                    WHERE CB04_EMPRESA.CB04_TIPO = 1 ) TBL
+                GROUP BY TBL.CB04_ID, TBL.CB04_NOME
+                ORDER BY TBL.CB04_NOME";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':user', $user);
+        return $command->query()->readAll();
+    }
+    
     
 }

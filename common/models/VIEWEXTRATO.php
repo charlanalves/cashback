@@ -117,4 +117,25 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
         return self::saldoAtualByCliente(User::getIdByAuthKey($AuthKey));
     }
     
+    public static function comissaoVendasEmpresa($idUser, $empresa, $periodo) 
+    {
+        $sql = "SELECT VIEW_EXTRATO.*, A.* 
+                FROM VIEW_EXTRATO
+                INNER JOIN (
+                    SELECT CB16_PEDIDO.*, CB04_EMPRESA.*
+                    FROM CB16_PEDIDO 
+                    INNER JOIN CB04_EMPRESA ON (CB04_EMPRESA.CB04_ID = CB16_PEDIDO.CB16_EMPRESA_ID)
+                    WHERE CB04_EMPRESA.CB04_ID = :empresa
+                    )A ON (VIEW_EXTRATO.PEDIDO_ID = A.CB16_ID OR VIEW_EXTRATO.PEDIDO_ID IS NULL)
+                WHERE USER = :idUser AND DT_CRIACAO BETWEEN :periodo AND LAST_DAY(:periodo) AND TIPO IN('M2F','M2R')
+                GROUP BY VIEW_EXTRATO.TRANSFERENCIA_ID
+                ORDER BY DT_CRIACAO DESC";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':idUser', $idUser);
+        $command->bindValue(':empresa', $empresa);
+        // $periodo = ano/mes
+        $command->bindValue(':periodo', $periodo . '-1');
+        return $command->queryAll();
+    }
+
 }

@@ -86,11 +86,20 @@ class User extends BaseUser implements IdentityInterface
      * @param string $cpf_cnpj
      * @return static|null
      */
-    public static function findByCpfCnpj($cpf_cnpj)
+    public static function findByCpfCnpj($cpf_cnpj, $scenario = null)
     {
-        return static::findOne(['cpf_cnpj' => $cpf_cnpj, 'status' => self::STATUS_ACTIVE]);
+        $user = static::findOne(['cpf_cnpj' => $cpf_cnpj, 'status' => self::STATUS_ACTIVE]);
+        if ($user && $scenario) {
+            switch ($scenario) {
+                case 'SCENARIOCOMISSAO':
+                    if (!AuthAssignment::find()->where("user_id = " . $user->id . " AND item_name IN('funcionario', 'representante')")->one()) {
+                        $user = null;
+                    }
+                    break;
+            }
+        }
+        return $user;
     }
-
 
     /**
      * Finds user by password reset token

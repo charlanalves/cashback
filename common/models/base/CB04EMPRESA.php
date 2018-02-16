@@ -31,6 +31,7 @@ use Yii;
  * @property string $CB04_END_LONGITUDE
  * @property integer $CB04_TIPO
  * @property integer $CB04_ID_EMPRESA
+ * @property integer $CB04_ID_REPRESENTANTE
  *
  * @property common\models\CB01TRANSACAO[] $cB01TRANSACAOs
  * @property common\models\CB10CATEGORIA $cB04CATEGORIA
@@ -54,7 +55,7 @@ class CB04EMPRESA extends \common\models\GlobalModel
         return [
             [['CB04_CNPJ','CB04_TEL_NUMERO', 'CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_UF', 'CB04_END_NUMERO',  'CB04_END_CEP','CB04_EMAIL'], 'required'],
             [['CB04_DADOS_API_TOKEN', 'CB04_FUNCIONAMENTO', 'CB04_OBSERVACAO'], 'string'],
-            [['CB04_CATEGORIA_ID', 'CB04_STATUS', 'CB04_QTD_FAVORITO', 'CB04_QTD_COMPARTILHADO', 'CB04_TIPO', 'CB04_ID_EMPRESA'], 'integer'],
+            [['CB04_CATEGORIA_ID', 'CB04_STATUS', 'CB04_QTD_FAVORITO', 'CB04_QTD_COMPARTILHADO', 'CB04_TIPO', 'CB04_ID_EMPRESA', 'CB04_ID_REPRESENTANTE'], 'integer'],
             [['CB04_NOME', 'CB04_END_LOGRADOURO', 'CB04_END_BAIRRO', 'CB04_END_CIDADE', 'CB04_END_COMPLEMENTO'], 'string', 'max' => 50],
             [['CB04_URL_LOGOMARCA'], 'string', 'max' => 100],
             [['CB04_END_UF'], 'string', 'max' => 2],
@@ -112,6 +113,7 @@ class CB04EMPRESA extends \common\models\GlobalModel
             'CB04_END_LATITUDE' => 'Latitude',
             'CB04_FLG_DELIVERY' => 'Delivery',
             'CB04_TIPO' => 'Tipo',
+            'CB04_ID_REPRESENTANTE' => 'Representante',
         ];
     }
     

@@ -421,6 +421,8 @@ class IuguComponent extends PaymentBaseComponent
         $user->username = $representante->CB04_CNPJ;
         $user->id_company = $representante->CB04_ID;
         $user->name = $representante->CB04_NOME;
+        // utilizado do controlar o primeiro acesso do representante
+        $user->email_valid = 0;
         $user->setPassword(123456);
         $user->generateAuthKey();
         $user->save();
@@ -498,6 +500,8 @@ class IuguComponent extends PaymentBaseComponent
         $user->username = $funcionario->CB04_CNPJ;
         $user->id_company = $funcionario->CB04_ID;
         $user->name = $funcionario->CB04_NOME;
+        // utilizado do controlar o primeiro acesso do funcionario
+        $user->email_valid = 0;
         $user->setPassword(123456);
         $user->generateAuthKey();
         $user->save();

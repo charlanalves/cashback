@@ -1200,7 +1200,7 @@ class ApiEmpresaController extends GlobalBaseController {
     
     public function actionParam() {
         $ambiente = SYS01PARAMETROSGLOBAIS::getValor('APP-AMB');
-        //$ambiente = 'APP-LO2';
+        $ambiente = 'APP-LO2';
         return SYS01PARAMETROSGLOBAIS::getValor($ambiente);
     }
     
@@ -1353,7 +1353,7 @@ class ApiEmpresaController extends GlobalBaseController {
             $trans->createM2R($idEmpresa, $vlrRep, $idPedido);
 
             // TRANSFÊNCIA EMPRESA TO FUNCIONARIO
-            $trans->createM2F($idEmpresa, $vlrFun, $idPedido);
+            $trans->createM2F($usuario['id'], $vlrFun, $idPedido);
             
             $transaction->commit();
             return true;
