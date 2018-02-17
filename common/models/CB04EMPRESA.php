@@ -224,6 +224,22 @@ class CB04EMPRESA extends BaseCB04EMPRESA
     /**
      * @inheritdoc
      */
+    public static function getRepresentante($empresa)
+    {
+        $sql = "SELECT id AS ID_USER, REP.CB04_ID AS REPRESENTANTE
+                FROM CB04_EMPRESA
+                INNER JOIN VIEW_REPRESENTANTE REP ON(CB04_EMPRESA.CB04_ID_REPRESENTANTE = REP.CB04_ID)
+                INNER JOIN user ON(id_company = REP.CB04_ID)
+                WHERE CB04_EMPRESA.CB04_ID = :empresa
+                GROUP BY id,REP.CB04_ID";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':empresa', $empresa);
+        return $command->queryOne();
+    }
+    
+    /**
+     * @inheritdoc
+     */
     public function saveRepresentante($data)
     {
         $this->setAttributes($data);
@@ -285,13 +301,13 @@ class CB04EMPRESA extends BaseCB04EMPRESA
                     SELECT CB04_EMPRESA.CB04_ID, CB04_EMPRESA.CB04_NOME
                     FROM CB04_EMPRESA
                     INNER JOIN VIEW_FUNCIONARIO ON(VIEW_FUNCIONARIO.CB04_ID_EMPRESA = CB04_EMPRESA.CB04_ID)
-                    INNER JOIN user ON(user.id_company = VIEW_FUNCIONARIO.CB04_ID_EMPRESA and user.id = 164)
+                    INNER JOIN user ON(user.id_company = VIEW_FUNCIONARIO.CB04_ID_EMPRESA and user.id = :user)
                     WHERE CB04_EMPRESA.CB04_TIPO = 1 
                     UNION
                     SELECT CB04_EMPRESA.CB04_ID, CB04_EMPRESA.CB04_NOME
                     FROM CB04_EMPRESA
                     INNER JOIN VIEW_REPRESENTANTE ON(VIEW_REPRESENTANTE.CB04_ID = CB04_EMPRESA.CB04_ID_REPRESENTANTE)
-                    INNER JOIN user ON(user.id_company = VIEW_REPRESENTANTE.CB04_ID and user.id = 164)
+                    INNER JOIN user ON(user.id_company = VIEW_REPRESENTANTE.CB04_ID and user.id = :user)
                     WHERE CB04_EMPRESA.CB04_TIPO = 1 ) TBL
                 GROUP BY TBL.CB04_ID, TBL.CB04_NOME
                 ORDER BY TBL.CB04_NOME";

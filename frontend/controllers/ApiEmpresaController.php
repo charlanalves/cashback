@@ -1284,6 +1284,8 @@ class ApiEmpresaController extends GlobalBaseController {
             
             $idCliente = User::findByCpfCnpj($post['busca_cpf'])->id;
             $idEmpresa = $usuario['id_company'];
+            $idRepresentante = CB04EMPRESA::getRepresentante($idEmpresa);
+            $idFuncionario = $usuario['id'];
             $vlrPedido = $post['total_compra'];
             $vlrCbTotal = $post['cb_total'];
             
@@ -1350,10 +1352,12 @@ class ApiEmpresaController extends GlobalBaseController {
             $trans->createE2ADQ($idEmpresa, $vlrAdq, $dtPrevisao, $idPedido);
 
             // TRANSFÊNCIA MASTER TO REPRESENTANTE
-            $trans->createM2R($idEmpresa, $vlrRep, $idPedido);
+            if ($idRepresentante) {
+                $trans->createM2R($idRepresentante['ID_USER'], $vlrRep, $idPedido); 
+            }
 
             // TRANSFÊNCIA EMPRESA TO FUNCIONARIO
-            $trans->createM2F($usuario['id'], $vlrFun, $idPedido);
+            $trans->createM2F($idFuncionario, $vlrFun, $idPedido);
             
             $transaction->commit();
             return true;

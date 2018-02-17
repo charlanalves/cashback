@@ -54,6 +54,18 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
         $command->bindValue(':cliente', $cliente);
         return $command->queryOne()['SALDO'];
     }
+    
+	
+    public static function saldoAtualComissao($user) 
+    {
+        $sql = "SELECT SUM(VIEW_EXTRATO.VALOR) AS SALDO 
+                FROM VIEW_EXTRATO 
+                WHERE VIEW_EXTRATO.USER = :user AND VIEW_EXTRATO.TIPO IN ('M2R','M2F') AND VIEW_EXTRATO.DT_DEPOSITO IS NULL";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':user', $user);
+        return $command->queryOne()['SALDO'];
+    }
+    
     public static function saldoReceberByCliente($cliente) 
     {
         $sql = "SELECT SUM(SALDO) AS SALDO FROM (
@@ -133,6 +145,18 @@ class VIEWEXTRATO extends BaseVIEWEXTRATO
         $command = \Yii::$app->db->createCommand($sql);
         $command->bindValue(':idUser', $idUser);
         $command->bindValue(':empresa', $empresa);
+        // $periodo = ano/mes
+        $command->bindValue(':periodo', $periodo . '-1');
+        return $command->queryAll();
+    }
+    
+    public static function comissaoExtratoPagamento($idUser, $periodo) 
+    {
+        $sql = "SELECT TRANSFERENCIA_ID, DT_DEPOSITO, VALOR 
+                FROM VIEW_EXTRATO 
+                WHERE USER = :idUser AND DT_DEPOSITO BETWEEN :periodo AND LAST_DAY(:periodo) AND TIPO IN('M2F','M2R')";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':idUser', $idUser);
         // $periodo = ano/mes
         $command->bindValue(':periodo', $periodo . '-1');
         return $command->queryAll();

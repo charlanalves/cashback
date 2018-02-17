@@ -95,7 +95,7 @@ class ApiComissaoController extends GlobalBaseController
      */
     private function getSaldoAtual($user)
     {
-        return VIEWEXTRATO::saldoAtualByCliente(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : '0,00';
+        return VIEWEXTRATO::saldoAtualComissao(( is_numeric($user) ? $user : User::getIdByAuthKey($user))) ? : '0,00';
     }
 
     /**
@@ -159,7 +159,7 @@ class ApiComissaoController extends GlobalBaseController
     }
 
     /**
-     * VENDAS - LISTA
+     * VENDAS - FILTRO
      */
     public function actionVendasFilter()
     {
@@ -182,30 +182,22 @@ class ApiComissaoController extends GlobalBaseController
     }
 
     /**
-     * Extrato
+     * EXTRATO - FILTRO
      */
-    public function actionExtract()
+    public function actionExtratoFilter()
     {
-        $saldoAtual = '';
-        $post = \Yii::$app->request->post();
-        if (($user = $post['user_auth_key'])) {
-            if (($idUser = User::getIdByAuthKey($user))) {
-                $saldoAtual = $this->getSaldoAtual($idUser);
-            }
-        }
-
-        return json_encode(['saldo' => $saldoAtual, 'ultimosMeses' => $this->ultimosMeses()]);
+        return json_encode(['ultimosMeses' => $this->ultimosMeses(6)]);
     }
 
     /**
-     * Extrato - LISTA
+     * EXTRATO - LISTA
      */
-    public function actionExtractList()
+    public function actionExtratoList()
     {
         $extrato = '';
         $post = \Yii::$app->request->post();
-        if (($idUser = User::getIdByAuthKey($post['user_auth_key'])) && ($periodo = $post['periodo'])) {
-            $extrato = VIEWEXTRATO::extractUser($idUser, $periodo);
+        if (($idUser = User::getIdByAuthKey($post['auth_key'])) && ($periodo = $post['periodo'])) {
+            $extrato = VIEWEXTRATO::comissaoExtratoPagamento($idUser, $periodo);
         }
         return json_encode($extrato);
     }
