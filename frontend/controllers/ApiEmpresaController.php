@@ -1200,7 +1200,7 @@ class ApiEmpresaController extends GlobalBaseController {
     
     public function actionParam() {
         $ambiente = SYS01PARAMETROSGLOBAIS::getValor('APP-AMB');
-        $ambiente = 'APP-LO2';
+        //$ambiente = 'APP-LO2'; config local - Eduardo
         return SYS01PARAMETROSGLOBAIS::getValor($ambiente);
     }
     
