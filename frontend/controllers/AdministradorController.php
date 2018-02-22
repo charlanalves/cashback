@@ -174,6 +174,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         }
 
         $dataCategoria = CB04EMPRESA::findCombo('CB10_CATEGORIA', 'CB10_ID', 'CB10_NOME', 'CB10_STATUS=1');
+        $dataRepresentantes = CB04EMPRESA::findCombo('VIEW_REPRESENTANTE', 'CB04_ID', 'CB04_NOME', 'CB04_STATUS=1');
         $dataFormaPagamento = CB04EMPRESA::findCombo('CB08_FORMA_PAGAMENTO', 'CB08_ID', 'CB08_NOME', 'CB08_STATUS=1');
         $limitFotos = SYS01PARAMETROSGLOBAIS::getValor(5); // limit de fotos da empresa   
         unset($dataEstabelecimento['CB04_DADOS_API_TOKEN']);
@@ -182,6 +183,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
                     'usuario' => $this->user->attributes,
                     'estabelecimento' => $dataEstabelecimento,
                     'categorias' => $dataCategoria,
+                    'representantes' => $dataRepresentantes,
                     'formaPagamento' => $dataFormaPagamento,
                     'limitFotos' => $limitFotos,
                     'al' => $al,

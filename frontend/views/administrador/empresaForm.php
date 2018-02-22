@@ -82,6 +82,19 @@
                     </fieldset>
 
                     <fieldset>
+                        <h3><?= $al['CB04_ID_REPRESENTANTE'] ?></h3>
+                        <div class="row no-margin padding-top-15">
+                            <section class="">
+                                <label class="select">
+                                    <select name="CB04_ID_REPRESENTANTE">
+                                        <option value="" selected="">Sem representante</option>
+                                    </select> <i></i> 
+                                </label>
+                            </section>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
                         <section id="forma-pagamento" class="padding-top-15" style="height: 455px;"></section>
                         <input type="hidden" name="FORMAS_PAGAMENTO" />
                     </fieldset>
@@ -221,6 +234,7 @@
             FormEmpresa = {},
             estabelecimento = JSON.parse('<?= json_encode($estabelecimento) ?>'),
             categorias = JSON.parse('<?= json_encode($categorias) ?>'),
+            representantes = JSON.parse('<?= json_encode($representantes) ?>'),
             limitFotos = JSON.parse('<?= json_encode($limitFotos) ?>'),
             formaPagamento = JSON.parse('<?= json_encode($formaPagamento) ?>'),
             callbackSaveEmpresa = function (data) {
@@ -325,6 +339,7 @@
 
     // add opcoes no select
     FormEmpresa.addOptionsSelect('CB04_CATEGORIA_ID', categorias);
+    FormEmpresa.addOptionsSelect('CB04_ID_REPRESENTANTE', representantes);
 
     // cria checkbox com as formas de pagamento
     //FormEmpresa.addCheckboxInLineFormPgto("forma-pagamento", "FORMA-PAGAMENTO", formaPagamento);
