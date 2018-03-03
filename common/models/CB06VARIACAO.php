@@ -131,7 +131,7 @@ class CB06VARIACAO extends BaseCB06VARIACAO
                     SELECT MIN(CB14_ID) AS CB14_ID, CB14_PRODUTO_ID, CB14_URL 
                     FROM CB14_FOTO_PRODUTO
                     GROUP BY CB14_PRODUTO_ID) CB14_FOTO_PRODUTO ON(CB14_PRODUTO_ID = CB05_ID)
-                WHERE AND CB04_TIPO = 1 " . (!$filterBindCat ? "" : " AND CB04_CATEGORIA_ID = :categoria") . "
+                WHERE CB04_TIPO = 1 " . (!$filterBindCat ? "" : " AND CB04_CATEGORIA_ID = :categoria") . "
                 GROUP BY CB04_EMPRESA.CB04_ID
                 ORDER BY " . (!$filterBindOrd ? 'CB06_DINHEIRO_VOLTA DESC' : ":ordem") . "
                 LIMIT $limiteInicio, $limiteQtd";
