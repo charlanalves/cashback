@@ -1228,9 +1228,13 @@ class ApiEmpresaController extends GlobalBaseController {
     public function actionOperacionalGetClientePdv() {
         $retorno = array();
         $post = \Yii::$app->request->post();
+        
+        
         if (($cliente = User::find()->where("cpf_cnpj='" . $post['busca_cpf'] . "' AND status = " . User::STATUS_ACTIVE)->asArray()->one())) {
             $retorno['cliente'] = $cliente;
-            $retorno['formasPagamento'] = $this->operacionalFormasPagamentoPdv($cliente['id'], $post['id_company'], $post['total_compra']);
+              //obtém a empresa do funcionário
+              $empresa = CB04EMPRESA::find()->select(['CB04_ID_EMPRESA'])->where(['CB04_ID' => $post['id_company']])->asArray()->one();              
+            $retorno['formasPagamento'] = $this->operacionalFormasPagamentoPdv($cliente['id'], $empresa['CB04_ID_EMPRESA'], $post['total_compra']);
         }
         return json_encode($retorno ? $retorno : false);
     }
@@ -1283,12 +1287,13 @@ class ApiEmpresaController extends GlobalBaseController {
         try {
             
             $idCliente = User::findByCpfCnpj($post['busca_cpf'])->id;
-            $idEmpresa = $usuario['id_company'];
+            $empresa = CB04EMPRESA::find()->select(['CB04_ID_EMPRESA'])->where(['CB04_ID' => $usuario['id_company']])->asArray()->one(); 
+            $idEmpresa = $empresa['CB04_ID_EMPRESA'];
             $idRepresentante = CB04EMPRESA::getRepresentante($idEmpresa);
             $idFuncionario = $usuario['id'];
             $vlrPedido = $post['total_compra'];
             $vlrCbTotal = $post['cb_total'];
-            
+            $post['forma_pagamento'] = CB09FORMAPAGTOEMPRESA::find()->select(['CB09_ID'])->where(['CB09_ID_EMPRESA' => $idEmpresa, 'CB09_ID_FORMA_PAG' => $post['forma_pagamento']])->asArray()->one()['CB09_ID']; 
             $percPag = $this->getPercPag(['FORMA-PAGAMENTO' => $post['forma_pagamento']], ['CB16_EMPRESA_ID' => $idEmpresa]);
             
             // salva pedido
