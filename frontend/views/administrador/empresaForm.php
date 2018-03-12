@@ -495,7 +495,9 @@
         C7.exportGridToCSV('FormaPagamentoMain');
         C7.grid.FormaPagamentoMain.enableCopyMMS(true, false);
     };
-    
-    C7.load('Grid', 'FormaPagamentoMain', 'forma-pagamento', {empresa: estabelecimento.CB04_ID});
+    setTimeout(function() {
+        C7.load('Grid', 'FormaPagamentoMain', 'forma-pagamento', {empresa: estabelecimento.CB04_ID});
+    }, 2000);
+   
 
 </script>
