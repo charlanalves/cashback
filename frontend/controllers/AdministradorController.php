@@ -251,6 +251,17 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         $new = $model->isNewRecord;
         \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
         $id = $model->saveEstabelecimento($param);
+        
+        // criando produto ficticio para manter a compatiblidade
+        $produtoFicticio = new \common\models\base\CB05PRODUTO;
+        $produtoFicticio->CB05_EMPRESA_ID = $id;
+        $produtoFicticio->CB05_ATIVO = true;
+        $produtoFicticio->CB05_DESCRICAO = 'teste';
+        $produtoFicticio->CB05_IMPORTANTE = 'teste';
+        $produtoFicticio->CB05_NOME_CURTO = 'teste';
+        $produtoFicticio->CB05_TITULO = 'teste';
+        $produtoFicticio->save();
+        
         $this->saveContaBancaria($param);
         
         if ($new) {
