@@ -497,7 +497,7 @@
     };
     setTimeout(function() {
         C7.load('Grid', 'FormaPagamentoMain', 'forma-pagamento', {empresa: estabelecimento.CB04_ID});
-    }, 2000);
+    }, 1000);
    
 
 </script>
