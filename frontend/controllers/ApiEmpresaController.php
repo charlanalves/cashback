@@ -909,9 +909,6 @@ class ApiEmpresaController extends GlobalBaseController {
     public function actionCompany() {
         $post = \Yii::$app->request->post(); 
         $produtoAtual = null;
-      //recurso técnico para forçar toda empresa ter um produto ficticio        
-        $post['product'] =  1;
-        $post['company'] = 1;
 
         // produtos da empresa
         $produto = CB05PRODUTO::find()
