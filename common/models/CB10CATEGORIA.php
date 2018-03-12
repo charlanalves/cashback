@@ -22,19 +22,39 @@ class CB10CATEGORIA extends BaseCB10CATEGORIA {
         ]);
     }
 
+//    public static function getMaxCachback() {
+//        $sql = "SELECT CB10_ID, CB10_NOME, MAX_CB_CATEGORIA, CB10_ICO
+//                FROM CB10_CATEGORIA
+//                LEFT JOIN ( 
+//                    SELECT CB04_CATEGORIA_ID, MAX(CB06_DINHEIRO_VOLTA) AS MAX_CB_CATEGORIA
+//                    FROM CB04_EMPRESA 
+//                    INNER JOIN CB05_PRODUTO ON (CB05_EMPRESA_ID = CB04_ID AND CB05_ATIVO = 1)
+//                    INNER JOIN CB06_VARIACAO ON (CB06_PRODUTO_ID = CB05_ID)
+//                    GROUP BY CB04_CATEGORIA_ID
+//                ) CB ON (CB.CB04_CATEGORIA_ID = CB10_ID)
+//                WHERE CB10_ID NOT IN (3,4)
+//                AND CB10_CATEGORIA.CB10_STATUS = 1
+//                ORDER BY CB10_NOME";
+//        $command = \Yii::$app->db->createCommand($sql);
+//        return $command->query()->readAll();
+//    }
     public static function getMaxCachback() {
-        $sql = "SELECT CB10_ID, CB10_NOME, MAX_CB_CATEGORIA, CB10_ICO
-                FROM CB10_CATEGORIA
-                LEFT JOIN ( 
-                    SELECT CB04_CATEGORIA_ID, MAX(CB06_DINHEIRO_VOLTA) AS MAX_CB_CATEGORIA
-                    FROM CB04_EMPRESA 
-                    INNER JOIN CB05_PRODUTO ON (CB05_EMPRESA_ID = CB04_ID AND CB05_ATIVO = 1)
-                    INNER JOIN CB06_VARIACAO ON (CB06_PRODUTO_ID = CB05_ID)
-                    GROUP BY CB04_CATEGORIA_ID
-                ) CB ON (CB.CB04_CATEGORIA_ID = CB10_ID)
-                WHERE CB10_ID NOT IN (3,4)
-                AND CB10_CATEGORIA.CB10_STATUS = 1
-                ORDER BY CB10_NOME";
+        $sql = "  
+          SELECT CB10_ID, CB10_NOME, MAX_CB_CATEGORIA, CB10_ICO
+            FROM CB10_CATEGORIA
+            LEFT JOIN ( 
+             SELECT 
+              CB04_CATEGORIA_ID,
+              MAX(CB07_CASH_BACK.CB07_PERCENTUAL) AS MAX_CB_CATEGORIA                   
+              FROM CB04_EMPRESA
+              JOIN CB07_CASH_BACK ON CB07_CASH_BACK.CB07_EMPRESA_ID = CB04_EMPRESA.CB04_ID
+              JOIN CB10_CATEGORIA ON CB10_CATEGORIA.CB10_ID = CB04_EMPRESA.CB04_CATEGORIA_ID
+              GROUP BY CB04_CATEGORIA_ID
+            ) CB ON (CB.CB04_CATEGORIA_ID = CB10_ID)
+            WHERE CB10_ID NOT IN (3,4)
+            AND CB10_CATEGORIA.CB10_STATUS = 1
+            ORDER BY CB10_NOME";
+                    
         $command = \Yii::$app->db->createCommand($sql);
         return $command->query()->readAll();
     }
