@@ -13,7 +13,8 @@ use yii\base\Model;
  */
 class LoginForm extends User
 {
- public $id;
+    public $id;
+    public $id_company;
     public $username;
     public $cpf_cnpj;
     public $password;
@@ -25,6 +26,7 @@ class LoginForm extends User
     
     const SCENARIO_COMPANY_LOGIN = 'SCENARIO_COMPANY_LOGIN';
     
+    const SCENARIOCLIENTE = 'SCENARIOCLIENTE';
     const SCENARIOADMINISTRADOR = 'SCENARIOADMINISTRADOR';
     const SCENARIOESTABELECIMENTO = 'SCENARIOESTABELECIMENTO';
     const SCENARIOFUNCIONARIO = 'SCENARIOFUNCIONARIO';
@@ -34,6 +36,7 @@ class LoginForm extends User
     public function scenarios()
     {
         $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIOCLIENTE] = ['cpf_cnpj', 'password', 'id'];
         $scenarios[self::SCENARIOADMINISTRADOR] = ['username', 'password', 'rememberMe', 'id'];
         $scenarios[self::SCENARIOESTABELECIMENTO] = ['cpf_cnpj', 'password', 'rememberMe', 'id'];
         $scenarios[self::SCENARIOFUNCIONARIO] = ['cpf_cnpj', 'password', 'rememberMe', 'id'];
@@ -57,6 +60,16 @@ class LoginForm extends User
             ['password', 'validatePassword'],
             
             ['email_valid', 'safe'],
+
+            // validar cliente
+            ['id', 'filter', 'filter' => function ($idUser) {
+                if(!$idUser){
+                } else if (!AuthAssignment::find()->where("user_id = $idUser AND item_name IN('cliente')")->one()) {
+                    $this->addError('cpf_cnpj', 'Seu usuário não tem permissão de acesso ao aplicativo, é necessário criar outra conta.');
+                } else {
+                    return true;
+                }
+            }, 'on' => self::SCENARIOCLIENTE],
 
             // validar estabelecimento
             //['cpf_cnpj', 'string', 'length' => 14, 'message' => 'Informe um CNPJ válido.', 'on' => self::SCENARIOESTABELECIMENTO],
@@ -142,14 +155,16 @@ class LoginForm extends User
     {
         if (!$this->hasErrors()) {
             
-            if($this->cpf_cnpj){
+            if ($this->cpf_cnpj) {
                 $user = $this->getCpfCnpj();
-            } else if($this->username){
+            } else if ($this->username) {
                 $user = $this->getUser();
             }
-            
-            if (!$user || !$user->validatePassword($this->password)) {
+
+            if (empty($user)) {
                 $this->addError($attribute, 'Dados incorretos.');
+            } else if (!$user->validatePassword($this->password)) {
+                $this->addError($attribute, 'Senha inválida');
             } else {
                 $this->id = $user->id;
             }
@@ -206,7 +221,7 @@ class LoginForm extends User
     protected function getCpfCnpj()
     {
         if ($this->_cpf_cnpj === null) {
-            $this->_cpf_cnpj = User::findByCpfCnpj($this->cpf_cnpj);
+            $this->_cpf_cnpj = User::findByCpfCnpj($this->cpf_cnpj, $this->scenariosToPerfil($this->getScenario()));
         }
 
         return $this->_cpf_cnpj;

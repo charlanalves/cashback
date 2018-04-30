@@ -5,6 +5,7 @@ $params = array_merge(
 );
 
 return [
+    'language' => 'pt-BR',
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'debug'],
@@ -20,10 +21,10 @@ return [
             'class' => 'yii\swiftmailer\Mailer',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp-relay.sendinblue.com',
-                'username' => 'charlan.job@gmail.com',
-                'password' => 'BYDg2LkW6sUy0x7Z',
-                'port' => '587', 
+                'host' => 'smtp.gmail.com',
+                'username' => 'appestalecasmail@gmail.com',
+                'password' => 'p@ssw0rd0007',
+                'port' => '587',
                 'encryption' => 'tls',
             ],
         ],

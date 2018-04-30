@@ -77,9 +77,8 @@ abstract class PaymentBaseComponent extends Component {
            }
         } catch (\Exception $e) {
             $status = false;
-           // $this->log();
-            $retorno = 'Ocorreu um erro interno. Tente novamente em alguns minutos.';
-            $dev = $e->getMessage();
+            
+            $dev = $retorno = $e->getMessage();
             
             if ($this->transaction instanceof \yii\db\Transaction) {
                 $this->transaction->rollBack();
@@ -87,10 +86,30 @@ abstract class PaymentBaseComponent extends Component {
             
             if ( $e instanceof \yii\base\UserException) {
                 $retorno = $e->getMessage();
-            } 
+            }
+            
+            $retornoN = explode('Descrição do erro:', $retorno);
+            if($retornoN[1]) {
+                $retorno = 'Descrição do erro:' . $retornoN[1];            
+            } else {
+                $retorno = 'Ocorreu um erro interno. Tente novamente em alguns minutos.';
+            }
+            
+            // quando erro ao criar contat iugu
+            if (!empty($this->lastResponse)) {
+                $lastResponse = (array) $this->lastResponse;
+                if (!empty($lastResponse['errors'])) {
+                    if(($erros = $lastResponse['errors'])) {
+                        $retorno = "";
+                        foreach ($erros as $k => $e) {
+                            $retorno .= strtoupper($k) . ': ' . $e[0] . '<br />';
+                        }
+                    }
+                }
+            }
         }
         
-        exit(json_encode(['status' => $status, 'retorno' => utf8_encode($retorno), 'dev' => utf8_encode($dev), 'lastResponse'=> $this->lastResponse]));
+        exit(json_encode(['status' => $status, 'retorno' => $retorno, 'dev' => utf8_encode($dev), 'lastResponse'=> $this->lastResponse]));
     }
     
     public function globalCall($action, $data) 

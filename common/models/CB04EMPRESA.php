@@ -196,16 +196,15 @@ class CB04EMPRESA extends BaseCB04EMPRESA
         $this->CB04_CNPJ = preg_replace("/[^0-9]/", "", $this->CB04_CNPJ);
         $this->CB04_CONTA_VERIFICADA = 1;
         $this->save();
-
-        // dados da forma de pagamento (exclui e cadastra)
-        CB09FORMAPAGTOEMPRESA::deleteAll(['CB09_ID_EMPRESA' => $this->CB04_ID]);
+        
         if (!empty($data['FORMAS_PAGAMENTO'])) {
             $array_fp = str_getcsv($data['FORMAS_PAGAMENTO'],"\n");
             foreach ($array_fp as $fp) {
-                // cadastra apenas os ativos
                 $fp = explode(',', $fp);
-                if ($fp[0]) {
-                    $CB09FORMAPAGTOEMPRESA = new CB09FORMAPAGTOEMPRESA();
+                $CB09_ID = $fp[8];
+                $status = $fp[0];
+                if ($status) {
+                    $CB09FORMAPAGTOEMPRESA = (!$CB09_ID) ? new CB09FORMAPAGTOEMPRESA() : CB09FORMAPAGTOEMPRESA::findOne($CB09_ID);
                     $CB09FORMAPAGTOEMPRESA->CB09_ID_EMPRESA = $this->CB04_ID;
                     $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADQ = $fp[2];
                     $CB09FORMAPAGTOEMPRESA->CB09_PERC_ADMIN = $fp[3];
@@ -214,10 +213,12 @@ class CB04EMPRESA extends BaseCB04EMPRESA
                     $CB09FORMAPAGTOEMPRESA->CB09_PERC_FUNC_ADMIN = $fp[6];   
                     $CB09FORMAPAGTOEMPRESA->CB09_ID_FORMA_PAG = $fp[7];
                     $CB09FORMAPAGTOEMPRESA->save();
+                    
+                } else if ($CB09_ID) {
+                    CB09FORMAPAGTOEMPRESA::deleteAll(['CB09_ID' => $CB09_ID]);
                 }
             }
         }
-
         return $this->CB04_ID;
     }
     
@@ -245,9 +246,23 @@ class CB04EMPRESA extends BaseCB04EMPRESA
         $this->setAttributes($data);
         $this->CB04_CNPJ = preg_replace("/[^0-9]/", "", $this->CB04_CNPJ);
         $this->CB04_CONTA_VERIFICADA = 1;
+        $this->CB04_STATUS = 1;
         $this->CB04_TIPO = 2; // representante
         $this->CB04_FUNCIONAMENTO = '_';
         $this->save();
+        
+        // edit user - o create é no componentIugu
+        if (!$this->isNewRecord) {
+            if (($user = User::findOne(['id_company' => $this->CB04_ID]))) {
+                $user->scenario = $user::PERFIL_REPRESENTANTE;
+                $user->email = $this->CB04_EMAIL;
+                $user->cpf_cnpj = $this->CB04_CNPJ;
+                $user->username = $this->CB04_CNPJ . '-' . uniqid();
+                $user->name = $this->CB04_NOME;
+                $user->save();
+            } 
+        }
+        
         return $this->CB04_ID;
     }
     
@@ -259,9 +274,23 @@ class CB04EMPRESA extends BaseCB04EMPRESA
         $this->setAttributes($data);
         $this->CB04_CNPJ = preg_replace("/[^0-9]/", "", $this->CB04_CNPJ);
         $this->CB04_CONTA_VERIFICADA = 1;
+        $this->CB04_STATUS = 1;
         $this->CB04_TIPO = 3; // funcionario
         $this->CB04_FUNCIONAMENTO = '_';
         $this->save();
+        
+        // edit user - o create é no componentIugu
+        if (!$this->isNewRecord) {
+            if (($user = User::findOne(['id_company' => $this->CB04_ID]))) {
+                $user->scenario = $user::PERFIL_FUNCIONARIO;
+                $user->email = $this->CB04_EMAIL;
+                $user->cpf_cnpj = $this->CB04_CNPJ;
+                $user->username = $this->CB04_CNPJ . '-' . uniqid();
+                $user->name = $this->CB04_NOME;
+                $user->save();
+            } 
+        }
+        
         return $this->CB04_ID;
     }
     

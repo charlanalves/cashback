@@ -20,8 +20,8 @@ return [
          'transport' => [
             'class' => 'Swift_SmtpTransport',
             'host' => 'smtp.gmail.com',
-            'username' => 'appestalecas@gmail.com',
-            'password' => 'p@ssw0rd1234',
+            'username' => 'appestalecasmail@gmail.com',
+            'password' => 'p@ssw0rd0007',
             'port' => '587',
             'encryption' => 'tls',
         ],

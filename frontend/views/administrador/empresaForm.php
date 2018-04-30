@@ -121,6 +121,7 @@
                                     </select> <i></i> 
                                 </label>
                             </section>
+                            <input type="hidden" name="CB03_ID">
                             <section class="col col-6"><?= $al['CB03_AGENCIA'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
                                     <input required type="text" name="CB03_AGENCIA" placeholder="">
@@ -340,6 +341,9 @@
     // add opcoes no select
     FormEmpresa.addOptionsSelect('CB04_CATEGORIA_ID', categorias);
     FormEmpresa.addOptionsSelect('CB04_ID_REPRESENTANTE', representantes);
+    
+    // campo monetario
+    FormEmpresa.setMoney(['CB03_SAQUE_MIN', 'CB03_SAQUE_MAX']);
 
     // cria checkbox com as formas de pagamento
     //FormEmpresa.addCheckboxInLineFormPgto("forma-pagamento", "FORMA-PAGAMENTO", formaPagamento);
@@ -374,7 +378,6 @@
     pageSetUp();
 
     var pagefunction = function () {
-
         var $empresaForm = FormEmpresa.form.validate({
             rules: {
                 CB04_NOME: {
@@ -384,6 +387,9 @@
                     required: true
                 },
                 CB04_FUNCIONAMENTO: {
+                    required: true
+                },
+                CB04_TEL_NUMERO: {
                     required: true
                 },
                 CB04_CNPJ: {
@@ -412,6 +418,18 @@
                 },
                 CB04_END_UF: {
                     required: true
+                },
+                CB03_AGENCIA: {
+                    required: true
+                },
+                CB03_NUM_CONTA: {
+                    required: true
+                },
+                CB03_SAQUE_MIN: {
+                    required: true
+                },
+                CB03_SAQUE_MAX: {
+                    required: true
                 }
             },
             messages: {
@@ -424,10 +442,13 @@
                 CB04_FUNCIONAMENTO: {
                     required: 'Campo obrigatório'
                 },
+                CB04_TEL_NUMERO: {
+                    required: 'Campo obrigatório'
+                },
                 CB04_CNPJ: {
                     required: 'Campo obrigatório',
-                    minlength: 'O CNPJ tem 14 dígitos',
-                    maxlength: 'O CNPJ tem 14 dígitos',
+                    minlength: 'O CNPJ deve conter 14 dígitos',
+                    maxlength: 'O CNPJ deve conter 14 dígitos',
                 },
                 CB04_OBSERVACAO: {
                     required: 'Campo obrigatório'
@@ -449,6 +470,18 @@
                     maxlength: 'Máximo 5 dígitos',
                 },
                 CB04_END_UF: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_AGENCIA: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_NUM_CONTA: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_SAQUE_MIN: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_SAQUE_MAX: {
                     required: 'Campo obrigatório'
                 }
             },

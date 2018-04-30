@@ -119,9 +119,10 @@ class IuguComponent extends PaymentBaseComponent
         if (!$qtdFuncionarios) {
             // estabelecimento
             $perfil = \common\models\User::PERFIL_ESTABELECIMENTO;
+            $user->scenario = $user::PERFIL_ESTABELECIMENTO;
             $user->email = $empresa->CB04_EMAIL;
             $user->cpf_cnpj = $empresa->CB04_CNPJ;
-            $user->username = $empresa->CB04_CNPJ;
+            $user->username = $empresa->CB04_CNPJ . '-' . uniqid();
         } else {
             // funcionario
             $perfil = \common\models\User::PERFIL_FUNCIONARIO;
@@ -131,7 +132,6 @@ class IuguComponent extends PaymentBaseComponent
 
         $user->id_company = $empresa->CB04_ID;
         $user->name = $empresa->CB04_NOME;
-//        $user->user_principal = 1;
         $user->setPassword(123456);
         $user->generateAuthKey();
         $user->save();
@@ -140,24 +140,30 @@ class IuguComponent extends PaymentBaseComponent
         $assignment->item_name = $perfil;
         $assignment->user_id = (string) $user->id;
         $assignment->save();
+        
+        return $user->id;
     }
 
     public function createCompanyAccount($dataApi)
     {
         $data = $dataApi['data'];
-        $model = $dataApi['model'];
         $id = $dataApi['id'];
+        $model = \common\models\CB04EMPRESA::findOne($id);
 
         $this->_createAccount($data['cnpj']);
         $this->verifyAccount($data);
         $this->saveApiCod($model);
         $this->saveCompanyLogo($model, $id);
 
-        //Cria o usuário do admin do estabelecimento
-        $this->createCompanyUser($model);
+        // Cria o usuário do admin do estabelecimento
+        $user = $this->createCompanyUser($model);
+        
+        // set conta bancaria para o usuario do estabelecimento
+        $this->setUserContaBancaria($data['CB03_ID'], $user);
 
-        //Cria o usuário do funcionario
-        $this->createCompanyUser($model);
+        // funcionalidade removida - 29/abri/18 (necessario cadastrar o funcionario no painel)
+        // Cria o usuário do funcionario
+        // $this->createCompanyUser($model);
     }
 
     public function createAccount($accountName)
@@ -170,7 +176,7 @@ class IuguComponent extends PaymentBaseComponent
         if (empty($accountName)) {
             throw new UserException("Erro ao criar conta. CNPJ ou CPF não informado.");
         }
-
+        
         $this->lastResponse = \Iugu_Marketplace::createAccount(['name' => $accountName]);
 
         if (isset($this->lastResponse->errors)) {
@@ -313,55 +319,77 @@ class IuguComponent extends PaymentBaseComponent
 
     protected function createSaveClienteAccount($atributos)
     {
-        $this->transaction = \Yii::$app->db->beginTransaction();
+        function erroModel($erro) {
+            return implode('<br />', array_map(function ($entry) {
+                $retorno = [];
+                foreach ($entry as $value) {
+                    $retorno[] = $value;
+                }
+              return implode('<br />', $retorno);
+            }, $erro));
+        }
 
-        $cliente = new \common\models\CB02CLIENTE;
-        $cliente->setAttributes($atributos);
-        $cliente->save();
+        try {
 
-        $user = new \common\models\User;
-        $user->cpf_cnpj = $cliente->CB02_CPF_CNPJ;
-        $user->name = $cliente->CB02_NOME;
-        $user->id_cliente = $cliente->CB02_ID;
-        $user->email = $cliente->CB02_EMAIL;
-        $user->username = $cliente->CB02_CPF_CNPJ;
+            $this->transaction = \Yii::$app->db->beginTransaction();
 
-        // logica da indicação do amigo
-        if (!empty($atributos['auth_key'])) {
-            $user->auth_key = $atributos['auth_key'];
-            $friend = \common\models\User::findBySql('SELECT * FROM user where auth_key  = "' . $atributos['auth_key'] . '"')->one();
-            if (!empty($friend->id)) {
-                $user->id_indicacao = $friend->id;
+            $cliente = new \common\models\CB02CLIENTE;
+            $cliente->setAttributes($atributos);
+            if (!$cliente->validate()) {
+                throw new UserException(erroModel($cliente->errors));
             }
+            $cliente->save(false);
+
+            $user = new \common\models\User;
+            $user->scenario = $user::PERFIL_CLIENTE;
+            $user->cpf_cnpj = $cliente->CB02_CPF_CNPJ;
+            $user->name = $cliente->CB02_NOME;
+            $user->id_cliente = $cliente->CB02_ID;
+            $user->email = $cliente->CB02_EMAIL;
+            $user->username = $cliente->CB02_CPF_CNPJ . '-' . uniqid();
+
+            // logica da indicação do amigo
+            if (!empty($atributos['auth_key'])) {
+                $user->auth_key = $atributos['auth_key'];
+                $friend = \common\models\User::findBySql('SELECT * FROM user where auth_key  = "' . $atributos['auth_key'] . '"')->one();
+                if (!empty($friend->id)) {
+                    $user->id_indicacao = $friend->id;
+                }
+            }
+
+            if (!empty($atributos['cod_indicacao'])) {
+                $user->id_indicacao = (\common\models\User::getIdByAuthKey($atributos['cod_indicacao'])) ? : null;
+            }
+            $user->setPassword($atributos['password']);
+            $user->generateAuthKey();
+            if (!$user->validate()) {
+                throw new UserException(erroModel($user->errors));
+            }
+            $user->save(false);
+
+            $assignment = new \common\models\AuthAssignment;
+            $assignment->item_name = 'cliente';
+            $assignment->user_id = (string) $user->id;
+            $assignment->save();
+
+            $this->createAccount($cliente->CB02_CPF_CNPJ);
+
+            $cliente->CB02_DADOS_API_TOKEN = json_encode($this->lastResponse);
+            $cliente->CB02_COD_CONTA_VIRTUAL = $this->lastResponse->account_id;
+            $cliente->save();
+
+            $model = new \common\models\LoginForm();
+            $model->cpf_cnpj = $cliente->CB02_CPF_CNPJ;
+            $model->password = $atributos['password'];
+            $model->loginCpfCnpj();
+
+            \Yii::$app->sendMail->enviarEmailCadastro($atributos['CB02_EMAIL'], $user->auth_key);
+
+            return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
+
+        } catch (\Exception $e) {
+            exit(json_encode(['status' => true, 'error' => $e->getMessage()]));
         }
-
-        if (!empty($atributos['cod_indicacao'])) {
-            $user->id_indicacao = (\common\models\User::getIdByAuthKey($atributos['cod_indicacao'])) ? : null;
-        }
-        $user->setPassword($atributos['password']);
-        $user->generateAuthKey();
-        $user->save();
-
-        $assignment = new \common\models\AuthAssignment;
-        $assignment->item_name = 'cliente';
-        $assignment->user_id = (string) $user->id;
-        $assignment->save();
-
-        $this->createAccount($cliente->CB02_CPF_CNPJ);
-
-        $cliente->CB02_DADOS_API_TOKEN = json_encode($this->lastResponse);
-        $cliente->CB02_COD_CONTA_VIRTUAL = $this->lastResponse->account_id;
-
-        $cliente->save();
-
-        $model = new \common\models\LoginForm();
-        $model->cpf_cnpj = $cliente->CB02_CPF_CNPJ;
-        $model->password = $atributos['password'];
-        $model->loginCpfCnpj();
-
-        \Yii::$app->sendMail->enviarEmailCadastro($atributos['CB02_EMAIL'], $user->auth_key);
-
-        return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
     }
 
     
@@ -418,7 +446,7 @@ class IuguComponent extends PaymentBaseComponent
         $user = new \common\models\User;
         $user->email = $representante->CB04_EMAIL;
         $user->cpf_cnpj = $representante->CB04_CNPJ;
-        $user->username = $representante->CB04_CNPJ;
+        $user->username = $representante->CB04_CNPJ . '-' . uniqid();
         $user->id_company = $representante->CB04_ID;
         $user->name = $representante->CB04_NOME;
         // utilizado do controlar o primeiro acesso do representante
@@ -431,8 +459,26 @@ class IuguComponent extends PaymentBaseComponent
         $assignment->item_name = \common\models\User::PERFIL_REPRESENTANTE;
         $assignment->user_id = (string) $user->id;
         $assignment->save();
+        
+        return $user->id;
     }
-
+    
+//    public function createUserRepresentanteTEMP($data)
+//    {
+//        // Cria o usuário
+//        $use = $this->createRepresentanteUser($data['model']);
+//        // set conta bancaria para o usuario
+//        $CB03 = \common\models\CB03CONTABANC::findOne($data['id']);
+//        $CB03->setAttribute('CB03_USER_ID', $use);
+//        $CB03->save();
+//    }
+    
+    private function setUserContaBancaria($idConta, $user) {
+        $CB03 = \common\models\CB03CONTABANC::findOne($idConta);
+        $CB03->setAttribute('CB03_USER_ID', $user);
+        $CB03->save();
+    }
+    
     protected function createRepresentanteAccount($dataApi)
     {
         $data = $dataApi['data'];
@@ -440,7 +486,10 @@ class IuguComponent extends PaymentBaseComponent
         $model = \common\models\VIEWREPRESENTANTE::findOne($dataApi['id']);
         $this->saveApiCod($model);
         $this->verifyRepresentanteAccount($model['CB04_DADOS_API_TOKEN'], $this->prepareRepresentanteAccountData($data));
-        $this->createRepresentanteUser($model);
+        $user = $this->createRepresentanteUser($model);
+        
+        // set conta bancaria para o usuario
+        $this->setUserContaBancaria($data['CB03_ID'], $user);
 
         \Yii::$app->sendMail->enviarEmailCreateRevendedor($data['CB04_EMAIL'], [
             'nome' => $data['CB04_NOME'],
@@ -493,11 +542,12 @@ class IuguComponent extends PaymentBaseComponent
         if (!($funcionario = is_int($funcionario) ? \common\models\VIEWFUNCIONARIO::findOne($funcionario) : $funcionario)) {
             throw new UserException("Erro ao tentar criar o usuário, funcionário não encontrado.");
         }
-
+        
         $user = new \common\models\User;
+        $user->scenario = $user::PERFIL_FUNCIONARIO;
         $user->email = $funcionario->CB04_EMAIL;
         $user->cpf_cnpj = $funcionario->CB04_CNPJ;
-        $user->username = $funcionario->CB04_CNPJ;
+        $user->username = $funcionario->CB04_CNPJ . '-' . uniqid();
         $user->id_company = $funcionario->CB04_ID;
         $user->name = $funcionario->CB04_NOME;
         // utilizado do controlar o primeiro acesso do funcionario
@@ -510,6 +560,8 @@ class IuguComponent extends PaymentBaseComponent
         $assignment->item_name = \common\models\User::PERFIL_FUNCIONARIO;
         $assignment->user_id = (string) $user->id;
         $assignment->save();
+        
+        return $user->id;
     }
     
     protected function createFuncionarioAccount($dataApi)
@@ -519,7 +571,10 @@ class IuguComponent extends PaymentBaseComponent
         $model = \common\models\VIEWFUNCIONARIO::findOne($dataApi['id']);
         $this->saveApiCod($model);
         $this->verifyFuncionarioAccount($model['CB04_DADOS_API_TOKEN'], $this->prepareFuncionarioAccountData($data));
-        $this->createFuncionarioUser($model);
+        $user = $this->createFuncionarioUser($model);
+        
+        // set conta bancaria para o usuario do estabelecimento
+        $this->setUserContaBancaria($data['CB03_ID'], $user);
 
         \Yii::$app->sendMail->enviarEmailCreateFuncionario($data['CB04_EMAIL'], [
             'nome' => $data['CB04_NOME'],

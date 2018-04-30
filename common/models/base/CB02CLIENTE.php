@@ -61,13 +61,14 @@ class CB02CLIENTE extends \common\models\GlobalModel
     public function attributeLabels()
     {
         return [
-            'CB02_ID' => 'Cb02  ID',
-            'CB02_NOME' => 'Cb02  Nome',
-            'CB02_CPF' => 'Cb02  Cpf',
-            'CB02_EMAIL' => 'Cb02  Email',
-            'CB02_DADOS_API_TOKEN' => 'Cb02  Dados  Api  Token',
-            'CB02_STATUS' => 'Cb02  Status',
-            'CB02_DT_CADASTRO' => 'Cb02  Dt  Cadastro',
+            'CB02_ID' => 'ID',
+            'CB02_NOME' => 'Nome',
+            'CB02_CPF' => 'CPF/CNPJ',
+            'CB02_CPF_CNPJ' => 'CPF/CNPJ',
+            'CB02_EMAIL' => 'E-mail',
+            'CB02_DADOS_API_TOKEN' => 'Api Token',
+            'CB02_STATUS' => 'Status',
+            'CB02_DT_CADASTRO' => 'Data de Cadastro',
         ];
     }
     

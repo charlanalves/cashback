@@ -73,6 +73,7 @@
                                     </select> <i></i> 
                                 </label>
                             </section>
+                            <input type="hidden" name="CB03_ID">
                             <section class="col col-6"><?= $al['CB03_AGENCIA'] ?>
                                 <label class="input"> <i class="icon-prepend fa fa-suitcase"></i>
                                     <input required type="text" name="CB03_AGENCIA" placeholder="">
@@ -132,8 +133,13 @@
                                 </label>
                             </section>
                         </div>
-
-                        <div class="row">
+                        <section><?= $al['CB04_END_COMPLEMENTO'] ?>
+                            <label class="input">
+                                <input type="text" name="CB04_END_COMPLEMENTO" placeholder="">
+                            </label>
+                        </section>
+                        <!--
+                        <div class="row">                            
                             <section class="col col-4"><?= $al['CB04_END_COMPLEMENTO'] ?>
                                 <label class="input">
                                     <input type="text" name="CB04_END_COMPLEMENTO" placeholder="">
@@ -150,6 +156,7 @@
                                 </label>
                             </section>
                         </div>
+                        -->
                     </fieldset>
 
                     <footer>
@@ -235,6 +242,8 @@
 
     // obj form
     FormFuncionario = new Form('funcionario-form');
+    // campo monetario
+    FormFuncionario.setMoney(['CB03_SAQUE_MIN', 'CB03_SAQUE_MAX']);
 
     if (typeof funcionario.CB04_ID !== 'undefined') {
 
@@ -265,6 +274,11 @@
                 },
                 CB04_EMAIL: {
                     required: true
+                },
+                CB04_CNPJ: {
+                    required: true,
+                    minlength: 11,
+                    maxlength: 11,
                 },
                 CB04_END_CEP: {
                     required: true
@@ -298,6 +312,11 @@
                 CB04_EMAIL: {
                     required: 'Campo obrigatório'
                 },
+                CB04_CNPJ: {
+                    required: 'Campo obrigatório',
+                    minlength: 'O CPF deve conter 11 dígitos',
+                    maxlength: 'O CPF deve conter 11 dígitos',
+                },
                 CB04_END_CEP: {
                     required: 'Campo obrigatório'
                 },
@@ -317,6 +336,18 @@
                     required: 'Campo obrigatório'
                 },
                 CB04_END_UF: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_AGENCIA: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_NUM_CONTA: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_SAQUE_MIN: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_SAQUE_MAX: {
                     required: 'Campo obrigatório'
                 }
             },

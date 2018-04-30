@@ -330,6 +330,15 @@ class GlobalBaseController extends Controller {
         $model->save();
     }
 
+    protected function throwError($erro) 
+    {
+        $retornoN = explode('Descrição do erro:', $erro);
+        if(!empty($retornoN[1])) {
+            $erro = 'Descrição do erro:' . $retornoN[1];
+        }
+        throw new \Exception($erro);
+    }
+
     public function actionGlobalRead($gridName, $param = '', $json = false) {
 
         if (empty($this->relatedModel)) {

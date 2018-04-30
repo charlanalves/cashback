@@ -22,10 +22,10 @@
         modalFuncionario = function (id) {
             if (typeof id == 'undefined') {
                 titulo = "Novo funcionário";
-                urlGet += "";
+                urlGetF = "";
             } else {
                 titulo = "Editar funcionário";
-                urlGet += "&funcionario=" + id;
+                urlGetF = "&funcionario=" + id;
             }
 
             $.blockUI();
@@ -33,7 +33,7 @@
             $('#remoteModalFuncionario').modal('show')
                     .find('.modal-body')
                     .html('')
-                    .load('index.php?r=estabelecimento/funcionario-form' + urlGet, function () {
+                    .load('index.php?r=estabelecimento/funcionario-form' + urlGet + urlGetF, function () {
                         $.unblockUI();
                     });
         };
@@ -49,6 +49,7 @@
         C7.callbackLoadGridFuncionariosMain = function () {
             C7.grid.FuncionariosMain.attachEvent("onCheck", function (rId, cInd, state) {
                 Util.ajaxGet('index.php?r=estabelecimento/funcionario-ativar&funcionario=' + this.cells(rId, 0).getValue() + '&status=' + (state ? 1 : 0), false);
+                return;
             });
         };
 

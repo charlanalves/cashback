@@ -21,6 +21,7 @@ use common\models\SYS01PARAMETROSGLOBAIS;
 use common\models\CB16PEDIDO;
 use common\models\CB23TIPOAVALIACAO;
 use common\models\VIEWREPRESENTANTE;
+use common\models\User;
 
 /**
  * Administrador controller
@@ -170,6 +171,8 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
                 $dataEstabelecimento["FORMA-PAGAMENTO"] = CB04EMPRESA::getFormaPagamento($dataEstabelecimento['CB04_ID']);
                 $dataEstabelecimento['CB04_FUNCIONAMENTO'] = str_replace("\r\n", '\r\n', $dataEstabelecimento['CB04_FUNCIONAMENTO']);
                 $dataEstabelecimento['CB04_OBSERVACAO'] = str_replace("\r\n", '\r\n', $dataEstabelecimento['CB04_OBSERVACAO']);
+                $dataContaBancaria = CB03CONTABANC::getContaBancariaEmpresa($dataEstabelecimento['CB04_ID']);
+                $dataEstabelecimento = array_merge($dataEstabelecimento, ($dataContaBancaria ? : []));
             }
         }
 
@@ -237,40 +240,51 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
     
     private function saveContaBancaria($param)
     {	 
-	   $conta = new CB03CONTABANC;
-	   $param['CB03_USER_ID'] = \Yii::$app->user->identity->id;
-	   $conta->setAttributes($param);
-	   $conta->save();
+        $conta = (empty($param['CB03_ID'])) ? new CB03CONTABANC() : CB03CONTABANC::findOne($param['CB03_ID']);
+        if ($conta->isNewRecord) {
+            $param['CB03_USER_ID'] = \Yii::$app->user->identity->id;
+        }
+        $conta->setAttributes($param);
+        $conta->save();
+        return $conta->CB03_ID;
     }
     
     public function saveEmpresa($param) {
         
-        unset($param['CB04_URL_LOGOMARCA']);
-        
-        $model = (!$param['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($param['CB04_ID']);
-        $new = $model->isNewRecord;
-        \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
-        $id = $model->saveEstabelecimento($param);
-        
-        // criando produto ficticio para manter a compatiblidade
-        $produtoFicticio = new \common\models\base\CB05PRODUTO;
-        $produtoFicticio->CB05_EMPRESA_ID = $id;
-        $produtoFicticio->CB05_ATIVO = true;
-        $produtoFicticio->CB05_DESCRICAO = 'teste';
-        $produtoFicticio->CB05_IMPORTANTE = 'teste';
-        $produtoFicticio->CB05_NOME_CURTO = 'teste';
-        $produtoFicticio->CB05_TITULO = 'teste';
-        $produtoFicticio->save();
-        
-        $this->saveContaBancaria($param);
-        
-        if ($new) {
-            $data = $this->prepareAccountData($param);
-            \Yii::$app->Iugu->execute('createCompanyAccount',[ 'data'=> $data,'model'=> $model, 'id'=> $id] );
-        } else {        
-            \Yii::$app->Iugu->transaction->commit();
+        try {
+            unset($param['CB04_URL_LOGOMARCA']);
+
+            $model = (!$param['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($param['CB04_ID']);
+            $new = $model->isNewRecord;
+            \Yii::$app->Iugu->transaction = \Yii::$app->db->beginTransaction();
+            $id = $model->saveEstabelecimento($param);
+
+            // criando produto ficticio para manter a compatiblidade
+            $produtoFicticio = new \common\models\base\CB05PRODUTO;
+            $produtoFicticio->CB05_EMPRESA_ID = $id;
+            $produtoFicticio->CB05_ATIVO = true;
+            $produtoFicticio->CB05_DESCRICAO = 'teste';
+            $produtoFicticio->CB05_IMPORTANTE = 'teste';
+            $produtoFicticio->CB05_NOME_CURTO = 'teste';
+            $produtoFicticio->CB05_TITULO = 'teste';
+            $produtoFicticio->save();
+
+            // retorna o id da conta bancaria para vincular ao usuario do estabelecimento q sera criado em "createCompanyAccount"
+            $CB03_ID = $this->saveContaBancaria($param);
+
+            if ($new) {
+                $data = $this->prepareAccountData($param);
+                $data['CB03_ID'] = $CB03_ID;
+                \Yii::$app->Iugu->execute('createCompanyAccount',[ 'data'=> $data, 'id'=> $id] );
+            } else {        
+                \Yii::$app->Iugu->transaction->commit();
+            }
+            $a  = 1;
+            
+        } catch (\Exception $ex) {
+            \Yii::$app->Iugu->transaction->rollBack();
+            $this->throwError($ex->getMessage()); 
         }
-        $a  = 1;
     }
     
     
@@ -440,6 +454,8 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
                 $dataRepresentante = $dataRepresentante->getAttributes();
                 unset($dataRepresentante['CB04_DADOS_API_TOKEN']);
                 $dataRepresentante['CB04_OBSERVACAO'] = str_replace("\r\n", '\r\n', $dataRepresentante['CB04_OBSERVACAO']);
+                $dataContaBancaria = CB03CONTABANC::getContaBancariaRepresentante($dataRepresentante['CB04_ID']);
+                $dataRepresentante = array_merge($dataRepresentante, ($dataContaBancaria ? : []));
             }
         }
 
@@ -458,22 +474,42 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
             $model = (!$param['CB04_ID']) ? new CB04EMPRESA() : CB04EMPRESA::findOne($param['CB04_ID']);
             $new = $model->isNewRecord;
             $id = $model->saveRepresentante($param);
-            $this->saveContaBancaria($param);
+            
+            // retorna o id da conta bancaria para vincular ao usuario do estabelecimento q sera criado em "createCompanyAccount"
+            $CB03_ID = $this->saveContaBancaria($param);
+            
             if ($new) {
+                $param['CB03_ID'] = $CB03_ID;
                 \Yii::$app->Iugu->execute('createRepresentanteAccount', ['data' => $param, 'id' => $id]);
             } else {
                 \Yii::$app->Iugu->transaction->commit();
             }
         } catch (\Exception $ex) {
             \Yii::$app->Iugu->transaction->rollBack();
-            throw new \yii\base\UserException($ex->getMessage());
+            $this->throwError($ex->getMessage()); 
         }
     }
 
-    public function actionRepresentanteAtivar($representante, $status) {
+    public function actionRepresentanteAtivar($representante, $status) 
+    {
+        $dbTransaction = \Yii::$app->db->beginTransaction();
+        
+        // desativa a empresa/representante
         $model = VIEWREPRESENTANTE::findOne($representante);
         $model->setAttribute('CB04_STATUS', $status);
-        return ($model->save()) ? '' : 'error';
+
+        // desativa o usuario
+        $user = User::find()->where("id_company = " . $model->CB04_ID)->one();
+        $user->setAttribute('status', ($status ? User::STATUS_ACTIVE : User::STATUS_DELETED));
+        
+        if ($model->save() && $user->save()) {
+            $dbTransaction->commit();
+            $return = '';
+        } else {
+            $dbTransaction->rollBack();
+            $return = 'error'; 
+        }
+        return $return;
     }
     
     public function actionGlobalRead($gridName, $param = '', $json = false) {

@@ -163,6 +163,7 @@ class ApiEmpresaController extends GlobalBaseController {
     public function actionLogin() {
         header('Access-Control-Allow-Origin: *'); 
         $model = new LoginForm();
+        $model->setScenario(LoginForm::SCENARIOCLIENTE);
         $model->setAttributes(\Yii::$app->request->post());
         $model->loginCpfCnpj(); 
         return json_encode(($model->errors ? ['error' => $model->errors] : \Yii::$app->user->identity->attributes));
@@ -285,8 +286,7 @@ class ApiEmpresaController extends GlobalBaseController {
      */
     public function actionLoginCreate()
     {
-      \Yii::$app->Iugu->execute('createSaveClienteAccount', \Yii::$app->request->post());
-       
+      return \Yii::$app->Iugu->execute('createSaveClienteAccount', \Yii::$app->request->post());
     }
     
     public function actionCmaster()
@@ -378,9 +378,7 @@ class ApiEmpresaController extends GlobalBaseController {
         $c = 0;
         foreach ($dados[0] as $diaCb => $p){
             $d1[$c]['HOJE'] = ($diaSemana == $diaCb) ? true : false;
-           
-                 $d1[$c]['PERC'] = substr($p, 0, -1) .'%';
-           
+            $d1[$c]['PERC'] = number_format($p,2,",",".") .'%';
             $c++;
         }
         
@@ -775,7 +773,8 @@ class ApiEmpresaController extends GlobalBaseController {
     private function getPercPag($data, $pedido)
     {	
        return CB09FORMAPAGTOEMPRESA::find()
-                 ->select(['CB09_ID', 'CB09_PERC_ADMIN', 'CB09_PERC_ADQ', 'CB09_PERC_FUNCIONARIO', 'CB09_PERC_REPRESENTANTE', 'CB09_PERC_FUNC_ADMIN'])
+                 ->select(['CB09_ID', 'CB09_PERC_ADMIN', 'CB09_PERC_ADQ', 'CB09_PERC_FUNCIONARIO', 'CB09_PERC_REPRESENTANTE', 'CB09_PERC_FUNC_ADMIN', 'CB08_PRAZO_DIAS_RECEBIMENTO'])
+                 ->join('JOIN','CB08_FORMA_PAGAMENTO','CB08_FORMA_PAGAMENTO.CB08_ID = CB09_FORMA_PAGTO_EMPRESA.CB09_ID_FORMA_PAG')
                  ->where(['CB09_ID_FORMA_PAG' => $data['FORMA-PAGAMENTO'], 'CB09_ID_EMPRESA' => $pedido['CB16_EMPRESA_ID']])
                  ->asArray()
                  ->one();                    
@@ -913,6 +912,7 @@ class ApiEmpresaController extends GlobalBaseController {
         // produtos da empresa
         $produto = CB05PRODUTO::find()
             ->where(['CB05_EMPRESA_ID' => $post['company'], 'CB05_ATIVO' => 1])
+            ->join('JOIN', 'CB04_EMPRESA', 'CB04_ID = CB05_EMPRESA_ID AND CB04_STATUS = 1')
             ->orderBy('CB05_NOME_CURTO')
             ->asArray()
             ->all();
@@ -1200,7 +1200,7 @@ class ApiEmpresaController extends GlobalBaseController {
     
     public function actionParam() {
         $ambiente = SYS01PARAMETROSGLOBAIS::getValor('APP-AMB');
-        //$ambiente = 'APP-LO2'; config local - Eduardo
+        $ambiente = 'APP-LO2'; //config local - Eduardo
         return SYS01PARAMETROSGLOBAIS::getValor($ambiente);
     }
     
@@ -1233,7 +1233,7 @@ class ApiEmpresaController extends GlobalBaseController {
         if (($cliente = User::find()->where("cpf_cnpj='" . $post['busca_cpf'] . "' AND status = " . User::STATUS_ACTIVE)->asArray()->one())) {
             $retorno['cliente'] = $cliente;
               //obtém a empresa do funcionário
-              $empresa = CB04EMPRESA::find()->select(['CB04_ID_EMPRESA'])->where(['CB04_ID' => $post['id_company']])->asArray()->one();              
+              $empresa = CB04EMPRESA::find()->select(['CB04_ID_EMPRESA'])->where(['CB04_ID_EMPRESA' => $post['id_company']])->asArray()->one();              
             $retorno['formasPagamento'] = $this->operacionalFormasPagamentoPdv($cliente['id'], $empresa['CB04_ID_EMPRESA'], $post['total_compra']);
         }
         return json_encode($retorno ? $retorno : false);
@@ -1253,7 +1253,7 @@ class ApiEmpresaController extends GlobalBaseController {
                 ->orderBy('CB08_ID')
                 ->asArray()
                 ->all();
-
+                
         // saldo estaleca sempre tem que ser o primeiro 
         // o saldo deve ser maior que o valor da compra
         $saldoAtual = $this->getSaldoAtual($auth_key);
@@ -1267,18 +1267,18 @@ class ApiEmpresaController extends GlobalBaseController {
         return $forma_pagamento;
     }
     
-    public function actionOperacionalFinalizarPdv() {
-	
+    public function actionOperacionalFinalizarPdv() 
+    {
         $post = \Yii::$app->request->post();
         $usuario = $post['usuario'];
         unset($post['usuario']);
 	
-	// verifica promocoes selecionadas
+    	// verifica promocoes selecionadas
     	if (empty($post['promocoes'])) {
-	    $promocoes = false;
+	       $promocoes = false;
         } else {
-	    $promocoes = $post['promocoes'];
-	    unset($post['promocoes']);
+	       $promocoes = $post['promocoes'];
+	       unset($post['promocoes']);
         }
         
         $connection = \Yii::$app->db;
@@ -1286,16 +1286,39 @@ class ApiEmpresaController extends GlobalBaseController {
 
         try {
             
-            $idCliente = User::findByCpfCnpj($post['busca_cpf'])->id;
-            $empresa = CB04EMPRESA::find()->select(['CB04_ID_EMPRESA'])->where(['CB04_ID' => $usuario['id_company']])->asArray()->one(); 
-            $idEmpresa = $empresa['CB04_ID_EMPRESA'];
-            $idRepresentante = CB04EMPRESA::getRepresentante($idEmpresa);
+            $idEmpresa = $usuario['id_company'];
             $idFuncionario = $usuario['id'];
+            
+            // teste cliente
+            $cliente = User::findByCpfCnpj($post['busca_cpf']);
+            if (!$cliente) {
+                return json_encode(['error' => ['Cliente não encontrado.']]);
+            }
+            $idCliente = $cliente->id;
+
+            // teste usuario principal do estabelecimento
+            $userRepresentanteEmpresa = User::getCompanyUserMainId($idEmpresa);
+            if (!$userRepresentanteEmpresa) {
+                return json_encode(['error' => ['O estabelecimento não tem um usuário principal, favor entre em contato com o suporte.']]);
+            }
+            $idRepresentanteEmpresa = $userRepresentanteEmpresa['id'];
+            
             $vlrPedido = $post['total_compra'];
             $vlrCbTotal = $post['cb_total'];
-            $post['forma_pagamento'] = CB09FORMAPAGTOEMPRESA::find()->select(['CB09_ID'])->where(['CB09_ID_EMPRESA' => $idEmpresa, 'CB09_ID_FORMA_PAG' => $post['forma_pagamento']])->asArray()->one()['CB09_ID']; 
-            $percPag = $this->getPercPag(['FORMA-PAGAMENTO' => $post['forma_pagamento']], ['CB16_EMPRESA_ID' => $idEmpresa]);
-            
+
+            $idTipoPagamento = $post['forma_pagamento'];
+            $idFormaPagamento = CB09FORMAPAGTOEMPRESA::find()
+                        ->select(['CB09_ID'])
+                        ->where(['CB09_ID_EMPRESA' => $idEmpresa, 'CB09_ID_FORMA_PAG' => $idTipoPagamento])
+                        ->asArray()
+                        ->one()['CB09_ID']; 
+
+            // percentual de comissao para a forma de pagamento
+            $percPag = $this->getPercPag(['FORMA-PAGAMENTO' => $idTipoPagamento], ['CB16_EMPRESA_ID' => $idEmpresa]);
+
+            // prazo para pagamento em dias pela forma de pagamento selecionada 
+            $prazoByTipoPagamento = $percPag['CB08_PRAZO_DIAS_RECEBIMENTO'];
+
             // salva pedido
             $pedido = new CB16PEDIDO();
             $pedido->CB16_EMPRESA_ID = $idEmpresa;                    
@@ -1305,7 +1328,7 @@ class ApiEmpresaController extends GlobalBaseController {
             $pedido->CB16_ORIGEM = "PDV";
             $pedido->CB16_COD_TRANSACAO = $post['cod_venda'];
             $pedido->CB16_FORMA_PAG = $post['forma_pagamento_name'];
-            $pedido->CB16_ID_FORMA_PAG_EMPRESA = $post['forma_pagamento'];
+            $pedido->CB16_ID_FORMA_PAG_EMPRESA = $idFormaPagamento;
             $pedido->CB16_STATUS = CB16PEDIDO::status_baixado;
             $pedido->CB16_TRANS_CRIADAS = 1;
             $pedido->CB16_DT_APROVACAO = date('Y-m-d H:i:s');
@@ -1337,26 +1360,30 @@ class ApiEmpresaController extends GlobalBaseController {
             $vlrAdq = floor((($pedido->CB16_PERC_ADQ/100) * $pedido->CB16_VALOR) * 100) / 100;
             $vlrRep = floor((($pedido->CB16_PERC_REP/100) * $pedido->CB16_VALOR) * 100) / 100;
             $vlrFun = floor((($pedido->CB16_PERC_FUN/100) * $pedido->CB16_VALOR) * 100) / 100;
-            $dtPrevisao = $pedido->CB16_DT_APROVACAO;
+            $dtPrevisao = date('Y-m-d', strtotime("+" . $prazoByTipoPagamento . " days", strtotime($pedido->CB16_DT_APROVACAO)));
 
             $trans = new PAG04TRANSFERENCIAS(); 
 
-            // TRANSFÊNCIA CLIENTE TO EMPRESA
-            $trans->createC2E($idCliente, $idEmpresa, $pedido->CB16_ID_FORMA_PAG_EMPRESA == 1 ? $vlrPedido : 0, $idPedido);
+            // TRANSFÊNCIA CLIENTE TO EMPRESA - quando paga com Saldo Estalecas (id: 1)
+            $trans->createC2E($idCliente, $idRepresentanteEmpresa, $idTipoPagamento == 1 ? $vlrPedido : 0, $idPedido);
+
+            // TRANSFÊNCIA MASTER TO EMPRESA - quando nao paga com Saldo Estalecas (id: 1) nem com Dinheiro (id: 2)
+            $trans->createM2E($idRepresentanteEmpresa, $idTipoPagamento > 2 ? $vlrPedido : 0, $dtPrevisao, $idPedido);
 
             // TRANSFÊNCIA EMPRESA TO MASTER
-            $trans->createE2M($idEmpresa, $vlrCliente, $dtPrevisao, $idPedido);
+            $trans->createE2M($idRepresentanteEmpresa, $vlrCliente, $dtPrevisao, $idPedido);
 
             // TRANSFÊNCIA MASTER TO CLIENTE
             $trans->createM2C($idCliente, $vlrCliente, $idPedido);
             
             // TRANSFÊNCIA EMPRESA TO ADMIN
-            $trans->createE2ADM($idEmpresa, $vlrAdmin, $dtPrevisao, $idPedido);
+            $trans->createE2ADM($idRepresentanteEmpresa, $vlrAdmin, $dtPrevisao, $idPedido);
 
             // TRANSFÊNCIA EMPRESA TO ADQ
-            $trans->createE2ADQ($idEmpresa, $vlrAdq, $dtPrevisao, $idPedido);
+            $trans->createE2ADQ($idRepresentanteEmpresa, $vlrAdq, $dtPrevisao, $idPedido);
 
             // TRANSFÊNCIA MASTER TO REPRESENTANTE
+            $idRepresentante = CB04EMPRESA::getRepresentante($idEmpresa);
             if ($idRepresentante) {
                 $trans->createM2R($idRepresentante['ID_USER'], $vlrRep, $idPedido); 
             }
@@ -1368,6 +1395,7 @@ class ApiEmpresaController extends GlobalBaseController {
             return true;
 
         } catch (\Exception $exc) {
+            var_dump($exc);
             $transaction->rollBack();
             return json_encode(['error' => ['Erro ao tentar finalizar o pedido, tente novamente.']]);
         }

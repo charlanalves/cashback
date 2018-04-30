@@ -158,7 +158,7 @@ class UtilComponent extends Component {
             } elseif (is_null($in)) {
                 $out .= 'null';
             } elseif (is_string($in)) {
-                $out .= "\"". $_escape(str_replace(array("\r\n","\r","\n","\r","\n","\r\n"),'\n', addslashes($in))) ."\"";
+                $out .= '"' . $_escape(str_replace(array("\r\n","\r","\n","\r","\n","\r\n"),'\n', $in)) . '"';
             } else {
                 $out .= $in;
             }

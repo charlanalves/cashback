@@ -39,6 +39,7 @@ class SYS01PARAMETROSGLOBAIS extends BaseSYS01PARAMETROSGLOBAIS {
     public static function setValor($cod, $value) {
         $param = self::findOne(['SYS01_COD' => $cod]);
         $param->setAttribute('SYS01_VALOR', $value);
+        //var_dump($param->getAttributes());
         $param->save();
     }
 

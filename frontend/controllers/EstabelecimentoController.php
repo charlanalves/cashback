@@ -992,11 +992,13 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         $al = $model->attributeLabels();
         $dataFuncionario = [];
 
-        if (($representante = Yii::$app->request->get('funcionario'))) {
-            if (($dataFuncionario = $model->findOne($representante))) {
+        if (($funcionario = Yii::$app->request->get('funcionario'))) {
+            if (($dataFuncionario = $model->findOne($funcionario))) {
                 $dataFuncionario = $dataFuncionario->getAttributes();
                 unset($dataFuncionario['CB04_DADOS_API_TOKEN']);
                 $dataFuncionario['CB04_OBSERVACAO'] = str_replace("\r\n", '\r\n', $dataFuncionario['CB04_OBSERVACAO']);
+                $dataContaBancaria = CB03CONTABANC::getContaBancariaFuncionario($dataFuncionario['CB04_ID']);
+                $dataFuncionario = array_merge($dataFuncionario, ($dataContaBancaria ? : []));
             }
         }
 
@@ -1010,10 +1012,13 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
 
     private function saveContaBancaria($param)
     {	 
-	   $conta = new CB03CONTABANC;
-	   $param['CB03_USER_ID'] = \Yii::$app->user->identity->id;
-	   $conta->setAttributes($param);
-	   $conta->save();
+        $conta = (empty($param['CB03_ID'])) ? new CB03CONTABANC() : CB03CONTABANC::findOne($param['CB03_ID']);
+        if ($conta->isNewRecord) {
+            $param['CB03_USER_ID'] = \Yii::$app->user->identity->id;
+        }
+        $conta->setAttributes($param);
+        $conta->save();
+        return $conta->CB03_ID;
     }
     
     public function saveFuncionario($param)
@@ -1024,7 +1029,8 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
             $param['CB04_ID_EMPRESA'] = $this->user->id_company;
             $new = $model->isNewRecord;
             $id = $model->saveFuncionario($param);
-            $this->saveContaBancaria($param);
+            $param['CB03_ID'] = $this->saveContaBancaria($param);
+            
             if ($new) {
                 \Yii::$app->Iugu->execute('createFuncionarioAccount', ['data' => $param, 'id' => $id]);
             } else {
@@ -1032,17 +1038,31 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
             }
         } catch (\Exception $ex) {
             \Yii::$app->Iugu->transaction->rollBack();
-            throw new \yii\base\UserException($ex->getMessage());
+            $this->throwError($ex->getMessage());
         }
     }
 
-    public function actionFuncionarioAtivar($funcionario, $status) {
+    public function actionFuncionarioAtivar($funcionario, $status) 
+    {
+        $dbTransaction = \Yii::$app->db->beginTransaction();
+        
+        // desativa a empresa/funcionario
         $model = VIEWFUNCIONARIO::findOne($funcionario);
         $model->setAttribute('CB04_STATUS', $status);
-        return ($model->save()) ? '' : 'error';
+
+        // desativa o usuario
+        $user = User::findOne(["id_company" => $model->CB04_ID]);
+        $user->setAttribute('status', ($status ? User::STATUS_ACTIVE : User::STATUS_DELETED));
+       
+        if ($model->save() && $user->save()) {
+            $dbTransaction->commit();
+            $return = '';
+        } else {
+            $dbTransaction->rollBack();
+            $return = 'error'; 
+        }
+        return $return;
     }
-    
-    
     
     public function callMethodDynamically($action, $data, $returnThowException = true, $class = NULL) {
         if (empty($class)) {

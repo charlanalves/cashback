@@ -65,6 +65,7 @@
                                     </select> <i></i> 
                                 </label>
                             </section>
+                            <input type="hidden" name="CB03_ID">
                             <section class="col col-6"><?= $al['CB03_TP_CONTA'] ?>
                                 <label class="select">
                                     <select name="CB03_TP_CONTA">
@@ -234,6 +235,9 @@
 
     // obj form
     FormRepresentante = new Form('representante-form');
+    
+    // campo monetario
+    FormRepresentante.setMoney(['CB03_SAQUE_MIN', 'CB03_SAQUE_MAX']);
 
     if (typeof representante.CB04_ID !== 'undefined') {
 
@@ -313,6 +317,18 @@
                     required: 'Campo obrigatório'
                 },
                 CB04_END_UF: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_AGENCIA: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_NUM_CONTA: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_SAQUE_MIN: {
+                    required: 'Campo obrigatório'
+                },
+                CB03_SAQUE_MAX: {
                     required: 'Campo obrigatório'
                 }
             },

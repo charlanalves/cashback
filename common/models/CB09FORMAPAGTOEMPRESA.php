@@ -28,7 +28,7 @@ class CB09FORMAPAGTOEMPRESA extends BaseCB09FORMAPAGTOEMPRESA
      */
     public function gridQueryFormaPagamentoMain($param)
     {
-        $sql = "SELECT CB08_ID as ID, CB08_ID, CB08_NOME, 
+        $sql = "SELECT CB08_ID as ID, CB09_ID, CB08_ID, CB08_NOME, 
                 COALESCE(CB09_ID_FORMA_PAG, 0) as ATIVO,
                 COALESCE(CB09_PERC_ADQ , 0) as CB09_PERC_ADQ, 
                 COALESCE(CB09_PERC_ADMIN , 0) as CB09_PERC_ADMIN,
@@ -61,6 +61,7 @@ class CB09FORMAPAGTOEMPRESA extends BaseCB09FORMAPAGTOEMPRESA
             ['sets' => ['title' => $al['CB09_PERC_REPRESENTANTE'], 'align' => 'right', 'width' => '118', 'type' => 'edn', 'id' => 'CB09_PERC_REPRESENTANTE']],
             ['sets' => ['title' => $al['CB09_PERC_FUNC_ADMIN'], 'align' => 'right', 'width' => '118', 'type' => 'edn', 'id' => 'CB09_PERC_FUNC_ADMIN']],
             ['sets' => ['title' => '', 'width' => '0', 'type' => 'ro', 'id' => 'CB08_ID']],
+            ['sets' => ['title' => '', 'width' => '0', 'type' => 'ro', 'id' => 'CB09_ID']],
         ];
     }
 

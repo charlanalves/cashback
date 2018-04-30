@@ -33,6 +33,7 @@ class CB03CONTABANC extends BaseCB03CONTABANC
             
         ];
     }
+    
     public function setMaskBancaria($a, $b)
     {
         // formata dados da conta e agencia
@@ -46,11 +47,44 @@ class CB03CONTABANC extends BaseCB03CONTABANC
         $this->CB03_AGENCIA = $dMask['A'];
         $this->CB03_NUM_CONTA = $dMask['C'];
     }
+    
     public function scenarios()
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_SAQUE] = ['CB03_USER_ID', 'CB03_NOME_BANCO', 'CB03_COD_BANCO', 'CB03_AGENCIA', 'CB03_TP_CONTA', 'CB03_NUM_CONTA', 'CB03_VALOR'];
         return $scenarios;        
+    }
+
+    private static function getContaBancariaUser($idCompany, $perfil)
+    {
+        $sql = "SELECT * FROM " . self::tableName() . " 
+                WHERE CB03_USER_ID = (
+                	SELECT u.ID
+                	FROM user u 
+                	INNER JOIN auth_assignment a ON (a.user_id = u.id AND a.item_name = :perfilUser) 
+                	WHERE u.ID_COMPANY = :idCompany
+                	ORDER BY u.ID
+                	LIMIT 1)
+                ORDER BY CB03_ID DESC";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindParam(':idCompany', $idCompany);
+        $command->bindParam(':perfilUser', $perfil);
+        return $command->queryOne();
+    }
+
+    public static function getContaBancariaEmpresa($idEmpresa)
+    {
+        return self::getContaBancariaUser($idEmpresa, User::PERFIL_ESTABELECIMENTO);
+    }
+
+    public static function getContaBancariaRepresentante($idRepresentante)
+    {
+        return self::getContaBancariaUser($idRepresentante, User::PERFIL_REPRESENTANTE);
+    }
+
+    public static function getContaBancariaFuncionario($idFuncionario)
+    {
+        return self::getContaBancariaUser($idFuncionario, User::PERFIL_FUNCIONARIO);
     }
 
 	
