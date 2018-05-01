@@ -81,6 +81,7 @@
         $('#remoteModalCategoria')
             .modal('show')
             .find('#btn-salvar')
+            .unbind('click')
             .on('click', function () {
                 var new_name = objName.val();
                 var new_ico = objIcone.val();
@@ -131,6 +132,7 @@
         $('#remoteModalItensCategoria')
             .modal('show')
             .find('#btn-salvar')
+            .unbind('click')
             .on('click', function () {
                 var new_item = objItem.val();
                 if(!new_item){
@@ -151,7 +153,7 @@
 
         setTimeout(function(){ 
             C7.load('Grid', 'ItensCategoriaMain', 'gridItensCategoria', {'cat': currentCategoria});    
-        }, 1000);
+        }, 500);
 
     };
 
@@ -190,6 +192,7 @@
         $('#remoteModalItensAvaliacao')
             .modal('show')
             .find('#btn-salvar')
+            .unbind('click')
             .on('click', function () {
                 var new_item = objItem.val();
                 var icone = (objIcone.val() || 'start');
@@ -213,7 +216,7 @@
 
         setTimeout(function(){ 
             C7.load('Grid', 'ItensAvaliacaoMain', 'gridItensAvaliacao', {'cat': currentCategoria});    
-        }, 1000);
+        }, 500);
 
     };
 

@@ -247,31 +247,36 @@ class IuguComponent extends PaymentBaseComponent
     public function verifyClientAccount($param)
     {
         try {
-
             $token = json_decode($param['CB02_DADOS_API_TOKEN']);
             \Iugu::setApiKey($token->user_token);
             $this->lastResponse = \Iugu_Account::fetch($token->account_id);
 
             if (isset($this->lastResponse->last_verification_request_status)) {
-
-                if ($this->lastResponse->last_verification_request_status == self::status_request_accepted) {
+                
+                if ($this->lastResponse->last_verification_request_status == null) {
+                    throw new \Exception("A conta do usuário ainda não foi verificada pela IUGU.");
+                    
+                } else if ($this->lastResponse->last_verification_request_status == self::status_request_accepted) {
 
                     $this->doTranfer($param['PAG04_VLR'], $token->account_id);
 
                     $trans = \common\models\PAG04TRANSFERENCIAS::findOne($param['PAG04_ID']);
-                    // $trans->PAG04_DT_DEP = date('Y-m-d H:i:s');
+                    $trans->PAG04_DT_DEP = date('Y-m-d H:i:s');
                     $trans->PAG04_STATUS = 1;
                     $trans->save();
                 } else {
                     $this->lastResponse = \Iugu_Account::requestVerification($param, $token->account_id);
-
-                    if (isset($this->lastResponse->errors)) {
-                        throw new UserException("Erro ao Verificar a conta.");
+                    if (!empty($this->lastResponse->errors)) {
+                        $erro = '';
+                        foreach ($this->lastResponse->errors as $k => $e) {
+                            $erro .= '[' . $k . ': ' . $e[0] . '] ';
+                        }
+                        throw new \Exception("Erro ao Verificar a conta.". $erro);
                     }
                 }
             }
         } catch (\Exception $ex) {
-            
+            throw new \Exception($ex->getMessage());
         }
     }
 
@@ -639,6 +644,7 @@ class IuguComponent extends PaymentBaseComponent
         } catch (\Exception $e) {
             $status = false;
             $message = $retorno = $dev = $e->getMessage(); 
+            throw new \Exception($e->getMessage());
         }
     }
 

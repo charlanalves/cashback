@@ -175,7 +175,8 @@ class ApiComissaoController extends GlobalBaseController
     {
         $vendas = '';
         $post = \Yii::$app->request->post();
-        if (($idUser = User::getIdByAuthKey($post['auth_key'])) && ($periodo = $post['periodo']) && ($empresa = $post['empresa'])) {
+        $empresa = $post['empresa'];
+        if (($idUser = User::getIdByAuthKey($post['auth_key'])) && ($periodo = $post['periodo'])) {
             $vendas = VIEWEXTRATO::comissaoVendasEmpresa($idUser, $empresa, $periodo);
         }
         return json_encode($vendas);
@@ -217,6 +218,7 @@ class ApiComissaoController extends GlobalBaseController
         if (\Yii::$app->security->validatePassword($current_password, User::getHashPasswordByAuthKey($auth_key))) {
             $new_password_hash = \Yii::$app->security->generatePasswordHash($new_password);
             $user = User::findOne(['auth_key' => $auth_key]);
+            $user->setScenario($user->getPerfil($user->id));
             $user->setAttribute('password_hash', $new_password_hash);
             $user->setAttribute('password_reset_token', NULL);
             $user->setAttribute('email_valid', 1);

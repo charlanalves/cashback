@@ -268,7 +268,6 @@
         }
     }
 
-
     function preencheEndereco(data) {
         if (data.erro) {
             $.smallBox({
@@ -347,7 +346,7 @@
 
     // cria checkbox com as formas de pagamento
     //FormEmpresa.addCheckboxInLineFormPgto("forma-pagamento", "FORMA-PAGAMENTO", formaPagamento);
-    $(FormEmpresa.form).find('#forma-pagamento');
+    //$(FormEmpresa.form).find('#forma-pagamento');
 
     if (typeof estabelecimento.CB04_ID != 'undefined') {
 
@@ -530,7 +529,7 @@
     };
     setTimeout(function() {
         C7.load('Grid', 'FormaPagamentoMain', 'forma-pagamento', {empresa: estabelecimento.CB04_ID});
-    }, 1000);
+    }, 500);
    
 
 </script>

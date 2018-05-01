@@ -330,7 +330,7 @@ class CB04EMPRESA extends BaseCB04EMPRESA
                     SELECT CB04_EMPRESA.CB04_ID, CB04_EMPRESA.CB04_NOME
                     FROM CB04_EMPRESA
                     INNER JOIN VIEW_FUNCIONARIO ON(VIEW_FUNCIONARIO.CB04_ID_EMPRESA = CB04_EMPRESA.CB04_ID)
-                    INNER JOIN user ON(user.id_company = VIEW_FUNCIONARIO.CB04_ID_EMPRESA and user.id = :user)
+                    INNER JOIN user ON(user.id_company = VIEW_FUNCIONARIO.CB04_ID and user.id = :user)
                     WHERE CB04_EMPRESA.CB04_TIPO = 1 
                     UNION
                     SELECT CB04_EMPRESA.CB04_ID, CB04_EMPRESA.CB04_NOME

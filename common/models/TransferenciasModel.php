@@ -98,7 +98,7 @@ class TransferenciasModel extends BaseTransferenciasModel
                               PAG04_TRANSFERENCIAS.PAG04_STATUS IS NULL AND
                               PAG04_TRANSFERENCIAS.PAG04_ID_PEDIDO IS NULL
                               GROUP BY PAG04_ID
-                              ORDER BY PAG04_DATA_CRIACAO DESC
+                              ORDER BY PAG04_TRANSFERENCIAS.PAG04_DATA_CRIACAO DESC
             ";
 		
             $connection = \Yii::$app->db;

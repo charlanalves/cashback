@@ -97,8 +97,7 @@ class EstabelecimentoController extends \common\controllers\GlobalBaseController
         }
 
         $model = new LoginForm();
-        $model->scenario = LoginForm::SCENARIOESTABELECIMENTO;
-
+        $model->setScenario(LoginForm::SCENARIOESTABELECIMENTO);
         if ($model->load(Yii::$app->request->post()) && $model->loginCpfCnpj()) {
             return $this->goLogin();
         } else {

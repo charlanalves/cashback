@@ -176,6 +176,7 @@ class ApiEmpresaController extends GlobalBaseController {
     public function actionNovaSenha() {
         header('Access-Control-Allow-Origin: *');
         $model = new LoginForm();
+        $model->setScenario(LoginForm::SCENARIOCLIENTE);
         $model->setAttributes(\Yii::$app->request->post());
         $user = $model->getUserByCpfCnpj();
         
@@ -1200,7 +1201,7 @@ class ApiEmpresaController extends GlobalBaseController {
     
     public function actionParam() {
         $ambiente = SYS01PARAMETROSGLOBAIS::getValor('APP-AMB');
-        $ambiente = 'APP-LO2'; //config local - Eduardo
+//        $ambiente = 'APP-LO2'; //config local - Eduardo
         return SYS01PARAMETROSGLOBAIS::getValor($ambiente);
     }
     
@@ -1229,8 +1230,7 @@ class ApiEmpresaController extends GlobalBaseController {
         $retorno = array();
         $post = \Yii::$app->request->post();
         
-        
-        if (($cliente = User::find()->where("cpf_cnpj='" . $post['busca_cpf'] . "' AND status = " . User::STATUS_ACTIVE)->asArray()->one())) {
+        if (($cliente = User::find()->where("cpf_cnpj='" . $post['busca_cpf'] . "' AND id_company is null AND status = " . User::STATUS_ACTIVE)->asArray()->one())) {
             $retorno['cliente'] = $cliente;
               //obtém a empresa do funcionário
               $empresa = CB04EMPRESA::find()->select(['CB04_ID_EMPRESA'])->where(['CB04_ID_EMPRESA' => $post['id_company']])->asArray()->one();              
@@ -1275,10 +1275,10 @@ class ApiEmpresaController extends GlobalBaseController {
 	
     	// verifica promocoes selecionadas
     	if (empty($post['promocoes'])) {
-	       $promocoes = false;
+            $promocoes = false;
         } else {
-	       $promocoes = $post['promocoes'];
-	       unset($post['promocoes']);
+            $promocoes = $post['promocoes'];
+            unset($post['promocoes']);
         }
         
         $connection = \Yii::$app->db;
@@ -1290,7 +1290,7 @@ class ApiEmpresaController extends GlobalBaseController {
             $idFuncionario = $usuario['id'];
             
             // teste cliente
-            $cliente = User::findByCpfCnpj($post['busca_cpf']);
+            $cliente = User::findByCpfCnpj($post['busca_cpf'], User::PERFIL_CLIENTE);
             if (!$cliente) {
                 return json_encode(['error' => ['Cliente não encontrado.']]);
             }
@@ -1307,11 +1307,11 @@ class ApiEmpresaController extends GlobalBaseController {
             $vlrCbTotal = $post['cb_total'];
 
             $idTipoPagamento = $post['forma_pagamento'];
-            $idFormaPagamento = CB09FORMAPAGTOEMPRESA::find()
-                        ->select(['CB09_ID'])
-                        ->where(['CB09_ID_EMPRESA' => $idEmpresa, 'CB09_ID_FORMA_PAG' => $idTipoPagamento])
-                        ->asArray()
-                        ->one()['CB09_ID']; 
+//            $idFormaPagamento = CB09FORMAPAGTOEMPRESA::find()
+//                        ->select(['CB09_ID'])
+//                        ->where(['CB09_ID_EMPRESA' => $idEmpresa, 'CB09_ID_FORMA_PAG' => $idTipoPagamento])
+//                        ->asArray()
+//                        ->one()['CB09_ID']; 
 
             // percentual de comissao para a forma de pagamento
             $percPag = $this->getPercPag(['FORMA-PAGAMENTO' => $idTipoPagamento], ['CB16_EMPRESA_ID' => $idEmpresa]);
@@ -1328,7 +1328,7 @@ class ApiEmpresaController extends GlobalBaseController {
             $pedido->CB16_ORIGEM = "PDV";
             $pedido->CB16_COD_TRANSACAO = $post['cod_venda'];
             $pedido->CB16_FORMA_PAG = $post['forma_pagamento_name'];
-            $pedido->CB16_ID_FORMA_PAG_EMPRESA = $idFormaPagamento;
+            $pedido->CB16_ID_FORMA_PAG_EMPRESA = $idTipoPagamento;
             $pedido->CB16_STATUS = CB16PEDIDO::status_baixado;
             $pedido->CB16_TRANS_CRIADAS = 1;
             $pedido->CB16_DT_APROVACAO = date('Y-m-d H:i:s');
@@ -1362,42 +1362,51 @@ class ApiEmpresaController extends GlobalBaseController {
             $vlrFun = floor((($pedido->CB16_PERC_FUN/100) * $pedido->CB16_VALOR) * 100) / 100;
             $dtPrevisao = date('Y-m-d', strtotime("+" . $prazoByTipoPagamento . " days", strtotime($pedido->CB16_DT_APROVACAO)));
 
-            $trans = new PAG04TRANSFERENCIAS(); 
-
-            // TRANSFÊNCIA CLIENTE TO EMPRESA - quando paga com Saldo Estalecas (id: 1)
+            $idRepresentante = CB04EMPRESA::getRepresentante($idEmpresa);
+            
+            $trans = new PAG04TRANSFERENCIAS();
+            
+//            echo "Master: " . \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CT_MA') . ' / ';
+//            echo "Admin estalecas: " . \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CT_SA') . ' / ';
+//            echo "Adquirente: " . \common\models\SYS01PARAMETROSGLOBAIS::getValor('U_CTADQ') . ' / ';
+//            echo "Cliente: " . $idCliente . ' / ';
+//            echo "Empresa:" . $idRepresentanteEmpresa . ' / ';
+//            echo "Representante: " . $idRepresentante['ID_USER'] . ' / ';
+//            exit;
+            
+            // TRANSFERÊNCIA CLIENTE TO EMPRESA - quando paga com Saldo Estalecas (id: 1)
             $trans->createC2E($idCliente, $idRepresentanteEmpresa, $idTipoPagamento == 1 ? $vlrPedido : 0, $idPedido);
 
-            // TRANSFÊNCIA MASTER TO EMPRESA - quando nao paga com Saldo Estalecas (id: 1) nem com Dinheiro (id: 2)
+            // TRANSFERÊNCIA MASTER TO EMPRESA - quando nao paga com Saldo Estalecas (id: 1) nem com Dinheiro (id: 2)
             $trans->createM2E($idRepresentanteEmpresa, $idTipoPagamento > 2 ? $vlrPedido : 0, $dtPrevisao, $idPedido);
 
-            // TRANSFÊNCIA EMPRESA TO MASTER
+            // TRANSFERÊNCIA EMPRESA TO MASTER
             $trans->createE2M($idRepresentanteEmpresa, $vlrCliente, $dtPrevisao, $idPedido);
 
-            // TRANSFÊNCIA MASTER TO CLIENTE
+            // TRANSFERÊNCIA MASTER TO CLIENTE
             $trans->createM2C($idCliente, $vlrCliente, $idPedido);
             
-            // TRANSFÊNCIA EMPRESA TO ADMIN
+            // TRANSFERÊNCIA EMPRESA TO ADMIN
             $trans->createE2ADM($idRepresentanteEmpresa, $vlrAdmin, $dtPrevisao, $idPedido);
 
-            // TRANSFÊNCIA EMPRESA TO ADQ
+            // TRANSFERÊNCIA EMPRESA TO ADQ
             $trans->createE2ADQ($idRepresentanteEmpresa, $vlrAdq, $dtPrevisao, $idPedido);
 
-            // TRANSFÊNCIA MASTER TO REPRESENTANTE
-            $idRepresentante = CB04EMPRESA::getRepresentante($idEmpresa);
+            // TRANSFÊNCIA MASTER TO FUNCIONARIO
+            $trans->createM2F($idFuncionario, $vlrFun, $idPedido);
+            
+            // TRANSFERÊNCIA MASTER TO REPRESENTANTE
             if ($idRepresentante) {
                 $trans->createM2R($idRepresentante['ID_USER'], $vlrRep, $idPedido); 
             }
-
-            // TRANSFÊNCIA EMPRESA TO FUNCIONARIO
-            $trans->createM2F($idFuncionario, $vlrFun, $idPedido);
-            
+;
             $transaction->commit();
             return true;
 
         } catch (\Exception $exc) {
-            var_dump($exc);
+//            var_dump($exc->getMessage());
             $transaction->rollBack();
-            return json_encode(['error' => ['Erro ao tentar finalizar o pedido, tente novamente.']]);
+            return json_encode(['error' => ['Erro ao tentar finalizar o pedido, tente novamente. [' . $exc->getMessage() . ']']]);
         }
 
     }

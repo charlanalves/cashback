@@ -28,6 +28,17 @@ return [
                 'encryption' => 'tls',
             ],
         ],
+        'mail' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp-relay.sendinblue.com',
+                'username' => 'charlan.job@gmail.com',
+                'password' => 'ph7XcwS6PdDBq9sV',
+                'port' => '587',
+                'encryption' => 'tls',
+            ],
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],

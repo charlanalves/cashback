@@ -40,11 +40,20 @@ class User extends BaseUser implements IdentityInterface
             'SCENARIOADMINISTRADOR' => self::PERFIL_ADMINISTRADOR,
             'SCENARIOESTABELECIMENTO' => self::PERFIL_ESTABELECIMENTO,
             'SCENARIOFUNCIONARIO' => self::PERFIL_FUNCIONARIO,
-            'SCENARIOCOMISSAO' => self::PERFIL_REPRESENTANTE,
+            'SCENARIOCOMISSAO' => [self::PERFIL_FUNCIONARIO, self::PERFIL_REPRESENTANTE],
         ];
         return $a[$scenario];
     }
-        
+    
+    public static function getPerfil($id)
+    {
+        $sql = "SELECT item_name FROM auth_assignment WHERE user_id = :attr";
+        $command = \Yii::$app->db->createCommand($sql);
+        $command->bindValue(':attr', $id);
+        $user = $command->queryOne();
+        return $user['item_name'];
+    }
+
     /**
      * @inheritdoc
      */
@@ -72,8 +81,8 @@ class User extends BaseUser implements IdentityInterface
             ['email','default', 'value' => null],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este e-mail já foi usado.', 'on' => self::SCENARIO_DEFAULT],
             
-            // validar email e cpf unico para o PERFIL_CLIENTE - ja esta validando em User::findByCpfCnpj()
-            //[['email', 'cpf_cnpj'], 'validateClienteUnique', 'on' => self::PERFIL_CLIENTE],
+            // validar email e cpf unico para o PERFIL_CLIENTE 
+            [['email', 'cpf_cnpj'], 'validateClienteUnique', 'on' => self::PERFIL_CLIENTE],
             
             // validar email e cpf unico para o PERFIL_ESTABELECIMENTO
             [['email', 'cpf_cnpj'], 'validateEstabelecimentoUnique', 'on' => self::PERFIL_ESTABELECIMENTO],
@@ -188,13 +197,13 @@ class User extends BaseUser implements IdentityInterface
     {
         $statusAtivo = self::STATUS_ACTIVE;
         if ($perfil) {
+            $perfil = is_array($perfil) ? "'" . implode("','", $perfil) . "'" : "'$perfil'";
             $sql = "SELECT user.*
                     FROM user
-                    INNER JOIN auth_assignment on (id = user_id AND item_name = :perfil)
+                    INNER JOIN auth_assignment on (id = user_id AND item_name IN($perfil))
                     WHERE user.cpf_cnpj = :cpf_cnpj AND user.status = :status";
             $command = \Yii::$app->db->createCommand($sql);
             $command->bindParam(':cpf_cnpj', $cpf_cnpj);
-            $command->bindParam(':perfil', $perfil);
             $command->bindParam(':status', $statusAtivo);
             if (($user = $command->queryOne())) {
                 $user = static::findOne($user['id']);

@@ -141,7 +141,7 @@ class LoginForm extends User
     }
     
     public function getUserByCpfCnpj(){
-        return User::findByCpfCnpj($this->cpf_cnpj, $this->getScenario());
+        return User::findByCpfCnpj($this->cpf_cnpj, $this->scenariosToPerfil($this->getScenario()));
     }
     
     /**

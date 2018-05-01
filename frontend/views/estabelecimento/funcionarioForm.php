@@ -307,15 +307,12 @@
                     required: 'Campo obrigatório'
                 },
                 CB04_CNPJ: {
-                    required: 'Campo obrigatório'
-                },
-                CB04_EMAIL: {
-                    required: 'Campo obrigatório'
-                },
-                CB04_CNPJ: {
                     required: 'Campo obrigatório',
                     minlength: 'O CPF deve conter 11 dígitos',
                     maxlength: 'O CPF deve conter 11 dígitos',
+                },
+                CB04_EMAIL: {
+                    required: 'Campo obrigatório'
                 },
                 CB04_END_CEP: {
                     required: 'Campo obrigatório'

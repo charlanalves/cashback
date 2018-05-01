@@ -68,6 +68,7 @@
     		
     		subtitleWindow: '',
     	}; 
+        
 
         C7.init(conf);
     });

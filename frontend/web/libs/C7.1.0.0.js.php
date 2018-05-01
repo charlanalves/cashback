@@ -1,4 +1,4 @@
-<script type="text/javascript" charset="utf-8">
+﻿<script type="text/javascript" charset="utf-8">
 var Validation = function() {	
 	var errorMessage = '';
 		
@@ -445,8 +445,10 @@ C7.checkPermissions = function(action) {
 }
 
 C7.close = function() {
+    if(typeof C7.windowMain !== 'undefined') {
 	C7.windowMain.hide();
 	C7.windowMain.setModal(false);
+    }
 }
 
 C7.show = function() {
@@ -682,23 +684,26 @@ C7.sendDataCallbackDefault = function(response) {
 		 if (response.message === 'undefined' || response.message == '') {
 			response.message = "Operação realizada com sucesso!";
 		 }
-			
-		 dhtmlx.alert({text: response.message , ok: "ok"});
+
+                dhtmlx.alert({
+                   text: response.message,
+                   ok: "ok"
+                });
 
 		 if (C7.formOpen) {
 		 	C7.close();
 		 }
 	} else {
-		
+            
 		if (response.message === 'undefined' || response.message == '') {
 			response.message = "Erro ao realizar a operação.";
 		}
 		
 		dhtmlx.alert({
-    		title:"Atenção!", 
-    		type:"alert-error errorCustom", 
-    		text: response.message,
-    		width: "100%",        		
+                    title:"Atenção!", 
+                    type:"alert-error errorCustom", 
+                    text: response.message,
+                    width: "100%",        		
 		});		
 	}
 }

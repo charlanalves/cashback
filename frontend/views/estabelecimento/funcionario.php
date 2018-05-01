@@ -46,16 +46,15 @@
 
         C7.init();
 
-        C7.callbackLoadGridFuncionariosMain = function () {
-            C7.grid.FuncionariosMain.attachEvent("onCheck", function (rId, cInd, state) {
-                Util.ajaxGet('index.php?r=estabelecimento/funcionario-ativar&funcionario=' + this.cells(rId, 0).getValue() + '&status=' + (state ? 1 : 0), false);
-                return;
-            });
-        };
+        C7.callbackLoadGridFuncionariosMain = function () {};
 
         C7.load('Grid', 'FuncionariosMain', 'grid-funcionarios', {empresa});
         C7.exportGridToCSV('FuncionariosMain');
         C7.grid.FuncionariosMain.enableCopyMMS(true, false);
+        C7.grid.FuncionariosMain.attachEvent("onCheck", function (rId, cInd, state) {
+            Util.ajaxGet('index.php?r=estabelecimento/funcionario-ativar&funcionario=' + this.cells(rId, 0).getValue() + '&status=' + (state ? 1 : 0), false);
+        });
+
 
     });
 

@@ -76,8 +76,7 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
         }
 
         $model = new LoginForm();
-        $model->scenario = LoginForm::SCENARIOADMINISTRADOR;
-
+        $model->setScenario(LoginForm::SCENARIOADMINISTRADOR);
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goLogin();
         } else {
@@ -134,23 +133,22 @@ class AdministradorController extends \common\controllers\GlobalBaseController {
          \Yii::$app->Iugu->execute('doTranfer', $trans);
     }
     
-	public function actionAtualizadtdep()
+    public function actionAtualizadtdep()
     {
     	$pedidos = CB16PEDIDO::getPedidoByStatus(CB16PEDIDO::status_pago_trans_agendadas);
     	  if (count($pedidos) > 0) {
        		\Yii::$app->Iugu->execute('fetchUpdateDtDepInvoice', $pedidos);
     	  }
     }
+    
     public function actionTransferencias() 
-    {	
-        
+    {
         echo $this->renderFile('@app/web/libs/C7.1.0.0.js.php');
         echo $this->renderFile('@app/views/administrador/_form.php');
-        
         return $this->render('trasferencias', ['tituloTela' => 'Empresa']);
     }
 
-	public function actionFetchAccount()
+    public function actionFetchAccount()
     {
       
     
