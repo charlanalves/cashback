@@ -384,6 +384,7 @@ class IuguComponent extends PaymentBaseComponent
             $cliente->save();
 
             $model = new \common\models\LoginForm();
+            $model->setScenario(\common\models\LoginForm::SCENARIOCLIENTE);
             $model->cpf_cnpj = $cliente->CB02_CPF_CNPJ;
             $model->password = $atributos['password'];
             $model->loginCpfCnpj();

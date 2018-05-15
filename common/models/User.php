@@ -42,7 +42,11 @@ class User extends BaseUser implements IdentityInterface
             'SCENARIOFUNCIONARIO' => self::PERFIL_FUNCIONARIO,
             'SCENARIOCOMISSAO' => [self::PERFIL_FUNCIONARIO, self::PERFIL_REPRESENTANTE],
         ];
-        return $a[$scenario];
+        if (empty($a[$scenario])) {
+            exit('DEV - É necessário definir o scenario: $model->setScenario(\common\models\LoginForm::SCENARIO) Scenarios diponíveis:' . implode(' | ', array_keys($a)));
+        } else {
+            return $a[$scenario];
+        }
     }
     
     public static function getPerfil($id)

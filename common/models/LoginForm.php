@@ -56,8 +56,8 @@ class LoginForm extends User
             [['cpf_cnpj', 'password'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+            // password is validated by validatePasswordLogin()
+            ['password', 'validatePasswordLogin'],
             
             ['email_valid', 'safe'],
 
@@ -151,7 +151,7 @@ class LoginForm extends User
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
      */
-    public function validatePassword($attribute, $params)
+    public function validatePasswordLogin($attribute, $params)
     {
         if (!$this->hasErrors()) {
             
