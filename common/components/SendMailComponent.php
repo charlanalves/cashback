@@ -7,47 +7,79 @@ use yii\base\Component;
 use common\models\SYS01PARAMETROSGLOBAIS;
 
 class SendMailComponent extends Component {
+
+    private $email;
+
+    public function __construct($config = []) {
+
+        // configuração do servidor de e-mail
+        $configTransport = json_decode(SYS01PARAMETROSGLOBAIS::getValor('MAIL_CO'), true);
+
+        // instancia do email
+        $this->email = \Yii::$app->mail;
+        $this->email->setTransport($configTransport);
+
+        parent::__construct($config);
+    }
+
+    private function sendMail($sendMail, $setFrom = 'nao-responda@estalecas.com.br') 
+    {
+        try {
+           $sendMail->setFrom($setFrom)->send();
+           $msg = "E-mail enviado com sucesso";
+           $status = true;
+
+        } catch (\Exception $ex) {
+            $msg = $ex->getMessage();
+            $status = false;
+
+        }
+        return ['status' => $status, 'msg' => $msg];
+    }
     
+    // \Yii::$app->sendMail->enviarEmailTeste('seuemail@');
+    public function enviarEmailTeste($email)
+    {
+        $sendMail = $this->email->compose('teste')
+                                ->setTo($email)
+                                ->setSubject('E$TALECAS - Teste param E-mail');
+
+        return $this->sendMail($sendMail);
+    }
+
     public function enviarEmailCadastro($email, $authKey)
     {
-        //$link = $this->urlController . 'valid-mail&c='. $post['auth_key'];
-        //$texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
-        
-      $teste =  \Yii::$app->mail->compose('confirmacaoemail',['authKey' => $authKey])
-        ->setFrom('nao-responda@estalecas.com.br')
-        ->setTo($email)
-        ->setSubject('E$TALECAS - Confirmação de E-mail')
-        ->send();
-      $a=1;
+        $sendMail = $this->email->compose('confirmacaoemail', ['authKey' => $authKey])
+                                ->setTo($email)
+                                ->setSubject('E$TALECAS - Confirmação de E-mail');
+
+        return $this->sendMail($sendMail);
     }
     
     public function enviarEmailNovaSenha($email, $senha)
     {
-        //$link = $this->urlController . 'valid-mail&c='. $post['auth_key'];
-        //$texto = SYS01PARAMETROSGLOBAIS::getValor('TX_MAIL') . "<br />" . $link;
-        
-        \Yii::$app->mail->compose('novasenha',['senha' => $senha])
-        ->setFrom('nao-responda@estalecas.com.br')
-        ->setTo($email)
-        ->setSubject('E$TALECAS - Esqueceu a senha?')
-        ->send();
+        $sendMail = $this->email->compose('novasenha', ['senha' => $senha])
+                                ->setTo($email)
+                                ->setSubject('E$TALECAS - Esqueceu a senha?');
+
+        return $this->sendMail($sendMail);
     }
     
     public function enviarEmailCreateRevendedor($email, $dados)
     {
-        \Yii::$app->mail->compose('createrevendedor', $dados)
-        ->setFrom('nao-responda@estalecas.com.br')
-        ->setTo($email)
-        ->setSubject('E$TALECAS - Seja bem vindo!')
-        ->send();
+        $sendMail = $this->email->compose('createrevendedor', $dados)
+                                ->setTo($email)
+                                ->setSubject('E$TALECAS - Seja bem vindo!');
+
+        return $this->sendMail($sendMail);
     }
     
     public function enviarEmailCreateFuncionario($email, $dados)
     {
-        \Yii::$app->mail->compose('createfuncionario', $dados)
-        ->setFrom('nao-responda@estalecas.com.br')
-        ->setTo($email)
-        ->setSubject('E$TALECAS - Seja bem vindo!')
-        ->send();
+        $sendMail = $this->email->compose('createfuncionario', $dados)
+                                ->setTo($email)
+                                ->setSubject('E$TALECAS - Seja bem vindo!');
+
+        return $this->sendMail($sendMail);
     }
 }

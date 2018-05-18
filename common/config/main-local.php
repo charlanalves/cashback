@@ -17,14 +17,6 @@ return [
         ],*/
         'mail' => [
          'class' => 'yii\swiftmailer\Mailer',
-         'transport' => [
-            'class' => 'Swift_SmtpTransport',
-            'host' => 'smtp.gmail.com',
-            'username' => 'appestalecasmail@gmail.com',
-            'password' => 'p@ssw0rd0007',
-            'port' => '587',
-            'encryption' => 'tls',
-        ],
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
