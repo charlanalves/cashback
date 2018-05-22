@@ -6,5 +6,4 @@ use yii\helpers\Url;
 /* @var $message \yii\mail\BaseMessage instance of newly created mail message */
 
 ?>
-<h2>This message allows you to visit our site home page by one click</h2>
-<?= Html::a('Go to home page', Url::home('http')) ?>
+E-mail de teste: <?= Html::a('link aqui', Url::home('http')) ?>

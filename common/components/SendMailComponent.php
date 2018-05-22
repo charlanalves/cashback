@@ -17,6 +17,7 @@ class SendMailComponent extends Component {
 
         // instancia do email
         $this->email = \Yii::$app->mail;
+        $this->email->htmlLayout = 'layouts/html';
         $this->email->setTransport($configTransport);
 
         parent::__construct($config);
@@ -40,7 +41,8 @@ class SendMailComponent extends Component {
     // \Yii::$app->sendMail->enviarEmailTeste('seuemail@');
     public function enviarEmailTeste($email)
     {
-        $sendMail = $this->email->compose('teste')
+//        $sendMail = $this->email->compose(['layout' => 'layouts/html', 'html' => 'teste'])
+        $sendMail = $this->email->compose('teste', [])
                                 ->setTo($email)
                                 ->setSubject('E$TALECAS - Teste param E-mail');
 

@@ -4,9 +4,8 @@ use yii\helpers\Url;
 
 ?>
 
-<h2>Olá, Agora você tem uma conta no E$TALECAS!</h2>
-
-<h3>
+Olá, Agora você tem uma conta no E$TALECAS!
+<p>
 	Nome: <?= $nome ?><br />
 	CNPJ: <?= $cnpj ?><br />
 	Telefone: <?= $telefone ?><br />
@@ -14,4 +13,4 @@ use yii\helpers\Url;
 	Observação: <?= $observacao ?><br />
 	Endereço: <?= $endereco ?><br />
 	Dados bancários: <?= $dados_banco ?><br />
-</h3>
+</p>
